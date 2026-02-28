@@ -1,0 +1,38 @@
+# System
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+coverage/
+release/
+
+# Secrets
+.env
+.env.*
+*.local
+!.env.example
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Chrome Extension
+*.crx
+*.pem
+
+# Gemini
+.gemini/.tmp/
+
+# Claude
+.claude/.tmp/
+.claude/PROJECT.md
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
