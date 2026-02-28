@@ -2,8 +2,6 @@
 
 > ASCII wireframes for planning purposes. Not final design — structure and layout only.
 
----
-
 ## 1. In-Chat Dropdown (Command Palette)
 
 Appears above the chat input when user types the trigger symbol (default `>`).
@@ -35,8 +33,6 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Keyboard: ↑↓, Ctrl+J/K, Ctrl+N/P to navigate · Enter to insert · Esc to dismiss
 - Empty state: "No prompts yet — click the extension icon to add one"
 
----
-
 ## 2. Popup
 
 Appears when user clicks the extension icon. Compact.
@@ -62,8 +58,6 @@ Appears when user clicks the extension icon. Compact.
 - ⚙️ opens Options page in new tab
 - Click any prompt to edit
 - \+ New prompt opens inline form
-
----
 
 ## 3. Sidepanel
 
@@ -118,8 +112,6 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 - Save updates prompt in storage immediately
 - Delete shows confirmation before removing
 
----
-
 ## 4. Options Page
 
 Opens in a new tab. Full settings surface.
@@ -150,10 +142,12 @@ Opens in a new tab. Full settings surface.
 - Export downloads `slashprompt-backup.json`
 - Import validates JSON with Zod before writing to storage
 
----
+## Decisions Log
 
-## Open Questions
-
-- [ ] Popup: is search bar necessary for small libraries or add later?
-- [ ] Sidepanel edit: ← Back or modal overlay?
-- [ ] Dropdown empty state: hint only, or a shortcut button to open popup?
+- ✅ **Sidepanel edit** → in-place view transition (← Back), not modal or dialog
+- ✅ **Popup edit** → inline expand or small modal — decide when we get there
+- ✅ **Floating content script badge** → ditched, too intrusive
+- ✅ **Categories/tags** → skipped for MVP, bet on fuzzy search + slug naming conventions
+- ✅ **Prompt length** → short only, sentence to paragraph max. Not suited for multi-paragraph docs
+- ✅ **Dropdown empty state** → hint only: "No prompts yet — click the extension icon to add one"
+- ⏳ **Popup search bar** → decide when library grows, not needed for MVP
