@@ -18,6 +18,9 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 - Prompt variables/placeholders (MVP)
 - Collaboration or shared libraries (MVP)
 - Mobile or Firefox support (MVP)
+- Floating badge or overlay injected into chat sites
+- Categories or tags (bet on fuzzy search + slug naming conventions)
+- Multi-paragraph / document-length prompts (sentence to paragraph max)
 - Per-site theming / blending with host site styles (MVP)
 
 ## MVP Features
