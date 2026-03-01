@@ -5,5 +5,9 @@ mkhl
 scannability
 shfmt
 sidepanel
+slashprompt
 tolower
 toupper
+Wireframes
+wireframes
+lintstagedrc
