@@ -15,8 +15,8 @@ src/
 │   └── views/
 │       ├── app.tsx           # Root content script component
 │       └── dropdown/
-│           ├── Dropdown.tsx  # Command palette dropdown
-│           └── useDropdown.ts
+│           ├── dropdown.tsx  # Command palette dropdown
+│           └── use-dropdown.ts
 ├── popup/
 │   ├── app.tsx               # Prompt library management UI
 │   ├── index.html
@@ -30,10 +30,10 @@ src/
 │   ├── index.html
 │   └── main.tsx
 └── shared/
-    ├── components/           # Shared UI (PromptForm, PromptList, etc.)
+    ├── components/           # Shared UI (prompt-form.tsx, prompt-list.tsx, etc.)
     ├── hooks/
-    │   ├── usePrompts.ts     # CRUD over chrome.storage.local
-    │   └── useSettings.ts    # Trigger symbol config per site
+    │   ├── use-prompts.ts    # CRUD over chrome.storage.local
+    │   └── use-settings.ts   # Trigger symbol config per site
     ├── types/
     │   └── index.ts          # Prompt, Settings schemas (Zod)
     └── utils/
