@@ -10,3 +10,4 @@ tolower
 toupper
 Wireframes
 wireframes
+lintstagedrc
