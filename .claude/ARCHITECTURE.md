@@ -103,6 +103,15 @@ type Settings = {
 
 Popup and sidepanel import the same React components from `src/shared/`. Only layout/width differs.
 
+## shadcn/ui Setup
+
+Components install to `src/components/ui/` via the CLI.
+
+```bash
+bunx shadcn@latest init          # once
+bunx shadcn@latest add [component]
+```
+
 ## Risks / Open Questions
 
 - **Claude.ai input insertion** — ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
