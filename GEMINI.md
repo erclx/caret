@@ -6,5 +6,6 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 
 - `src/content/` — injected UI and input detection per site
 - `src/popup/` + `src/sidepanel/` — prompt library management
+- `src/options/` — per-site trigger config and settings page
 - `src/shared/` — hooks, types, utils shared across entry points
 - `.claude/` — planning docs (requirements, architecture, tasks)
