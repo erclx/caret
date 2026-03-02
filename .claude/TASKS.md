@@ -6,6 +6,15 @@
 
 ## Up Next
 
+### Design Setup
+
+- [ ] Run `bunx shadcn@latest init`
+- [ ] Set `--radius: 0.25rem` (4px)
+- [ ] Override shadcn HSL variables with zinc scale (see DESIGN.md)
+- [ ] Import Geist font, apply to all roots
+- [ ] Verify light/dark mode via `prefers-color-scheme`
+- **Test strategy: none** — visual verification in browser
+
 ### Feature 1 — Prompt Storage Layer
 
 - [ ] Define Zod schemas for `Prompt` and `Settings`
