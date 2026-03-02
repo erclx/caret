@@ -15,8 +15,8 @@ src/
 │   └── views/
 │       ├── app.tsx           # Root content script component
 │       └── dropdown/
-│           ├── Dropdown.tsx  # Command palette dropdown
-│           └── useDropdown.ts
+│           ├── dropdown.tsx  # Command palette dropdown
+│           └── use-dropdown.ts
 ├── popup/
 │   ├── app.tsx               # Prompt library management UI
 │   ├── index.html
@@ -30,10 +30,10 @@ src/
 │   ├── index.html
 │   └── main.tsx
 └── shared/
-    ├── components/           # Shared UI (PromptForm, PromptList, etc.)
+    ├── components/           # Shared UI (prompt-form.tsx, prompt-list.tsx, etc.)
     ├── hooks/
-    │   ├── usePrompts.ts     # CRUD over chrome.storage.local
-    │   └── useSettings.ts    # Trigger symbol config per site
+    │   ├── use-prompts.ts    # CRUD over chrome.storage.local
+    │   └── use-settings.ts   # Trigger symbol config per site
     ├── types/
     │   └── index.ts          # Prompt, Settings schemas (Zod)
     └── utils/
@@ -50,11 +50,7 @@ Claude.ai natively intercepts `/` for its own command menu. Using `>` by default
 
 ### UI: shadcn/ui + Tailwind v4 + lucide-react
 
-shadcn is headless and Tailwind-native — ships only what's used, no bloat. lucide-react is already in deps. No additional icon or component library needed.
-
-### Theme: system preference
-
-Tailwind `darkMode: 'class'` + a `prefers-color-scheme` media query listener on the content script root. One CSS variable switch covers light and dark. No per-site theming.
+shadcn is headless and Tailwind-native — ships only what's used, no bloat. lucide-react is already in deps. No additional icon or component library needed. See `DESIGN.md` for theme, token, and typography decisions.
 
 ### Dropdown: command palette style, above input
 
@@ -105,7 +101,7 @@ Popup and sidepanel import the same React components from `src/shared/`. Only la
 
 ## shadcn/ui Setup
 
-Components install to `src/components/ui/` via the CLI.
+Components install to `src/components/ui/` via the CLI. Install iteratively per feature — don't pre-install.
 
 ```bash
 bunx shadcn@latest init          # once
