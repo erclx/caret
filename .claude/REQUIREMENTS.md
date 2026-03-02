@@ -43,7 +43,6 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 - Usage count / recently used sorting
 - Cloud sync (backend)
 - Additional site support beyond initial three
-- Per-site theming to blend with host UI
 
 ## Tech Stack
 
@@ -57,12 +56,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 
 ## UI Decisions
 
-- **Theme** — follows system `prefers-color-scheme`; single unified theme across all sites
-- **Dropdown style** — command palette (Linear/Raycast feel)
-- **Dropdown position** — above the chat input (correct for bottom-anchored inputs on all three sites)
-- **Dropdown rows** — 6 visible before scrolling; name + truncated body preview per row
-- **Empty state** — inline hint: "No prompts yet — click the extension icon to add one"
-- **Extension icon** — clean, no badge
+See `DESIGN.md` for all theme, token, typography, and component-specific decisions.
 
 ## Constraints
 
