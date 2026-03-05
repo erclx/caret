@@ -27,10 +27,10 @@ playwright/.cache/
 
 # Gemini
 .gemini/.tmp/
+.gemini/settings.json
 
 # Claude
 .claude/.tmp/
-.claude/PROJECT.md
 
 # VS Code
 .vscode/*

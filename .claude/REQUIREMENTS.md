@@ -1,4 +1,4 @@
-# Requirements: SlashPrompt
+# Requirements
 
 ## Problem
 
@@ -35,14 +35,6 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 8. **Side panel UI** — manage library from Chrome side panel
 9. **Options page** — full settings including per-site trigger symbol config
 10. **JSON export/import** — backup and restore prompt library
-
-## Nice to Have
-
-- Prompt variables/placeholders (`{{topic}}`)
-- Categories or tags
-- Usage count / recently used sorting
-- Cloud sync (backend)
-- Additional site support beyond initial three
 
 ## Tech Stack
 

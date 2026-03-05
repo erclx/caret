@@ -1,4 +1,4 @@
-# Tasks: SlashPrompt
+# Tasks
 
 ## In Progress
 
@@ -21,7 +21,7 @@
 - [ ] Build typed `storage.ts` wrapper (get, set, subscribe)
 - [ ] Build `usePrompts` hook (list, create, update, delete)
 - [ ] Build `useSettings` hook (read/write per-site config)
-- [ ] Unit test storage utils and hooks
+- [ ] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files — overwrite the existing smoke test)
 - **Test strategy: unit** — pure logic, no DOM needed
 
 ### Feature 2 — Popup & Sidepanel Prompt Library UI
@@ -34,6 +34,7 @@
 
 ### Feature 3 — Options Page
 
+- [ ] Scaffold `src/options/` (app.tsx, index.html, main.tsx) — not yet in repo
 - [ ] Per-site trigger symbol config UI
 - [ ] Enable/disable per site toggle
 - [ ] Wire to useSettings
@@ -59,6 +60,7 @@
 - [ ] Insert at cursor for contenteditable (execCommand)
 - [ ] Insert at cursor for textarea (InputEvent dispatch)
 - [ ] Verify Claude.ai ProseMirror state updates correctly
+- [ ] Replace `e2e/smoke.test.ts` with real Playwright tests for insertion (don't create new test files — overwrite the existing smoke test)
 - **Test strategy: e2e** — must verify real site behavior
 
 ### Feature 7 — JSON Export / Import
