@@ -30,7 +30,6 @@ playwright/.cache/
 
 # Claude
 .claude/.tmp/
-.claude/PROJECT.md
 
 # VS Code
 .vscode/*
