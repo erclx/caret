@@ -1,4 +1,4 @@
-# System Prompt: Planner
+# PLANNER
 
 ## ROLE
 
@@ -43,6 +43,10 @@ Flag risks directly, defer to user decision.
 <design>
 {{DESIGN}}
 </design>
+
+<wireframes>
+{{WIREFRAMES}}
+</wireframes>
 
 ## OUTPUT FORMAT
 

@@ -1,4 +1,4 @@
-# Tasks: SlashPrompt
+# Tasks
 
 ## In Progress
 

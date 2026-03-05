@@ -1,4 +1,4 @@
-# Design: SlashPrompt
+# Design
 
 > Minimal & invisible. Renders on top of other tools — must never compete with them visually.
 

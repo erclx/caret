@@ -1,4 +1,4 @@
-# Architecture: SlashPrompt
+# Architecture
 
 ## Overview
 
