@@ -29,6 +29,11 @@ src/
 │   ├── app.tsx               # Per-site trigger config + advanced settings
 │   ├── index.html
 │   └── main.tsx
+├── test/
+│   ├── setup.ts
+│   ├── storage.test.ts       # Unit tests for storage utils
+│   └── hooks.test.ts         # Unit tests for usePrompts, useSettings
+├── index.css
 └── shared/
     ├── components/           # Shared UI (prompt-form.tsx, prompt-list.tsx, etc.)
     ├── hooks/
@@ -40,6 +45,8 @@ src/
         ├── cn.ts
         ├── fuzzy.ts          # Fuzzy match util
         └── storage.ts        # chrome.storage.local wrapper (typed, async)
+e2e/
+└── insertion.test.ts         # Playwright e2e for prompt insertion
 ```
 
 ## Key Technical Decisions
