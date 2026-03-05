@@ -27,6 +27,7 @@ playwright/.cache/
 
 # Gemini
 .gemini/.tmp/
+.gemini/settings.json
 
 # Claude
 .claude/.tmp/
