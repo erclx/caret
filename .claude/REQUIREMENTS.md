@@ -36,14 +36,6 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 9. **Options page** — full settings including per-site trigger symbol config
 10. **JSON export/import** — backup and restore prompt library
 
-## Nice to Have
-
-- Prompt variables/placeholders (`{{topic}}`)
-- Categories or tags
-- Usage count / recently used sorting
-- Cloud sync (backend)
-- Additional site support beyond initial three
-
 ## Tech Stack
 
 - React 19 + TypeScript + Vite (via @crxjs/vite-plugin, Manifest V3)
