@@ -1,9 +1,9 @@
 {
-  "name": "slash-prompt",
+  "name": "caret",
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Chrome extension built with React & Vite",
+  "description": "Chrome extension to save and invoke reusable prompts via fuzzy dropdown",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

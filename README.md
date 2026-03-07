@@ -1,4 +1,4 @@
-# SlashPrompt
+# Caret
 
 Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbol in any chat input to search and insert saved prompts without leaving the keyboard.
 

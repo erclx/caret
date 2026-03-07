@@ -1,4 +1,4 @@
-# SlashPrompt
+# Caret
 
 Chrome extension (MV3) that lets users save reusable prompts and invoke them via a trigger symbol + fuzzy dropdown directly inside Claude.ai, Gemini, and ChatGPT.
 
