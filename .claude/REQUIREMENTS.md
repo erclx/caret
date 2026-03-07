@@ -12,7 +12,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 - Work across Claude.ai, Gemini, and ChatGPT without conflicts
 - Keep data local, private, and fast
 
-## Non-Goals
+## Non-goals
 
 - Cloud sync or user accounts (MVP)
 - Prompt variables/placeholders (MVP)
@@ -23,7 +23,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 - Multi-paragraph / document-length prompts (sentence to paragraph max)
 - Per-site theming / blending with host site styles (MVP)
 
-## MVP Features
+## MVP features
 
 1. **Prompt library CRUD** — create, edit, delete prompts with a name (slug) and body text
 2. **Trigger detection** — user types configurable symbol (default: `>`) in chat input → dropdown appears

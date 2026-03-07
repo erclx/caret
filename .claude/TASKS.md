@@ -1,6 +1,6 @@
 # Tasks
 
-## In Progress
+## In progress
 
 - [ ] Planning & document setup
 
