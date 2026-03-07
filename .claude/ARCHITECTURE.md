@@ -49,7 +49,7 @@ e2e/
 └── insertion.test.ts         # Playwright e2e for prompt insertion
 ```
 
-## Key Technical Decisions
+## Key technical decisions
 
 ### Trigger symbol default: `>`
 
@@ -115,7 +115,7 @@ bunx shadcn@latest init          # once
 bunx shadcn@latest add [component]
 ```
 
-## Risks / Open Questions
+## Risks / open questions
 
 - **Claude.ai input insertion** — ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
 - **ChatGPT input** — DOM structure changes frequently; content script selector targeting is fragile.
