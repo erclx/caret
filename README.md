@@ -81,7 +81,7 @@ src/
 - `bun run test:e2e`: Runs end-to-end tests with Playwright.
 - `bun run format`: Formats code with Prettier.
 - `bun run lint`: Lints code with ESLint.
-- `bun run snapshot`: Generates a project snapshot in `.claude/PROJECT.md`.
+- `bun run snapshot`: Generates a project snapshot in `.claude/.tmp/SNAPSHOT.md`.
 - `bun run clean`: Removes `node_modules` and temporary files.
 - `bun run update`: Updates dependencies and runs full verification.
 
