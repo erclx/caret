@@ -1,4 +1,4 @@
-# Wireframes: SlashPrompt
+# Wireframes
 
 > ASCII wireframes for planning purposes. Not final design — structure and layout only.
 
@@ -39,7 +39,7 @@ Appears when user clicks the extension icon. Compact.
 
 ```
 ┌──────────────────────────┐
-│ ⚡ SlashPrompt       ⚙️  │
+│ ⚡ Caret       ⚙️  │
 ├──────────────────────────┤
 │ 🔍 Search prompts...     │
 ├──────────────────────────┤
@@ -67,7 +67,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 ```
 ┌────────────────────────────────┐
-│ ⚡ SlashPrompt            ⚙️   │
+│ ⚡ Caret            ⚙️   │
 ├────────────────────────────────┤
 │ 🔍 Search prompts...           │
 ├────────────────────────────────┤
@@ -118,7 +118,7 @@ Opens in a new tab. Full settings surface.
 
 ```
 ┌─────────────────────────────────────────────┐
-│ ⚡ SlashPrompt — Settings                   │
+│ ⚡ Caret — Settings                   │
 ├─────────────────────────────────────────────┤
 │ TRIGGER SYMBOLS                             │
 │                                             │
@@ -139,5 +139,5 @@ Opens in a new tab. Full settings surface.
 
 - Trigger symbol is editable per site inline
 - Toggle enable/disable per site without losing its trigger config
-- Export downloads `slashprompt-backup.json`
+- Export downloads `caret-backup.json`
 - Import validates JSON with Zod before writing to storage
