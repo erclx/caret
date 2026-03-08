@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- ui: initialize shadcn/ui and base styles
+
 ### Changed
 
 ### Fixed
