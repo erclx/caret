@@ -8,6 +8,7 @@ frontmatter
 lintstagedrc
 mkhl
 navigations
+networkidle
 noopener
 noreferrer
 Noto

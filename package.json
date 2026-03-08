@@ -28,7 +28,8 @@
     "update": "./scripts/update.sh",
     "check:shell": "find scripts -name '*.sh' -exec shellcheck --severity=warning {} +",
     "snapshot": "./scripts/snapshot.sh",
-    "verify": "./scripts/verify.sh"
+    "verify": "./scripts/verify.sh",
+    "screenshot": "bun run build && node --experimental-strip-types e2e/screenshot.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
