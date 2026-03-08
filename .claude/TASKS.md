@@ -4,16 +4,6 @@
 
 ## Up next
 
-### Feature 1 — Prompt storage layer
-
-- [ ] Define Zod schemas for `Prompt` and `Settings`
-- [ ] Build typed `storage.ts` wrapper (get, set, subscribe)
-- [ ] Build `usePrompts` hook (list, create, update, delete)
-- [ ] Build `useSettings` hook (read/write per-site config)
-- [ ] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
-- [ ] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files — overwrite the existing smoke test)
-- **Test strategy: unit** — pure logic, no DOM needed
-
 ### Feature 2 — Popup & sidepanel prompt library UI
 
 - [ ] PromptList component (list all prompts)
@@ -35,6 +25,7 @@
 - [ ] Detect chat input per target site (Claude, Gemini, ChatGPT)
 - [ ] Abstract input adapter (contenteditable vs textarea)
 - [ ] Trigger symbol detection on keydown — symbol must be at position 0 or immediately preceded by whitespace; mid-word trigger (e.g. `word>`) must not fire
+- [ ] Position/reposition on resize
 - **Test strategy: integration** — needs real DOM shapes per site
 
 ### Feature 5 — Content script: Dropdown
@@ -82,6 +73,16 @@
   - [x] Import Geist font, apply to all roots
   - [x] Verify light/dark mode via `prefers-color-scheme`
   - **Test strategy: none** — visual verification in browser
+
+### Feature 1 — Prompt storage layer
+
+- [x] Define Zod schemas for `Prompt` and `Settings`
+- [x] Build typed `storage.ts` wrapper (get, set, subscribe)
+- [x] Build `usePrompts` hook (list, create, update, delete)
+- [x] Build `useSettings` hook (read/write per-site config)
+- [x] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
+- [x] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files — overwrite the existing smoke test)
+- **Test strategy: unit** — pure logic, no DOM needed
 
 ## Blocked
 
