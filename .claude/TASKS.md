@@ -71,7 +71,7 @@
 
 ### Feature 8 — GitHub Sync
 
-- [ ] Add GitHub config to Settings schema: `githubPAT`, `owner`, `repo`, `branch`, `snippetsPath`
+- [ ] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath`
 - [ ] GitHub config UI in options page (PAT input, repo details)
 - [ ] Dedicated sync view in sidepanel: connection status, last synced timestamp, snippet count, sync button
 - [ ] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
