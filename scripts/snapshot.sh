@@ -94,7 +94,7 @@ write_snapshot() {
   mkdir -p "$(dirname "$OUTPUT_FILE")"
 
   {
-    echo "# Project Snapshot: $project_name"
+    echo "# Project snapshot: $project_name"
     echo ""
     echo "## Structure"
     echo ""
