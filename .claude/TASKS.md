@@ -19,6 +19,7 @@
 - [ ] Build typed `storage.ts` wrapper (get, set, subscribe)
 - [ ] Build `usePrompts` hook (list, create, update, delete)
 - [ ] Build `useSettings` hook (read/write per-site config)
+- [ ] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
 - [ ] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files — overwrite the existing smoke test)
 - **Test strategy: unit** — pure logic, no DOM needed
 
@@ -42,7 +43,7 @@
 
 - [ ] Detect chat input per target site (Claude, Gemini, ChatGPT)
 - [ ] Abstract input adapter (contenteditable vs textarea)
-- [ ] Trigger symbol detection on keydown
+- [ ] Trigger symbol detection on keydown — symbol must be at position 0 or immediately preceded by whitespace; mid-word trigger (e.g. `word>`) must not fire
 - **Test strategy: integration** — needs real DOM shapes per site
 
 ### Feature 5 — Content script: Dropdown
@@ -67,6 +68,17 @@
 - [ ] Import from JSON file with Zod validation
 - [ ] Handle merge conflicts (duplicate names)
 - **Test strategy: unit** — pure parse/validate logic
+
+### Feature 8 — GitHub Sync
+
+- [ ] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath`
+- [ ] GitHub config UI in options page (PAT input, repo details)
+- [ ] Dedicated sync view in sidepanel: connection status, last synced timestamp, snippet count, sync button
+- [ ] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
+- [ ] Map filename → slug (strip `.md`), file content → prompt body; full replace on sync
+- [ ] Show post-sync summary: how many snippets added/updated/removed
+- [ ] Diff view before confirming sync: list of changes (add/update/delete) per snippet
+- **Test strategy: unit** — fetch parsing and mapping logic; e2e deferred (requires live PAT)
 
 ## Done
 

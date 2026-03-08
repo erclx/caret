@@ -90,12 +90,31 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Width: ~380px (user-resizable)
 - Same components as popup, wider layout shows name + preview per row
 - Edit view: full list replacement, `← Back` top-left, no modal
+- Tab bar: `[Prompts] [GitHub]` — plain text tabs, `--border` bottom, selected tab uses `--text-primary`, unselected uses `--text-muted`
+
+### Sidepanel — GitHub Sync View
+
+- Connection indicator: 8px filled circle, `green-500` connected / `red-500` error / `zinc-400` not configured; inline with repo name in `--text-muted`
+- Status line: `hint` size, `--text-muted` — e.g. "Synced just now · 8 snippets" or "Never synced"
+- Sync button: standard outline button, full width, lucide `RefreshCw` icon 16px left of label
+- Diff list: monospace slug names, `body` size; prefix symbols `+` in `green-600`/`green-400`, `~` in `zinc-500`, `-` in `--destructive`; "N unchanged" in `--text-muted` below list
+- Apply button: `--text-primary` on `--surface`, shows count inline e.g. "Apply 3 changes"
+- Not configured state: replace sync button with `"Set up in Options →"` link, `--text-muted`
 
 ### Options Page
 
 - Max width: 640px, centered
 - Section headers: `heading` size, `--text-muted`, uppercase, `letter-spacing: 0.05em`
 - Toggles: shadcn Switch, zinc only (no accent color)
+
+### Options Page — GitHub Sync Section
+
+- PAT input: `type="password"`, masked after save, full width
+- Repository and Branch fields: side by side, equal width
+- Snippets path field: full width, placeholder `snippets`
+- Save button: standard outline, left-aligned
+- Connection status: inline right of Save — 8px dot + short label ("Connected" / "Not configured" / "Error"), `hint` size
+- No inline validation on PAT format — only show error state after a failed save attempt
 
 ## Iconography
 
