@@ -26,7 +26,7 @@ src/
 │   ├── index.html
 │   └── main.tsx
 ├── options/
-│   ├── app.tsx               # Per-site trigger config + advanced settings
+│   ├── app.tsx               # Per-site trigger config + advanced settings + GitHub config
 │   ├── index.html
 │   └── main.tsx
 ├── test/
@@ -44,7 +44,9 @@ src/
     └── utils/
         ├── cn.ts
         ├── fuzzy.ts          # Fuzzy match util
-        └── storage.ts        # chrome.storage.local wrapper (typed, async)
+        ├── storage.ts        # chrome.storage.local wrapper (typed, async)
+        ├── seeds.ts          # Dev-only sample prompts; seeded on first run in development
+        └── github.ts         # GitHub Contents API fetch + snippet mapping
 e2e/
 └── insertion.test.ts         # Playwright e2e for prompt insertion
 ```
@@ -54,6 +56,10 @@ e2e/
 ### Trigger symbol default: `>`
 
 Claude.ai natively intercepts `/` for its own command menu. Using `>` by default avoids DOM race conditions. Users can override per site in options.
+
+### Trigger detection: word boundary rule
+
+The trigger symbol only fires when it appears at position 0 in the input, or is immediately preceded by whitespace. Typing a symbol mid-word (e.g. `word>`) must not open the dropdown. Detection checks the character at `cursorPosition - 1` before activating.
 
 ### UI: shadcn/ui + Tailwind v4 + lucide-react
 
@@ -99,8 +105,23 @@ type Settings = {
       enabled: boolean
     }
   }
+  github?: {
+    pat: string // personal access token, stored in chrome.storage.local
+    owner: string // repo owner
+    repo: string // repo name
+    branch: string // default "main"
+    snippetsPath: string // path to snippets folder, default "snippets"
+  }
 }
 ```
+
+### Dev seeding
+
+On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `seeds.ts` writes a set of sample prompts mirroring the real `snippets/` folder content. No-op in production. Prevents implementers from testing against an empty library.
+
+### GitHub sync (read-only, GitHub is source of truth)
+
+Extension pulls from GitHub; it never pushes back. Sync is manual — triggered by the user via a sync button in the sidepanel GitHub view. Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → use file content as prompt body → full replace of prompts in storage. Post-sync shows a summary of adds/updates/removes. A diff view lets the user review changes before confirming. PAT is optional for public repos; required for private.
 
 ### Shared UI between popup and sidepanel
 
@@ -121,3 +142,5 @@ bunx shadcn@latest add [component]
 - **ChatGPT input** — DOM structure changes frequently; content script selector targeting is fragile.
 - **Dropdown positioning** — inputs that resize dynamically need ResizeObserver to stay anchored correctly.
 - **MV3 service worker lifecycle** — background script can be killed at any time; no persistent state lives there.
+- **GitHub PAT storage** — stored in `chrome.storage.local`, not encrypted. Acceptable for personal use; document the risk clearly in the UI.
+- **GitHub API rate limits** — unauthenticated: 60 req/hour. Authenticated: 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.
