@@ -1,7 +1,7 @@
 export default function App() {
   return (
-    <div className='min-h-screen w-full bg-zinc-900 p-3 text-slate-50'>
-      <div className='w-full rounded-lg border border-zinc-600 bg-zinc-800 p-4 shadow-xl'>
+    <div className='bg-background text-foreground min-h-screen w-full p-3'>
+      <div className='border-border bg-card text-card-foreground w-full rounded-lg border p-4 shadow-xl'>
         <h1 className='text-lg font-bold'>Side Panel</h1>
         <p className='text-sm opacity-90'>Ready to use</p>
       </div>
