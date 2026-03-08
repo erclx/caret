@@ -10,8 +10,10 @@ mkhl
 navigations
 noopener
 noreferrer
+Noto
 parallelizable
 scannability
+Segoe
 shadcn
 shfmt
 sidepanel
