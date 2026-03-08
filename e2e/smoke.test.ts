@@ -1,15 +1,27 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test.describe('Extension UI Smoke Test', () => {
-  test('Popup should load and display title', async ({ page }) => {
-    await page.goto('/src/popup/index.html')
-    const heading = page.getByRole('heading', { name: /popup/i })
-    await expect(heading).toBeVisible()
+  test('Popup should load and render prompt library', async ({
+    page,
+    extensionId,
+  }) => {
+    await page.goto(`chrome-extension://${extensionId}/src/popup/index.html`)
+    await expect(page.getByText('No prompts found.')).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: /create prompt/i }),
+    ).toBeVisible()
   })
 
-  test('Sidepanel should load and display title', async ({ page }) => {
-    await page.goto('/src/sidepanel/index.html')
-    const heading = page.getByRole('heading', { name: /side panel/i })
-    await expect(heading).toBeVisible()
+  test('Sidepanel should load and render prompt library', async ({
+    page,
+    extensionId,
+  }) => {
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
+    await expect(page.getByText('No prompts found.')).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: /create prompt/i }),
+    ).toBeVisible()
   })
 })
