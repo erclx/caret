@@ -6,7 +6,7 @@
 
 Appears above the chat input when user types the trigger symbol (default `>`).
 
-```
+```plaintext
 ┌─────────────────────────────────────────┐
 │ 🔍 summarize...                         │
 ├─────────────────────────────────────────┤
@@ -38,7 +38,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 
 Appears when user clicks the extension icon. Compact.
 
-```
+```plaintext
 ┌──────────────────────────┐
 │ ⚡ Caret       ⚙️        │
 ├──────────────────────────┤
@@ -66,7 +66,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 ### List View
 
-```
+```plaintext
 ┌────────────────────────────────┐
 │ ⚡ Caret            ⚙️        │
 ├────────────────────────────────┤
@@ -89,7 +89,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 ### Edit View (click ✏️ — transitions in-place, no new tab)
 
-```
+```plaintext
 ┌────────────────────────────────┐
 │ ← Back                         │
 ├────────────────────────────────┤
@@ -119,7 +119,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 #### Idle — never synced
 
-```
+```plaintext
 ┌────────────────────────────────┐
 │ ⚡ Caret            ⚙️        │
 ├────────────────────────────────┤
@@ -134,7 +134,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 #### Diff view — after fetch, before confirm
 
-```
+```plaintext
 ┌────────────────────────────────┐
 │ ⚡ Caret            ⚙️        │
 ├────────────────────────────────┤
@@ -157,7 +157,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 #### Post-sync
 
-```
+```plaintext
 ┌────────────────────────────────┐
 │ ⚡ Caret            ⚙️        │
 ├────────────────────────────────┤
@@ -182,7 +182,7 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 
 Opens in a new tab. Full settings surface.
 
-```
+```plaintext
 ┌─────────────────────────────────────────────┐
 │ ⚡ Caret — Settings                         │
 ├─────────────────────────────────────────────┤
