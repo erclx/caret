@@ -21,7 +21,7 @@ export function PromptForm({
   const [body, setBody] = useState(initialPrompt?.body ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
@@ -32,7 +32,7 @@ export function PromptForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+    <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-2'>
       <div className='flex flex-col gap-2'>
         <Label htmlFor='name'>Trigger Name</Label>
         <Input
