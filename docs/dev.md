@@ -41,6 +41,7 @@ Generates a production build and a zip in `release/`.
 - `bun run format` — format with Prettier
 - `bun run lint` — lint with ESLint
 - `bun run snapshot` — generate project snapshot in `.claude/.tmp/SNAPSHOT.md`
+- `bun run screenshot` — generate extension screenshots
 - `bun run clean` — remove `node_modules` and temporary files
 - `bun run update` — update dependencies and run full verification
 
