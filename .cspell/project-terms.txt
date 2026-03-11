@@ -8,12 +8,14 @@ frontmatter
 lintstagedrc
 mkhl
 navigations
+networkidle
 noopener
 noreferrer
 Noto
 parallelizable
 scannability
 Segoe
+serviceworker
 shadcn
 shfmt
 sidepanel
