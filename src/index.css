@@ -72,7 +72,7 @@
 }
 
 .dark {
-  --background: 240 4% 13%;
+  --background: 240 4% 15%;
   --foreground: 0 0% 98%;
 
   --card: 240 3.7% 15.9%;
@@ -103,7 +103,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: 240 4% 13%;
+    --background: 240 4% 15%;
     --foreground: 0 0% 98%;
 
     --card: 240 3.7% 15.9%;
