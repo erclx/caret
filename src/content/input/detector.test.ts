@@ -1,0 +1,198 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { InputDetector, type TriggerState } from './detector'
+
+let activeResizeCallback: ResizeObserverCallback | null = null
+
+class MockResizeObserver {
+  constructor(callback: ResizeObserverCallback) {
+    activeResizeCallback = callback
+  }
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
+}
+
+vi.stubGlobal('ResizeObserver', MockResizeObserver)
+
+function typeIntoTextarea(textarea: HTMLTextAreaElement, text: string) {
+  for (const char of text) {
+    if (char === '\x1B') {
+      textarea.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+    } else {
+      textarea.dispatchEvent(
+        new KeyboardEvent('keydown', { key: char, bubbles: true }),
+      )
+      textarea.value += char
+      textarea.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+  }
+}
+
+describe('InputDetector integration', () => {
+  let detector: InputDetector
+  let stateCallback: ReturnType<typeof vi.fn>
+
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    activeResizeCallback = null
+    stateCallback = vi.fn()
+    detector = new InputDetector(
+      stateCallback as unknown as (state: TriggerState) => void,
+    )
+    document.body.innerHTML = ''
+  })
+
+  afterEach(() => {
+    detector.detach()
+    vi.useRealTimers()
+  })
+
+  it('should detect trigger symbol at position 0 in textarea', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ isActive: true, triggerSymbol: '>' }),
+    )
+  })
+
+  it('should not detect mid-word trigger symbol', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, 'word>')
+    vi.runAllTimers()
+
+    const activeCalls = stateCallback.mock.calls.filter(
+      (call) => call[0].isActive === true,
+    )
+    expect(activeCalls.length).toBe(0)
+  })
+
+  it('should detect trigger symbol immediately preceded by whitespace', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, 'hello >')
+    vi.runAllTimers()
+
+    const activeCalls = stateCallback.mock.calls.filter(
+      (call) => call[0].isActive === true,
+    )
+    expect(activeCalls.length).toBeGreaterThan(0)
+  })
+
+  it('should deactivate on Escape key', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: true }),
+    )
+
+    typeIntoTextarea(textarea, '\x1B')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: false }),
+    )
+  })
+
+  it('should deactivate when user types a space invalidating the trigger', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: true }),
+    )
+
+    typeIntoTextarea(textarea, ' ')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: false }),
+    )
+  })
+
+  it('should detect trigger symbol in contenteditable', () => {
+    const div = document.createElement('div')
+    div.setAttribute('contenteditable', 'true')
+    div.contentEditable = 'true'
+    document.body.appendChild(div)
+    detector.attach(div)
+    detector.setTriggerSymbol('>')
+
+    const mockSelection = {
+      rangeCount: 1,
+      getRangeAt: () => ({
+        startContainer: div,
+        startOffset: 1,
+        cloneRange: () => ({
+          selectNodeContents: vi.fn(),
+          setEnd: vi.fn(),
+          cloneContents: () => ({ textContent: '>' }),
+        }),
+      }),
+    }
+    vi.spyOn(window, 'getSelection').mockReturnValue(
+      mockSelection as unknown as Selection,
+    )
+
+    div.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ isActive: true, triggerSymbol: '>' }),
+    )
+  })
+
+  it('should update state on resize', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: true }),
+    )
+    stateCallback.mockClear()
+
+    if (activeResizeCallback) {
+      activeResizeCallback(
+        [],
+        new MockResizeObserver(
+          activeResizeCallback,
+        ) as unknown as ResizeObserver,
+      )
+    }
+
+    expect(stateCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ isActive: true }),
+    )
+  })
+})
