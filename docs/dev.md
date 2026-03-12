@@ -68,7 +68,8 @@ src/
 │   ├── index.html
 │   └── main.tsx
 └── shared/          # Hooks, types, components, utilities
-    ├── components/
+    ├── components/  # Reusable React components
+    │   └── ui/      # UI primitives (button, input, etc.)
     ├── hooks/
     ├── types/
     └── utils/
