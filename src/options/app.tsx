@@ -8,9 +8,15 @@ import { useSettings } from '@/shared/hooks/use-settings'
 
 const DEFAULT_SITES = ['claude.ai', 'gemini.google.com', 'chatgpt.com']
 
+const SYMBOL_RE = /^[^a-zA-Z0-9\s]$/
+
 type SiteConfig = {
   triggerSymbol: string
   enabled: boolean
+}
+
+function isValidTrigger(value: string): boolean {
+  return SYMBOL_RE.test(value)
 }
 
 export default function App() {
@@ -33,7 +39,14 @@ export default function App() {
     }
   }, [settings, isLoading, isInitialized])
 
+  const hasInvalidTrigger = DEFAULT_SITES.some(
+    (site) =>
+      localSites[site]?.enabled &&
+      !isValidTrigger(localSites[site]?.triggerSymbol),
+  )
+
   const handleSave = async () => {
+    if (hasInvalidTrigger) return
     setIsSaving(true)
     try {
       const promises = Object.entries(localSites)
@@ -91,57 +104,72 @@ export default function App() {
             </p>
           </div>
           <div className='flex flex-col gap-6 p-6'>
-            {DEFAULT_SITES.map((site) => (
-              <div
-                key={site}
-                className='border-border bg-background flex flex-col justify-between gap-4 rounded-md border p-5 sm:flex-row sm:items-center'
-              >
-                <div className='flex flex-col gap-2'>
-                  <Label className='text-base font-medium'>{site}</Label>
-                  <div className='flex items-center gap-2'>
-                    <input
-                      type='checkbox'
-                      id={`enable-${site}`}
-                      aria-label={`Enable Caret on ${site}`}
-                      checked={localSites[site]?.enabled ?? true}
-                      onChange={(e) =>
-                        handleChange(site, 'enabled', e.target.checked)
-                      }
-                      className='border-input accent-primary size-4 rounded bg-transparent'
-                    />
+            {DEFAULT_SITES.map((site) => {
+              const config = localSites[site]
+              const triggerInvalid =
+                config?.enabled && !isValidTrigger(config?.triggerSymbol)
+
+              return (
+                <div
+                  key={site}
+                  className='border-border bg-background flex flex-col justify-between gap-4 rounded-md border p-5 sm:flex-row sm:items-center'
+                >
+                  <div className='flex flex-col gap-2'>
+                    <Label className='text-base font-medium'>{site}</Label>
+                    <div className='flex items-center gap-2'>
+                      <input
+                        type='checkbox'
+                        id={`enable-${site}`}
+                        aria-label={`Enable Caret on ${site}`}
+                        checked={config?.enabled ?? true}
+                        onChange={(e) =>
+                          handleChange(site, 'enabled', e.target.checked)
+                        }
+                        className='border-input accent-primary size-4 rounded bg-transparent'
+                      />
+                      <Label
+                        htmlFor={`enable-${site}`}
+                        className='text-muted-foreground text-sm font-normal'
+                      >
+                        Enable Caret on this site
+                      </Label>
+                    </div>
+                  </div>
+                  <div className='flex w-full flex-col gap-1 sm:w-32'>
                     <Label
-                      htmlFor={`enable-${site}`}
-                      className='text-muted-foreground text-sm font-normal'
+                      htmlFor={`trigger-${site}`}
+                      className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'
                     >
-                      Enable Caret on this site
+                      Trigger
                     </Label>
+                    <Input
+                      id={`trigger-${site}`}
+                      aria-label={`Trigger symbol for ${site}`}
+                      value={config?.triggerSymbol ?? '>'}
+                      onChange={(e) =>
+                        handleChange(site, 'triggerSymbol', e.target.value)
+                      }
+                      maxLength={1}
+                      disabled={!(config?.enabled ?? true)}
+                      aria-invalid={triggerInvalid}
+                      className='text-center font-mono'
+                    />
+                    {triggerInvalid && (
+                      <p className='text-xs text-red-600 dark:text-red-400'>
+                        must be a single symbol
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className='flex w-full flex-col gap-2 sm:w-32'>
-                  <Label
-                    htmlFor={`trigger-${site}`}
-                    className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'
-                  >
-                    Trigger
-                  </Label>
-                  <Input
-                    id={`trigger-${site}`}
-                    aria-label={`Trigger symbol for ${site}`}
-                    value={localSites[site]?.triggerSymbol ?? '>'}
-                    onChange={(e) =>
-                      handleChange(site, 'triggerSymbol', e.target.value)
-                    }
-                    maxLength={3}
-                    disabled={!(localSites[site]?.enabled ?? true)}
-                    className='text-center font-mono'
-                  />
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <div className='border-border bg-muted/50 flex justify-end rounded-b-lg border-t p-6'>
-            <Button onClick={handleSave} disabled={isSaving}>
-              <Save className='mr-2 size-4' />{' '}
+            <Button
+              onClick={handleSave}
+              disabled={isSaving || hasInvalidTrigger}
+            >
+              <Save className='mr-2 size-4' />
               {isSaving ? 'Saving...' : 'Save Settings'}
             </Button>
           </div>
