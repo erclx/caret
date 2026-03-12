@@ -55,15 +55,15 @@ src/
 │   ├── main.tsx
 │   └── views/       # Dropdown command palette
 │       └── app.tsx
+├── options/         # Per-site trigger config and settings
+│   ├── app.tsx
+│   ├── index.html
+│   └── main.tsx
 ├── popup/           # Prompt library UI (extension icon)
 │   ├── app.tsx
 │   ├── index.html
 │   └── main.tsx
 ├── sidepanel/       # Prompt library UI (side panel)
-│   ├── app.tsx
-│   ├── index.html
-│   └── main.tsx
-├── options/         # Per-site trigger config and settings
 │   ├── app.tsx
 │   ├── index.html
 │   └── main.tsx
