@@ -37,3 +37,6 @@ screenshots
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Cursor
+.cursor/.tmp/
