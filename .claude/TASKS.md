@@ -4,14 +4,6 @@
 
 ## Up next
 
-### Feature 2 — Popup & sidepanel prompt library UI
-
-- [ ] PromptList component (list all prompts)
-- [ ] PromptForm component (create/edit)
-- [ ] Delete with confirmation
-- [ ] Wire popup/sidepanel to usePrompts
-- **Test strategy: unit** — component logic; e2e deferred
-
 ### Feature 3 — Options page
 
 - [ ] Scaffold `src/options/` (app.tsx, index.html, main.tsx) — not yet in repo
@@ -41,7 +33,7 @@
 - [ ] Insert at cursor for contenteditable (execCommand)
 - [ ] Insert at cursor for textarea (InputEvent dispatch)
 - [ ] Verify Claude.ai ProseMirror state updates correctly
-- [ ] Replace `e2e/smoke.test.ts` with real Playwright tests for insertion (don't create new test files — overwrite the existing smoke test)
+- [ ] Rename `e2e/smoke.test.ts` → `e2e/ui.test.ts` then overwrite with real Playwright tests for insertion (don't create new test files — overwrite the existing smoke test)
 - **Test strategy: e2e** — must verify real site behavior
 
 ### Feature 7 — JSON export / import
@@ -83,6 +75,14 @@
 - [x] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
 - [x] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files — overwrite the existing smoke test)
 - **Test strategy: unit** — pure logic, no DOM needed
+
+### Feature 2 — Popup & sidepanel prompt library UI
+
+- [x] PromptList component (list all prompts)
+- [x] PromptForm component (create/edit)
+- [x] Delete with confirmation
+- [x] Wire popup/sidepanel to usePrompts
+- **Test strategy: unit** — component logic; e2e deferred
 
 ## Blocked
 
