@@ -106,7 +106,7 @@ export function PromptList({
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='text-destructive/80 hover:bg-destructive/20 hover:text-destructive size-8'
+                    className='text-destructive/80 hover:bg-destructive/10 dark:hover:bg-destructive/20 hover:text-destructive size-8'
                     onClick={() => setConfirmDeleteId(prompt.id)}
                     aria-label='Delete prompt'
                   >
