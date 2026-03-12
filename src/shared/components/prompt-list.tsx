@@ -54,7 +54,7 @@ export function PromptList({
                   className='border-destructive bg-destructive/10 flex items-center justify-between gap-2 rounded-md border p-3 shadow-sm'
                 >
                   <span className='text-destructive text-sm font-medium'>
-                    Delete prompt?
+                    Delete?
                   </span>
                   <div className='flex shrink-0 gap-2'>
                     <Button
@@ -74,7 +74,7 @@ export function PromptList({
                       }}
                       aria-label='Confirm delete'
                     >
-                      Delete
+                      Confirm
                     </Button>
                   </div>
                 </div>
