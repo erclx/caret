@@ -33,7 +33,7 @@ export function PromptList({
   return (
     <div className='flex h-full flex-col gap-4 overflow-hidden'>
       <div className='flex shrink-0 items-center justify-between'>
-        <h2 className='text-foreground text-sm font-semibold'>Your Prompts</h2>
+        <h2 className='text-foreground text-sm font-semibold'>Your prompts</h2>
         <Button
           variant='outline'
           size='sm'
