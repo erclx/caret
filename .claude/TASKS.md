@@ -4,14 +4,6 @@
 
 ## Up next
 
-### Feature 5 — Content script: Dropdown
-
-- [ ] Inject React root adjacent to input
-- [ ] Fuzzy filter against prompt library
-- [ ] Keyboard nav: ↑↓, Ctrl+J/K, Ctrl+N/P, Enter, Escape
-- [ ] Position/reposition on resize
-- **Test strategy: integration** — component + keyboard interaction
-
 ### Feature 6 — Prompt insertion
 
 - [ ] Insert at cursor for contenteditable (execCommand)
@@ -83,6 +75,14 @@
 - [x] Trigger symbol detection on keydown — symbol must be at position 0 or immediately preceded by whitespace; mid-word trigger (e.g. `word>`) must not fire
 - [x] Position/reposition on resize
 - **Test strategy: integration** — needs real DOM shapes per site
+
+### Feature 5 — Content script: Dropdown
+
+- [x] Inject React root adjacent to input
+- [x] Fuzzy filter against prompt library
+- [x] Keyboard nav: ↑↓, Ctrl+J (down), Ctrl+P (up), Enter/Tab, Escape
+- [x] Position/reposition on resize
+- **Test strategy: integration** — component + keyboard interaction
 
 ## Blocked
 
