@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- content: add trigger detection and command palette UI in chat inputs
 - options: add per-site settings page
 - options: validate trigger symbols on settings page
 - storage: prompt and settings CRUD via chrome.storage.local
