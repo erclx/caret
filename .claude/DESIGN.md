@@ -104,7 +104,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 ### Options Page
 
 - Max width: 640px, centered
-- Section headers: `heading` size, `--text-muted`, uppercase, `letter-spacing: 0.05em`
+- Section headers: `heading` size, `--text-muted`, sentence case
 - Toggles: shadcn Switch, zinc only (no accent color)
 
 ### Options Page — GitHub Sync Section
