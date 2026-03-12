@@ -97,7 +97,7 @@ export function PromptList({
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='size-8'
+                    className='size-8 dark:hover:bg-zinc-700'
                     onClick={() => onEdit(prompt)}
                     aria-label='Edit prompt'
                   >
