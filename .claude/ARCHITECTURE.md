@@ -127,6 +127,10 @@ Extension pulls from GitHub; it never pushes back. Sync is manual — triggered 
 
 Popup and sidepanel import the same React components from `src/shared/`. Only layout/width differs.
 
+## shadcn/ui constraints
+
+Components in `src/components/ui/` are source of truth. Never modify them directly. Override via `className` props at the usage site only.
+
 ## shadcn/ui Setup
 
 Components install to `src/components/ui/` via the CLI. Install iteratively per feature — don't pre-install.
