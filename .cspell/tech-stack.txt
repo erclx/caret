@@ -2,6 +2,7 @@ bun
 bunx
 clsx
 commitlint
+contenteditable
 crxjs
 lucide
 nextjs
