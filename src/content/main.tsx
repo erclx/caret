@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import cssText from '@/index.css?inline'
 
-import App from './views/app.tsx'
+import { App } from './views/app'
 
 console.log('[CRXJS] Hello world from content script!')
 
