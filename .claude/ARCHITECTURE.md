@@ -12,10 +12,18 @@ src/
 │   └── index.ts              # Service worker — storage message relay if needed
 ├── content/
 │   ├── main.tsx              # Entry per site (Claude, Gemini, ChatGPT)
+│   ├── hooks/
+│   │   └── use-input-detection.ts
+│   ├── input/
+│   │   ├── adapters.ts       # Input adapter per site (contenteditable / textarea)
+│   │   ├── detector.ts       # Trigger symbol detection + ResizeObserver
+│   │   ├── detector.test.ts
+│   │   └── site-observer.ts  # MutationObserver — finds chat input per site
 │   └── views/
 │       ├── app.tsx           # Root content script component
 │       └── dropdown/
 │           ├── dropdown.tsx  # Command palette dropdown
+│           ├── dropdown.test.tsx
 │           └── use-dropdown.ts
 ├── popup/
 │   ├── app.tsx               # Prompt library management UI
@@ -27,28 +35,39 @@ src/
 │   └── main.tsx
 ├── options/
 │   ├── app.tsx               # Per-site trigger config + advanced settings + GitHub config
+│   ├── app.test.tsx
 │   ├── index.html
 │   └── main.tsx
 ├── test/
-│   ├── setup.ts
-│   ├── storage.test.ts       # Unit tests for storage utils
-│   └── hooks.test.ts         # Unit tests for usePrompts, useSettings
+│   └── setup.ts
 ├── index.css
 └── shared/
-    ├── components/           # Shared UI (prompt-form.tsx, prompt-list.tsx, etc.)
+    ├── components/
+    │   ├── prompt-form.tsx
+    │   ├── prompt-form.test.tsx
+    │   ├── prompt-library.tsx
+    │   ├── prompt-library.test.tsx
+    │   ├── prompt-list.tsx
+    │   ├── prompt-list.test.tsx
+    │   └── ui/               # shadcn/ui primitives (button, input, label, textarea)
     ├── hooks/
     │   ├── use-prompts.ts    # CRUD over chrome.storage.local
-    │   └── use-settings.ts   # Trigger symbol config per site
+    │   ├── use-prompts.test.ts
+    │   ├── use-settings.ts   # Trigger symbol config per site
+    │   └── use-settings.test.ts
     ├── types/
     │   └── index.ts          # Prompt, Settings schemas (Zod)
     └── utils/
         ├── cn.ts
         ├── fuzzy.ts          # Fuzzy match util
+        ├── fuzzy.test.ts
         ├── storage.ts        # chrome.storage.local wrapper (typed, async)
-        ├── seeds.ts          # Dev-only sample prompts; seeded on first run in development
-        └── github.ts         # GitHub Contents API fetch + snippet mapping
+        ├── storage.test.ts
+        └── seeds.ts          # Dev-only sample prompts; seeded on first run in development
 e2e/
-└── insertion.test.ts         # Playwright e2e for prompt insertion
+├── fixtures.ts
+├── screenshot.ts
+└── smoke.test.ts             # Playwright e2e — overwrite with insertion tests in Feature 6
 ```
 
 ## Key technical decisions
@@ -71,7 +90,7 @@ Rendered as a React root injected adjacent to the detected input element. Positi
 
 ### Keyboard navigation
 
-↑↓ arrows, Ctrl+J/K, Ctrl+N/P — all move selection. Enter inserts. Escape dismisses. All handled via keydown listener on the document while dropdown is open.
+↑↓ arrows, Ctrl+J (down), Ctrl+P (up) — all move selection. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded — Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
 
 ### Content script input detection
 
