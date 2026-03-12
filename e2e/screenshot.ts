@@ -81,17 +81,16 @@ async function goto(
 }
 
 async function shot(page: Page, surface: string, filename: string) {
-  // group by surface so screenshots aren't a flat pile
   const dir = path.join(screenshotsDir, surface)
   fs.mkdirSync(dir, { recursive: true })
   await page.screenshot({ path: path.join(dir, filename) })
   console.log(`✓ ${surface}/${filename}`)
 }
 
-// popup and sidepanel
+// popup + sidepanel
+
 for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   for (const surface of ['popup', 'sidepanel'] as Surface[]) {
-    // fresh context per surface so storage state doesn't bleed between empty and seeded shots
     const emptyCtx = await launchWithExtension()
     const emptyId = await getExtensionId(emptyCtx)
     const emptyPage = await emptyCtx.newPage()
@@ -100,7 +99,6 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
     await emptyCtx.close()
 
     const ctx = await launchWithExtension()
-    // addInitScript: runs before any page script so storage is populated before react mounts
     await ctx.addInitScript((prompts: Record<string, unknown>[]) => {
       ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
         prompts,
@@ -129,20 +127,19 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   }
 }
 
-// options page
+// options
+
 for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   const ctx = await launchWithExtension()
   const id = await getExtensionId(ctx)
 
   const page = await ctx.newPage()
-  // options is a full tab, not a constrained popup — use a normal viewport
   await page.setViewportSize({ width: 800, height: 900 })
   await page.emulateMedia({ colorScheme: scheme })
   await page.goto(`chrome-extension://${id}/src/options/index.html`)
   await page.waitForLoadState('networkidle')
   await shot(page, 'options', `${scheme}-default.png`)
 
-  // capture disabled state so the trigger input appears dimmed in the record
   await page
     .getByRole('checkbox', { name: /enable caret on claude\.ai/i })
     .click()

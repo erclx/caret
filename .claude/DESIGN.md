@@ -42,6 +42,8 @@ font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
 | `heading` | 14px | 600    | Section headers             |
 | `hint`    | 11px | 400    | Keyboard hints, empty state |
 
+> Keyboard hint footer text: `↑↓ navigate · Enter/Tab insert · Esc close`
+
 All sizes in `px` — surfaces are fixed-width, rem scaling irrelevant.
 
 ## Spacing
@@ -74,12 +76,12 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 
 ### Dropdown
 
-- Width: matches input element (min 320px, max 480px)
-- Max height: 6 rows × 44px = 264px, then scrollable
+- Width: matches input element exactly
+- Max height: 280px, then scrollable (rows are ~48px with two-line name + preview layout)
 - Row: `[name label] ··· [preview muted, truncated 1 line]`
 - Selected state: `--selected` bg only, no border or left bar
 - Search input: borderless, `--surface` bg, placeholder in `--text-muted`
-- Footer hint: `↑↓ navigate · Enter insert · Esc close`, `hint` size, `--text-muted`
+- Footer hint: `↑↓ navigate · Enter/Tab insert · Esc close`, `hint` size, `--text-muted`
 - Empty state: `"No prompts yet — click the extension icon to add one"`
 
 ### Popup

@@ -4,6 +4,7 @@ export interface TriggerState {
   isActive: boolean
   rect: DOMRect | null
   triggerSymbol: string
+  query: string
 }
 
 export class InputDetector {
@@ -11,7 +12,9 @@ export class InputDetector {
   private triggerSymbol: string = '>'
   private resizeObserver: ResizeObserver
   private onTriggerChange: (state: TriggerState) => void
+
   private isActive = false
+  private query = ''
 
   constructor(onTriggerChange: (state: TriggerState) => void) {
     this.onTriggerChange = onTriggerChange
@@ -24,6 +27,7 @@ export class InputDetector {
 
   public attach(element: HTMLElement): void {
     if (this.adapter?.element === element) return
+
     this.detach()
 
     const adapter = createAdapter(element)
@@ -42,15 +46,21 @@ export class InputDetector {
       this.resizeObserver.unobserve(this.adapter.element)
       this.adapter = null
     }
+
     if (this.isActive) {
-      this.isActive = false
-      this.emitState()
+      this.deactivate()
     }
   }
 
   public destroy(): void {
     this.detach()
     this.resizeObserver.disconnect()
+  }
+
+  public deactivate(): void {
+    this.isActive = false
+    this.query = ''
+    this.emitState()
   }
 
   private handleKeydown = (e: KeyboardEvent): void => {
@@ -62,11 +72,11 @@ export class InputDetector {
 
       if (isValid) {
         this.isActive = true
+        this.query = ''
         setTimeout(() => this.emitState(), 0)
       }
     } else if (this.isActive && e.key === 'Escape') {
-      this.isActive = false
-      this.emitState()
+      this.deactivate()
     }
   }
 
@@ -74,12 +84,13 @@ export class InputDetector {
     if (!this.isActive || !this.adapter) return
 
     const textBefore = this.adapter.getTextBeforeCursor()
-
     const words = textBefore.split(/\s/)
     const lastWord = words[words.length - 1]
 
     if (!lastWord || !lastWord.startsWith(this.triggerSymbol)) {
-      this.isActive = false
+      this.deactivate()
+    } else {
+      this.query = lastWord.slice(this.triggerSymbol.length)
       this.emitState()
     }
   }
@@ -95,6 +106,7 @@ export class InputDetector {
       isActive: this.isActive,
       rect: this.isActive && this.adapter ? this.adapter.getRect() : null,
       triggerSymbol: this.triggerSymbol,
+      query: this.query,
     })
   }
 }

@@ -1,16 +1,18 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useSettings } from '@/shared/hooks/use-settings'
 
 import { InputDetector, type TriggerState } from '../input/detector'
 import { startSiteObserver } from '../input/site-observer'
 
-export function useInputDetection(): TriggerState {
+export function useInputDetection() {
   const { settings, isLoading } = useSettings()
+
   const [triggerState, setTriggerState] = useState<TriggerState>({
     isActive: false,
     rect: null,
     triggerSymbol: '>',
+    query: '',
   })
 
   const detector = useMemo(() => new InputDetector(setTriggerState), [])
@@ -37,7 +39,6 @@ export function useInputDetection(): TriggerState {
     detector.setTriggerSymbol(symbol)
 
     let stopped = false
-
     const stopObserver = startSiteObserver((element) => {
       if (!stopped) {
         detector.attach(element)
@@ -51,5 +52,9 @@ export function useInputDetection(): TriggerState {
     }
   }, [detector, settings, isLoading])
 
-  return triggerState
+  const deactivate = useCallback(() => {
+    detector.deactivate()
+  }, [detector])
+
+  return { ...triggerState, deactivate }
 }

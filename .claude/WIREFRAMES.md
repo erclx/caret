@@ -17,7 +17,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 │   eli5             Explain this like... │
 │   translate-en     Translate the fol... │
 ├─────────────────────────────────────────┤
-│ ↑↓ navigate · Enter insert · Esc close  │
+│ ↑↓ navigate · Enter/Tab insert · Esc close  │
 └─────────────────────────────────────────┘
         ▲ anchored above input
 ┌─────────────────────────────────────────┐
@@ -31,7 +31,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Symbol only fires at position 0 or immediately after whitespace — mid-word does not trigger
 - Filters in real time as user types after trigger
 - Max 6 rows visible before scroll
-- Keyboard: ↑↓, Ctrl+J/K, Ctrl+N/P to navigate · Enter to insert · Esc to dismiss
+- Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Empty state: "No prompts yet — click the extension icon to add one"
 
 ## 2. Popup
