@@ -2,6 +2,10 @@
 
 > Minimal & invisible. Renders on top of other tools — must never compete with them visually.
 
+## General rules
+
+All UI text uses sentence case — never title case. Proper nouns and product names retain their casing.
+
 ## Personality
 
 **Utilitarian. Sharp. Out of the way.** If the user notices the design, we've failed.
