@@ -65,7 +65,7 @@ export function PromptForm({
         >
           Cancel
         </Button>
-        <Button type='submit' disabled={isSubmitting}>
+        <Button variant='outline' type='submit' disabled={isSubmitting}>
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>
       </div>

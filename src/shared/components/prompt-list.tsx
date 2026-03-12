@@ -23,7 +23,7 @@ export function PromptList({
     return (
       <div className='flex flex-col items-center justify-center gap-4 py-8 text-center'>
         <p className='text-muted-foreground text-sm'>No prompts found.</p>
-        <Button onClick={onCreate}>
+        <Button variant='outline' onClick={onCreate}>
           <Plus className='mr-2 size-4' /> Create Prompt
         </Button>
       </div>
@@ -34,7 +34,7 @@ export function PromptList({
     <div className='flex h-full flex-col gap-4 overflow-hidden'>
       <div className='flex shrink-0 items-center justify-between'>
         <h2 className='text-foreground text-sm font-semibold'>Your Prompts</h2>
-        <Button size='sm' onClick={onCreate}>
+        <Button variant='outline' size='sm' onClick={onCreate}>
           <Plus className='mr-1 size-4' /> New
         </Button>
       </div>
@@ -78,7 +78,7 @@ export function PromptList({
             return (
               <div
                 key={prompt.id}
-                className='group border-border bg-card hover:border-accent flex items-center justify-between gap-2 rounded-md border p-3 shadow-sm transition-colors'
+                className='group border-border bg-card hover:border-foreground/30 hover:bg-accent/5 flex items-center justify-between gap-2 rounded-md border p-3 shadow-sm transition-colors'
               >
                 <div className='flex flex-col overflow-hidden'>
                   <span className='text-foreground truncate text-sm font-medium'>
@@ -88,7 +88,7 @@ export function PromptList({
                     {prompt.body}
                   </span>
                 </div>
-                <div className='flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100'>
+                <div className='flex shrink-0 gap-1'>
                   <Button
                     variant='ghost'
                     size='icon'
@@ -101,7 +101,7 @@ export function PromptList({
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='text-destructive hover:bg-destructive/20 hover:text-destructive size-8'
+                    className='text-destructive/80 hover:bg-destructive/20 hover:text-destructive size-8'
                     onClick={() => setConfirmDeleteId(prompt.id)}
                     aria-label='Delete prompt'
                   >
