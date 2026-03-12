@@ -34,7 +34,12 @@ export function PromptList({
     <div className='flex h-full flex-col gap-4 overflow-hidden'>
       <div className='flex shrink-0 items-center justify-between'>
         <h2 className='text-foreground text-sm font-semibold'>Your Prompts</h2>
-        <Button variant='outline' size='sm' onClick={onCreate}>
+        <Button
+          variant='outline'
+          size='sm'
+          className='transition-colors dark:hover:bg-zinc-700 dark:hover:text-white'
+          onClick={onCreate}
+        >
           <Plus className='mr-1 size-4' /> New
         </Button>
       </div>

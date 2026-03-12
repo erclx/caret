@@ -60,12 +60,13 @@ export function PromptForm({
         <Button
           type='button'
           variant='ghost'
+          className='text-muted-foreground'
           onClick={onCancel}
           disabled={isSubmitting}
         >
           Cancel
         </Button>
-        <Button variant='outline' type='submit' disabled={isSubmitting}>
+        <Button variant='default' type='submit' disabled={isSubmitting}>
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>
       </div>
