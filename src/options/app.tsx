@@ -93,12 +93,12 @@ export default function App() {
     <div className='bg-background text-foreground min-h-screen p-8'>
       <div className='mx-auto max-w-3xl'>
         <h1 className='mb-8 text-3xl font-bold tracking-tight'>
-          Caret Settings
+          Caret settings
         </h1>
         <div className='border-border bg-card text-card-foreground rounded-lg border shadow-xs'>
           <div className='border-border border-b p-6'>
             <h2 className='text-muted-foreground text-sm font-semibold'>
-              Per-Site Configuration
+              Per-site configuration
             </h2>
             <p className='text-muted-foreground text-sm'>
               Configure the trigger symbol and toggle Caret integration for
