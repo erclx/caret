@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- content: invoke prompts via fuzzy-search dropdown
+- fuzzy: add fuzzy matching for prompt search
 - content: add trigger detection and command palette UI in chat inputs
 - options: add per-site settings page
 - options: validate trigger symbols on settings page

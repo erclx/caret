@@ -56,7 +56,8 @@ src/
 │   ├── hooks/       # React hooks for content scripts
 │   ├── input/       # Input detection and adapters
 │   └── views/       # Dropdown command palette
-│       └── app.tsx
+│       ├── app.tsx
+│       └── dropdown/
 ├── options/         # Per-site trigger config and settings
 │   ├── app.tsx
 │   ├── index.html
