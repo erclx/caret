@@ -1,9 +1,10 @@
+import { PromptLibrary } from '@/shared/components/prompt-library'
+
 export default function App() {
   return (
-    <div className='bg-background text-foreground min-h-screen w-full p-3'>
-      <div className='border-border bg-card text-card-foreground w-full rounded-lg border p-4 shadow-xl'>
-        <h1 className='text-lg font-bold'>Side Panel</h1>
-        <p className='text-sm opacity-90'>Ready to use</p>
+    <div className='bg-background text-foreground flex min-h-screen w-full flex-col p-3'>
+      <div className='border-border bg-card text-card-foreground flex flex-1 flex-col overflow-hidden rounded-lg border p-4 shadow-xl'>
+        <PromptLibrary />
       </div>
     </div>
   )

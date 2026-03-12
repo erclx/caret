@@ -19,7 +19,7 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) or load 
 
 ## Usage
 
-1. Click the extension icon to open the prompt library and add prompts.
+1. Click the extension icon or open the side panel to manage your prompts. You can create, edit, and delete prompts from this view.
 2. In any supported chat input, type `>` followed by a prompt name to search.
 3. Use `↑↓` to navigate, `Enter` to insert, `Esc` to dismiss.
 

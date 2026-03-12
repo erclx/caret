@@ -10,15 +10,15 @@
 
 No accent. Mono zinc scale only. These override shadcn's default HSL variables in `index.css` — not a separate token system. Two palettes switched via `prefers-color-scheme`.
 
-| Token            | Light                | Dark                 | Usage                         |
-| ---------------- | -------------------- | -------------------- | ----------------------------- |
-| `--background`   | `zinc-50` (#fafafa)  | `zinc-900` (#18181b) | Popup, sidepanel, dropdown bg |
-| `--surface`      | `white` (#ffffff)    | `zinc-800` (#27272a) | Cards, input bg               |
-| `--border`       | `zinc-200` (#e4e4e7) | `zinc-700` (#3f3f46) | All borders                   |
-| `--text-primary` | `zinc-900` (#18181b) | `zinc-50` (#fafafa)  | Body text, prompt names       |
-| `--text-muted`   | `zinc-500` (#71717a) | `zinc-400` (#a1a1aa) | Preview text, hints, labels   |
-| `--selected`     | `zinc-100` (#f4f4f5) | `zinc-700` (#3f3f46) | Dropdown selected row, hover  |
-| `--destructive`  | `red-600` (#dc2626)  | `red-500` (#ef4444)  | Delete, error                 |
+| Token            | Light                | Dark                       | Usage                         |
+| ---------------- | -------------------- | -------------------------- | ----------------------------- |
+| `--background`   | `zinc-50` (#fafafa)  | `240 4% 15%` (#222226)     | Popup, sidepanel, dropdown bg |
+| `--surface`      | `white` (#ffffff)    | `240 3.7% 15.9%` (#27272a) | Cards, input bg               |
+| `--border`       | `zinc-200` (#e4e4e7) | `240 3.7% 25%` (#3a3a42)   | All borders                   |
+| `--text-primary` | `zinc-900` (#18181b) | `zinc-50` (#fafafa)        | Body text, prompt names       |
+| `--text-muted`   | `zinc-500` (#71717a) | `zinc-400` (#a1a1aa)       | Preview text, hints, labels   |
+| `--selected`     | `zinc-100` (#f4f4f5) | `240 3.7% 22%` (#333338)   | Dropdown selected row, hover  |
+| `--destructive`  | `red-600` (#dc2626)  | `0 72% 51%` (#e03131)      | Delete, error                 |
 
 Buttons use `--text-primary` on `--surface` with `--border` outline. Selection = background shift only, no color pop.
 

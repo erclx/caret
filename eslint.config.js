@@ -66,6 +66,14 @@ const reactConfig = {
   },
 }
 
+const shadcnConfig = {
+  name: 'feature/shadcn',
+  files: ['src/shared/components/ui/*.tsx'],
+  rules: {
+    'react-refresh/only-export-components': 'off',
+  },
+}
+
 const testConfig = {
   name: 'feature/testing',
   files: ['**/*.test.{ts,tsx}'],
@@ -84,6 +92,7 @@ export default defineConfig([
   ...tseslint.configs.recommended,
   featureConfig,
   reactConfig,
+  shadcnConfig,
   testConfig,
   eslintConfigPrettier,
 ])
