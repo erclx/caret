@@ -53,6 +53,8 @@ src/
 │   └── index.ts
 ├── content/         # Content scripts injected into target sites
 │   ├── main.tsx
+│   ├── hooks/       # React hooks for content scripts
+│   ├── input/       # Input detection and adapters
 │   └── views/       # Dropdown command palette
 │       └── app.tsx
 ├── options/         # Per-site trigger config and settings
