@@ -63,7 +63,7 @@ describe('PromptLibrary', () => {
 
     await user.click(screen.getByRole('button', { name: /new/i }))
 
-    expect(screen.getByText('New Prompt')).toBeInTheDocument()
+    expect(screen.getByText('New prompt')).toBeInTheDocument()
     expect(screen.getByLabelText(/trigger name/i)).toHaveValue('')
   })
 
@@ -73,7 +73,7 @@ describe('PromptLibrary', () => {
 
     await user.click(screen.getAllByRole('button', { name: /edit prompt/i })[0])
 
-    expect(screen.getByText('Edit Prompt')).toBeInTheDocument()
+    expect(screen.getByText('Edit prompt')).toBeInTheDocument()
     expect(screen.getByLabelText(/trigger name/i)).toHaveValue('summarize')
     expect(screen.getByLabelText(/prompt body/i)).toHaveValue('Summarize this')
   })

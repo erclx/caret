@@ -46,7 +46,7 @@ describe('OptionsApp', () => {
       name: /trigger symbol for claude\.ai/i,
     })
     await user.clear(claudeInput)
-    await user.type(claudeInput, '!!')
+    await user.type(claudeInput, '!')
 
     const claudeCheckbox = screen.getByRole('checkbox', {
       name: /enable caret on claude\.ai/i,
@@ -59,7 +59,7 @@ describe('OptionsApp', () => {
     await waitFor(() => {
       expect(mockUpdateSiteSettings).toHaveBeenCalledTimes(1)
       expect(mockUpdateSiteSettings).toHaveBeenCalledWith('claude.ai', {
-        triggerSymbol: '!!',
+        triggerSymbol: '!',
         enabled: false,
       })
     })
