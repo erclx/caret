@@ -1,10 +1,21 @@
-function App() {
+import { useInputDetection } from '../hooks/use-input-detection'
+
+export function App() {
+  const { isActive, rect, triggerSymbol } = useInputDetection()
+
+  if (!isActive || !rect) return null
+
   return (
-    <div className='border-border bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground fixed right-10 bottom-10 z-50 w-80 cursor-pointer rounded-lg border p-4 shadow-xl transition-colors'>
-      <h1 className='text-lg font-bold'>Content</h1>
-      <p className='text-sm opacity-90'>Ready to use</p>
+    <div
+      className='border-border bg-card text-card-foreground fixed z-50 rounded-lg border p-4 shadow-xl'
+      style={{
+        top: `${rect.top - 8}px`,
+        left: `${rect.left}px`,
+        transform: 'translateY(-100%)',
+      }}
+    >
+      <h1 className='text-sm font-bold'>Trigger Detected: {triggerSymbol}</h1>
+      <p className='text-muted-foreground text-xs'>Ready to search prompts</p>
     </div>
   )
 }
-
-export default App
