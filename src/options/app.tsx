@@ -97,7 +97,9 @@ export default function App() {
         </h1>
         <div className='border-border bg-card text-card-foreground rounded-lg border shadow-xs'>
           <div className='border-border border-b p-6'>
-            <h2 className='text-lg font-semibold'>Per-Site Configuration</h2>
+            <h2 className='text-muted-foreground text-sm font-semibold'>
+              Per-Site Configuration
+            </h2>
             <p className='text-muted-foreground text-sm'>
               Configure the trigger symbol and toggle Caret integration for
               supported AI platforms.

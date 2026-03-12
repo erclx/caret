@@ -40,7 +40,7 @@
 }
 
 :root {
-  --background: 0 0% 100%;
+  --background: 0 0% 98%;
   --foreground: 240 10% 3.9%;
 
   --card: 0 0% 100%;
@@ -121,7 +121,7 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 240 3.7% 22%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 72% 51%;
