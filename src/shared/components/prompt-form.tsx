@@ -43,6 +43,7 @@ export function PromptForm({
           pattern='^[a-zA-Z0-9_-]+$'
           title='Only letters, numbers, hyphens, and underscores'
           placeholder='e.g. summarize-text'
+          className='text-sm'
         />
       </div>
       <div className='flex flex-col gap-2'>
@@ -54,6 +55,7 @@ export function PromptForm({
           required
           rows={6}
           placeholder='Enter the prompt content...'
+          className='text-sm'
         />
       </div>
       <div className='mt-2 flex justify-end gap-2'>
