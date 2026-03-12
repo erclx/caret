@@ -4,14 +4,6 @@
 
 ## Up next
 
-### Feature 3 — Options page
-
-- [ ] Scaffold `src/options/` (app.tsx, index.html, main.tsx) — not yet in repo
-- [ ] Per-site trigger symbol config UI
-- [ ] Enable/disable per site toggle
-- [ ] Wire to useSettings
-- **Test strategy: unit** — settings form logic
-
 ### Feature 4 — Content script: Input detection
 
 - [ ] Detect chat input per target site (Claude, Gemini, ChatGPT)
@@ -83,6 +75,14 @@
 - [x] Delete with confirmation
 - [x] Wire popup/sidepanel to usePrompts
 - **Test strategy: unit** — component logic; e2e deferred
+
+### Feature 3 — Options page
+
+- [x] Scaffold `src/options/` (app.tsx, index.html, main.tsx)
+- [x] Per-site trigger symbol config UI
+- [x] Enable/disable per site toggle
+- [x] Wire to useSettings
+- **Test strategy: unit** — settings form logic
 
 ## Blocked
 

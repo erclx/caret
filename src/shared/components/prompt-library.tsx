@@ -55,7 +55,7 @@ export function PromptLibrary() {
       ) : (
         <div className='flex h-full flex-col overflow-y-auto pr-2'>
           <h2 className='text-foreground mb-4 text-base font-semibold'>
-            {editingPrompt ? 'Edit Prompt' : 'New Prompt'}
+            {editingPrompt ? 'Edit prompt' : 'New prompt'}
           </h2>
           <PromptForm
             initialPrompt={editingPrompt}

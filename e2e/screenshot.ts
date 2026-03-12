@@ -80,23 +80,27 @@ async function goto(
   await page.waitForLoadState('networkidle')
 }
 
-async function shot(page: Page, filename: string) {
-  await page.screenshot({ path: path.join(screenshotsDir, filename) })
-  console.log(`✓ ${filename}`)
+async function shot(page: Page, surface: string, filename: string) {
+  // group by surface so screenshots aren't a flat pile
+  const dir = path.join(screenshotsDir, surface)
+  fs.mkdirSync(dir, { recursive: true })
+  await page.screenshot({ path: path.join(dir, filename) })
+  console.log(`✓ ${surface}/${filename}`)
 }
 
+// popup and sidepanel
 for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   for (const surface of ['popup', 'sidepanel'] as Surface[]) {
-    // Empty state
+    // fresh context per surface so storage state doesn't bleed between empty and seeded shots
     const emptyCtx = await launchWithExtension()
     const emptyId = await getExtensionId(emptyCtx)
     const emptyPage = await emptyCtx.newPage()
     await goto(emptyPage, emptyId, surface, scheme)
-    await shot(emptyPage, `${surface}-${scheme}-empty.png`)
+    await shot(emptyPage, surface, `${scheme}-empty.png`)
     await emptyCtx.close()
 
-    // List, form-new, form-edit (shared context with seed data)
     const ctx = await launchWithExtension()
+    // addInitScript: runs before any page script so storage is populated before react mounts
     await ctx.addInitScript((prompts: Record<string, unknown>[]) => {
       ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
         prompts,
@@ -106,14 +110,12 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
 
     const listPage = await ctx.newPage()
     await goto(listPage, id, surface, scheme)
-    await shot(listPage, `${surface}-${scheme}-list.png`)
+    await shot(listPage, surface, `${scheme}-list.png`)
 
-    // Form — new prompt
     await listPage.getByRole('button', { name: /new/i }).click()
     await listPage.waitForTimeout(200)
-    await shot(listPage, `${surface}-${scheme}-form-new.png`)
+    await shot(listPage, surface, `${scheme}-form-new.png`)
 
-    // Form — edit prompt
     await listPage.getByRole('button', { name: /cancel/i }).click()
     await listPage.waitForTimeout(200)
     await listPage
@@ -121,10 +123,33 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
       .first()
       .click()
     await listPage.waitForTimeout(200)
-    await shot(listPage, `${surface}-${scheme}-form-edit.png`)
+    await shot(listPage, surface, `${scheme}-form-edit.png`)
 
     await ctx.close()
   }
+}
+
+// options page
+for (const scheme of ['light', 'dark'] as ColorScheme[]) {
+  const ctx = await launchWithExtension()
+  const id = await getExtensionId(ctx)
+
+  const page = await ctx.newPage()
+  // options is a full tab, not a constrained popup — use a normal viewport
+  await page.setViewportSize({ width: 800, height: 900 })
+  await page.emulateMedia({ colorScheme: scheme })
+  await page.goto(`chrome-extension://${id}/src/options/index.html`)
+  await page.waitForLoadState('networkidle')
+  await shot(page, 'options', `${scheme}-default.png`)
+
+  // capture disabled state so the trigger input appears dimmed in the record
+  await page
+    .getByRole('checkbox', { name: /enable caret on claude\.ai/i })
+    .click()
+  await page.waitForTimeout(100)
+  await shot(page, 'options', `${scheme}-site-disabled.png`)
+
+  await ctx.close()
 }
 
 console.log(`\nAll screenshots saved to: screenshots/`)

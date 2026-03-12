@@ -2,6 +2,10 @@
 
 > Minimal & invisible. Renders on top of other tools — must never compete with them visually.
 
+## General rules
+
+All UI text uses sentence case — never title case. Proper nouns and product names retain their casing.
+
 ## Personality
 
 **Utilitarian. Sharp. Out of the way.** If the user notices the design, we've failed.
@@ -104,7 +108,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 ### Options Page
 
 - Max width: 640px, centered
-- Section headers: `heading` size, `--text-muted`, uppercase, `letter-spacing: 0.05em`
+- Section headers: `heading` size, `--text-muted`, sentence case
 - Toggles: shadcn Switch, zinc only (no accent color)
 
 ### Options Page — GitHub Sync Section

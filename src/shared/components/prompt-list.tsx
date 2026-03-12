@@ -33,7 +33,7 @@ export function PromptList({
   return (
     <div className='flex h-full flex-col gap-4 overflow-hidden'>
       <div className='flex shrink-0 items-center justify-between'>
-        <h2 className='text-foreground text-sm font-semibold'>Your Prompts</h2>
+        <h2 className='text-foreground text-sm font-semibold'>Your prompts</h2>
         <Button
           variant='outline'
           size='sm'
@@ -54,7 +54,7 @@ export function PromptList({
                   className='border-destructive bg-destructive/10 flex items-center justify-between gap-2 rounded-md border p-3 shadow-sm'
                 >
                   <span className='text-destructive text-sm font-medium'>
-                    Delete prompt?
+                    Delete?
                   </span>
                   <div className='flex shrink-0 gap-2'>
                     <Button
@@ -74,7 +74,7 @@ export function PromptList({
                       }}
                       aria-label='Confirm delete'
                     >
-                      Delete
+                      Confirm
                     </Button>
                   </div>
                 </div>

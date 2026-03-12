@@ -34,7 +34,7 @@ export function PromptForm({
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-2'>
       <div className='flex flex-col gap-2'>
-        <Label htmlFor='name'>Trigger Name</Label>
+        <Label htmlFor='name'>Trigger name</Label>
         <Input
           id='name'
           value={name}
@@ -47,7 +47,7 @@ export function PromptForm({
         />
       </div>
       <div className='flex flex-col gap-2'>
-        <Label htmlFor='body'>Prompt Body</Label>
+        <Label htmlFor='body'>Prompt body</Label>
         <Textarea
           id='body'
           value={body}
