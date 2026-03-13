@@ -21,7 +21,7 @@ export function PromptForm({
   const [body, setBody] = useState(initialPrompt?.body ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmitting(true)
     try {
@@ -34,7 +34,7 @@ export function PromptForm({
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-2'>
       <div className='flex flex-col gap-2'>
-        <Label htmlFor='name'>Trigger name</Label>
+        <Label htmlFor='name'>Name</Label>
         <Input
           id='name'
           value={name}
@@ -68,7 +68,12 @@ export function PromptForm({
         >
           Cancel
         </Button>
-        <Button variant='default' type='submit' disabled={isSubmitting}>
+        <Button
+          variant='outline'
+          type='submit'
+          className='dark:hover:bg-zinc-700 dark:hover:text-white'
+          disabled={isSubmitting}
+        >
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>
       </div>

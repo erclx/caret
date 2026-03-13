@@ -135,6 +135,34 @@
 
 * {
   border-color: var(--color-border);
+  scrollbar-width: thin;
+  scrollbar-color: theme(colors.zinc.400) transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: theme(colors.zinc.600) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme(colors.zinc.400);
+  border-radius: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background-color: theme(colors.zinc.600);
+  }
 }
 
 body {

@@ -9,17 +9,6 @@ type BrowserGlobal = {
 }
 
 test.describe('Extension UI and Prompt Insertion E2E', () => {
-  test('Popup should load and render prompt library', async ({
-    page,
-    extensionId,
-  }) => {
-    await page.goto(`chrome-extension://${extensionId}/src/popup/index.html`)
-    await expect(page.getByText('No prompts found.')).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: /create prompt/i }),
-    ).toBeVisible()
-  })
-
   test('Sidepanel should load and render prompt library', async ({
     page,
     extensionId,
@@ -27,10 +16,10 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
     await page.goto(
       `chrome-extension://${extensionId}/src/sidepanel/index.html`,
     )
-    await expect(page.getByText('No prompts found.')).toBeVisible()
     await expect(
-      page.getByRole('button', { name: /create prompt/i }),
+      page.getByText(/no prompts yet — click the extension icon to add one/i),
     ).toBeVisible()
+    await expect(page.getByRole('button', { name: /new/i })).toBeVisible()
   })
 
   test('Should insert prompt into textarea (ChatGPT mock)', async ({
@@ -45,7 +34,9 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
       })
     })
 
-    await page.goto(`chrome-extension://${extensionId}/src/popup/index.html`)
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
 
     await page.evaluate(async () => {
       await (globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
@@ -93,7 +84,9 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
       })
     })
 
-    await page.goto(`chrome-extension://${extensionId}/src/popup/index.html`)
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
 
     await page.evaluate(async () => {
       await (globalThis as unknown as BrowserGlobal).chrome.storage.local.set({

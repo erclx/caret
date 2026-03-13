@@ -38,6 +38,10 @@ vi.mock('@/shared/hooks/use-prompts', () => ({
   usePrompts: () => mockUsePrompts,
 }))
 
+vi.stubGlobal('chrome', {
+  runtime: { openOptionsPage: vi.fn() },
+})
+
 describe('PromptLibrary', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -57,24 +61,22 @@ describe('PromptLibrary', () => {
     expect(screen.getByText(/loading prompts/i)).toBeInTheDocument()
   })
 
-  it('should switch to new form when create is clicked', async () => {
+  it('should switch to new form when New is clicked', async () => {
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: /new/i }))
 
-    expect(screen.getByText('New prompt')).toBeInTheDocument()
-    expect(screen.getByLabelText(/trigger name/i)).toHaveValue('')
+    expect(screen.getByLabelText(/^name$/i)).toHaveValue('')
   })
 
   it('should switch to edit form with correct prompt pre-populated', async () => {
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getAllByRole('button', { name: /edit prompt/i })[0])
+    await user.click(screen.getByText('summarize'))
 
-    expect(screen.getByText('Edit prompt')).toBeInTheDocument()
-    expect(screen.getByLabelText(/trigger name/i)).toHaveValue('summarize')
+    expect(screen.getByLabelText(/^name$/i)).toHaveValue('summarize')
     expect(screen.getByLabelText(/prompt body/i)).toHaveValue('Summarize this')
   })
 
@@ -84,7 +86,7 @@ describe('PromptLibrary', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: /new/i }))
-    await user.type(screen.getByLabelText(/trigger name/i), 'new-prompt')
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
     await user.type(screen.getByLabelText(/prompt body/i), 'New body')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
@@ -102,9 +104,9 @@ describe('PromptLibrary', () => {
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getAllByRole('button', { name: /edit prompt/i })[0])
-    await user.clear(screen.getByLabelText(/trigger name/i))
-    await user.type(screen.getByLabelText(/trigger name/i), 'updated-name')
+    await user.click(screen.getByText('summarize'))
+    await user.clear(screen.getByLabelText(/^name$/i))
+    await user.type(screen.getByLabelText(/^name$/i), 'updated-name')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
     expect(mockUpdatePrompt).toHaveBeenCalledWith('1', {
@@ -125,5 +127,38 @@ describe('PromptLibrary', () => {
 
     expect(mockAddPrompt).not.toHaveBeenCalled()
     expect(screen.getByText('summarize')).toBeInTheDocument()
+  })
+
+  it('should return to list without saving when ← Back is clicked', async () => {
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /new/i }))
+    await user.click(screen.getByRole('button', { name: /← back/i }))
+
+    expect(mockAddPrompt).not.toHaveBeenCalled()
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+  })
+
+  it('should filter prompts as search query changes', async () => {
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByPlaceholderText(/search prompts/i), 'sum')
+
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+    expect(screen.queryByText('refactor')).not.toBeInTheDocument()
+  })
+
+  it('should switch to GitHub tab and show setup placeholder', async () => {
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /github/i }))
+
+    expect(screen.getByText(/set up in options/i)).toBeInTheDocument()
+    expect(
+      screen.queryByPlaceholderText(/search prompts/i),
+    ).not.toBeInTheDocument()
   })
 })

@@ -80,16 +80,13 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Max height: 280px, then scrollable (rows are ~48px with two-line name + preview layout)
 - Row: `[name label] ··· [preview muted, truncated 1 line]`
 - Selected state: `--selected` bg only, no border or left bar
-- Search input: borderless, `--surface` bg, placeholder in `--text-muted`
+- No search input inside dropdown — filtering happens by typing after the trigger symbol in the chat input (intentional)
 - Footer hint: `↑↓ navigate · Enter/Tab insert · Esc close`, `hint` size, `--text-muted`
 - Empty state: `"No prompts yet — click the extension icon to add one"`
 
 ### Popup
 
-- Width: ~320px
-- Header: icon + title left, gear icon right
-- List: prompt name only, full-width clickable rows
-- `+ New prompt` bottom-anchored, `--text-muted` until hovered
+> Dormant — extension icon now opens the sidepanel. Popup kept for rollback only.
 
 ### Sidepanel
 

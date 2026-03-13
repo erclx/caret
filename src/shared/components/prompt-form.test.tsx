@@ -11,7 +11,7 @@ describe('PromptForm', () => {
     render(<PromptForm onSave={handleSave} onCancel={handleCancel} />)
     const user = userEvent.setup()
 
-    await user.type(screen.getByLabelText(/trigger name/i), 'new-prompt')
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
     await user.type(screen.getByLabelText(/prompt body/i), 'New body')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
