@@ -1,16 +1,31 @@
-import { useState } from 'react'
+import { Plus, Settings } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 import { usePrompts } from '@/shared/hooks/use-prompts'
 import type { Prompt } from '@/shared/types'
+import { cn } from '@/shared/utils/cn'
 
 import { PromptForm } from './prompt-form'
 import { PromptList } from './prompt-list'
 
+type Tab = 'prompts' | 'github'
+type View = 'list' | 'form'
+
 export function PromptLibrary() {
   const { prompts, isLoading, addPrompt, updatePrompt, deletePrompt } =
     usePrompts()
-  const [view, setView] = useState<'list' | 'form'>('list')
+  const [view, setView] = useState<View>('list')
+  const [tab, setTab] = useState<Tab>('prompts')
+  const [query, setQuery] = useState('')
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
+
+  const filteredPrompts = useMemo(() => {
+    const trimmed = query.trim().toLowerCase()
+    if (!trimmed) return prompts
+    return prompts.filter((p) => p.name.toLowerCase().includes(trimmed))
+  }, [prompts, query])
 
   if (isLoading) {
     return (
@@ -20,17 +35,17 @@ export function PromptLibrary() {
     )
   }
 
-  const handleCreate = () => {
+  function handleCreate() {
     setEditingPrompt(null)
     setView('form')
   }
 
-  const handleEdit = (prompt: Prompt) => {
+  function handleEdit(prompt: Prompt) {
     setEditingPrompt(prompt)
     setView('form')
   }
 
-  const handleSave = async (data: { name: string; body: string }) => {
+  async function handleSave(data: { name: string; body: string }) {
     if (editingPrompt) {
       await updatePrompt(editingPrompt.id, data)
     } else {
@@ -39,29 +54,105 @@ export function PromptLibrary() {
     setView('list')
   }
 
-  const handleCancel = () => {
+  function handleBack() {
     setView('list')
   }
 
-  return (
-    <div className='flex h-full flex-col overflow-hidden'>
-      {view === 'list' ? (
-        <PromptList
-          prompts={prompts}
-          onCreate={handleCreate}
-          onEdit={handleEdit}
-          onDelete={deletePrompt}
-        />
-      ) : (
-        <div className='flex h-full flex-col overflow-y-auto pr-2'>
-          <h2 className='text-foreground mb-4 text-base font-semibold'>
-            {editingPrompt ? 'Edit prompt' : 'New prompt'}
-          </h2>
+  if (view === 'form') {
+    return (
+      <div className='flex h-full flex-col overflow-hidden'>
+        <button
+          className='text-muted-foreground hover:text-foreground mb-4 flex shrink-0 items-center gap-1 text-sm transition-colors'
+          onClick={handleBack}
+        >
+          ← Back
+        </button>
+        <div className='flex-1 overflow-y-auto pr-2'>
           <PromptForm
             initialPrompt={editingPrompt}
             onSave={handleSave}
-            onCancel={handleCancel}
+            onCancel={handleBack}
           />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex h-full flex-col gap-3 overflow-hidden px-1'>
+      {/* Header */}
+      <div className='flex shrink-0 items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <img src='/logo.png' alt='' className='size-5' aria-hidden='true' />
+          <span className='text-foreground text-sm font-semibold'>Caret</span>
+        </div>
+        <Button
+          variant='ghost'
+          size='icon-sm'
+          onClick={() => chrome.runtime.openOptionsPage()}
+          aria-label='Open settings'
+        >
+          <Settings className='size-4' />
+        </Button>
+      </div>
+
+      {/* Tab bar */}
+      <div className='flex shrink-0 items-center gap-2'>
+        <div className='flex flex-1 gap-1'>
+          {(['prompts', 'github'] as const).map((t) => (
+            <button
+              key={t}
+              className={cn(
+                'rounded-md px-3 py-1 text-sm font-medium capitalize transition-colors',
+                tab === t
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+              onClick={() => setTab(t)}
+            >
+              {t === 'prompts' ? 'Prompts' : 'GitHub'}
+            </button>
+          ))}
+        </div>
+        {tab === 'prompts' && (
+          <Button
+            variant='outline'
+            size='sm'
+            className='dark:hover:bg-zinc-700 dark:hover:text-white'
+            onClick={handleCreate}
+          >
+            <Plus className='size-4' /> New
+          </Button>
+        )}
+      </div>
+
+      {/* Prompts tab */}
+      {tab === 'prompts' && (
+        <>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder='Search prompts...'
+            className='shrink-0 text-sm'
+          />
+          <PromptList
+            prompts={filteredPrompts}
+            hasQuery={query.trim().length > 0}
+            onEdit={handleEdit}
+            onDelete={deletePrompt}
+          />
+        </>
+      )}
+
+      {/* GitHub tab */}
+      {tab === 'github' && (
+        <div className='flex flex-1 items-center justify-center'>
+          <button
+            className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-colors hover:underline'
+            onClick={() => chrome.runtime.openOptionsPage()}
+          >
+            Set up in Options →
+          </button>
         </div>
       )}
     </div>

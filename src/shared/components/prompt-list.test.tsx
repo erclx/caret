@@ -11,11 +11,26 @@ const mockPrompts: Prompt[] = [
 ]
 
 describe('PromptList', () => {
-  it('should render empty state when no prompts exist', () => {
+  it('should render empty state with no-prompts copy when hasQuery is false', () => {
     render(
       <PromptList
         prompts={[]}
-        onCreate={vi.fn()}
+        hasQuery={false}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByText(/no prompts yet — click the extension icon to add one/i),
+    ).toBeInTheDocument()
+  })
+
+  it('should render empty state with no-results copy when hasQuery is true', () => {
+    render(
+      <PromptList
+        prompts={[]}
+        hasQuery={true}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -24,30 +39,62 @@ describe('PromptList', () => {
     expect(screen.getByText(/no prompts found/i)).toBeInTheDocument()
   })
 
+  it('should call onEdit when a prompt row is clicked', async () => {
+    const handleEdit = vi.fn()
+    render(
+      <PromptList
+        prompts={mockPrompts}
+        hasQuery={false}
+        onEdit={handleEdit}
+        onDelete={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(screen.getByText('prompt-1'))
+
+    expect(handleEdit).toHaveBeenCalledWith(mockPrompts[0])
+  })
+
   it('should require inline confirmation before triggering delete', async () => {
     const handleDelete = vi.fn()
     render(
       <PromptList
         prompts={mockPrompts}
-        onCreate={vi.fn()}
+        hasQuery={false}
         onEdit={vi.fn()}
         onDelete={handleDelete}
       />,
     )
     const user = userEvent.setup()
 
-    const deleteButtons = screen.getAllByRole('button', {
-      name: /delete prompt/i,
-    })
-    await user.click(deleteButtons[0])
+    await user.click(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
 
     expect(handleDelete).not.toHaveBeenCalled()
 
-    const confirmButton = screen.getByRole('button', {
-      name: /confirm delete/i,
-    })
-    await user.click(confirmButton)
+    await user.click(screen.getByRole('button', { name: /confirm delete/i }))
 
     expect(handleDelete).toHaveBeenCalledWith('1')
+  })
+
+  it('should not trigger onEdit when the delete button is clicked', async () => {
+    const handleEdit = vi.fn()
+    render(
+      <PromptList
+        prompts={mockPrompts}
+        hasQuery={false}
+        onEdit={handleEdit}
+        onDelete={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
+
+    expect(handleEdit).not.toHaveBeenCalled()
   })
 })
