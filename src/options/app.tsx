@@ -121,9 +121,6 @@ export default function App() {
       setIsSaved(true)
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
       savedTimerRef.current = setTimeout(() => setIsSaved(false), 2500)
-      setIsSaved(true)
-      if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
-      savedTimerRef.current = setTimeout(() => setIsSaved(false), 2500)
     } finally {
       setIsSaving(false)
     }
