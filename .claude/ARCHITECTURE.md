@@ -61,6 +61,8 @@ src/
         ├── cn.ts
         ├── fuzzy.ts          # Fuzzy match util
         ├── fuzzy.test.ts
+        ├── io.ts             # Export (JSON download) and import (parse + merge) logic
+        ├── io.test.ts
         ├── storage.ts        # chrome.storage.local wrapper (typed, async)
         ├── storage.test.ts
         └── seeds.ts          # Dev-only sample prompts; seeded on first run in development
@@ -133,6 +135,10 @@ type Settings = {
   }
 }
 ```
+
+### JSON export / import
+
+Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using name-based last-write-wins — duplicate names overwrite the existing body while preserving the existing `id`; new prompts get a fresh `crypto.randomUUID()`.
 
 ## Filtering strategy
 

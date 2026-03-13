@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import type { Prompt } from '@/shared/types'
+import { mergePrompts } from '@/shared/utils/io'
 import { storage } from '@/shared/utils/storage'
 
 export function usePrompts() {
@@ -62,5 +63,22 @@ export function usePrompts() {
     await storage.setPrompts(current.filter((p) => p.id !== id))
   }, [])
 
-  return { prompts, isLoading, addPrompt, updatePrompt, deletePrompt }
+  const importPrompts = useCallback(
+    async (incoming: Prompt[]): Promise<{ added: number; updated: number }> => {
+      const current = await storage.getPrompts()
+      const { merged, added, updated } = mergePrompts(current, incoming)
+      await storage.setPrompts(merged)
+      return { added, updated }
+    },
+    [],
+  )
+
+  return {
+    prompts,
+    isLoading,
+    addPrompt,
+    updatePrompt,
+    deletePrompt,
+    importPrompts,
+  }
 }
