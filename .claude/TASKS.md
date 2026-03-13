@@ -2,6 +2,47 @@
 
 ## In progress
 
+### Chore — migrate to sidepanel
+
+- [ ] Manifest: remove `default_popup`, add sidepanel + permission
+- [ ] Background worker: `chrome.action.onClicked` → `chrome.sidePanel.open()`
+- [ ] Popup: keep code, add dormant comment
+- [ ] ARCHITECTURE.md: note sidepanel-primary decision, popup dormant
+
+### Chore — add extension icons at all sizes
+
+- [ ] Create logo at 16, 32, 48, 128px
+- [ ] Wire into manifest as extension icons
+
+### Feature — sidepanel UI
+
+- [ ] Header: replace "Your prompts" → logo + "Caret" + gear icon
+- [ ] Gear icon → opens options page via `chrome.runtime.openOptionsPage()`
+- [ ] Add `[Prompts] [GitHub]` tab bar
+- [ ] GitHub tab: empty shell, "Set up in options →" placeholder
+- [ ] Add search input between tab bar and list, filters in real time
+- [ ] Remove pencil icon from list rows
+- [ ] Whole row clickable to edit
+- [ ] Row hover state: background shift + pointer cursor
+- [ ] Bin + inline delete confirmation: keep as-is
+- [ ] Form label: "Trigger name" → "Name"
+- [ ] Form: add `← Back` top-left
+- [ ] Save button: fix light mode solid → outlined (shared button component)
+- [ ] Empty state copy: "No prompts found." → "No prompts yet — click the extension icon to add one"
+- [ ] Scrollbar styling: thin 4px zinc thumb, transparent track, applied globally in `index.css` (textarea + dropdown list)
+
+### Fix — options page save feedback
+
+- [ ] Inline "Settings saved" on save, fades after 2-3s
+
+### Docs — update wireframes and architecture
+
+- [ ] Dropdown: remove search field, note filter-as-you-type in chat input is intentional
+- [ ] List view: remove pencil `✏️`, note whole row is clickable
+- [ ] Sidepanel: update layout to reflect search bar, tab bar, fixed header
+
+## Up next
+
 ### Feature 7 — JSON export / import
 
 - [ ] Export prompts as JSON download
@@ -13,9 +54,9 @@
 
 ### Feature 8 — GitHub Sync
 
-- [ ] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath`
-- [ ] GitHub config UI in options page (PAT input, repo details)
-- [ ] Dedicated sync view in sidepanel: connection status, last synced timestamp, snippet count, sync button
+- [x] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath` — `GithubSettingsSchema` defined in `src/shared/types/index.ts`
+- [ ] GitHub config UI in options page (PAT input, repo details, save, connection status)
+- [ ] Dedicated sync view in sidepanel: tab bar `[Prompts] [GitHub]`, connection status, last synced timestamp, snippet count, sync button
 - [ ] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
 - [ ] Map filename → slug (strip `.md`), file content → prompt body; full replace on sync
 - [ ] Show post-sync summary: how many snippets added/updated/removed
