@@ -4,15 +4,6 @@
 
 ## Up next
 
-### Feature 7 — JSON export / import
-
-- [ ] Export prompts as JSON download
-- [ ] Import from JSON file with Zod validation
-- [ ] Handle merge conflicts (duplicate names)
-- **Test strategy: unit** — pure parse/validate logic
-
-## Up next
-
 ### Feature 8 — GitHub Sync
 
 - [x] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath` — `GithubSettingsSchema` defined in `src/shared/types/index.ts`
@@ -120,3 +111,10 @@
 - [x] Add mousedown listener on document in `use-dropdown.ts`
 - [x] Dismiss when click target is outside dropdown ref
 - [x] Clean up listener in useEffect teardown
+
+### Feature 7 — JSON export / import
+
+- [x] Export prompts as JSON download
+- [x] Import from JSON file with Zod validation
+- [x] Handle merge conflicts (duplicate names)
+- **Test strategy: unit** — pure parse/validate logic
