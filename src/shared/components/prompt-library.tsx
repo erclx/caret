@@ -1,5 +1,5 @@
-import { Plus, Settings } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { Plus, Settings, X } from 'lucide-react'
+import { useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -20,6 +20,7 @@ export function PromptLibrary() {
   const [tab, setTab] = useState<Tab>('prompts')
   const [query, setQuery] = useState('')
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
+  const searchRef = useRef<HTMLInputElement | null>(null)
 
   const filteredPrompts = useMemo(() => {
     const trimmed = query.trim().toLowerCase()
@@ -129,12 +130,27 @@ export function PromptLibrary() {
       {/* Prompts tab */}
       {tab === 'prompts' && (
         <>
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder='Search prompts...'
-            className='shrink-0 text-sm'
-          />
+          <div className='relative shrink-0'>
+            <Input
+              ref={searchRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder='Search prompts...'
+              className='text-sm'
+            />
+            {query && (
+              <button
+                className='text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2 transition-colors'
+                onClick={() => {
+                  setQuery('')
+                  searchRef.current?.focus()
+                }}
+                aria-label='Clear search'
+              >
+                <X className='size-3.5' />
+              </button>
+            )}
+          </div>
           <PromptList
             prompts={filteredPrompts}
             hasQuery={query.trim().length > 0}

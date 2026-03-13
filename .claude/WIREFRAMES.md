@@ -53,7 +53,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 ├────────────────────────────────┤
 │ [Prompts]  [GitHub]   + New   │  ← tab bar; + New scoped to Prompts tab, hides on GitHub tab
 ├────────────────────────────────┤
-│ 🔍 Search prompts...           │  ← real-time filter against prompt names
+│ 🔍 Search prompts...        ✕ │  ← X appears only when query is non-empty; clears and refocuses
 ├────────────────────────────────┤
 │ summarize              🗑️     │  ← whole row clickable to edit; no pencil icon
 │ Summarize the following...     │
