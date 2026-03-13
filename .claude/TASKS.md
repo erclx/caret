@@ -2,11 +2,6 @@
 
 ## In progress
 
-### Chore — add extension icons at all sizes
-
-- [ ] Create logo at 16, 32, 48, 128px
-- [ ] Wire into manifest as extension icons
-
 ### Feature — sidepanel UI
 
 - [ ] Header: replace "Your prompts" → logo + "Caret" + gear icon
@@ -123,3 +118,8 @@
 - [x] Background worker: `chrome.action.onClicked` → `chrome.sidePanel.open()`
 - [x] Popup: keep code, add dormant comment
 - [x] ARCHITECTURE.md: note sidepanel-primary decision, popup dormant
+
+### Chore — add extension icons at all sizes
+
+- [x] Create logo at 16, 32, 48, 128px
+- [x] Wire into manifest as extension icons
