@@ -1,10 +1,11 @@
 import { Save } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { useSettings } from '@/shared/hooks/use-settings'
+import { cn } from '@/shared/utils/cn'
 
 const DEFAULT_SITES = ['claude.ai', 'gemini.google.com', 'chatgpt.com']
 
@@ -23,7 +24,15 @@ export default function App() {
   const { settings, isLoading, updateSiteSettings } = useSettings()
   const [localSites, setLocalSites] = useState<Record<string, SiteConfig>>({})
   const [isSaving, setIsSaving] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   const [isInitialized, setIsInitialized] = useState(false)
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     if (!isLoading && !isInitialized) {
@@ -62,6 +71,9 @@ export default function App() {
         })
         .map(([site, config]) => updateSiteSettings(site, config))
       await Promise.all(promises)
+      setIsSaved(true)
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
+      savedTimerRef.current = setTimeout(() => setIsSaved(false), 2500)
     } finally {
       setIsSaving(false)
     }
@@ -166,7 +178,15 @@ export default function App() {
               )
             })}
           </div>
-          <div className='border-border bg-muted/50 flex justify-end rounded-b-lg border-t p-6'>
+          <div className='border-border bg-muted/50 flex items-center justify-end gap-4 rounded-b-lg border-t p-6'>
+            <span
+              className={cn(
+                'text-muted-foreground text-sm transition-opacity duration-500',
+                isSaved ? 'opacity-100' : 'opacity-0',
+              )}
+            >
+              Settings saved ✓
+            </span>
             <Button
               onClick={handleSave}
               disabled={isSaving || hasInvalidTrigger}
