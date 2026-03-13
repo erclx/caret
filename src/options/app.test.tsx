@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '@/options/app'
 
 const mockUpdateSiteSettings = vi.fn()
+const mockImportPrompts = vi.fn()
 
 vi.mock('@/shared/hooks/use-settings', () => ({
   useSettings: () => ({
@@ -17,6 +18,14 @@ vi.mock('@/shared/hooks/use-settings', () => ({
     },
     isLoading: false,
     updateSiteSettings: mockUpdateSiteSettings,
+  }),
+}))
+
+vi.mock('@/shared/hooks/use-prompts', () => ({
+  usePrompts: () => ({
+    prompts: [],
+    isLoading: false,
+    importPrompts: mockImportPrompts,
   }),
 }))
 
