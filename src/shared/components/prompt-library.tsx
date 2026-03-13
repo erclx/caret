@@ -7,6 +7,7 @@ import { usePrompts } from '@/shared/hooks/use-prompts'
 import type { Prompt } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
+import { GitHubView } from './github-view'
 import { PromptForm } from './prompt-form'
 import { PromptList } from './prompt-list'
 
@@ -161,16 +162,7 @@ export function PromptLibrary() {
       )}
 
       {/* GitHub tab */}
-      {tab === 'github' && (
-        <div className='flex flex-1 items-center justify-center'>
-          <button
-            className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-colors hover:underline'
-            onClick={() => chrome.runtime.openOptionsPage()}
-          >
-            Set up in Options →
-          </button>
-        </div>
-      )}
+      {tab === 'github' && <GitHubView />}
     </div>
   )
 }
