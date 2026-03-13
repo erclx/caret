@@ -21,9 +21,10 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) or load 
 ## Usage
 
 1. Click the extension icon or open the side panel. Here you can manage your prompts, view GitHub snippets, and access settings.
-2. In the 'Prompts' tab, use the search bar to find prompts or the 'New' button to create a new one.
-3. In any supported chat input, type `>` followed by a prompt name to search.
-4. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss.
+2. In the 'Prompts' tab, use the search bar to find prompts or the 'New' button to create one.
+3. To backup or restore your prompts, navigate to the settings page (right-click the extension icon and select 'Options') and use the export/import options.
+4. In any supported chat input, type `>` followed by a prompt name to search.
+5. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss.
 
 Supported sites: Claude.ai, Gemini, ChatGPT.
 
