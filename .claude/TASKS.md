@@ -2,13 +2,6 @@
 
 ## In progress
 
-### Chore — migrate to sidepanel
-
-- [ ] Manifest: remove `default_popup`, add sidepanel + permission
-- [ ] Background worker: `chrome.action.onClicked` → `chrome.sidePanel.open()`
-- [ ] Popup: keep code, add dormant comment
-- [ ] ARCHITECTURE.md: note sidepanel-primary decision, popup dormant
-
 ### Chore — add extension icons at all sizes
 
 - [ ] Create logo at 16, 32, 48, 128px
@@ -123,3 +116,10 @@
 - [x] Insert at cursor for textarea (InputEvent dispatch)
 - [x] Verify Claude.ai ProseMirror state updates correctly
 - [x] Rename `e2e/smoke.test.ts` → `e2e/ui.test.ts` then overwrite with real Playwright tests for insertion
+
+### Chore — migrate to sidepanel
+
+- [x] Manifest: remove `default_popup`, add sidepanel + permission
+- [x] Background worker: `chrome.action.onClicked` → `chrome.sidePanel.open()`
+- [x] Popup: keep code, add dormant comment
+- [x] ARCHITECTURE.md: note sidepanel-primary decision, popup dormant
