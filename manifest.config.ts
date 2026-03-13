@@ -7,11 +7,17 @@ export default defineManifest({
   name: pkg.name,
   version: pkg.version,
   icons: {
-    48: 'public/logo.png',
+    16: 'public/icons/16.png',
+    32: 'public/icons/32.png',
+    48: 'public/icons/48.png',
+    128: 'public/icons/128.png',
   },
   action: {
     default_icon: {
-      48: 'public/logo.png',
+      16: 'public/icons/16.png',
+      32: 'public/icons/32.png',
+      48: 'public/icons/48.png',
+      128: 'public/icons/128.png',
     },
   },
   permissions: ['sidePanel', 'contentSettings', 'storage'],
