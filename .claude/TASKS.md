@@ -2,23 +2,6 @@
 
 ## In progress
 
-### Feature — sidepanel UI
-
-- [ ] Header: replace "Your prompts" → logo + "Caret" + gear icon
-- [ ] Gear icon → opens options page via `chrome.runtime.openOptionsPage()`
-- [ ] Add `[Prompts] [GitHub]` tab bar
-- [ ] GitHub tab: empty shell, "Set up in options →" placeholder
-- [ ] Add search input between tab bar and list, filters in real time
-- [ ] Remove pencil icon from list rows
-- [ ] Whole row clickable to edit
-- [ ] Row hover state: background shift + pointer cursor
-- [ ] Bin + inline delete confirmation: keep as-is
-- [ ] Form label: "Trigger name" → "Name"
-- [ ] Form: add `← Back` top-left
-- [ ] Save button: fix light mode solid → outlined (shared button component)
-- [ ] Empty state copy: "No prompts found." → "No prompts yet — click the extension icon to add one"
-- [ ] Scrollbar styling: thin 4px zinc thumb, transparent track, applied globally in `index.css` (textarea + dropdown list)
-
 ### Fix — options page save feedback
 
 - [ ] Inline "Settings saved" on save, fades after 2-3s
@@ -123,3 +106,20 @@
 
 - [x] Create logo at 16, 32, 48, 128px
 - [x] Wire into manifest as extension icons
+
+### Feature — sidepanel UI
+
+- [x] Header: replace "Your prompts" → logo + "Caret" + gear icon
+- [x] Gear icon → opens options page via `chrome.runtime.openOptionsPage()`
+- [x] Add `[Prompts] [GitHub]` tab bar
+- [x] GitHub tab: empty shell, "Set up in options →" placeholder
+- [x] Add search input between tab bar and list, filters in real time
+- [x] Remove pencil icon from list rows
+- [x] Whole row clickable to edit
+- [x] Row hover state: background shift + pointer cursor
+- [x] Bin + inline delete confirmation: keep as-is
+- [x] Form label: "Trigger name" → "Name"
+- [x] Form: add `← Back` top-left
+- [x] Save button: fix light mode solid → outlined (shared button component)
+- [x] Empty state copy: "No prompts found." → "No prompts yet — click the extension icon to add one"
+- [x] Scrollbar styling: thin 4px zinc thumb, transparent track, applied globally in `index.css` (textarea + dropdown list)
