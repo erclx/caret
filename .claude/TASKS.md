@@ -2,13 +2,6 @@
 
 ## In progress
 
-### Fix — minor UI & interaction
-
-- [ ] Inline "Settings saved" on save, fades after 2-3s
-- [ ] Add mousedown listener on document in `use-dropdown.ts`
-- [ ] Dismiss when click target is outside dropdown ref
-- [ ] Clean up listener in useEffect teardown
-
 ## Up next
 
 ### Feature 7 — JSON export / import
@@ -120,3 +113,10 @@
 - [x] Save button: fix light mode solid → outlined (shared button component)
 - [x] Empty state copy: "No prompts found." → "No prompts yet — click the extension icon to add one"
 - [x] Scrollbar styling: thin 4px zinc thumb, transparent track, applied globally in `index.css` (textarea + dropdown list)
+
+### Fix — minor UI & interaction
+
+- [x] Inline "Settings saved" on save, fades after 2-3s
+- [x] Add mousedown listener on document in `use-dropdown.ts`
+- [x] Dismiss when click target is outside dropdown ref
+- [x] Clean up listener in useEffect teardown
