@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- prompts: insert selected prompt content into chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - fuzzy: add fuzzy matching for prompt search
 - content: add trigger detection and command palette UI in chat inputs
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- ui: migrate primary management interface to the sidepanel
 - design-system: adjust dark mode background and accent colors
 - design-system: update destructive color
 - prompt-list: refine hover styles
