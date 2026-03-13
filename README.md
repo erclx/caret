@@ -4,6 +4,8 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 
 ## Features
 
+- GitHub sync: pull prompts from a repository
+- Tooltips for clearer explanations in settings
 - Prompt library with tabbed view (your prompts and GitHub snippets) and search
 - Prompt form with simplified 'Name' field
 - Trigger symbol with fuzzy search on prompt names
@@ -22,9 +24,11 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) or load 
 
 1. Click the extension icon or open the side panel. Here you can manage your prompts, view GitHub snippets, and access settings.
 2. In the 'Prompts' tab, use the search bar to find prompts or the 'New' button to create one.
-3. To backup or restore your prompts, navigate to the settings page (right-click the extension icon and select 'Options') and use the export/import options.
-4. In any supported chat input, type `>` followed by a prompt name to search.
-5. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss.
+3. To configure GitHub sync, navigate to the settings page (right-click the extension icon and select 'Options'). In the 'GitHub sync' section, enter your Personal Access Token, repository details, and snippets path.
+4. Once configured, switch to the 'GitHub' tab in the prompt library to view and sync prompts from your repository.
+5. To backup or restore your prompts, navigate to the settings page and use the export/import options.
+6. In any supported chat input, type `>` followed by a prompt name to search.
+7. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss.
 
 Supported sites: Claude.ai, Gemini, ChatGPT.
 
