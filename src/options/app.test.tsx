@@ -38,6 +38,24 @@ describe('OptionsApp', () => {
     ).toHaveValue('>')
   })
 
+  it('should show "Settings saved" feedback after a successful save', async () => {
+    mockUpdateSiteSettings.mockResolvedValue(undefined)
+    render(<App />)
+    const user = userEvent.setup()
+
+    const claudeInput = screen.getByRole('textbox', {
+      name: /trigger symbol for claude\.ai/i,
+    })
+    await user.clear(claudeInput)
+    await user.type(claudeInput, '!')
+
+    await user.click(screen.getByRole('button', { name: /save settings/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/settings saved/i)).toBeVisible()
+    })
+  })
+
   it('should only call updateSiteSettings for modified sites on save', async () => {
     render(<App />)
     const user = userEvent.setup()

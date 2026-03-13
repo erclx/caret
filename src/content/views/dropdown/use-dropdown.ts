@@ -8,6 +8,7 @@ export interface UseDropdownProps {
   query: string
   onSelect: (prompt: Prompt) => void
   onClose: () => void
+  dropdownRef: React.RefObject<HTMLElement | null>
 }
 
 export function useDropdown({
@@ -15,6 +16,7 @@ export function useDropdown({
   query,
   onSelect,
   onClose,
+  dropdownRef,
 }: UseDropdownProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [prevQuery, setPrevQuery] = useState(query)
@@ -64,6 +66,20 @@ export function useDropdown({
     window.addEventListener('keydown', handleKeyDown, true)
     return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [filteredPrompts, selectedIndex, onSelect, onClose])
+
+  useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [dropdownRef, onClose])
 
   return { filteredPrompts, selectedIndex, setSelectedIndex }
 }

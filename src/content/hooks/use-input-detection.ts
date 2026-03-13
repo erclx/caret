@@ -21,6 +21,12 @@ export function useInputDetection() {
   }, [detector])
 
   useEffect(() => {
+    const handleResize = () => detector.deactivate()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [detector])
+
+  useEffect(() => {
     if (isLoading) return
 
     const hostname = window.location.hostname
