@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import App from '@/options/app'
+import { TooltipProvider } from '@/shared/components/ui/tooltip'
 
 const mockUpdateSiteSettings = vi.fn()
 const mockImportPrompts = vi.fn()
@@ -35,7 +36,11 @@ describe('OptionsApp', () => {
   })
 
   it('should render default sites with loaded settings', () => {
-    render(<App />)
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
 
     expect(screen.getByText('claude.ai')).toBeInTheDocument()
     expect(
@@ -49,7 +54,11 @@ describe('OptionsApp', () => {
 
   it('should show "Settings saved" feedback after a successful save', async () => {
     mockUpdateSiteSettings.mockResolvedValue(undefined)
-    render(<App />)
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
     const user = userEvent.setup()
 
     const claudeInput = screen.getByRole('textbox', {
@@ -66,7 +75,11 @@ describe('OptionsApp', () => {
   })
 
   it('should only call updateSiteSettings for modified sites on save', async () => {
-    render(<App />)
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
     const user = userEvent.setup()
 
     const claudeInput = screen.getByRole('textbox', {

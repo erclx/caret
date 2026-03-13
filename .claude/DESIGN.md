@@ -118,6 +118,8 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Save button: standard outline, left-aligned
 - Connection status: inline right of Save — 8px dot + short label ("Connected" / "Not configured" / "Error"), `hint` size
 - No inline validation on PAT format — only show error state after a failed save attempt
+- Field labels have a `HelpCircle` icon (16px, `--text-muted`) that shows a tooltip on hover; tooltip styled zinc-800/zinc-700 via `className` override at usage site, not in the shadcn primitive
+- Repository field accepts `owner/repo` combined input and parses into separate `owner` and `repo` fields on change
 
 ## Iconography
 

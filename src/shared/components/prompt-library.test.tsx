@@ -38,6 +38,27 @@ vi.mock('@/shared/hooks/use-prompts', () => ({
   usePrompts: () => mockUsePrompts,
 }))
 
+vi.mock('@/shared/hooks/use-settings', () => ({
+  useSettings: () => ({
+    settings: { sites: {} },
+    isLoading: false,
+    updateSettings: vi.fn(),
+    updateSiteSettings: vi.fn(),
+  }),
+}))
+
+vi.mock('@/shared/hooks/use-github-sync', () => ({
+  useGithubSync: () => ({
+    status: 'idle',
+    diff: null,
+    error: null,
+    config: null,
+    sync: vi.fn(),
+    applySync: vi.fn(),
+    cancelSync: vi.fn(),
+  }),
+}))
+
 vi.stubGlobal('chrome', {
   runtime: { openOptionsPage: vi.fn() },
 })

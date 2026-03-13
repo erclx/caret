@@ -43,14 +43,16 @@ src/
 ├── index.css
 └── shared/
     ├── components/
+    │   ├── github-view.tsx   # GitHub tab UI: status, diff, sync controls
     │   ├── prompt-form.tsx
     │   ├── prompt-form.test.tsx
     │   ├── prompt-library.tsx
     │   ├── prompt-library.test.tsx
     │   ├── prompt-list.tsx
     │   ├── prompt-list.test.tsx
-    │   └── ui/               # shadcn/ui primitives (button, input, label, textarea)
+    │   └── ui/               # shadcn/ui primitives (button, input, label, textarea, tooltip)
     ├── hooks/
+    │   ├── use-github-sync.ts # Sync state machine: idle → fetching → reviewing → applying
     │   ├── use-prompts.ts    # CRUD over chrome.storage.local
     │   ├── use-prompts.test.ts
     │   ├── use-settings.ts   # Trigger symbol config per site
@@ -61,6 +63,8 @@ src/
         ├── cn.ts
         ├── fuzzy.ts          # Fuzzy match util
         ├── fuzzy.test.ts
+        ├── github.ts         # fetchSnippets, testConnection, computeDiff (pure)
+        ├── github.test.ts
         ├── io.ts             # Export (JSON download) and import (parse + merge) logic
         ├── io.test.ts
         ├── storage.ts        # chrome.storage.local wrapper (typed, async)
