@@ -7,7 +7,6 @@ import { startSiteObserver } from '../input/site-observer'
 
 export function useInputDetection() {
   const { settings, isLoading } = useSettings()
-
   const [triggerState, setTriggerState] = useState<TriggerState>({
     isActive: false,
     rect: null,
@@ -25,9 +24,10 @@ export function useInputDetection() {
     if (isLoading) return
 
     const hostname = window.location.hostname
-    const siteKey = Object.keys(settings.sites).find((k) =>
-      hostname.includes(k),
-    )
+    const siteKey = Object.keys(settings.sites)
+      .sort((a, b) => b.length - a.length)
+      .find((k) => hostname === k || hostname.endsWith(`.${k}`))
+
     const siteSettings = siteKey ? settings.sites[siteKey] : null
 
     if (siteSettings && !siteSettings.enabled) {
@@ -56,5 +56,12 @@ export function useInputDetection() {
     detector.deactivate()
   }, [detector])
 
-  return { ...triggerState, deactivate }
+  const insertPrompt = useCallback(
+    (text: string) => {
+      detector.insertPrompt(text)
+    },
+    [detector],
+  )
+
+  return { ...triggerState, deactivate, insertPrompt }
 }

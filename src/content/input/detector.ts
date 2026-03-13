@@ -12,7 +12,6 @@ export class InputDetector {
   private triggerSymbol: string = '>'
   private resizeObserver: ResizeObserver
   private onTriggerChange: (state: TriggerState) => void
-
   private isActive = false
   private query = ''
 
@@ -27,12 +26,9 @@ export class InputDetector {
 
   public attach(element: HTMLElement): void {
     if (this.adapter?.element === element) return
-
     this.detach()
-
     const adapter = createAdapter(element)
     if (!adapter) return
-
     this.adapter = adapter
     this.adapter.element.addEventListener('keydown', this.handleKeydown)
     this.adapter.element.addEventListener('input', this.handleInput)
@@ -46,7 +42,6 @@ export class InputDetector {
       this.resizeObserver.unobserve(this.adapter.element)
       this.adapter = null
     }
-
     if (this.isActive) {
       this.deactivate()
     }
@@ -63,17 +58,26 @@ export class InputDetector {
     this.emitState()
   }
 
+  public insertPrompt(text: string): void {
+    if (!this.isActive || !this.adapter) return
+
+    const deleteLength = this.triggerSymbol.length + this.query.length
+    this.isActive = false
+    this.query = ''
+    this.emitState()
+
+    this.adapter.insertText(text, deleteLength)
+  }
+
   private handleKeydown = (e: KeyboardEvent): void => {
     if (!this.adapter) return
 
     if (e.key === this.triggerSymbol) {
       const textBefore = this.adapter.getTextBeforeCursor()
       const isValid = textBefore.length === 0 || /\s$/.test(textBefore)
-
       if (isValid) {
         this.isActive = true
         this.query = ''
-        setTimeout(() => this.emitState(), 0)
       }
     } else if (this.isActive && e.key === 'Escape') {
       this.deactivate()
@@ -81,7 +85,8 @@ export class InputDetector {
   }
 
   private handleInput = (): void => {
-    if (!this.isActive || !this.adapter) return
+    if (!this.adapter) return
+    if (!this.isActive) return
 
     const textBefore = this.adapter.getTextBeforeCursor()
     const words = textBefore.split(/\s/)
@@ -96,7 +101,7 @@ export class InputDetector {
   }
 
   private updateRect(): void {
-    if (this.isActive) {
+    if (this.isActive && this.adapter) {
       this.emitState()
     }
   }
