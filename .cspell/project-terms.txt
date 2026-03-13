@@ -7,6 +7,7 @@ dbaeumer
 esbenp
 frontmatter
 lintstagedrc
+mousedown
 mkhl
 navigations
 networkidle

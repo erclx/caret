@@ -6,11 +6,11 @@
 
 - [ ] Inline "Settings saved" on save, fades after 2-3s
 
-### Docs — update wireframes and architecture
+### Fix — dropdown dismiss on outside click
 
-- [ ] Dropdown: remove search field, note filter-as-you-type in chat input is intentional
-- [ ] List view: remove pencil `✏️`, note whole row is clickable
-- [ ] Sidepanel: update layout to reflect search bar, tab bar, fixed header
+- [ ] Add mousedown listener on document in `use-dropdown.ts`
+- [ ] Dismiss when click target is outside dropdown ref
+- [ ] Clean up listener in useEffect teardown
 
 ## Up next
 
