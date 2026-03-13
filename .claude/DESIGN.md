@@ -107,7 +107,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 ### Options Page
 
 - Max width: 640px, centered
-- Section headers: `heading` size, `--text-muted`, sentence case
+- Section headers: `heading` size, `--text-foreground`, sentence case — deliberately full contrast (not muted) to create clear hierarchy against the muted description text below
 - Toggles: shadcn Switch, zinc only (no accent color)
 
 ### Options Page — GitHub Sync Section
