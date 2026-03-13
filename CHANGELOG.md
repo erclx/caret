@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- icons: add extension icons
 - prompts: insert selected prompt content into chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - fuzzy: add fuzzy matching for prompt search
