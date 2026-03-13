@@ -1,3 +1,4 @@
+// Dormant — extension icon now opens the sidepanel. Popup kept for reference/rollback.
 import { PromptLibrary } from '@/shared/components/prompt-library'
 
 export default function App() {

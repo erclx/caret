@@ -154,6 +154,10 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 Extension pulls from GitHub; it never pushes back. Sync is manual — triggered by the user via a sync button in the sidepanel GitHub view. Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → use file content as prompt body → full replace of prompts in storage. Post-sync shows a summary of adds/updates/removes. A diff view lets the user review changes before confirming. PAT is optional for public repos; required for private.
 
+### Sidepanel-primary: popup dormant
+
+The extension icon opens the sidepanel via `chrome.action.onClicked` → `chrome.sidePanel.open()`. The popup entry point (`src/popup/`) is kept dormant for rollback but is not wired into the manifest's `action.default_popup`.
+
 ### Shared UI between popup and sidepanel
 
 Popup and sidepanel import the same React components from `src/shared/`. Only layout/width differs.
