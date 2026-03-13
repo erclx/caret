@@ -2,22 +2,14 @@
 
 ## In progress
 
-## Up next
-
-### Feature 6 — Prompt insertion
-
-- [ ] Insert at cursor for contenteditable (execCommand)
-- [ ] Insert at cursor for textarea (InputEvent dispatch)
-- [ ] Verify Claude.ai ProseMirror state updates correctly
-- [ ] Rename `e2e/smoke.test.ts` → `e2e/ui.test.ts` then overwrite with real Playwright tests for insertion (don't create new test files — overwrite the existing smoke test)
-- **Test strategy: e2e** — must verify real site behavior
-
 ### Feature 7 — JSON export / import
 
 - [ ] Export prompts as JSON download
 - [ ] Import from JSON file with Zod validation
 - [ ] Handle merge conflicts (duplicate names)
 - **Test strategy: unit** — pure parse/validate logic
+
+## Up next
 
 ### Feature 8 — GitHub Sync
 
@@ -84,6 +76,9 @@
 - [x] Position/reposition on resize
 - **Test strategy: integration** — component + keyboard interaction
 
-## Blocked
+### Feature 6 — Prompt insertion
 
-- Claude.ai input insertion — ProseMirror compatibility unverified until Feature 6
+- [x] Insert at cursor for contenteditable (execCommand)
+- [x] Insert at cursor for textarea (InputEvent dispatch)
+- [x] Verify Claude.ai ProseMirror state updates correctly
+- [x] Rename `e2e/smoke.test.ts` → `e2e/ui.test.ts` then overwrite with real Playwright tests for insertion
