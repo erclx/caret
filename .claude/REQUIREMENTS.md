@@ -32,11 +32,10 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 4. **Keyboard nav** — ↑↓, Ctrl+J/K, Ctrl+N/P to move; Enter to insert; Escape to dismiss
 5. **Prompt insertion** — inserts prompt text at cursor position in the chat input
 6. **Per-site trigger config** — configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
-7. **Popup UI** — manage library from extension icon popup
-8. **Side panel UI** — manage library from Chrome side panel
-9. **Options page** — full settings including per-site trigger symbol config and GitHub sync config
-10. **JSON export/import** — backup and restore prompt library
-11. **GitHub sync** — pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
+7. **Side panel UI** — manage library from Chrome side panel; extension icon opens sidepanel via `chrome.action.onClicked`; popup entry kept dormant for rollback
+8. **Options page** — full settings including per-site trigger symbol config and GitHub sync config
+9. **JSON export/import** — backup and restore prompt library
+10. **GitHub sync** — pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
 
 ## Tech Stack
 
