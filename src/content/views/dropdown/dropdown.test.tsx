@@ -27,7 +27,7 @@ describe('Dropdown', () => {
     },
   ]
 
-  it('should filter prompts by query', () => {
+  it('should filter prompts by slug', () => {
     render(
       <Dropdown
         prompts={prompts}
@@ -39,6 +39,38 @@ describe('Dropdown', () => {
 
     expect(screen.getByText('summarize')).toBeInTheDocument()
     expect(screen.queryByText('refactor')).not.toBeInTheDocument()
+  })
+
+  it('should not match against prompt body', () => {
+    render(
+      <Dropdown
+        prompts={prompts}
+        query='Fix'
+        onSelect={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    )
+
+    expect(screen.queryByText('refactor')).not.toBeInTheDocument()
+  })
+
+  it('should sort prefix matches above fuzzy matches', () => {
+    const mixedPrompts = [
+      { id: '1', name: 'claude-edit', body: '', createdAt: 0, updatedAt: 0 },
+      { id: '2', name: 'code-search', body: '', createdAt: 0, updatedAt: 0 },
+    ]
+
+    render(
+      <Dropdown
+        prompts={mixedPrompts}
+        query='code'
+        onSelect={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    )
+
+    const items = screen.getAllByText(/claude-edit|code-search/)
+    expect(items[0]).toHaveTextContent('code-search')
   })
 
   it('should navigate down and select via keyboard', async () => {

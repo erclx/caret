@@ -25,3 +25,4 @@ All notable changes to this project will be documented in this file.
 - project: rename to Caret and refine description
 - design-system: dark mode background and surface colors softened from near-black to dark grey
 - design-system: button variants updated to outline and ghost for reduced visual weight
+- content: improve prompt filtering within dropdown

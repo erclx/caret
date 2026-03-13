@@ -53,10 +53,10 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
                 {index === selectedIndex ? '▶︎' : ''}
               </span>
               <div className='flex min-w-0 flex-col gap-0.5 overflow-hidden'>
-                <span className='text-foreground truncate text-[13px] leading-none font-medium'>
+                <span className='text-foreground truncate text-[13px] leading-tight font-medium'>
                   {prompt.name}
                 </span>
-                <span className='text-muted-foreground truncate text-[12px] leading-none'>
+                <span className='text-muted-foreground truncate text-[12px] leading-tight'>
                   {prompt.body}
                 </span>
               </div>
@@ -65,7 +65,7 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
         </div>
       )}
 
-      <div className='border-border text-muted-foreground border-t px-3 py-1.5 text-[11px] select-none'>
+      <div className='border-border text-muted-foreground shrink-0 border-t px-3 py-1.5 text-[11px] select-none'>
         ↑↓ navigate · Enter/Tab insert · Esc close
       </div>
     </div>

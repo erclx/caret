@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import type { Prompt } from '@/shared/types'
-import { fuzzyMatch } from '@/shared/utils/fuzzy'
+import { fuzzyMatch, scoreMatch } from '@/shared/utils/fuzzy'
 
 export interface UseDropdownProps {
   prompts: Prompt[]
@@ -26,9 +26,9 @@ export function useDropdown({
 
   const filteredPrompts = useMemo(() => {
     if (!query) return prompts
-    return prompts.filter(
-      (p) => fuzzyMatch(query, p.name) || fuzzyMatch(query, p.body),
-    )
+    return prompts
+      .filter((p) => fuzzyMatch(query, p.name))
+      .sort((a, b) => scoreMatch(query, b.name) - scoreMatch(query, a.name))
   }, [prompts, query])
 
   useEffect(() => {

@@ -161,7 +161,8 @@ describe('InputDetector integration', () => {
     )
 
     div.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
-    vi.runAllTimers()
+    div.appendChild(document.createTextNode('>'))
+    div.dispatchEvent(new Event('input', { bubbles: true }))
 
     expect(stateCallback).toHaveBeenCalledWith(
       expect.objectContaining({ isActive: true, triggerSymbol: '>' }),
@@ -175,7 +176,8 @@ describe('InputDetector integration', () => {
     detector.setTriggerSymbol('>')
 
     textarea.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
-    vi.runAllTimers()
+    textarea.value = '>'
+    textarea.dispatchEvent(new Event('input', { bubbles: true }))
 
     expect(stateCallback).toHaveBeenLastCalledWith(
       expect.objectContaining({ isActive: true }),

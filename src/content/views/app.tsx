@@ -7,14 +7,15 @@ import { useInputDetection } from '../hooks/use-input-detection'
 import { Dropdown } from './dropdown/dropdown'
 
 export function App() {
-  const { isActive, rect, query, deactivate } = useInputDetection()
+  const { isActive, rect, query, deactivate, insertPrompt } =
+    useInputDetection()
   const { prompts, isLoading } = usePrompts()
 
   const handleSelect = useCallback(
-    (_prompt: Prompt) => {
-      deactivate()
+    (prompt: Prompt) => {
+      insertPrompt(prompt.body)
     },
-    [deactivate],
+    [insertPrompt],
   )
 
   if (!isActive || !rect || isLoading) return null

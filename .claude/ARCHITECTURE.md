@@ -134,6 +134,18 @@ type Settings = {
 }
 ```
 
+## Filtering strategy
+
+Prompts filter on `name` only. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
+
+### Prompt insertion sequencing
+
+`insertPrompt` captures `deleteLength` then deactivates before calling `adapter.insertText` to prevent re-entrant `handleInput` on the synchronous input event.
+
+### ProseMirror insertion
+
+`ContentEditableAdapter.insertText` dispatches a cancellable `beforeinput` event. If the framework cancels it, `execCommand` is skipped. ProseMirror cancels and handles insertion via its own transaction system.
+
 ### Dev seeding
 
 On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `seeds.ts` writes a set of sample prompts mirroring the real `snippets/` folder content. No-op in production. Prevents implementers from testing against an empty library.
