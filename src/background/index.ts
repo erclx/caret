@@ -3,6 +3,10 @@ import { storage } from '@/shared/utils/storage'
 
 console.log('[Background] Service Worker Initialized')
 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.sidePanel.open({ windowId: tab.windowId })
+})
+
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('[Background] Extension installed')
 
