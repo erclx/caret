@@ -8,8 +8,8 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 
 ```plaintext
 ┌─────────────────────────────────────────┐
-│ 🔍 summarize...                         │
-├─────────────────────────────────────────┤
+│   summarize...                          │  ← no search input; filter is typed
+├─────────────────────────────────────────┤  directly in chat input after trigger
 │ ▶ summarize        Summarize the fol... │  ← selected
 │   fix-grammar      Fix grammar and s... │
 │   explain-code     Explain this code... │
@@ -21,79 +21,71 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └─────────────────────────────────────────┘
         ▲ anchored above input
 ┌─────────────────────────────────────────┐
-│ > summarize█                            │  ← chat input
+│ > summarize█                            │  ← chat input; typing here filters above
 └─────────────────────────────────────────┘
 ```
 
 **Behavior:**
 
 - Trigger: user types `>` (configurable per site)
-- Symbol only fires at position 0 or immediately after whitespace — mid-word does not trigger
-- Filters in real time as user types after trigger
+- Symbol only fires at position 0 or immediately after whitespace — mid-word does not trigger (e.g. `word>` must not open dropdown)
+- Filters in real time as user types after trigger symbol in the chat input — no separate search field inside the dropdown (intentional design decision)
 - Max 6 rows visible before scroll
 - Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
+- Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
+- Keydown listener on window capture phase to intercept before host page handlers fire
 - Empty state: "No prompts yet — click the extension icon to add one"
+- Dropdown width matches input element exactly
+- Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
+- Insertion: removes trigger + query text, inserts prompt body at cursor position
+- After insertion dropdown dismisses and focus returns to chat input
 
-## 2. Popup
+## 2. Sidepanel
 
-Appears when user clicks the extension icon. Compact.
+> Popup code is kept but not surfaced. `chrome.action.onClicked` opens the sidepanel.
+> All prompt management lives here.
+
+### List view
 
 ```plaintext
-┌──────────────────────────┐
-│ ⚡ Caret       ⚙️        │
-├──────────────────────────┤
-│ 🔍 Search prompts...     │
-├──────────────────────────┤
-│ summarize                │
-│ fix-grammar              │
-│ explain-code             │
-│ bullet-points            │
-│ eli5                     │
-├──────────────────────────┤
-│ + New prompt             │
-└──────────────────────────┘
+┌────────────────────────────────┐
+│ ⚡ Caret                ⚙️    │  ← logo + "Caret" left, gear right (opens options)
+├────────────────────────────────┤
+│ [Prompts]  [GitHub]   + New   │  ← tab bar; + New scoped to Prompts tab, hides on GitHub tab
+├────────────────────────────────┤
+│ 🔍 Search prompts...           │  ← real-time filter against prompt names
+├────────────────────────────────┤
+│ summarize              🗑️     │  ← whole row clickable to edit; no pencil icon
+│ Summarize the following...     │
+├────────────────────────────────┤
+│ fix-grammar            🗑️     │
+│ Fix grammar and spelling...    │
+├────────────────────────────────┤
+│ explain-code           🗑️     │
+│ Explain this code in simp...   │
+└────────────────────────────────┘
 ```
 
 **Behavior:**
 
-- ⚙️ opens Options page in new tab
-- Click any prompt to edit
-- \+ New prompt opens inline form
+- Click anywhere on row → opens edit form (full replace, no modal)
+- Hover → background shift + pointer cursor
+- 🗑️ click → inline confirmation expands in-row:
+  ```
+  │ Delete?      [Cancel]  [Confirm]  │
+  ```
+  Cancel dismisses, Confirm deletes with animation
+- Search filters on prompt name in real time; empty query shows all
+- List is scrollable; header, tab bar, and search input are fixed
+- `+ New` opens new prompt form (full replace); hidden when GitHub tab is active
 
-## 3. Sidepanel
-
-Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
-
-### List View
-
-```plaintext
-┌────────────────────────────────┐
-│ ⚡ Caret            ⚙️        │
-├────────────────────────────────┤
-│ [Prompts]  [GitHub]            │  ← tab bar
-├────────────────────────────────┤
-│ 🔍 Search prompts...           │
-├────────────────────────────────┤
-│ summarize                  ✏️  │
-│ Summarize the following...     │
-├────────────────────────────────┤
-│ fix-grammar                ✏️  │
-│ Fix grammar and spelling...    │
-├────────────────────────────────┤
-│ explain-code               ✏️  │
-│ Explain this code in simp...   │
-├────────────────────────────────┤
-│ + New prompt                   │
-└────────────────────────────────┘
-```
-
-### Edit View (click ✏️ — transitions in-place, no new tab)
+### Edit / new form
 
 ```plaintext
 ┌────────────────────────────────┐
-│ ← Back                         │
+│ ← Back                         │  ← discards changes, returns to list
 ├────────────────────────────────┤
-│ Name                           │
+│ Name                           │  ← was "Trigger name"; simplified
 │ ┌──────────────────────────┐   │
 │ │ summarize                │   │
 │ └──────────────────────────┘   │
@@ -102,26 +94,57 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 │ ┌──────────────────────────┐   │
 │ │ Summarize the following  │   │
 │ │ text in 3 bullet points: │   │
-│ │                          │   │
 │ └──────────────────────────┘   │
 │                                │
-│ [Save]          [Delete 🗑️]    │
+│ [Cancel]        [Save]         │  ← Save is outlined, not solid, in both modes
 └────────────────────────────────┘
 ```
 
 **Behavior:**
 
-- ← Back returns to list, discards unsaved changes
-- Save updates prompt in storage immediately
-- Delete shows confirmation before removing
+- `← Back` and Cancel both discard unsaved changes and return to list
+- Name field: required, must not be empty — red validation state if submitted empty
+- Prompt body: required, must not be empty — red validation state if submitted empty
+- Save writes to `chrome.storage.local` immediately, returns to list
+- Textarea scrollbar: thin 4px zinc thumb, transparent track (styled in `index.css`)
+- Edit form pre-fills fields with existing prompt data
+- New form shows empty fields with placeholder hints
 
-### GitHub sync view (click GitHub tab)
-
-#### Idle — never synced
+### Empty state
 
 ```plaintext
 ┌────────────────────────────────┐
-│ ⚡ Caret            ⚙️        │
+│ ⚡ Caret                ⚙️    │
+├────────────────────────────────┤
+│ [Prompts]  [GitHub]   + New   │
+├────────────────────────────────┤
+│                                │
+│   No prompts yet —             │
+│   click the extension icon     │
+│   to add one                   │
+│                                │
+└────────────────────────────────┘
+```
+
+### GitHub tab — not configured
+
+```plaintext
+┌────────────────────────────────┐
+│ ⚡ Caret                ⚙️    │
+├────────────────────────────────┤
+│ [Prompts]  [GitHub]            │
+├────────────────────────────────┤
+│                                │
+│   Set up in Options →          │  ← link to options page
+│                                │
+└────────────────────────────────┘
+```
+
+### GitHub tab — configured, never synced
+
+```plaintext
+┌────────────────────────────────┐
+│ ⚡ Caret                ⚙️    │
 ├────────────────────────────────┤
 │ [Prompts]  [GitHub]            │
 ├────────────────────────────────┤
@@ -132,11 +155,11 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 └────────────────────────────────┘
 ```
 
-#### Diff view — after fetch, before confirm
+### GitHub tab — diff view
 
 ```plaintext
 ┌────────────────────────────────┐
-│ ⚡ Caret            ⚙️        │
+│ ⚡ Caret                ⚙️    │
 ├────────────────────────────────┤
 │ [Prompts]  [GitHub]            │
 ├────────────────────────────────┤
@@ -155,11 +178,11 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 └────────────────────────────────┘
 ```
 
-#### Post-sync
+### GitHub tab — post-sync
 
 ```plaintext
 ┌────────────────────────────────┐
-│ ⚡ Caret            ⚙️        │
+│ ⚡ Caret                ⚙️    │
 ├────────────────────────────────┤
 │ [Prompts]  [GitHub]            │
 ├────────────────────────────────┤
@@ -170,17 +193,18 @@ Wider than popup. Persistent alongside the chat. Inline editing — no new tab.
 └────────────────────────────────┘
 ```
 
-**Behavior:**
+**GitHub behavior:**
 
-- `●` indicator: green = connected, red = error, gray = not configured
+- `●` indicator: green = connected · red = error · gray = not configured
+- Sync is always manual — no auto-sync
 - Cancel on diff discards fetch, does not modify storage
-- Apply does full replace then returns to post-sync state
-- If not configured: show "Set up in Options →" link instead of sync button
-- No auto-sync — always manual
+- Apply does full replace of all prompts then returns to post-sync state
+- Not configured: show "Set up in Options →" link instead of sync button
+- PAT optional for public repos; required for private
+- Each sync: 1 directory listing request + 1 per snippet file (N+1 total)
+- Filename → slug: strip `.md` extension; file content → prompt body
 
-## 4. Options Page
-
-Opens in a new tab. Full settings surface.
+## 3. Options Page
 
 ```plaintext
 ┌─────────────────────────────────────────────┐
@@ -216,7 +240,7 @@ Opens in a new tab. Full settings surface.
 │ │ snippets                            │     │
 │ └─────────────────────────────────────┘     │
 │                                             │
-│ [Save]           ● Connected                │
+│ [Save]   ● Connected   Settings saved ✓     │  ← inline feedback, fades after 2-3s
 │                                             │
 └─────────────────────────────────────────────┘
 ```
@@ -226,7 +250,12 @@ Opens in a new tab. Full settings surface.
 - Trigger symbol is editable per site inline
 - Toggle enable/disable per site without losing its trigger config
 - Export downloads `caret-backup.json`
-- Import validates JSON with Zod before writing to storage
-- PAT stored in chrome.storage.local — displayed masked after save
-- `●` Connected status updates on save; red if credentials fail validation
-- PAT is optional for public repos
+- Import validates JSON with Zod before writing to storage; shows error on invalid file
+- Import merge conflict (duplicate name): last-write-wins
+- PAT stored in `chrome.storage.local` — displayed masked after save; not encrypted (documented risk)
+- PAT field: `type="password"`, full width
+- Repository and Branch fields: side by side, equal width
+- `●` Connected status updates on save; red if credentials fail
+- No inline validation on PAT format — error shown only after failed save attempt
+- "Settings saved ✓" appears inline right of Save button, fades after 2-3s
+- Max width 640px, centered
