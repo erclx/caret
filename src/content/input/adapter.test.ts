@@ -6,7 +6,6 @@ import {
   TextareaAdapter,
 } from './adapters'
 
-// jsdom does not define document.execCommand
 document.execCommand = vi.fn().mockReturnValue(true)
 
 function makeTextarea(value = ''): HTMLTextAreaElement {
