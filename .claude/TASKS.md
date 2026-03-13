@@ -2,12 +2,9 @@
 
 ## In progress
 
-### Fix — options page save feedback
+### Fix — minor UI & interaction
 
 - [ ] Inline "Settings saved" on save, fades after 2-3s
-
-### Fix — dropdown dismiss on outside click
-
 - [ ] Add mousedown listener on document in `use-dropdown.ts`
 - [ ] Dismiss when click target is outside dropdown ref
 - [ ] Clean up listener in useEffect teardown
