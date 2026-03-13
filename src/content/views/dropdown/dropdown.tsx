@@ -13,11 +13,14 @@ export interface DropdownProps {
 }
 
 export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const { filteredPrompts, selectedIndex, setSelectedIndex } = useDropdown({
     prompts,
     query,
     onSelect,
     onClose,
+    dropdownRef: containerRef,
   })
 
   const listRef = useRef<HTMLDivElement>(null)
@@ -30,7 +33,7 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
   }, [selectedIndex])
 
   return (
-    <div className='flex w-full flex-col'>
+    <div ref={containerRef} className='flex w-full flex-col'>
       {filteredPrompts.length === 0 ? (
         <p className='text-muted-foreground px-3 py-4 text-center text-[11px]'>
           No prompts yet — click the extension icon to add one
