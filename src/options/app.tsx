@@ -247,9 +247,10 @@ export default function App() {
   return (
     <div className='bg-background text-foreground min-h-screen p-8'>
       <div className='mx-auto max-w-3xl'>
-        <h1 className='mb-8 text-3xl font-bold tracking-tight'>
-          Caret settings
-        </h1>
+        <div className='mb-8 flex items-center gap-3'>
+          <img src='/logo.png' alt='' className='size-8' aria-hidden='true' />
+          <h1 className='text-3xl font-bold tracking-tight'>Caret settings</h1>
+        </div>
         {/* Data section */}
         <div className='border-border bg-card text-card-foreground mb-6 rounded-lg border shadow-xs'>
           <div className='border-border border-b p-6'>
