@@ -137,7 +137,7 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
 
   await listPage.getByRole('button', { name: /cancel/i }).click()
   await listPage.waitForTimeout(200)
-  await listPage.getByText('summarize', { exact: true }).click()
+  await listPage.getByText(SEED_PROMPTS[0].name, { exact: true }).click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-edit.png`)
 
