@@ -72,6 +72,56 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
     await expect(textarea).toHaveValue('This is a test prompt body.')
   })
 
+  test('Should insert prompt into contenteditable (Gemini mock)', async ({
+    page,
+    extensionId,
+  }) => {
+    await page.route('https://gemini.google.com/*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!DOCTYPE html><html><body><rich-textarea><div contenteditable="true"></div></rich-textarea></body></html>',
+      })
+    })
+
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
+
+    await page.evaluate(async () => {
+      await (globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+        prompts: [
+          {
+            id: '1',
+            name: 'gemini-prompt',
+            body: 'Gemini test body.',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
+        ],
+        settings: {
+          sites: {
+            'gemini.google.com': { triggerSymbol: '>', enabled: true },
+          },
+        },
+      })
+    })
+
+    await page.goto('https://gemini.google.com/')
+
+    const ce = page.locator('rich-textarea div[contenteditable="true"]')
+    await ce.waitFor()
+    await ce.focus()
+    await ce.pressSequentially('>gemini')
+
+    const dropdown = page.locator('#crxjs-app').locator('text=gemini-prompt')
+    await expect(dropdown).toBeVisible()
+
+    await page.keyboard.press('Enter')
+
+    await expect(ce).toHaveText('Gemini test body.')
+  })
+
   test('Should insert prompt into contenteditable (Claude mock)', async ({
     page,
     extensionId,
