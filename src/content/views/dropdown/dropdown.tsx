@@ -36,7 +36,7 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
     <div ref={containerRef} className='flex w-full flex-col'>
       {filteredPrompts.length === 0 ? (
         <p className='text-muted-foreground px-3 py-4 text-center text-[11px]'>
-          No prompts yet — click the extension icon to add one
+          No prompts yet - click the extension icon to add one
         </p>
       ) : (
         <div ref={listRef} className='max-h-70 overflow-y-auto'>

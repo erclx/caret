@@ -36,7 +36,7 @@ function buildHeaders(pat: string): HeadersInit {
 function describeHttpError(status: number): string {
   switch (status) {
     case 401:
-      return 'Invalid token — check your PAT has repo read access'
+      return 'Invalid token - check your PAT has repo read access'
     case 403:
       return 'Token lacks read access to this repository'
     case 404:
@@ -57,7 +57,7 @@ export async function testConnection(
     if (res.ok) return { ok: true }
     return { ok: false, error: describeHttpError(res.status) }
   } catch {
-    return { ok: false, error: 'Network error — check your connection' }
+    return { ok: false, error: 'Network error - check your connection' }
   }
 }
 

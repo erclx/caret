@@ -25,7 +25,7 @@ export function PromptList({
         <p className='text-muted-foreground text-sm'>
           {hasQuery
             ? 'No prompts found.'
-            : 'No prompts yet — click the extension icon to add one'}
+            : 'No prompts yet - click the extension icon to add one'}
         </p>
       </div>
     )

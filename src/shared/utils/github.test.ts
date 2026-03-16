@@ -149,7 +149,7 @@ describe('fetchSnippets', () => {
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.error).toBe(
-        'Invalid token — check your PAT has repo read access',
+        'Invalid token - check your PAT has repo read access',
       )
     }
   })
@@ -248,7 +248,7 @@ describe('testConnection', () => {
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.error).toBe(
-        'Invalid token — check your PAT has repo read access',
+        'Invalid token - check your PAT has repo read access',
       )
     }
   })
@@ -276,7 +276,7 @@ describe('testConnection', () => {
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
-      expect(result.error).toBe('Network error — check your connection')
+      expect(result.error).toBe('Network error - check your connection')
     }
   })
 })
