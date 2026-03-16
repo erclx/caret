@@ -6,6 +6,7 @@ export const PromptSchema = z.object({
   body: z.string(),
   createdAt: z.number(),
   updatedAt: z.number(),
+  source: z.literal('github').optional(),
 })
 
 export type Prompt = z.infer<typeof PromptSchema>
@@ -21,7 +22,11 @@ export const GithubSettingsSchema = z.object({
   repo: z.string(),
   branch: z.string().default('main'),
   snippetsPath: z.string().default('snippets'),
+  lastSyncedAt: z.number().optional(),
+  lastSyncedCount: z.number().optional(),
 })
+
+export type GithubSettings = z.infer<typeof GithubSettingsSchema>
 
 export const SettingsSchema = z.object({
   sites: z.record(z.string(), SiteSettingsSchema).default({}),

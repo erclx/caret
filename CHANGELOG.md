@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- prompt-library: integrate GitHub sync view
+- options: integrate GitHub sync configuration UI
+- ui: add tooltip and GitHub sync view components
 - content: add trigger detection and command palette UI in chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - design-system: initialize shadcn/ui with zinc mono color scale

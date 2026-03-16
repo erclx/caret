@@ -58,8 +58,11 @@ src/
 │   └── views/       # Dropdown command palette
 │       ├── app.tsx
 │       └── dropdown/
-├── options/         # Per-site trigger config and settings
-│   ├── app.tsx
+├── options/         # Settings page — trigger config, data, GitHub sync
+│   ├── app.tsx      # Loading gate and section composition
+│   ├── data-section.tsx
+│   ├── github-section.tsx
+│   ├── site-config-section.tsx
 │   ├── index.html
 │   └── main.tsx
 ├── popup/           # Prompt library UI (extension icon)

@@ -7,6 +7,7 @@ import { usePrompts } from '@/shared/hooks/use-prompts'
 import type { Prompt } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
+import { GitHubView } from './github-view'
 import { PromptForm } from './prompt-form'
 import { PromptList } from './prompt-list'
 
@@ -81,7 +82,6 @@ export function PromptLibrary() {
 
   return (
     <div className='flex h-full flex-col gap-3 overflow-hidden px-1'>
-      {/* Header */}
       <div className='flex shrink-0 items-center justify-between'>
         <div className='flex items-center gap-2'>
           <img src='/logo.png' alt='' className='size-5' aria-hidden='true' />
@@ -97,7 +97,6 @@ export function PromptLibrary() {
         </Button>
       </div>
 
-      {/* Tab bar */}
       <div className='flex shrink-0 items-center gap-2'>
         <div className='flex flex-1 gap-1'>
           {(['prompts', 'github'] as const).map((t) => (
@@ -127,7 +126,6 @@ export function PromptLibrary() {
         )}
       </div>
 
-      {/* Prompts tab */}
       {tab === 'prompts' && (
         <>
           <div className='relative shrink-0'>
@@ -160,17 +158,7 @@ export function PromptLibrary() {
         </>
       )}
 
-      {/* GitHub tab */}
-      {tab === 'github' && (
-        <div className='flex flex-1 items-center justify-center'>
-          <button
-            className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-colors hover:underline'
-            onClick={() => chrome.runtime.openOptionsPage()}
-          >
-            Set up in Options →
-          </button>
-        </div>
-      )}
+      {tab === 'github' && <GitHubView />}
     </div>
   )
 }

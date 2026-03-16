@@ -14,6 +14,7 @@ networkidle
 noopener
 noreferrer
 Noto
+octocat
 parallelizable
 scannability
 Segoe
@@ -23,7 +24,10 @@ shfmt
 sidepanel
 sonner
 tanstack
+testuser
 tolower
 toupper
+unconfigured
+unstub
 Wireframes
 wireframes

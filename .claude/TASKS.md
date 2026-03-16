@@ -4,17 +4,6 @@
 
 ## Up next
 
-### Feature 8 — GitHub Sync
-
-- [x] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath` — `GithubSettingsSchema` defined in `src/shared/types/index.ts`
-- [ ] GitHub config UI in options page (PAT input, repo details, save, connection status)
-- [ ] Dedicated sync view in sidepanel: tab bar `[Prompts] [GitHub]`, connection status, last synced timestamp, snippet count, sync button
-- [ ] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
-- [ ] Map filename → slug (strip `.md`), file content → prompt body; full replace on sync
-- [ ] Show post-sync summary: how many snippets added/updated/removed
-- [ ] Diff view before confirming sync: list of changes (add/update/delete) per snippet
-- **Test strategy: unit** — fetch parsing and mapping logic; e2e deferred (requires live PAT)
-
 ## Done
 
 - [x] Planning & document setup
@@ -118,3 +107,17 @@
 - [x] Import from JSON file with Zod validation
 - [x] Handle merge conflicts (duplicate names)
 - **Test strategy: unit** — pure parse/validate logic
+
+### Feature 8 — GitHub Sync
+
+- [x] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath`
+- [x] GitHub config UI in options page (PAT input, repo details, save, connection status); test connection before saving, only persist on success
+- [x] Dedicated sync view in sidepanel: tab bar `[Prompts] [GitHub]`, connection status, last synced timestamp, snippet count, sync button
+- [x] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
+- [x] Map filename → slug (strip `.md`), file content → prompt body
+- [x] Add `source?: 'github'` to `Prompt` schema; sync only manages prompts it owns; locally created prompts excluded from diff and untouched by apply
+- [x] Diff view before confirming sync: apply surgically (add, update, remove), preserving `id` and `createdAt` for unchanged and updated prompts
+- [x] Post-sync summary via `lastSyncedAt` / `lastSyncedCount` in settings
+- [x] Dev seeding: seed GitHub config from `VITE_GITHUB_*` env vars in background `onInstalled`
+- [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`; `app.tsx` is loading gate and composition only
+- **Test strategy: unit** — fetch parsing and mapping logic; e2e deferred (requires live PAT)
