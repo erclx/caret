@@ -4,12 +4,6 @@
 
 ## Up next
 
-### Feat — prompt list improvements
-
-- [ ] Name field: realtime kebab-case validation with inline error
-- [ ] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
-- **Test strategy: unit** — validation logic
-
 ### Chore — screenshot script rewrite
 
 - [ ] Capture options page (light + dark)
@@ -147,3 +141,9 @@
 - [x] Prompt form layout: textarea fills available height, buttons always visible below it
 - [x] Add PAT setup link in GitHub config section
 - **Test strategy: none** — visual verification in browser
+
+### Feat — prompt list improvements
+
+- [x] Name field: realtime kebab-case validation with inline error
+- [x] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
+- **Test strategy: unit** — validation logic

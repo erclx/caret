@@ -1,7 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { usePrompts } from '@/shared/hooks/use-prompts'
+import { sortPrompts, usePrompts } from '@/shared/hooks/use-prompts'
+import type { Prompt } from '@/shared/types'
 
 const mockStorage = new Map<string, unknown>()
 type StorageChangeListener = (
@@ -63,6 +64,42 @@ vi.stubGlobal('chrome', {
       },
     },
   },
+})
+
+function makePrompt(overrides: Partial<Prompt>): Prompt {
+  return {
+    id: crypto.randomUUID(),
+    name: 'test',
+    body: 'body',
+    createdAt: 0,
+    updatedAt: 0,
+    ...overrides,
+  }
+}
+
+describe('sortPrompts', () => {
+  it('should place local prompts before github-sourced prompts', () => {
+    const github = makePrompt({ source: 'github', updatedAt: 200 })
+    const local = makePrompt({ updatedAt: 100 })
+    const result = sortPrompts([github, local])
+    expect(result[0]).toBe(local)
+    expect(result[1]).toBe(github)
+  })
+
+  it('should sort within each group by updatedAt descending', () => {
+    const older = makePrompt({ updatedAt: 100 })
+    const newer = makePrompt({ updatedAt: 200 })
+    const result = sortPrompts([older, newer])
+    expect(result[0]).toBe(newer)
+    expect(result[1]).toBe(older)
+  })
+
+  it('should not mutate the original array', () => {
+    const prompts = [makePrompt({ updatedAt: 1 }), makePrompt({ updatedAt: 2 })]
+    const original = [...prompts]
+    sortPrompts(prompts)
+    expect(prompts).toEqual(original)
+  })
 })
 
 describe('usePrompts', () => {

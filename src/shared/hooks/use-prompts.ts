@@ -4,6 +4,15 @@ import type { Prompt } from '@/shared/types'
 import { mergePrompts } from '@/shared/utils/io'
 import { storage } from '@/shared/utils/storage'
 
+export function sortPrompts(prompts: Prompt[]): Prompt[] {
+  return [...prompts].sort((a, b) => {
+    const aLocal = a.source !== 'github' ? 0 : 1
+    const bLocal = b.source !== 'github' ? 0 : 1
+    if (aLocal !== bLocal) return aLocal - bLocal
+    return b.updatedAt - a.updatedAt
+  })
+}
+
 export function usePrompts() {
   const [prompts, setPrompts] = useState<Prompt[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -13,14 +22,14 @@ export function usePrompts() {
 
     storage.getPrompts().then((data) => {
       if (isMounted) {
-        setPrompts(data)
+        setPrompts(sortPrompts(data))
         setIsLoading(false)
       }
     })
 
     const unsubscribe = storage.subscribe((changes) => {
       if (changes.prompts && isMounted) {
-        setPrompts((changes.prompts.newValue as Prompt[]) || [])
+        setPrompts(sortPrompts((changes.prompts.newValue as Prompt[]) || []))
       }
     })
 

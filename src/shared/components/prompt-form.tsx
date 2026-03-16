@@ -12,14 +12,29 @@ export interface PromptFormProps {
   onCancel: () => void
 }
 
+const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
 export function PromptForm({
   initialPrompt,
   onSave,
   onCancel,
 }: PromptFormProps) {
   const [name, setName] = useState(initialPrompt?.name ?? '')
+  const [nameError, setNameError] = useState('')
   const [body, setBody] = useState(initialPrompt?.body ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value
+    setName(val)
+    if (val && !KEBAB_RE.test(val)) {
+      setNameError(
+        'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
+      )
+    } else {
+      setNameError('')
+    }
+  }
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -38,13 +53,12 @@ export function PromptForm({
         <Input
           id='name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleNameChange}
           required
-          pattern='^[a-zA-Z0-9_-]+$'
-          title='Only letters, numbers, hyphens, and underscores'
           placeholder='e.g. summarize-text'
           className='text-sm'
         />
+        {nameError && <p className='text-destructive text-xs'>{nameError}</p>}
       </div>
       <div className='flex min-h-0 flex-1 flex-col gap-2'>
         <Label htmlFor='body'>Prompt body</Label>
@@ -71,7 +85,7 @@ export function PromptForm({
           variant='outline'
           type='submit'
           className='dark:hover:bg-zinc-700 dark:hover:text-white'
-          disabled={isSubmitting}
+          disabled={isSubmitting || !!nameError || !name}
         >
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>

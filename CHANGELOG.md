@@ -6,27 +6,29 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- github-sync: add prompt synchronization
-- options: add link to generate GitHub PAT
-- prompt-library: integrate GitHub sync view
-- options: integrate GitHub sync configuration UI
-- ui: add tooltip and GitHub sync view components
 - content: add trigger detection and command palette UI in chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - design-system: initialize shadcn/ui with zinc mono color scale
 - fuzzy: add fuzzy matching for prompt search
+- github-sync: add prompt synchronization
 - icons: add extension icons
 - options: add 'Settings saved' feedback
 - options: add data import/export section
+- options: add link to generate GitHub PAT
 - options: add per-site settings page
+- options: integrate GitHub sync configuration UI
 - options: validate trigger symbols on settings page
 - popup: prompt library UI with list, create, edit, and delete
+- prompt-form: add kebab-case validation for prompt names
 - prompt-library: add clear button to search input
 - prompt-library: add tabbed view and search functionality
+- prompt-library: integrate GitHub sync view
 - prompts: insert selected prompt content into chat inputs
+- prompts: sort by updated date and source
 - sidepanel: prompt library UI with list, create, edit, and delete
 - storage: dev seeding with sample prompts on first run
 - storage: prompt and settings CRUD via chrome.storage.local
+- ui: add tooltip and GitHub sync view components
 
 ### Changed
 
