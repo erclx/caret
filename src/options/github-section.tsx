@@ -11,7 +11,7 @@ import {
 } from '@/shared/components/ui/tooltip'
 import { useSettings } from '@/shared/hooks/use-settings'
 import { cn } from '@/shared/utils/cn'
-import { testConnection } from '@/shared/utils/github'
+import { testConnection, validateOwnerRepo } from '@/shared/utils/github'
 import { storage } from '@/shared/utils/storage'
 
 type ConnectionStatus = 'unconfigured' | 'connected' | 'error'
@@ -73,6 +73,9 @@ export function GithubSection() {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     () => (settings.github ? 'connected' : 'unconfigured'),
   )
+  const [repoError, setRepoError] = useState<string | null>(null)
+  const [repoBlurred, setRepoBlurred] = useState(false)
+  const [connectionError, setConnectionError] = useState<string | null>(null)
   const [isSavingGithub, setIsSavingGithub] = useState(false)
   const [isGithubSaved, setIsGithubSaved] = useState(false)
   const githubSavedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -85,10 +88,14 @@ export function GithubSection() {
 
   async function handleSaveGithub() {
     setIsSavingGithub(true)
+    setConnectionError(null)
     try {
-      const ok = await testConnection(localGithub)
-      setConnectionStatus(ok ? 'connected' : 'error')
-      if (!ok) return
+      const result = await testConnection(localGithub)
+      setConnectionStatus(result.ok ? 'connected' : 'error')
+      if (!result.ok) {
+        setConnectionError(result.error)
+        return
+      }
 
       const current = await storage.getSettings()
       await updateSettings({
@@ -165,9 +172,24 @@ export function GithubSection() {
                   owner: slash !== -1 ? val.slice(0, slash) : '',
                   repo: slash !== -1 ? val.slice(slash + 1) : val,
                 }))
+                setRepoError(validateOwnerRepo(val))
+              }}
+              onBlur={(e) => {
+                const val = e.target.value.trim()
+                const slash = val.indexOf('/')
+                setLocalGithub((prev) => ({
+                  ...prev,
+                  owner: slash !== -1 ? val.slice(0, slash) : '',
+                  repo: slash !== -1 ? val.slice(slash + 1) : val,
+                }))
+                setRepoBlurred(true)
+                setRepoError(validateOwnerRepo(val))
               }}
               placeholder='owner/repo'
             />
+            {repoBlurred && repoError && (
+              <p className='text-destructive text-xs'>{repoError}</p>
+            )}
           </div>
           <div className='flex flex-1 flex-col gap-1'>
             <FieldLabel htmlFor='github-branch' hint='Defaults to main.'>
@@ -203,40 +225,45 @@ export function GithubSection() {
           />
         </div>
       </div>
-      <div className='border-border bg-muted/50 flex items-center gap-4 rounded-b-lg border-t p-6'>
-        <Button
-          variant='outline'
-          className='dark:hover:bg-zinc-700 dark:hover:text-white'
-          onClick={handleSaveGithub}
-          disabled={isSavingGithub}
-        >
-          <Save className='mr-2 size-4' />
-          {isSavingGithub ? 'Saving...' : 'Save'}
-        </Button>
-        <div className='flex items-center gap-1.5'>
+      <div className='border-border bg-muted/50 flex flex-col gap-3 rounded-b-lg border-t p-6'>
+        <div className='flex items-center gap-4'>
+          <Button
+            variant='outline'
+            className='dark:hover:bg-zinc-700 dark:hover:text-white'
+            onClick={handleSaveGithub}
+            disabled={isSavingGithub || !!repoError}
+          >
+            <Save className='mr-2 size-4' />
+            {isSavingGithub ? 'Saving...' : 'Save'}
+          </Button>
+          <div className='flex items-center gap-1.5'>
+            <span
+              className={cn('size-2 rounded-full', {
+                'bg-green-500': connectionStatus === 'connected',
+                'bg-red-500': connectionStatus === 'error',
+                'bg-zinc-400': connectionStatus === 'unconfigured',
+              })}
+            />
+            <span className='text-muted-foreground text-xs'>
+              {connectionStatus === 'connected'
+                ? 'Connected'
+                : connectionStatus === 'error'
+                  ? 'Error'
+                  : 'Not configured'}
+            </span>
+          </div>
           <span
-            className={cn('size-2 rounded-full', {
-              'bg-green-500': connectionStatus === 'connected',
-              'bg-red-500': connectionStatus === 'error',
-              'bg-zinc-400': connectionStatus === 'unconfigured',
-            })}
-          />
-          <span className='text-muted-foreground text-xs'>
-            {connectionStatus === 'connected'
-              ? 'Connected'
-              : connectionStatus === 'error'
-                ? 'Error'
-                : 'Not configured'}
+            className={cn(
+              'text-muted-foreground ml-auto text-sm transition-opacity duration-500',
+              isGithubSaved ? 'opacity-100' : 'opacity-0',
+            )}
+          >
+            Saved ✓
           </span>
         </div>
-        <span
-          className={cn(
-            'text-muted-foreground ml-auto text-sm transition-opacity duration-500',
-            isGithubSaved ? 'opacity-100' : 'opacity-0',
-          )}
-        >
-          Saved ✓
-        </span>
+        {connectionError && (
+          <p className='text-destructive text-xs'>{connectionError}</p>
+        )}
       </div>
     </div>
   )
