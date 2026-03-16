@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - options: validate trigger symbols on settings page
 - popup: prompt library UI with list, create, edit, and delete
 - prompt-form: add kebab-case validation for prompt names
+- prompt-form: implement two-anchor dirty discard confirmation
+- prompt-form: implement dirty state warning
 - prompt-library: add clear button to search input
 - prompt-library: add tabbed view and search functionality
 - prompt-library: integrate GitHub sync view
