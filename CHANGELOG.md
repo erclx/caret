@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - storage: dev seeding with sample prompts on first run
 - storage: prompt and settings CRUD via chrome.storage.local
 - ui: add tooltip and GitHub sync view components
+- prompt-form: add duplicate name validation
 
 ### Changed
 
@@ -48,3 +49,4 @@ All notable changes to this project will be documented in this file.
 
 - dropdown: dismiss on outside click and window resize
 - ui: improve dropdown and options interactions
+- prompt-form: correct duplicate name validation for editing

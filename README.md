@@ -8,7 +8,7 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 - Tooltips for clearer explanations in settings
 - Prompt library with tabbed view (your prompts and GitHub snippets) and search
 - Prompts sorted with local prompts first, then by last updated
-- Prompt names must be kebab-case (e.g., `my-prompt`)
+- Prompt names must be unique and kebab-case (e.g., `my-prompt`)
 - Trigger symbol with fuzzy search on prompt names
 - Keyboard navigation: `↑↓` to move, `Enter` or `Tab` to insert, `Esc` to dismiss
 - Per-site trigger symbol config to avoid conflicts with native commands
