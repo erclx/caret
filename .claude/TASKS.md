@@ -4,11 +4,6 @@
 
 ## Up next
 
-### Feat — prompt form improvements
-
-- [ ] Warn on duplicate name — prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
-- **Test strategy: unit** — duplicate detection logic
-
 ### Feat — GitHub config improvements
 
 - [ ] Realtime format validation on owner/repo field — must match `owner/repo` pattern, inline error if not
@@ -31,6 +26,11 @@
 
 - [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
 - [ ] Replace placeholder icons in `public/icons/`
+
+### Feat — prompt form improvements
+
+- [x] Warn on duplicate name — prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
+- **Test strategy: unit** — duplicate detection logic
 
 ## Done
 
