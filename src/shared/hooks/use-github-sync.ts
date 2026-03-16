@@ -59,7 +59,7 @@ export function useGithubSync() {
       await updateSettings({
         ...current,
         github: {
-          ...config,
+          ...(current.github ?? config),
           lastSyncedAt: now,
           lastSyncedCount: result.snippets.length,
         },
@@ -121,7 +121,7 @@ export function useGithubSync() {
     await updateSettings({
       ...current,
       github: {
-        ...config,
+        ...(current.github ?? config),
         lastSyncedAt: now,
         lastSyncedCount: snippets.length,
       },
