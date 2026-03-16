@@ -32,7 +32,12 @@ export function useGithubSync() {
     }
 
     setSnippets(result.snippets)
-    setDiff(computeDiff(prompts, result.snippets))
+    setDiff(
+      computeDiff(
+        prompts.filter((p) => p.source === 'github'),
+        result.snippets,
+      ),
+    )
     setStatus('reviewing')
   }, [config, prompts])
 
@@ -45,8 +50,10 @@ export function useGithubSync() {
     const updatedSet = new Set(diff.updated)
     const snippetsByName = new Map(snippets.map((s) => [s.name, s]))
 
-    const keptPrompts = prompts
-      .filter((p) => !removedSet.has(p.name))
+    const localPrompts = prompts.filter((p) => p.source !== 'github')
+
+    const keptGithubPrompts = prompts
+      .filter((p) => p.source === 'github' && !removedSet.has(p.name))
       .map((p) => {
         if (updatedSet.has(p.name)) {
           const incoming = snippetsByName.get(p.name)
@@ -63,13 +70,18 @@ export function useGithubSync() {
           id: crypto.randomUUID(),
           name: snippet.name,
           body: snippet.body,
+          source: 'github' as const,
           createdAt: now,
           updatedAt: now,
         },
       ]
     })
 
-    await storage.setPrompts([...keptPrompts, ...addedPrompts])
+    await storage.setPrompts([
+      ...localPrompts,
+      ...keptGithubPrompts,
+      ...addedPrompts,
+    ])
 
     const current = await storage.getSettings()
     await updateSettings({

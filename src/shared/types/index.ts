@@ -6,6 +6,7 @@ export const PromptSchema = z.object({
   body: z.string(),
   createdAt: z.number(),
   updatedAt: z.number(),
+  source: z.literal('github').optional(),
 })
 
 export type Prompt = z.infer<typeof PromptSchema>
