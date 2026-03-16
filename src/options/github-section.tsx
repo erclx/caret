@@ -48,7 +48,7 @@ function FieldLabel({ htmlFor, hint, children }: FieldLabelProps) {
         </TooltipTrigger>
         <TooltipContent
           side='top'
-          className='max-w-64 bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700 [&>svg]:fill-zinc-800 dark:[&>svg]:fill-zinc-700'
+          className='max-w-64 bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700'
         >
           {hint}
         </TooltipContent>
@@ -136,6 +136,14 @@ export function GithubSection() {
             placeholder='ghp_••••••••••••••••••••'
             className='font-mono'
           />
+          <a
+            href='https://github.com/settings/personal-access-tokens/new'
+            target='_blank'
+            rel='noreferrer'
+            className='text-muted-foreground hover:text-foreground w-fit text-xs underline-offset-2 hover:underline'
+          >
+            Create a token on GitHub →
+          </a>
         </div>
         <div className='flex gap-3'>
           <div className='flex flex-1 flex-col gap-1'>

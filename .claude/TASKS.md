@@ -4,6 +4,24 @@
 
 ## Up next
 
+### Feat — prompt list improvements
+
+- [ ] Name field: realtime kebab-case validation with inline error
+- [ ] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
+- **Test strategy: unit** — validation logic
+
+### Chore — screenshot script rewrite
+
+- [ ] Capture options page (light + dark)
+- [ ] Remove stale popup captures
+- [ ] Add dropdown capture on mocked chat page
+- **Test strategy: none** — visual output, manually verified
+
+### Chore — icon design
+
+- [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
+- [ ] Replace placeholder icons in `public/icons/`
+
 ## Done
 
 - [x] Planning & document setup
@@ -121,3 +139,11 @@
 - [x] Dev seeding: seed GitHub config from `VITE_GITHUB_*` env vars in background `onInstalled`
 - [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`; `app.tsx` is loading gate and composition only
 - **Test strategy: unit** — fetch parsing and mapping logic; e2e deferred (requires live PAT)
+
+### Chore — UI polish
+
+- [x] Remove tooltip arrow artifact
+- [x] Fix options page white flash on load
+- [x] Prompt form layout: textarea fills available height, buttons always visible below it
+- [x] Add PAT setup link in GitHub config section
+- **Test strategy: none** — visual verification in browser

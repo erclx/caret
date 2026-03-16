@@ -69,7 +69,7 @@ export function PromptLibrary() {
         >
           ← Back
         </button>
-        <div className='flex-1 overflow-y-auto pr-2'>
+        <div className='flex flex-1 flex-col overflow-hidden pr-2'>
           <PromptForm
             initialPrompt={editingPrompt}
             onSave={handleSave}

@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- github-sync: add prompt synchronization
+- options: add link to generate GitHub PAT
 - prompt-library: integrate GitHub sync view
 - options: integrate GitHub sync configuration UI
 - ui: add tooltip and GitHub sync view components

@@ -32,8 +32,8 @@ export function PromptForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-2'>
-      <div className='flex flex-col gap-2'>
+    <form onSubmit={handleSubmit} className='flex h-full flex-col gap-4 px-2'>
+      <div className='flex shrink-0 flex-col gap-2'>
         <Label htmlFor='name'>Name</Label>
         <Input
           id='name'
@@ -46,19 +46,18 @@ export function PromptForm({
           className='text-sm'
         />
       </div>
-      <div className='flex flex-col gap-2'>
+      <div className='flex min-h-0 flex-1 flex-col gap-2'>
         <Label htmlFor='body'>Prompt body</Label>
         <Textarea
           id='body'
           value={body}
           onChange={(e) => setBody(e.target.value)}
           required
-          rows={6}
           placeholder='Enter the prompt content...'
-          className='text-sm'
+          className='flex-1 resize-none text-sm'
         />
       </div>
-      <div className='mt-2 flex justify-end gap-2'>
+      <div className='flex shrink-0 justify-end gap-2'>
         <Button
           type='button'
           variant='ghost'
