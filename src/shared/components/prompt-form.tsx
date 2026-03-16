@@ -85,7 +85,7 @@ export function PromptForm({
           variant='outline'
           type='submit'
           className='dark:hover:bg-zinc-700 dark:hover:text-white'
-          disabled={isSubmitting || !!nameError}
+          disabled={isSubmitting || !!nameError || !name}
         >
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>
