@@ -24,6 +24,7 @@ export const GithubSettingsSchema = z.object({
   snippetsPath: z.string().default('snippets'),
   lastSyncedAt: z.number().optional(),
   lastSyncedCount: z.number().optional(),
+  connectionHealth: z.enum(['connected', 'error']).optional(),
 })
 
 export type GithubSettings = z.infer<typeof GithubSettingsSchema>

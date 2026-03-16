@@ -14,8 +14,16 @@ function formatSyncTime(ts: number): string {
 }
 
 export function GitHubView() {
-  const { status, diff, error, config, sync, applySync, cancelSync } =
-    useGithubSync()
+  const {
+    status,
+    diff,
+    error,
+    config,
+    upToDateCount,
+    sync,
+    applySync,
+    cancelSync,
+  } = useGithubSync()
 
   if (!config) {
     return (
@@ -34,14 +42,22 @@ export function GitHubView() {
     ? diff.added.length + diff.updated.length + diff.removed.length
     : 0
 
-  const statusLine = config.lastSyncedAt
-    ? `Synced ${formatSyncTime(config.lastSyncedAt)} · ${config.lastSyncedCount ?? 0} snippet${config.lastSyncedCount !== 1 ? 's' : ''}`
-    : 'Never synced'
+  const statusLine =
+    upToDateCount !== null
+      ? `Up to date · ${upToDateCount} snippet${upToDateCount !== 1 ? 's' : ''}`
+      : config.lastSyncedAt
+        ? `Synced ${formatSyncTime(config.lastSyncedAt)} · ${config.lastSyncedCount ?? 0} snippet${config.lastSyncedCount !== 1 ? 's' : ''}`
+        : 'Never synced'
 
   return (
     <div className='flex flex-1 flex-col gap-3 overflow-hidden'>
       <div className='flex shrink-0 items-center gap-2'>
-        <span className='size-2 rounded-full bg-green-500' />
+        <span
+          className={cn(
+            'size-2 rounded-full',
+            config.connectionHealth === 'error' ? 'bg-red-500' : 'bg-green-500',
+          )}
+        />
         <span className='text-muted-foreground text-xs'>
           {config.owner}/{config.repo}
         </span>
@@ -106,7 +122,7 @@ export function GitHubView() {
               </div>
             ) : (
               <p className='text-muted-foreground text-xs'>
-                {diff.unchanged.length} unchanged — nothing to apply
+                {diff.unchanged.length} unchanged - nothing to apply
               </p>
             )}
           </div>

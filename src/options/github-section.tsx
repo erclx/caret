@@ -86,6 +86,16 @@ export function GithubSection() {
     }
   }, [])
 
+  async function handleDisconnect() {
+    const current = await storage.getSettings()
+    await updateSettings({ sites: current.sites })
+    setLocalGithub(DEFAULT_GITHUB)
+    setConnectionStatus('unconfigured')
+    setConnectionError(null)
+    setRepoError(null)
+    setRepoBlurred(false)
+  }
+
   async function handleSaveGithub() {
     setIsSavingGithub(true)
     setConnectionError(null)
@@ -94,6 +104,13 @@ export function GithubSection() {
       setConnectionStatus(result.ok ? 'connected' : 'error')
       if (!result.ok) {
         setConnectionError(result.error)
+        const current = await storage.getSettings()
+        await updateSettings({
+          ...current,
+          github: current.github
+            ? { ...current.github, connectionHealth: 'error' }
+            : undefined,
+        })
         return
       }
 
@@ -103,6 +120,7 @@ export function GithubSection() {
         github: {
           ...current.github,
           ...localGithub,
+          connectionHealth: 'connected',
         },
       })
       setIsGithubSaved(true)
@@ -265,6 +283,20 @@ export function GithubSection() {
           <p className='text-destructive text-xs'>{connectionError}</p>
         )}
       </div>
+      {settings.github && (
+        <div className='border-border flex flex-col gap-2 border-t p-6'>
+          <Button
+            variant='outline'
+            className='text-destructive hover:text-destructive w-fit dark:hover:bg-zinc-700'
+            onClick={handleDisconnect}
+          >
+            Disconnect
+          </Button>
+          <p className='text-muted-foreground text-xs'>
+            Your synced prompts will not be removed.
+          </p>
+        </div>
+      )}
     </div>
   )
 }

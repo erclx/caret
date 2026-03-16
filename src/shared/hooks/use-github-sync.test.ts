@@ -85,8 +85,48 @@ describe('useGithubSync', () => {
     vi.stubGlobal('fetch', vi.fn())
   })
 
+  it('should skip reviewing and return upToDateCount when diff has no changes', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    expect(result.current.upToDateCount).toBe(0)
+    expect(result.current.diff).toBeNull()
+
+    const saved = mockStorage.get('settings') as ReturnType<typeof makeSettings>
+    expect(saved?.github?.lastSyncedAt).toBeGreaterThan(0)
+    expect(saved?.github?.lastSyncedCount).toBe(0)
+  })
+
   it('should auto-cancel a review when the GitHub config changes', async () => {
     mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'existing-prompt',
+        body: 'hello',
+        source: 'github',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
 
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
@@ -120,6 +160,16 @@ describe('useGithubSync', () => {
 
   it('should not cancel a review when an unrelated setting changes', async () => {
     mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'existing-prompt',
+        body: 'hello',
+        source: 'github',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
 
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
