@@ -4,14 +4,6 @@
 
 ## Up next
 
-### Chore — UI polish
-
-- [ ] Remove tooltip arrow artifact
-- [ ] Fix options page white flash on load
-- [ ] Prompt form layout: textarea fills available height, buttons always visible below it
-- [ ] Add PAT setup link in GitHub config section
-- **Test strategy: none** — visual verification in browser
-
 ### Feat — prompt list improvements
 
 - [ ] Name field: realtime kebab-case validation with inline error
@@ -147,3 +139,11 @@
 - [x] Dev seeding: seed GitHub config from `VITE_GITHUB_*` env vars in background `onInstalled`
 - [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`; `app.tsx` is loading gate and composition only
 - **Test strategy: unit** — fetch parsing and mapping logic; e2e deferred (requires live PAT)
+
+### Chore — UI polish
+
+- [x] Remove tooltip arrow artifact
+- [x] Fix options page white flash on load
+- [x] Prompt form layout: textarea fills available height, buttons always visible below it
+- [x] Add PAT setup link in GitHub config section
+- **Test strategy: none** — visual verification in browser
