@@ -16,6 +16,8 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 
 - Reason through the approach and confirm with the user before making any edits
 - After implementing changes, run `bun run format && bun run lint && bun run test:run`
+- After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
+- After editing `e2e/ui.test.ts`, run `bun run test:e2e` to verify all e2e tests pass
 
 ## Before making changes
 
