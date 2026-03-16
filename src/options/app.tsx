@@ -199,6 +199,10 @@ export default function App() {
   const handleSaveGithub = async () => {
     setIsSavingGithub(true)
     try {
+      const ok = await testConnection(localGithub)
+      setConnectionStatus(ok ? 'connected' : 'error')
+      if (!ok) return
+
       const current = await import('@/shared/utils/storage').then((m) =>
         m.storage.getSettings(),
       )
@@ -209,8 +213,6 @@ export default function App() {
           ...localGithub,
         },
       })
-      const ok = await testConnection(localGithub)
-      setConnectionStatus(ok ? 'connected' : 'error')
       setIsGithubSaved(true)
       if (githubSavedTimerRef.current) clearTimeout(githubSavedTimerRef.current)
       githubSavedTimerRef.current = setTimeout(

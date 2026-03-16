@@ -41,15 +41,35 @@ export function useGithubSync() {
     setStatus('applying')
 
     const now = Date.now()
-    const newPrompts = snippets.map((s) => ({
-      id: crypto.randomUUID(),
-      name: s.name,
-      body: s.body,
-      createdAt: now,
-      updatedAt: now,
-    }))
+    const removedSet = new Set(diff.removed)
+    const updatedSet = new Set(diff.updated)
+    const snippetsByName = new Map(snippets.map((s) => [s.name, s]))
 
-    await storage.setPrompts(newPrompts)
+    const keptPrompts = prompts
+      .filter((p) => !removedSet.has(p.name))
+      .map((p) => {
+        if (updatedSet.has(p.name)) {
+          const incoming = snippetsByName.get(p.name)
+          return incoming ? { ...p, body: incoming.body, updatedAt: now } : p
+        }
+        return p
+      })
+
+    const addedPrompts = diff.added.flatMap((name) => {
+      const snippet = snippetsByName.get(name)
+      if (!snippet) return []
+      return [
+        {
+          id: crypto.randomUUID(),
+          name: snippet.name,
+          body: snippet.body,
+          createdAt: now,
+          updatedAt: now,
+        },
+      ]
+    })
+
+    await storage.setPrompts([...keptPrompts, ...addedPrompts])
 
     const current = await storage.getSettings()
     await updateSettings({
@@ -64,7 +84,7 @@ export function useGithubSync() {
     setDiff(null)
     setSnippets([])
     setStatus('idle')
-  }, [config, diff, snippets, updateSettings])
+  }, [config, diff, prompts, snippets, updateSettings])
 
   const cancelSync = useCallback(() => {
     setDiff(null)
