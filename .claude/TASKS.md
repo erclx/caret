@@ -4,11 +4,6 @@
 
 ## Up next
 
-### Feat — unsaved changes warning in prompt form
-
-- [ ] Warn before discarding a dirty form — Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
-- **Test strategy: unit** — dirty state detection
-
 ### Chore — icon design
 
 - [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
@@ -153,3 +148,8 @@
 - [x] Add dropdown capture on mocked chat page
 - [x] Add Gemini e2e insertion test (parity with Claude and ChatGPT)
 - **Test strategy: none** — visual output, manually verified
+
+### Feat — unsaved changes warning in prompt form
+
+- [x] Warn before discarding a dirty form — Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
+- **Test strategy: unit** — dirty state detection

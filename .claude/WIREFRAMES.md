@@ -100,11 +100,37 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └────────────────────────────────┘
 ```
 
+### Edit / new form — dirty state
+
+```plaintext
+┌────────────────────────────────┐
+│ Discard changes?               │  ← replaces ← Back row when form is dirty
+│               [Keep editing] [Discard] │
+├────────────────────────────────┤
+│ Name                           │
+│ ┌──────────────────────────┐   │
+│ │ summarize                │   │
+│ └──────────────────────────┘   │
+│                                │
+│ Prompt body                    │
+│ ┌──────────────────────────┐   │
+│ │ ...                      │   │
+│ └──────────────────────────┘   │
+│                                │
+│ [Cancel]        [Save]         │  ← Cancel also triggers confirmation if dirty
+└────────────────────────────────┘
+```
+
 **Behavior:**
 
-- `← Back` and Cancel both discard unsaved changes and return to list
-- Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active
-- Prompt body: required, must not be empty — red validation state if submitted empty
+- `← Back` and Cancel both check dirty state before navigating
+- Dirty = values differ from initial; new form with empty fields is never dirty
+- If dirty: inline confirmation row replaces the buttons row — "Discard changes?" with Keep editing and Discard
+- Keep editing dismisses the confirmation and returns focus to the form
+- Discard navigates back without saving
+- If clean: navigate immediately with no confirmation
+- Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty
+- Prompt body: required, must not be empty
 - Save writes to `chrome.storage.local` immediately, returns to list
 - Textarea scrollbar: thin 4px zinc thumb, transparent track (styled in `index.css`)
 - Edit form pre-fills fields with existing prompt data
