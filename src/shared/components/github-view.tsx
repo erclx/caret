@@ -40,7 +40,6 @@ export function GitHubView() {
 
   return (
     <div className='flex flex-1 flex-col gap-3 overflow-hidden'>
-      {/* Connection header */}
       <div className='flex shrink-0 items-center gap-2'>
         <span className='size-2 rounded-full bg-green-500' />
         <span className='text-muted-foreground text-xs'>
@@ -50,7 +49,6 @@ export function GitHubView() {
 
       {status === 'reviewing' && diff ? (
         <>
-          {/* Diff view */}
           <p className='text-muted-foreground shrink-0 text-xs'>
             {diff.added.length +
               diff.updated.length +
@@ -137,7 +135,6 @@ export function GitHubView() {
         </>
       ) : (
         <>
-          {/* Idle / fetching / applying */}
           <p className='text-muted-foreground shrink-0 text-xs'>{statusLine}</p>
           {error && (
             <p className='text-destructive shrink-0 text-xs'>{error}</p>
