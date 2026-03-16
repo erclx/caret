@@ -4,13 +4,6 @@
 
 ## Up next
 
-### Chore — screenshot script rewrite
-
-- [ ] Capture options page (light + dark)
-- [ ] Remove stale popup captures
-- [ ] Add dropdown capture on mocked chat page
-- **Test strategy: none** — visual output, manually verified
-
 ### Chore — icon design
 
 - [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
@@ -147,3 +140,11 @@
 - [x] Name field: realtime kebab-case validation with inline error
 - [x] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
 - **Test strategy: unit** — validation logic
+
+### Chore — screenshot script rewrite
+
+- [x] Capture options page (light + dark)
+- [x] Remove stale popup captures
+- [x] Add dropdown capture on mocked chat page
+- [x] Add Gemini e2e insertion test (parity with Claude and ChatGPT)
+- **Test strategy: none** — visual output, manually verified

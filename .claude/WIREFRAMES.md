@@ -103,7 +103,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 **Behavior:**
 
 - `← Back` and Cancel both discard unsaved changes and return to list
-- Name field: required, must not be empty — red validation state if submitted empty
+- Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active
 - Prompt body: required, must not be empty — red validation state if submitted empty
 - Save writes to `chrome.storage.local` immediately, returns to list
 - Textarea scrollbar: thin 4px zinc thumb, transparent track (styled in `index.css`)
