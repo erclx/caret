@@ -4,6 +4,32 @@
 
 ## Up next
 
+### Chore — UI polish
+
+- [ ] Remove tooltip arrow artifact
+- [ ] Fix options page white flash on load
+- [ ] Prompt form layout: textarea fills available height, buttons always visible below it
+- [ ] Add PAT setup link in GitHub config section
+- **Test strategy: none** — visual verification in browser
+
+### Feat — prompt list improvements
+
+- [ ] Name field: realtime kebab-case validation with inline error
+- [ ] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
+- **Test strategy: unit** — validation logic
+
+### Chore — screenshot script rewrite
+
+- [ ] Capture options page (light + dark)
+- [ ] Remove stale popup captures
+- [ ] Add dropdown capture on mocked chat page
+- **Test strategy: none** — visual output, manually verified
+
+### Chore — icon design
+
+- [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
+- [ ] Replace placeholder icons in `public/icons/`
+
 ## Done
 
 - [x] Planning & document setup
