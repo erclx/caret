@@ -3,20 +3,17 @@ set -e
 set -o pipefail
 
 GREEN='\033[0;32m'
-RED='\033[0;31m'
 WHITE='\033[1;37m'
 GREY='\033[0;90m'
 NC='\033[0m'
 
-NESTED="${VERIFY_NESTED:-false}"
+OUTPUT_FILE=".claude/.tmp/SNAPSHOT.md"
 
 log_info() { echo -e "${GREY}│${NC} ${GREEN}✓${NC} $1"; }
 log_error() {
   echo -e "${GREY}│${NC} ${RED}✗${NC} $1"
   exit 1
 }
-
-OUTPUT_FILE=".claude/.tmp/SNAPSHOT.md"
 
 check_dependencies() {
   command -v find >/dev/null 2>&1 || log_error "find not installed"
@@ -108,16 +105,16 @@ write_snapshot() {
 main() {
   check_dependencies
 
-  if [ "$NESTED" = false ]; then echo -e "${GREY}┌${NC}"; fi
+  echo -e "${GREY}┌${NC}"
+  echo -e "${GREY}│${NC} ${WHITE}Snapshot${NC}"
+  echo -e "${GREY}│${NC}"
+  echo -e "${GREY}├${NC} ${WHITE}Writing${NC}"
 
-  echo -e "${GREY}├${NC} ${WHITE}Snapshot${NC}"
   write_snapshot
-  log_info "Written to $OUTPUT_FILE"
+  log_info "$OUTPUT_FILE"
 
-  if [ "$NESTED" = false ]; then
-    echo -e "${GREY}└${NC}\n"
-    echo -e "${GREEN}✓ Snapshot complete${NC}"
-  fi
+  echo -e "${GREY}└${NC}\n"
+  echo -e "${GREEN}✓ Snapshot complete${NC}"
 }
 
 main "$@"
