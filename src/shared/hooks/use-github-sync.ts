@@ -12,14 +12,24 @@ export function useGithubSync() {
   const { settings, updateSettings } = useSettings()
   const { prompts } = usePrompts()
   const [status, setStatus] = useState<SyncStatus>('idle')
+  const [syncConfigKey, setSyncConfigKey] = useState<string | null>(null)
   const [diff, setDiff] = useState<DiffResult | null>(null)
   const [snippets, setSnippets] = useState<Snippet[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const config = settings.github
 
+  const configKey = config
+    ? `${config.owner}/${config.repo}/${config.branch}/${config.snippetsPath}`
+    : null
+
+  // If the config changed since the sync started, the diff is stale.
+  const isStaleReview = status === 'reviewing' && syncConfigKey !== configKey
+  const effectiveStatus: SyncStatus = isStaleReview ? 'idle' : status
+
   const sync = useCallback(async () => {
     if (!config) return
+    setSyncConfigKey(configKey)
     setStatus('fetching')
     setError(null)
 
@@ -39,10 +49,10 @@ export function useGithubSync() {
       ),
     )
     setStatus('reviewing')
-  }, [config, prompts])
+  }, [config, configKey, prompts])
 
   const applySync = useCallback(async () => {
-    if (!config || !diff) return
+    if (!config || !diff || isStaleReview) return
     setStatus('applying')
 
     const now = Date.now()
@@ -95,14 +105,24 @@ export function useGithubSync() {
 
     setDiff(null)
     setSnippets([])
+    setSyncConfigKey(null)
     setStatus('idle')
-  }, [config, diff, prompts, snippets, updateSettings])
+  }, [config, diff, isStaleReview, prompts, snippets, updateSettings])
 
   const cancelSync = useCallback(() => {
     setDiff(null)
     setSnippets([])
+    setSyncConfigKey(null)
     setStatus('idle')
   }, [])
 
-  return { status, diff, error, config, sync, applySync, cancelSync }
+  return {
+    status: effectiveStatus,
+    diff,
+    error,
+    config,
+    sync,
+    applySync,
+    cancelSync,
+  }
 }

@@ -26,7 +26,7 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) or load 
 
 1. Click the extension icon or open the side panel. Here you can manage your prompts, view GitHub snippets, and access settings.
 2. In the 'Prompts' tab, use the search bar to find prompts or the 'New' button to create one.
-3. To configure GitHub sync, navigate to the settings page (right-click the extension icon and select 'Options'). In the 'GitHub sync' section, enter your Personal Access Token (a direct link is available to create one on GitHub), repository details, and snippets path.
+3. To configure GitHub sync, navigate to the settings page (right-click the extension icon and select 'Options'). In the 'GitHub sync' section, enter your Personal Access Token (a direct link is available to create one on GitHub), repository details (e.g., `owner/repo`), and snippets path. The extension now provides real-time validation for the repository format and more detailed error messages for connection issues.
 4. Once configured, switch to the 'GitHub' tab in the prompt library to view and sync prompts from your repository.
 5. To backup or restore your prompts, navigate to the settings page and use the export/import options.
 6. In any supported chat input, type `>` followed by a prompt name to search.

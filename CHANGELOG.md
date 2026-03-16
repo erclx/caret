@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- github-sync: auto-cancel on config change
+- github: config validation and connection testing
+- github-sync: add tooltips for synchronization features
 - content: add trigger detection and command palette UI in chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - design-system: initialize shadcn/ui with zinc mono color scale
@@ -35,6 +38,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- options: enhance UI for settings page
 - content: improve prompt filtering within dropdown
 - design-system: adjust dark mode background and accent colors
 - design-system: button variants updated to outline and ghost for reduced visual weight

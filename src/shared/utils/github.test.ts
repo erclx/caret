@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { Prompt } from '@/shared/types'
-import { computeDiff, fetchSnippets } from '@/shared/utils/github'
+import {
+  computeDiff,
+  fetchSnippets,
+  testConnection,
+  validateOwnerRepo,
+} from '@/shared/utils/github'
 
 const mockConfig = {
   pat: 'ghp_test',
@@ -113,7 +118,7 @@ describe('fetchSnippets', () => {
     }
   })
 
-  it('should return an error when the directory request fails', async () => {
+  it('should return a not-found error when the directory request returns 404', async () => {
     const mockFetch = vi.mocked(fetch)
 
     mockFetch.mockResolvedValueOnce({
@@ -125,7 +130,27 @@ describe('fetchSnippets', () => {
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
-      expect(result.error).toContain('404')
+      expect(result.error).toBe(
+        'Repository, branch, or snippets path not found',
+      )
+    }
+  })
+
+  it('should return an invalid-token error when the directory request returns 401', async () => {
+    const mockFetch = vi.mocked(fetch)
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+    } as Response)
+
+    const result = await fetchSnippets(mockConfig)
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.error).toBe(
+        'Invalid token — check your PAT has repo read access',
+      )
     }
   })
 
@@ -165,6 +190,93 @@ describe('fetchSnippets', () => {
     expect(result.ok).toBe(true)
     if (result.ok) {
       expect(result.snippets[0].body).toBe('Summarize the text.')
+    }
+  })
+})
+
+describe('validateOwnerRepo', () => {
+  it('should return null for a valid owner/repo value', () => {
+    expect(validateOwnerRepo('octocat/my-snippets')).toBeNull()
+  })
+
+  it('should return an error for a value with no slash', () => {
+    expect(validateOwnerRepo('octocat')).not.toBeNull()
+  })
+
+  it('should return an error for a value with only a slash', () => {
+    expect(validateOwnerRepo('/')).not.toBeNull()
+  })
+
+  it('should return an error when the owner segment is empty', () => {
+    expect(validateOwnerRepo('/repo')).not.toBeNull()
+  })
+
+  it('should return an error when the repo segment is empty', () => {
+    expect(validateOwnerRepo('owner/')).not.toBeNull()
+  })
+
+  it('should return null for names with hyphens, underscores, and dots', () => {
+    expect(validateOwnerRepo('my-org/my.repo_name')).toBeNull()
+  })
+})
+
+describe('testConnection', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', vi.fn())
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('should return ok when the request succeeds', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({ ok: true } as Response)
+
+    const result = await testConnection(mockConfig)
+
+    expect(result.ok).toBe(true)
+  })
+
+  it('should return a token error on 401', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+    } as Response)
+
+    const result = await testConnection(mockConfig)
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.error).toBe(
+        'Invalid token — check your PAT has repo read access',
+      )
+    }
+  })
+
+  it('should return a not-found error on 404', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+    } as Response)
+
+    const result = await testConnection(mockConfig)
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.error).toBe(
+        'Repository, branch, or snippets path not found',
+      )
+    }
+  })
+
+  it('should return a network error when fetch throws', async () => {
+    vi.mocked(fetch).mockRejectedValueOnce(new Error('Network failure'))
+
+    const result = await testConnection(mockConfig)
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.error).toBe('Network error — check your connection')
     }
   })
 })

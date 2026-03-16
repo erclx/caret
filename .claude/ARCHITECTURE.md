@@ -56,6 +56,7 @@ src/
     │   └── ui/               # shadcn/ui primitives (button, input, label, textarea, tooltip)
     ├── hooks/
     │   ├── use-github-sync.ts # Sync state machine: idle → fetching → reviewing → applying
+    │   ├── use-github-sync.test.ts
     │   ├── use-prompts.ts    # CRUD over chrome.storage.local
     │   ├── use-prompts.test.ts
     │   ├── use-settings.ts   # Trigger symbol config per site
@@ -175,6 +176,10 @@ Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 
 PAT is optional for public repos; required for private.
+
+Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message.
+
+If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
 
 ### Sidepanel-primary: popup dormant
 
