@@ -34,8 +34,11 @@ src/
 │   ├── index.html
 │   └── main.tsx
 ├── options/
-│   ├── app.tsx               # Per-site trigger config + advanced settings + GitHub config
+│   ├── app.tsx               # Page shell — loading gate and section composition
 │   ├── app.test.tsx
+│   ├── data-section.tsx      # Export / import prompts
+│   ├── github-section.tsx    # GitHub credentials, connection test, save
+│   ├── site-config-section.tsx # Per-site trigger symbol config
 │   ├── index.html
 │   └── main.tsx
 ├── test/
@@ -121,6 +124,7 @@ type Prompt = {
   body: string // text inserted into chat
   createdAt: number
   updatedAt: number
+  source?: 'github' // present only on prompts pulled via GitHub sync; absent on locally created prompts
 }
 
 type Settings = {
@@ -136,6 +140,8 @@ type Settings = {
     repo: string // repo name
     branch: string // default "main"
     snippetsPath: string // path to snippets folder, default "snippets"
+    lastSyncedAt?: number // timestamp of last successful sync
+    lastSyncedCount?: number // number of snippets in last successful sync
   }
 }
 ```
@@ -162,7 +168,13 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 ### GitHub sync (read-only, GitHub is source of truth)
 
-Extension pulls from GitHub; it never pushes back. Sync is manual — triggered by the user via a sync button in the sidepanel GitHub view. Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → use file content as prompt body → full replace of prompts in storage. Post-sync shows a summary of adds/updates/removes. A diff view lets the user review changes before confirming. PAT is optional for public repos; required for private.
+Extension pulls from GitHub; it never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
+
+Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → show diff view → on confirm, apply changes surgically.
+
+Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
+
+PAT is optional for public repos; required for private.
 
 ### Sidepanel-primary: popup dormant
 
