@@ -100,12 +100,11 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └────────────────────────────────┘
 ```
 
-### Edit / new form — dirty state
+### Edit / new form — dirty state (Back triggered)
 
 ```plaintext
 ┌────────────────────────────────┐
-│ Discard changes?               │  ← replaces ← Back row when form is dirty
-│               [Keep editing] [Discard] │
+│ Discard changes?  [Keep editing] [Discard] │  ← replaces ← Back
 ├────────────────────────────────┤
 │ Name                           │
 │ ┌──────────────────────────┐   │
@@ -117,7 +116,27 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 │ │ ...                      │   │
 │ └──────────────────────────┘   │
 │                                │
-│ [Cancel]        [Save]         │  ← Cancel also triggers confirmation if dirty
+│ [Cancel]        [Save]         │  ← Cancel/Save remain visible
+└────────────────────────────────┘
+```
+
+### Edit / new form — dirty state (Cancel triggered)
+
+```plaintext
+┌────────────────────────────────┐
+│ ← Back                         │  ← Back remains visible
+├────────────────────────────────┤
+│ Name                           │
+│ ┌──────────────────────────┐   │
+│ │ summarize                │   │
+│ └──────────────────────────┘   │
+│                                │
+│ Prompt body                    │
+│ ┌──────────────────────────┐   │
+│ │ ...                      │   │
+│ └──────────────────────────┘   │
+│                                │
+│ Discard changes?  [Keep editing] [Discard] │  ← replaces Cancel/Save
 └────────────────────────────────┘
 ```
 
@@ -125,8 +144,8 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 
 - `← Back` and Cancel both check dirty state before navigating
 - Dirty = values differ from initial; new form with empty fields is never dirty
-- If dirty: inline confirmation row replaces the buttons row — "Discard changes?" with Keep editing and Discard
-- Keep editing dismisses the confirmation and returns focus to the form
+- If dirty: confirmation row appears at the anchor that was triggered — Back replaces the top `← Back` row; Cancel replaces the bottom Cancel/Save row
+- Keep editing dismisses the confirmation and restores whichever row was replaced
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty

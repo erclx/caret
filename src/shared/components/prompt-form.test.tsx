@@ -51,7 +51,7 @@ describe('PromptForm', () => {
     expect(handleCancel).toHaveBeenCalled()
   })
 
-  it('should show discard confirmation when Cancel is clicked on dirty form', async () => {
+  it('should show discard confirmation at bottom when Cancel is clicked on dirty form', async () => {
     render(
       <PromptForm
         initialPrompt={EXISTING_PROMPT}
@@ -69,9 +69,16 @@ describe('PromptForm', () => {
       screen.getByRole('button', { name: /keep editing/i }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /discard/i })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /^cancel$/i }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /^save$/i }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText(/← back/i)).toBeInTheDocument()
   })
 
-  it('should show discard confirmation when Back is clicked on dirty form', async () => {
+  it('should show discard confirmation at top when Back is clicked on dirty form', async () => {
     render(
       <PromptForm
         initialPrompt={EXISTING_PROMPT}
@@ -85,6 +92,11 @@ describe('PromptForm', () => {
     await user.click(screen.getByText(/← back/i))
 
     expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
+    expect(screen.queryByText(/← back/i)).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /^cancel$/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^save$/i })).toBeInTheDocument()
   })
 
   it('should dismiss confirmation and return to editing when Keep editing is clicked', async () => {
