@@ -4,6 +4,29 @@
 
 ## Up next
 
+### Feat — prompt form improvements
+
+- [ ] Warn on duplicate name — prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
+- **Test strategy: unit** — duplicate detection logic
+
+### Feat — GitHub config improvements
+
+- [ ] Realtime format validation on owner/repo field — must match `owner/repo` pattern, inline error if not
+- [ ] Informative error messages on sync failure — surface the specific cause (bad PAT, repo not found, wrong path) rather than a generic error
+- [ ] Auto-cancel sync when config changes mid-review — stale diff should not be applied against a different config
+- **Test strategy: unit** — validation logic and diff cancellation
+
+### Feat — GitHub sync improvements
+
+- [ ] "Nothing to sync" feedback — when a sync finds zero changes, show a status message instead of an empty diff view
+- [ ] Disconnect GitHub button in options page — clears github config from settings
+- **Test strategy: unit** — disconnect logic
+
+### Feat — onboarding
+
+- [ ] First install empty state — hint about typing the trigger symbol in a chat input; shown only when prompt list is empty and no prompts have ever been created
+- **Test strategy: none** — visual verification
+
 ### Chore — icon design
 
 - [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
