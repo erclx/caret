@@ -33,8 +33,42 @@ const SEED_PROMPTS = [
   },
 ]
 
+const MOCK_CHATGPT_HTML = `<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        align-items: flex-end;
+        height: 100vh;
+        box-sizing: border-box;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { background: #212121; }
+      }
+      textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #e4e4e7;
+        background: #fff;
+        color: #000;
+      }
+      @media (prefers-color-scheme: dark) {
+        textarea { background: #2f2f2f; border-color: #4a4a4a; color: #ececec; }
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="prompt-textarea" placeholder="Message ChatGPT"></textarea>
+  </body>
+</html>`
+
 type ColorScheme = 'light' | 'dark'
-type Surface = 'popup' | 'sidepanel'
 
 type BrowserGlobal = {
   chrome: {
@@ -44,11 +78,6 @@ type BrowserGlobal = {
       }
     }
   }
-}
-
-const SURFACES: Record<Surface, { width: number; height: number }> = {
-  popup: { width: 320, height: 500 },
-  sidepanel: { width: 400, height: 800 },
 }
 
 async function launchWithExtension(): Promise<BrowserContext> {
@@ -67,19 +96,6 @@ async function getExtensionId(ctx: BrowserContext): Promise<string> {
   return sw.url().split('/')[2]
 }
 
-async function goto(
-  page: Page,
-  extensionId: string,
-  surface: Surface,
-  scheme: ColorScheme,
-) {
-  const { width, height } = SURFACES[surface]
-  await page.setViewportSize({ width, height })
-  await page.emulateMedia({ colorScheme: scheme })
-  await page.goto(`chrome-extension://${extensionId}/src/${surface}/index.html`)
-  await page.waitForLoadState('networkidle')
-}
-
 async function shot(page: Page, surface: string, filename: string) {
   const dir = path.join(screenshotsDir, surface)
   fs.mkdirSync(dir, { recursive: true })
@@ -87,44 +103,45 @@ async function shot(page: Page, surface: string, filename: string) {
   console.log(`✓ ${surface}/${filename}`)
 }
 
-// popup + sidepanel
+// sidepanel
 
 for (const scheme of ['light', 'dark'] as ColorScheme[]) {
-  for (const surface of ['popup', 'sidepanel'] as Surface[]) {
-    const emptyCtx = await launchWithExtension()
-    const emptyId = await getExtensionId(emptyCtx)
-    const emptyPage = await emptyCtx.newPage()
-    await goto(emptyPage, emptyId, surface, scheme)
-    await shot(emptyPage, surface, `${scheme}-empty.png`)
-    await emptyCtx.close()
+  const emptyCtx = await launchWithExtension()
+  const emptyId = await getExtensionId(emptyCtx)
+  const emptyPage = await emptyCtx.newPage()
+  await emptyPage.setViewportSize({ width: 400, height: 800 })
+  await emptyPage.emulateMedia({ colorScheme: scheme })
+  await emptyPage.goto(`chrome-extension://${emptyId}/src/sidepanel/index.html`)
+  await emptyPage.waitForLoadState('networkidle')
+  await shot(emptyPage, 'sidepanel', `${scheme}-empty.png`)
+  await emptyCtx.close()
 
-    const ctx = await launchWithExtension()
-    await ctx.addInitScript((prompts: Record<string, unknown>[]) => {
-      ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
-        prompts,
-      })
-    }, SEED_PROMPTS)
-    const id = await getExtensionId(ctx)
+  const ctx = await launchWithExtension()
+  await ctx.addInitScript((prompts: Record<string, unknown>[]) => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      prompts,
+    })
+  }, SEED_PROMPTS)
+  const id = await getExtensionId(ctx)
 
-    const listPage = await ctx.newPage()
-    await goto(listPage, id, surface, scheme)
-    await shot(listPage, surface, `${scheme}-list.png`)
+  const listPage = await ctx.newPage()
+  await listPage.setViewportSize({ width: 400, height: 800 })
+  await listPage.emulateMedia({ colorScheme: scheme })
+  await listPage.goto(`chrome-extension://${id}/src/sidepanel/index.html`)
+  await listPage.waitForLoadState('networkidle')
+  await shot(listPage, 'sidepanel', `${scheme}-list.png`)
 
-    await listPage.getByRole('button', { name: /new/i }).click()
-    await listPage.waitForTimeout(200)
-    await shot(listPage, surface, `${scheme}-form-new.png`)
+  await listPage.getByRole('button', { name: /new/i }).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-form-new.png`)
 
-    await listPage.getByRole('button', { name: /cancel/i }).click()
-    await listPage.waitForTimeout(200)
-    await listPage
-      .getByRole('button', { name: /edit prompt/i })
-      .first()
-      .click()
-    await listPage.waitForTimeout(200)
-    await shot(listPage, surface, `${scheme}-form-edit.png`)
+  await listPage.getByRole('button', { name: /cancel/i }).click()
+  await listPage.waitForTimeout(200)
+  await listPage.getByText('summarize', { exact: true }).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-form-edit.png`)
 
-    await ctx.close()
-  }
+  await ctx.close()
 }
 
 // options
@@ -138,13 +155,46 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await page.emulateMedia({ colorScheme: scheme })
   await page.goto(`chrome-extension://${id}/src/options/index.html`)
   await page.waitForLoadState('networkidle')
-  await shot(page, 'options', `${scheme}-default.png`)
+  await shot(page, 'options', `${scheme}.png`)
 
-  await page
-    .getByRole('checkbox', { name: /enable caret on claude\.ai/i })
-    .click()
-  await page.waitForTimeout(100)
-  await shot(page, 'options', `${scheme}-site-disabled.png`)
+  await ctx.close()
+}
+
+// dropdown (mocked ChatGPT page)
+
+for (const scheme of ['light', 'dark'] as ColorScheme[]) {
+  const ctx = await launchWithExtension()
+  const id = await getExtensionId(ctx)
+
+  const seedPage = await ctx.newPage()
+  await seedPage.goto(`chrome-extension://${id}/src/sidepanel/index.html`)
+  await seedPage.evaluate((prompts) => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      prompts,
+      settings: {
+        sites: { 'chatgpt.com': { triggerSymbol: '>', enabled: true } },
+      },
+    })
+  }, SEED_PROMPTS)
+  await seedPage.close()
+
+  const page = await ctx.newPage()
+  await page.setViewportSize({ width: 800, height: 600 })
+  await page.emulateMedia({ colorScheme: scheme })
+  await page.route('https://chatgpt.com/*', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: MOCK_CHATGPT_HTML,
+    })
+  })
+  await page.goto('https://chatgpt.com/')
+  const textarea = page.locator('#prompt-textarea')
+  await textarea.waitFor()
+  await textarea.focus()
+  await page.keyboard.type('>')
+  await page.waitForTimeout(500)
+  await shot(page, 'dropdown', `${scheme}.png`)
 
   await ctx.close()
 }
