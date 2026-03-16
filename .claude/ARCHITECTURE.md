@@ -177,9 +177,9 @@ Apply uses the diff, not a full replace. Added snippets get `source: 'github'` a
 
 PAT is optional for public repos; required for private.
 
-`testConnection` returns `{ ok: true } | { ok: false; error: string }` — HTTP status codes map to specific user-facing messages via `describeHttpError` in `github.ts`. Both `testConnection` and `fetchSnippets` use the same helper.
+Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message.
 
-Stale review detection: `useGithubSync` captures a config fingerprint (`owner/repo/branch/snippetsPath`) in `syncConfigKey` state when sync starts. If `settings.github` changes before the user applies the diff, `isStaleReview` is derived as true and `effectiveStatus` collapses to `idle`. No `useEffect` is needed — the stale state is computed in render.
+If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
 
 ### Sidepanel-primary: popup dormant
 
