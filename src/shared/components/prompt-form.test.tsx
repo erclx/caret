@@ -221,11 +221,16 @@ describe('PromptForm', () => {
     render(
       <PromptForm
         initialPrompt={EXISTING_PROMPT}
-        existingNames={[]}
+        existingNames={[EXISTING_PROMPT.name]}
         onSave={vi.fn()}
         onCancel={vi.fn()}
       />,
     )
+    const user = userEvent.setup()
+    const input = screen.getByLabelText(/^name$/i)
+
+    await user.clear(input)
+    await user.type(input, EXISTING_PROMPT.name)
 
     expect(
       screen.queryByText(/a prompt with this name already exists/i),

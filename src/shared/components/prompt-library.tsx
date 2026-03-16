@@ -60,9 +60,7 @@ export function PromptLibrary() {
     setView('list')
   }
 
-  const existingNames = prompts
-    .filter((p) => p.id !== editingPrompt?.id)
-    .map((p) => p.name)
+  const existingNames = prompts.map((p) => p.name)
 
   if (view === 'form') {
     return (

@@ -41,7 +41,7 @@ export function PromptForm({
       setNameError(
         'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
       )
-    } else if (val && existingNames.includes(val)) {
+    } else if (val && val !== initialName && existingNames.includes(val)) {
       setNameError('A prompt with this name already exists')
     } else {
       setNameError('')
