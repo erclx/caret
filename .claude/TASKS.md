@@ -6,9 +6,9 @@
 
 ### Feat — GitHub sync improvements
 
-- [ ] "Nothing to sync" feedback — when a sync finds zero changes, show a status message instead of an empty diff view
-- [ ] Disconnect GitHub button in options page — clears github config from settings
-- [ ] Shared connection status — persist connection health (`connected` | `error`) in settings storage so the sidepanel dot reflects actual sync state rather than just config presence; currently the dot is always green when config exists regardless of whether the last save or sync succeeded
+- [x] "Nothing to sync" feedback — when a sync finds zero changes, show a status message instead of an empty diff view
+- [x] Disconnect GitHub button in options page — clears github config from settings
+- [x] Shared connection status — persist connection health (`connected` | `error`) in settings storage so the sidepanel dot reflects actual sync state rather than just config presence; currently the dot is always green when config exists regardless of whether the last save or sync succeeded
 - **Test strategy: unit** — disconnect logic
 
 ### Feat — onboarding

@@ -82,7 +82,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Selected state: `--selected` bg only, no border or left bar
 - No search input inside dropdown — filtering happens by typing after the trigger symbol in the chat input (intentional)
 - Footer hint: `↑↓ navigate · Enter/Tab insert · Esc close`, `hint` size, `--text-muted`
-- Empty state: `"No prompts yet — click the extension icon to add one"`
+- Empty state: `"No prompts yet - click the extension icon to add one"`
 
 ### Popup
 
@@ -97,8 +97,8 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 
 ### Sidepanel — GitHub Sync View
 
-- Connection indicator: 8px filled circle, `green-500` connected / `red-500` error / `zinc-400` not configured; inline with repo name in `--text-muted`
-- Status line: `hint` size, `--text-muted` — e.g. "Synced just now · 8 snippets" or "Never synced"
+- Connection indicator: 8px filled circle driven by `connectionHealth` in settings — `green-500` connected (or absent, fallback) / `red-500` error / `zinc-400` not configured; inline with repo name in `--text-muted`
+- Status line: `hint` size, `--text-muted` — e.g. "Synced just now · 8 snippets", "Up to date · 8 snippets" (transient, after a no-change sync), or "Never synced"
 - Sync button: standard outline button, full width, lucide `RefreshCw` icon 16px left of label
 - Diff list: monospace slug names, `body` size; prefix symbols `+` in `green-600`/`green-400`, `~` in `zinc-500`, `-` in `--destructive`; "N unchanged" in `--text-muted` below list
 - Apply button: `--text-primary` on `--surface`, shows count inline e.g. "Apply 3 changes"
@@ -121,6 +121,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Field labels have a `HelpCircle` icon (16px, `--text-muted`) that shows a tooltip on hover; tooltip styled zinc-800/zinc-700 via `className` override at usage site; `TooltipPrimitive.Arrow` is removed from the shared `tooltip.tsx` component (no arrow anywhere)
 - PAT field has a "Create a token on GitHub →" link below the input, `--text-muted`, opens in new tab
 - Repository field accepts `owner/repo` combined input and parses into separate `owner` and `repo` fields on change
+- Disconnect button: shown below the save footer only when GitHub is configured; outline style, `--destructive` text, no confirmation; hint below: "Your synced prompts will not be removed."
 
 ## Iconography
 
