@@ -24,3 +24,4 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - Check `.claude/WIREFRAMES.md` for intended UI layout and behavior
 - Check `.claude/DESIGN.md` for tokens, typography, spacing, and component rules
 - Check `.claude/REQUIREMENTS.md` for feature scope and non-goals
+- Check `.claude/GOV.md` for coding standards before writing or editing any code
