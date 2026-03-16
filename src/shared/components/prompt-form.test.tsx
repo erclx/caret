@@ -184,4 +184,75 @@ describe('PromptForm', () => {
 
     expect(screen.getByRole('button', { name: /save/i })).toBeDisabled()
   })
+
+  it('should show duplicate name error when name matches an existing prompt', async () => {
+    render(
+      <PromptForm
+        existingNames={['existing-prompt']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'existing-prompt')
+
+    expect(
+      screen.getByText(/a prompt with this name already exists/i),
+    ).toBeInTheDocument()
+  })
+
+  it('should disable save button when name is a duplicate', async () => {
+    render(
+      <PromptForm
+        existingNames={['existing-prompt']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'existing-prompt')
+
+    expect(screen.getByRole('button', { name: /save/i })).toBeDisabled()
+  })
+
+  it('should not show duplicate error when editing a prompt with its own name', async () => {
+    render(
+      <PromptForm
+        initialPrompt={EXISTING_PROMPT}
+        existingNames={[]}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.queryByText(/a prompt with this name already exists/i),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled()
+  })
+
+  it('should clear duplicate error when name is changed to a non-duplicate', async () => {
+    render(
+      <PromptForm
+        existingNames={['existing-prompt']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+    const input = screen.getByLabelText(/^name$/i)
+
+    await user.type(input, 'existing-prompt')
+    expect(
+      screen.getByText(/a prompt with this name already exists/i),
+    ).toBeInTheDocument()
+
+    await user.clear(input)
+    await user.type(input, 'new-prompt')
+    expect(
+      screen.queryByText(/a prompt with this name already exists/i),
+    ).not.toBeInTheDocument()
+  })
 })

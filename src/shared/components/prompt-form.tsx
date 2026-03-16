@@ -8,6 +8,7 @@ import type { Prompt } from '@/shared/types'
 
 export interface PromptFormProps {
   initialPrompt?: Prompt | null
+  existingNames?: string[]
   onSave: (data: { name: string; body: string }) => Promise<void>
   onCancel: () => void
 }
@@ -16,6 +17,7 @@ const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 export function PromptForm({
   initialPrompt,
+  existingNames = [],
   onSave,
   onCancel,
 }: PromptFormProps) {
@@ -39,6 +41,8 @@ export function PromptForm({
       setNameError(
         'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
       )
+    } else if (val && existingNames.includes(val)) {
+      setNameError('A prompt with this name already exists')
     } else {
       setNameError('')
     }

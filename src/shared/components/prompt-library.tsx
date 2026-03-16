@@ -60,11 +60,16 @@ export function PromptLibrary() {
     setView('list')
   }
 
+  const existingNames = prompts
+    .filter((p) => p.id !== editingPrompt?.id)
+    .map((p) => p.name)
+
   if (view === 'form') {
     return (
       <div className='flex h-full flex-col overflow-hidden pr-2'>
         <PromptForm
           initialPrompt={editingPrompt}
+          existingNames={existingNames}
           onSave={handleSave}
           onCancel={handleBack}
         />
