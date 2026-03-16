@@ -4,17 +4,11 @@
 
 ## Up next
 
-### Feat — GitHub config improvements
-
-- [ ] Realtime format validation on owner/repo field — must match `owner/repo` pattern, inline error if not
-- [ ] Informative error messages on sync failure — surface the specific cause (bad PAT, repo not found, wrong path) rather than a generic error
-- [ ] Auto-cancel sync when config changes mid-review — stale diff should not be applied against a different config
-- **Test strategy: unit** — validation logic and diff cancellation
-
 ### Feat — GitHub sync improvements
 
 - [ ] "Nothing to sync" feedback — when a sync finds zero changes, show a status message instead of an empty diff view
 - [ ] Disconnect GitHub button in options page — clears github config from settings
+- [ ] Shared connection status — persist connection health (`connected` | `error`) in settings storage so the sidepanel dot reflects actual sync state rather than just config presence; currently the dot is always green when config exists regardless of whether the last save or sync succeeded
 - **Test strategy: unit** — disconnect logic
 
 ### Feat — onboarding
@@ -26,11 +20,6 @@
 
 - [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
 - [ ] Replace placeholder icons in `public/icons/`
-
-### Feat — prompt form improvements
-
-- [x] Warn on duplicate name — prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
-- **Test strategy: unit** — duplicate detection logic
 
 ## Done
 
@@ -177,3 +166,15 @@
 - [x] Warn before discarding a dirty form — Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
 - [x] Two-anchor confirmation: Back shows confirmation at top replacing `← Back`; Cancel shows confirmation at bottom replacing Cancel/Save; Keep editing restores the replaced row
 - **Test strategy: unit** — dirty state detection
+
+### Feat — prompt form improvements
+
+- [x] Warn on duplicate name — prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
+- **Test strategy: unit** — duplicate detection logic
+
+### Feat — GitHub config improvements
+
+- [x] Realtime format validation on owner/repo field — must match `owner/repo` pattern, inline error if not
+- [x] Informative error messages on sync failure — surface the specific cause (bad PAT, repo not found, wrong path) rather than a generic error
+- [x] Auto-cancel sync when config changes mid-review — stale diff should not be applied against a different config
+- **Test strategy: unit** — validation logic and diff cancellation

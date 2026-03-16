@@ -56,6 +56,7 @@ src/
     │   └── ui/               # shadcn/ui primitives (button, input, label, textarea, tooltip)
     ├── hooks/
     │   ├── use-github-sync.ts # Sync state machine: idle → fetching → reviewing → applying
+    │   ├── use-github-sync.test.ts
     │   ├── use-prompts.ts    # CRUD over chrome.storage.local
     │   ├── use-prompts.test.ts
     │   ├── use-settings.ts   # Trigger symbol config per site
@@ -175,6 +176,10 @@ Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 
 PAT is optional for public repos; required for private.
+
+`testConnection` returns `{ ok: true } | { ok: false; error: string }` — HTTP status codes map to specific user-facing messages via `describeHttpError` in `github.ts`. Both `testConnection` and `fetchSnippets` use the same helper.
+
+Stale review detection: `useGithubSync` captures a config fingerprint (`owner/repo/branch/snippetsPath`) in `syncConfigKey` state when sync starts. If `settings.github` changes before the user applies the diff, `isStaleReview` is derived as true and `effectiveStatus` collapses to `idle`. No `useEffect` is needed — the stale state is computed in render.
 
 ### Sidepanel-primary: popup dormant
 
