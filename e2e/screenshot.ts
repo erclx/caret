@@ -96,10 +96,15 @@ async function getExtensionId(ctx: BrowserContext): Promise<string> {
   return sw.url().split('/')[2]
 }
 
-async function shot(page: Page, surface: string, filename: string) {
+async function shot(
+  page: Page,
+  surface: string,
+  filename: string,
+  fullPage = false,
+) {
   const dir = path.join(screenshotsDir, surface)
   fs.mkdirSync(dir, { recursive: true })
-  await page.screenshot({ path: path.join(dir, filename) })
+  await page.screenshot({ path: path.join(dir, filename), fullPage })
   console.log(`✓ ${surface}/${filename}`)
 }
 
@@ -131,6 +136,15 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.waitForLoadState('networkidle')
   await shot(listPage, 'sidepanel', `${scheme}-list.png`)
 
+  await listPage
+    .getByRole('button', { name: /delete prompt/i })
+    .first()
+    .click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-list-delete.png`)
+  await listPage.getByRole('button', { name: /cancel/i }).click()
+  await listPage.waitForTimeout(200)
+
   await listPage.getByRole('button', { name: /new/i }).click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-new.png`)
@@ -140,6 +154,11 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.getByText(SEED_PROMPTS[0].name, { exact: true }).click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-edit.png`)
+
+  await listPage.getByLabel(/prompt body/i).type(' updated')
+  await listPage.getByRole('button', { name: /cancel/i }).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-form-dirty.png`)
 
   await ctx.close()
 }
@@ -155,7 +174,7 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await page.emulateMedia({ colorScheme: scheme })
   await page.goto(`chrome-extension://${id}/src/options/index.html`)
   await page.waitForLoadState('networkidle')
-  await shot(page, 'options', `${scheme}.png`)
+  await shot(page, 'options', `${scheme}.png`, true)
 
   await ctx.close()
 }

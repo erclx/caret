@@ -62,20 +62,12 @@ export function PromptLibrary() {
 
   if (view === 'form') {
     return (
-      <div className='flex h-full flex-col overflow-hidden'>
-        <button
-          className='text-muted-foreground hover:text-foreground mb-4 flex shrink-0 items-center gap-1 text-sm transition-colors'
-          onClick={handleBack}
-        >
-          ← Back
-        </button>
-        <div className='flex flex-1 flex-col overflow-hidden pr-2'>
-          <PromptForm
-            initialPrompt={editingPrompt}
-            onSave={handleSave}
-            onCancel={handleBack}
-          />
-        </div>
+      <div className='flex h-full flex-col overflow-hidden pr-2'>
+        <PromptForm
+          initialPrompt={editingPrompt}
+          onSave={handleSave}
+          onCancel={handleBack}
+        />
       </div>
     )
   }

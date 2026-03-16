@@ -155,7 +155,7 @@ describe('PromptLibrary', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: /new/i }))
-    await user.click(screen.getByRole('button', { name: /← back/i }))
+    await user.click(screen.getByText(/← back/i))
 
     expect(mockAddPrompt).not.toHaveBeenCalled()
     expect(screen.getByText('summarize')).toBeInTheDocument()

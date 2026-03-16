@@ -19,10 +19,18 @@ export function PromptForm({
   onSave,
   onCancel,
 }: PromptFormProps) {
-  const [name, setName] = useState(initialPrompt?.name ?? '')
+  const initialName = initialPrompt?.name ?? ''
+  const initialBody = initialPrompt?.body ?? ''
+
+  const [name, setName] = useState(initialName)
   const [nameError, setNameError] = useState('')
-  const [body, setBody] = useState(initialPrompt?.body ?? '')
+  const [body, setBody] = useState(initialBody)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [discardTrigger, setDiscardTrigger] = useState<
+    'back' | 'cancel' | null
+  >(null)
+
+  const isDirty = name !== initialName || body !== initialBody
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
@@ -36,6 +44,14 @@ export function PromptForm({
     }
   }
 
+  function handleRequestDiscard(trigger: 'back' | 'cancel') {
+    if (isDirty) {
+      setDiscardTrigger(trigger)
+    } else {
+      onCancel()
+    }
+  }
+
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmitting(true)
@@ -46,8 +62,45 @@ export function PromptForm({
     }
   }
 
+  const discardRow = (
+    <div className='border-destructive bg-destructive/10 flex shrink-0 items-center justify-between gap-2 rounded-md border p-3 shadow-sm'>
+      <span className='text-destructive text-sm font-medium'>
+        Discard changes?
+      </span>
+      <div className='flex shrink-0 gap-2'>
+        <Button
+          type='button'
+          variant='ghost'
+          size='sm'
+          onClick={() => setDiscardTrigger(null)}
+        >
+          Keep editing
+        </Button>
+        <Button
+          type='button'
+          variant='destructive'
+          size='sm'
+          onClick={onCancel}
+        >
+          Discard
+        </Button>
+      </div>
+    </div>
+  )
+
   return (
     <form onSubmit={handleSubmit} className='flex h-full flex-col gap-4 px-2'>
+      {discardTrigger === 'back' ? (
+        discardRow
+      ) : (
+        <button
+          type='button'
+          className='text-muted-foreground hover:text-foreground flex w-fit shrink-0 items-center gap-1 text-sm transition-colors'
+          onClick={() => handleRequestDiscard('back')}
+        >
+          ← Back
+        </button>
+      )}
       <div className='flex shrink-0 flex-col gap-2'>
         <Label htmlFor='name'>Name</Label>
         <Input
@@ -71,25 +124,29 @@ export function PromptForm({
           className='flex-1 resize-none text-sm'
         />
       </div>
-      <div className='flex shrink-0 justify-end gap-2'>
-        <Button
-          type='button'
-          variant='ghost'
-          className='text-muted-foreground'
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant='outline'
-          type='submit'
-          className='dark:hover:bg-zinc-700 dark:hover:text-white'
-          disabled={isSubmitting || !!nameError || !name}
-        >
-          {isSubmitting ? 'Saving...' : 'Save'}
-        </Button>
-      </div>
+      {discardTrigger === 'cancel' ? (
+        discardRow
+      ) : (
+        <div className='flex shrink-0 justify-end gap-2'>
+          <Button
+            type='button'
+            variant='ghost'
+            className='text-muted-foreground'
+            onClick={() => handleRequestDiscard('cancel')}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant='outline'
+            type='submit'
+            className='dark:hover:bg-zinc-700 dark:hover:text-white'
+            disabled={isSubmitting || !!nameError || !name}
+          >
+            {isSubmitting ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      )}
     </form>
   )
 }

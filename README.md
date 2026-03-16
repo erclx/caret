@@ -15,6 +15,7 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 - Popup and side panel UI for managing prompts
 - Quick access to settings from the prompt library
 - JSON export and import for backup and restore
+- Prompt editing includes unsaved changes warning
 - Data stays local, no accounts or sync
 
 ## Installation

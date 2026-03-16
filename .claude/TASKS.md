@@ -148,3 +148,9 @@
 - [x] Add dropdown capture on mocked chat page
 - [x] Add Gemini e2e insertion test (parity with Claude and ChatGPT)
 - **Test strategy: none** — visual output, manually verified
+
+### Feat — unsaved changes warning in prompt form
+
+- [x] Warn before discarding a dirty form — Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
+- [x] Two-anchor confirmation: Back shows confirmation at top replacing `← Back`; Cancel shows confirmation at bottom replacing Cancel/Save; Keep editing restores the replaced row
+- **Test strategy: unit** — dirty state detection
