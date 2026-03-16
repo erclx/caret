@@ -19,10 +19,16 @@ export function PromptForm({
   onSave,
   onCancel,
 }: PromptFormProps) {
-  const [name, setName] = useState(initialPrompt?.name ?? '')
+  const initialName = initialPrompt?.name ?? ''
+  const initialBody = initialPrompt?.body ?? ''
+
+  const [name, setName] = useState(initialName)
   const [nameError, setNameError] = useState('')
-  const [body, setBody] = useState(initialPrompt?.body ?? '')
+  const [body, setBody] = useState(initialBody)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [confirmDiscard, setConfirmDiscard] = useState(false)
+
+  const isDirty = name !== initialName || body !== initialBody
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
@@ -33,6 +39,14 @@ export function PromptForm({
       )
     } else {
       setNameError('')
+    }
+  }
+
+  function handleRequestDiscard() {
+    if (isDirty) {
+      setConfirmDiscard(true)
+    } else {
+      onCancel()
     }
   }
 
@@ -48,6 +62,13 @@ export function PromptForm({
 
   return (
     <form onSubmit={handleSubmit} className='flex h-full flex-col gap-4 px-2'>
+      <button
+        type='button'
+        className='text-muted-foreground hover:text-foreground flex w-fit shrink-0 items-center gap-1 text-sm transition-colors'
+        onClick={handleRequestDiscard}
+      >
+        ← Back
+      </button>
       <div className='flex shrink-0 flex-col gap-2'>
         <Label htmlFor='name'>Name</Label>
         <Input
@@ -71,25 +92,52 @@ export function PromptForm({
           className='flex-1 resize-none text-sm'
         />
       </div>
-      <div className='flex shrink-0 justify-end gap-2'>
-        <Button
-          type='button'
-          variant='ghost'
-          className='text-muted-foreground'
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant='outline'
-          type='submit'
-          className='dark:hover:bg-zinc-700 dark:hover:text-white'
-          disabled={isSubmitting || !!nameError || !name}
-        >
-          {isSubmitting ? 'Saving...' : 'Save'}
-        </Button>
-      </div>
+      {confirmDiscard ? (
+        <div className='border-destructive bg-destructive/10 flex shrink-0 items-center justify-between gap-2 rounded-md border p-3'>
+          <span className='text-destructive text-sm font-medium'>
+            Discard changes?
+          </span>
+          <div className='flex shrink-0 gap-2'>
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              className='text-foreground hover:bg-destructive/20'
+              onClick={() => setConfirmDiscard(false)}
+            >
+              Keep editing
+            </Button>
+            <Button
+              type='button'
+              variant='destructive'
+              size='sm'
+              onClick={onCancel}
+            >
+              Discard
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className='flex shrink-0 justify-end gap-2'>
+          <Button
+            type='button'
+            variant='ghost'
+            className='text-muted-foreground'
+            onClick={handleRequestDiscard}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant='outline'
+            type='submit'
+            className='dark:hover:bg-zinc-700 dark:hover:text-white'
+            disabled={isSubmitting || !!nameError || !name}
+          >
+            {isSubmitting ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      )}
     </form>
   )
 }
