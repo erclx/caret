@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- prompts: add onboarding empty state for new users
 - github: add connection health, disconnect, and UX improvements
 
 - github-sync: auto-cancel on config change
