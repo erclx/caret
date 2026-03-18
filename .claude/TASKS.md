@@ -4,13 +4,6 @@
 
 ## Up next
 
-### Feat — GitHub sync improvements
-
-- [ ] "Nothing to sync" feedback — when a sync finds zero changes, show a status message instead of an empty diff view
-- [ ] Disconnect GitHub button in options page — clears github config from settings
-- [ ] Shared connection status — persist connection health (`connected` | `error`) in settings storage so the sidepanel dot reflects actual sync state rather than just config presence; currently the dot is always green when config exists regardless of whether the last save or sync succeeded
-- **Test strategy: unit** — disconnect logic
-
 ### Feat — onboarding
 
 - [ ] First install empty state — hint about typing the trigger symbol in a chat input; shown only when prompt list is empty and no prompts have ever been created
@@ -178,3 +171,11 @@
 - [x] Informative error messages on sync failure — surface the specific cause (bad PAT, repo not found, wrong path) rather than a generic error
 - [x] Auto-cancel sync when config changes mid-review — stale diff should not be applied against a different config
 - **Test strategy: unit** — validation logic and diff cancellation
+
+### Feat — GitHub sync UX fixes
+
+- [x] Fix connection status mismatch — saving with an invalid PAT no longer writes `connectionHealth: 'error'` to the stored config; error stays local to the options form, leaving the valid stored config and sidebar dot unaffected
+- [x] Fix options form initial status — `connectionStatus` now reads from `settings.github.connectionHealth` on load instead of always defaulting to `'connected'` when a config exists
+- [x] Post-apply feedback — sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
+- [x] Dev prefill — options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
+- **Test strategy: none** — visual verification

@@ -35,6 +35,8 @@ All notable changes to this project will be documented in this file.
 - storage: prompt and settings CRUD via chrome.storage.local
 - ui: add tooltip and GitHub sync view components
 - prompt-form: add duplicate name validation
+- github-sync: add visual feedback for apply
+- github-sync: add disconnect and connection health persistence
 
 ### Changed
 
@@ -48,9 +50,12 @@ All notable changes to this project will be documented in this file.
 - sidepanel: add base background color
 - ui: adjust options page header and sidepanel background styles
 - ui: migrate primary management interface to the sidepanel
+- github-sync: refine connection status logic
 
 ### Fixed
 
 - dropdown: dismiss on outside click and window resize
 - ui: improve dropdown and options interactions
 - prompt-form: correct duplicate name validation for editing
+- github-sync: add guard for missing github config
+- github: handle missing github config during sync

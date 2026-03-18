@@ -16,6 +16,7 @@ export function useGithubSync() {
   const [diff, setDiff] = useState<DiffResult | null>(null)
   const [snippets, setSnippets] = useState<Snippet[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [upToDateCount, setUpToDateCount] = useState<number | null>(null)
 
   const config = settings.github
 
@@ -32,6 +33,7 @@ export function useGithubSync() {
     setSyncConfigKey(configKey)
     setStatus('fetching')
     setError(null)
+    setUpToDateCount(null)
 
     const result = await fetchSnippets(config)
 
@@ -41,15 +43,38 @@ export function useGithubSync() {
       return
     }
 
-    setSnippets(result.snippets)
-    setDiff(
-      computeDiff(
-        prompts.filter((p) => p.source === 'github'),
-        result.snippets,
-      ),
+    const diffResult = computeDiff(
+      prompts.filter((p) => p.source === 'github'),
+      result.snippets,
     )
+    const hasChanges =
+      diffResult.added.length +
+        diffResult.updated.length +
+        diffResult.removed.length >
+      0
+
+    if (!hasChanges) {
+      const now = Date.now()
+      const current = await storage.getSettings()
+      if (!current.github) return
+      await updateSettings({
+        ...current,
+        github: {
+          ...current.github,
+          lastSyncedAt: now,
+          lastSyncedCount: result.snippets.length,
+        },
+      })
+      setUpToDateCount(result.snippets.length)
+      setSyncConfigKey(null)
+      setStatus('idle')
+      return
+    }
+
+    setSnippets(result.snippets)
+    setDiff(diffResult)
     setStatus('reviewing')
-  }, [config, configKey, prompts])
+  }, [config, configKey, prompts, updateSettings])
 
   const applySync = useCallback(async () => {
     if (!config || !diff || isStaleReview) return
@@ -94,10 +119,11 @@ export function useGithubSync() {
     ])
 
     const current = await storage.getSettings()
+    if (!current.github) return
     await updateSettings({
       ...current,
       github: {
-        ...config,
+        ...current.github,
         lastSyncedAt: now,
         lastSyncedCount: snippets.length,
       },
@@ -121,6 +147,7 @@ export function useGithubSync() {
     diff,
     error,
     config,
+    upToDateCount,
     sync,
     applySync,
     cancelSync,

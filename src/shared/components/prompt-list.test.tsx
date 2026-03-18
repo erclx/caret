@@ -22,7 +22,7 @@ describe('PromptList', () => {
     )
 
     expect(
-      screen.getByText(/no prompts yet — click the extension icon to add one/i),
+      screen.getByText(/no prompts yet - click the extension icon to add one/i),
     ).toBeInTheDocument()
   })
 

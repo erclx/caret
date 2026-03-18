@@ -141,8 +141,9 @@ type Settings = {
     repo: string // repo name
     branch: string // default "main"
     snippetsPath: string // path to snippets folder, default "snippets"
-    lastSyncedAt?: number // timestamp of last successful sync
-    lastSyncedCount?: number // number of snippets in last successful sync
+    lastSyncedAt?: number // timestamp of last sync (applied or up-to-date)
+    lastSyncedCount?: number // number of snippets in last sync
+    connectionHealth?: 'connected' | 'error' // persisted after each save attempt; absent means treat as connected
   }
 }
 ```
@@ -171,7 +172,7 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 Extension pulls from GitHub; it never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
 
-Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → show diff view → on confirm, apply changes surgically.
+Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
 
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 

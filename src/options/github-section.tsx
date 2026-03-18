@@ -59,19 +59,37 @@ function FieldLabel({ htmlFor, hint, children }: FieldLabelProps) {
 
 export function GithubSection() {
   const { settings, updateSettings } = useSettings()
-  const [localGithub, setLocalGithub] = useState<LocalGithub>(() =>
-    settings.github
-      ? {
-          pat: settings.github.pat,
-          owner: settings.github.owner,
-          repo: settings.github.repo,
-          branch: settings.github.branch,
-          snippetsPath: settings.github.snippetsPath,
-        }
-      : DEFAULT_GITHUB,
-  )
+  const [localGithub, setLocalGithub] = useState<LocalGithub>(() => {
+    if (settings.github) {
+      return {
+        pat: settings.github.pat,
+        owner: settings.github.owner,
+        repo: settings.github.repo,
+        branch: settings.github.branch,
+        snippetsPath: settings.github.snippetsPath,
+      }
+    }
+    if (
+      import.meta.env.MODE === 'development' &&
+      import.meta.env.VITE_GITHUB_PAT
+    ) {
+      return {
+        pat: import.meta.env.VITE_GITHUB_PAT as string,
+        owner: (import.meta.env.VITE_GITHUB_OWNER as string) ?? '',
+        repo: (import.meta.env.VITE_GITHUB_REPO as string) ?? '',
+        branch: (import.meta.env.VITE_GITHUB_BRANCH as string) ?? 'main',
+        snippetsPath:
+          (import.meta.env.VITE_GITHUB_SNIPPETS_PATH as string) ?? 'snippets',
+      }
+    }
+    return DEFAULT_GITHUB
+  })
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    () => (settings.github ? 'connected' : 'unconfigured'),
+    () => {
+      if (!settings.github) return 'unconfigured'
+      return (settings.github.connectionHealth ??
+        'connected') as ConnectionStatus
+    },
   )
   const [repoError, setRepoError] = useState<string | null>(null)
   const [repoBlurred, setRepoBlurred] = useState(false)
@@ -85,6 +103,16 @@ export function GithubSection() {
       if (githubSavedTimerRef.current) clearTimeout(githubSavedTimerRef.current)
     }
   }, [])
+
+  async function handleDisconnect() {
+    const current = await storage.getSettings()
+    await updateSettings({ sites: current.sites })
+    setLocalGithub(DEFAULT_GITHUB)
+    setConnectionStatus('unconfigured')
+    setConnectionError(null)
+    setRepoError(null)
+    setRepoBlurred(false)
+  }
 
   async function handleSaveGithub() {
     setIsSavingGithub(true)
@@ -103,6 +131,7 @@ export function GithubSection() {
         github: {
           ...current.github,
           ...localGithub,
+          connectionHealth: 'connected',
         },
       })
       setIsGithubSaved(true)
@@ -265,6 +294,20 @@ export function GithubSection() {
           <p className='text-destructive text-xs'>{connectionError}</p>
         )}
       </div>
+      {settings.github && (
+        <div className='border-border flex flex-col gap-2 border-t p-6'>
+          <Button
+            variant='outline'
+            className='text-destructive hover:text-destructive w-fit dark:hover:bg-zinc-700'
+            onClick={handleDisconnect}
+          >
+            Disconnect
+          </Button>
+          <p className='text-muted-foreground text-xs'>
+            Your synced prompts will not be removed.
+          </p>
+        </div>
+      )}
     </div>
   )
 }

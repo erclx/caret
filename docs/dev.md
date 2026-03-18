@@ -90,6 +90,16 @@ src/
     └── utils/
 ```
 
+## Environment Variables
+
+For local development, especially when working with GitHub sync, you can set the following environment variables in your `.env` file or directly in your shell:
+
+- `VITE_GITHUB_PAT`: Your GitHub Personal Access Token.
+- `VITE_GITHUB_OWNER`: The owner of the GitHub repository (e.g., `my-org`).
+- `VITE_GITHUB_REPO`: The name of the GitHub repository (e.g., `my-prompts`).
+- `VITE_GITHUB_BRANCH`: The branch to sync from (defaults to `main`).
+- `VITE_GITHUB_SNIPPETS_PATH`: The path within the repository where snippets are stored (defaults to `snippets`).
+
 ## Commit standards
 
 See [standards/commit.md](../standards/commit.md). This project follows [Conventional Commits](https://www.conventionalcommits.org/).
