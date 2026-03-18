@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- github: add connection health, disconnect, and UX improvements
+
 - github-sync: auto-cancel on config change
 - github: config validation and connection testing
 - github-sync: add tooltips for synchronization features
@@ -53,6 +55,8 @@ All notable changes to this project will be documented in this file.
 - github-sync: refine connection status logic
 
 ### Fixed
+
+- options: guard saved feedback and validate trigger input
 
 - dropdown: dismiss on outside click and window resize
 - ui: improve dropdown and options interactions
