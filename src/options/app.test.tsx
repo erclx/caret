@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -52,6 +52,13 @@ describe('OptionsApp', () => {
     ).toHaveValue('>')
   })
 
+  function getSiteConfigSection() {
+    const heading = screen.getByRole('heading', {
+      name: /per-site configuration/i,
+    })
+    return within(heading.closest('div')!.parentElement!)
+  }
+
   it('should show "Settings saved" feedback after a successful save', async () => {
     mockUpdateSiteSettings.mockResolvedValue(undefined)
     render(
@@ -67,10 +74,11 @@ describe('OptionsApp', () => {
     await user.clear(claudeInput)
     await user.type(claudeInput, '!')
 
-    await user.click(screen.getByRole('button', { name: /save settings/i }))
+    const section = getSiteConfigSection()
+    await user.click(section.getByRole('button', { name: /^save$/i }))
 
     await waitFor(() => {
-      expect(screen.getByText(/settings saved/i)).toBeVisible()
+      expect(section.getByText(/^saved/i)).toBeVisible()
     })
   })
 
@@ -93,7 +101,9 @@ describe('OptionsApp', () => {
     })
     await user.click(claudeCheckbox)
 
-    const saveButton = screen.getByRole('button', { name: /save settings/i })
+    const saveButton = getSiteConfigSection().getByRole('button', {
+      name: /^save$/i,
+    })
     await user.click(saveButton)
 
     await waitFor(() => {

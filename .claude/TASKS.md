@@ -4,13 +4,6 @@
 
 ## Up next
 
-### Fix — options page polish
-
-- [ ] Guard "Settings saved" feedback in `site-config-section.tsx` — skip if no sites were modified
-- [ ] Per-site trigger validation: show error on blur only, not on every keystroke
-- [ ] Em dash audit — grep all rendered component strings for `—`, replace with comma, period, or restructured sentence
-- **Test strategy: unit** — settings form logic; visual verification for copy
-
 ### Fix — GitHub tab state + docs
 
 - [ ] Debug diff state survival across tab switch in `PromptLibrary`; if re-mount is the cause, lift state or cancel explicitly with a warning
@@ -192,3 +185,11 @@
 - [x] Post-apply feedback — sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
 - [x] Dev prefill — options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
 - **Test strategy: none** — visual verification
+
+### Fix — options page polish
+
+- [x] Guard "Saved ✓" feedback in `site-config-section.tsx` — skip if no sites were modified
+- [x] Per-site trigger validation: show error on blur only, not on every keystroke
+- [x] Em dash audit — grep all rendered component strings for `—`; none found in rendered UI
+- [x] UI copy audit — apply copy standards to options page and shared utils error messages
+- **Test strategy: unit** — settings form logic; visual verification for copy

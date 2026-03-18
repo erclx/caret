@@ -23,16 +23,14 @@ describe('parseImport', () => {
 
   it('should return an error for malformed JSON', () => {
     const result = parseImport('not json {')
-    expect(result).toEqual({ ok: false, error: 'Invalid JSON file.' })
+    expect(result).toEqual({ ok: false, error: 'Select a valid JSON file.' })
   })
 
   it('should return an error when schema validation fails', () => {
     const result = parseImport(JSON.stringify([{ foo: 'bar' }]))
     expect(result.ok).toBe(false)
     if (!result.ok) {
-      expect(result.error).toBe(
-        'File does not match the expected prompt format.',
-      )
+      expect(result.error).toBe('Use a JSON file exported from Caret.')
     }
   })
 
