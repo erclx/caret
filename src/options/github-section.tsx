@@ -59,17 +59,31 @@ function FieldLabel({ htmlFor, hint, children }: FieldLabelProps) {
 
 export function GithubSection() {
   const { settings, updateSettings } = useSettings()
-  const [localGithub, setLocalGithub] = useState<LocalGithub>(() =>
-    settings.github
-      ? {
-          pat: settings.github.pat,
-          owner: settings.github.owner,
-          repo: settings.github.repo,
-          branch: settings.github.branch,
-          snippetsPath: settings.github.snippetsPath,
-        }
-      : DEFAULT_GITHUB,
-  )
+  const [localGithub, setLocalGithub] = useState<LocalGithub>(() => {
+    if (settings.github) {
+      return {
+        pat: settings.github.pat,
+        owner: settings.github.owner,
+        repo: settings.github.repo,
+        branch: settings.github.branch,
+        snippetsPath: settings.github.snippetsPath,
+      }
+    }
+    if (
+      import.meta.env.MODE === 'development' &&
+      import.meta.env.VITE_GITHUB_PAT
+    ) {
+      return {
+        pat: import.meta.env.VITE_GITHUB_PAT as string,
+        owner: (import.meta.env.VITE_GITHUB_OWNER as string) ?? '',
+        repo: (import.meta.env.VITE_GITHUB_REPO as string) ?? '',
+        branch: (import.meta.env.VITE_GITHUB_BRANCH as string) ?? 'main',
+        snippetsPath:
+          (import.meta.env.VITE_GITHUB_SNIPPETS_PATH as string) ?? 'snippets',
+      }
+    }
+    return DEFAULT_GITHUB
+  })
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     () => (settings.github ? 'connected' : 'unconfigured'),
   )
