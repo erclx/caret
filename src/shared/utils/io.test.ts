@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Prompt } from '@/shared/types'
-import { mergePrompts, parseImport } from '@/shared/utils/io'
+import {
+  formatImportFeedback,
+  mergePrompts,
+  parseImport,
+} from '@/shared/utils/io'
 
 function makePrompt(overrides: Partial<Prompt> = {}): Prompt {
   return {
@@ -45,10 +49,13 @@ describe('mergePrompts', () => {
     const existing = [makePrompt({ id: 'e1', name: 'existing' })]
     const incoming = [makePrompt({ id: 'i1', name: 'new-prompt' })]
 
-    const { merged, added, updated } = mergePrompts(existing, incoming)
+    const { merged, addedNames, updatedNames } = mergePrompts(
+      existing,
+      incoming,
+    )
 
-    expect(added).toBe(1)
-    expect(updated).toBe(0)
+    expect(addedNames).toEqual(['new-prompt'])
+    expect(updatedNames).toEqual([])
     expect(merged).toHaveLength(2)
   })
 
@@ -60,10 +67,13 @@ describe('mergePrompts', () => {
       makePrompt({ id: 'i1', name: 'summarize', body: 'new body' }),
     ]
 
-    const { merged, added, updated } = mergePrompts(existing, incoming)
+    const { merged, addedNames, updatedNames } = mergePrompts(
+      existing,
+      incoming,
+    )
 
-    expect(added).toBe(0)
-    expect(updated).toBe(1)
+    expect(addedNames).toEqual([])
+    expect(updatedNames).toEqual(['summarize'])
     expect(merged).toHaveLength(1)
     expect(merged[0].body).toBe('new body')
   })
@@ -86,10 +96,13 @@ describe('mergePrompts', () => {
       makePrompt({ name: 'brand-new' }),
     ]
 
-    const { added, updated, merged } = mergePrompts(existing, incoming)
+    const { addedNames, updatedNames, merged } = mergePrompts(
+      existing,
+      incoming,
+    )
 
-    expect(added).toBe(1)
-    expect(updated).toBe(1)
+    expect(addedNames).toEqual(['brand-new'])
+    expect(updatedNames).toEqual(['existing'])
     expect(merged).toHaveLength(2)
   })
 
@@ -100,5 +113,27 @@ describe('mergePrompts', () => {
     const { merged } = mergePrompts(existing, incoming)
 
     expect(merged[0].id).not.toBe('original-id')
+  })
+})
+
+describe('formatImportFeedback', () => {
+  it('should list updated and added names when both are present', () => {
+    expect(formatImportFeedback(['c'], ['a', 'b'])).toBe(
+      'Updated: a, b. Added: c.',
+    )
+  })
+
+  it('should show only updated names when nothing was added', () => {
+    expect(formatImportFeedback([], ['summarize', 'refactor'])).toBe(
+      'Updated: summarize, refactor.',
+    )
+  })
+
+  it('should show only added names when nothing was updated', () => {
+    expect(formatImportFeedback(['new-prompt'], [])).toBe('Added: new-prompt.')
+  })
+
+  it('should return an empty string when both arrays are empty', () => {
+    expect(formatImportFeedback([], [])).toBe('')
   })
 })
