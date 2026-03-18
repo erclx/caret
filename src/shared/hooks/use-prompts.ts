@@ -25,7 +25,7 @@ export function usePrompts() {
       ([data, everHad]) => {
         if (isMounted) {
           setPrompts(sortPrompts(data))
-          setHasEverHadPrompts(everHad)
+          setHasEverHadPrompts((current) => current || everHad)
           setIsLoading(false)
         }
       },
