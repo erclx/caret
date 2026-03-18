@@ -237,7 +237,7 @@ export function GithubSection() {
         <div className='flex flex-col gap-2'>
           <FieldLabel
             htmlFor='github-path'
-            hint='Folder of .md files, relative to the repo root. e.g. snippets or prompts/work'
+            hint='Folder of .md files relative to the repo root. Filename (without .md) becomes the snippet name; non-.md files are skipped. e.g. snippets or prompts/work'
           >
             Snippets path
           </FieldLabel>

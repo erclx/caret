@@ -2,8 +2,20 @@ import { RefreshCw } from 'lucide-react'
 import { useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
-import { useGithubSync } from '@/shared/hooks/use-github-sync'
+import type { GithubSettings } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
+import type { DiffResult } from '@/shared/utils/github'
+
+interface GitHubViewProps {
+  status: 'idle' | 'fetching' | 'reviewing' | 'applying'
+  diff: DiffResult | null
+  error: string | null
+  config: GithubSettings | undefined
+  upToDateCount: number | null
+  sync: () => Promise<void>
+  applySync: () => Promise<void>
+  cancelSync: () => void
+}
 
 function formatSyncTime(ts: number): string {
   const diffMin = Math.floor((Date.now() - ts) / 60000)
@@ -14,18 +26,16 @@ function formatSyncTime(ts: number): string {
   return new Date(ts).toLocaleDateString()
 }
 
-export function GitHubView() {
-  const {
-    status,
-    diff,
-    error,
-    config,
-    upToDateCount,
-    sync,
-    applySync,
-    cancelSync,
-  } = useGithubSync()
-
+export function GitHubView({
+  status,
+  diff,
+  error,
+  config,
+  upToDateCount,
+  sync,
+  applySync,
+  cancelSync,
+}: GitHubViewProps) {
   const [justApplied, setJustApplied] = useState(false)
   const justAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 

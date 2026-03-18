@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import { useGithubSync } from '@/shared/hooks/use-github-sync'
 import { usePrompts } from '@/shared/hooks/use-prompts'
 import type { Prompt } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
@@ -17,6 +18,7 @@ type View = 'list' | 'form'
 export function PromptLibrary() {
   const { prompts, isLoading, addPrompt, updatePrompt, deletePrompt } =
     usePrompts()
+  const githubSync = useGithubSync()
   const [view, setView] = useState<View>('list')
   const [tab, setTab] = useState<Tab>('prompts')
   const [query, setQuery] = useState('')
@@ -153,7 +155,7 @@ export function PromptLibrary() {
         </>
       )}
 
-      {tab === 'github' && <GitHubView />}
+      {tab === 'github' && <GitHubView {...githubSync} />}
     </div>
   )
 }
