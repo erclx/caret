@@ -85,7 +85,11 @@ export function GithubSection() {
     return DEFAULT_GITHUB
   })
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    () => (settings.github ? 'connected' : 'unconfigured'),
+    () => {
+      if (!settings.github) return 'unconfigured'
+      return (settings.github.connectionHealth ??
+        'connected') as ConnectionStatus
+    },
   )
   const [repoError, setRepoError] = useState<string | null>(null)
   const [repoBlurred, setRepoBlurred] = useState(false)
@@ -118,13 +122,6 @@ export function GithubSection() {
       setConnectionStatus(result.ok ? 'connected' : 'error')
       if (!result.ok) {
         setConnectionError(result.error)
-        const current = await storage.getSettings()
-        await updateSettings({
-          ...current,
-          github: current.github
-            ? { ...current.github, connectionHealth: 'error' }
-            : undefined,
-        })
         return
       }
 
