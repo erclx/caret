@@ -4,11 +4,6 @@
 
 ## Up next
 
-### Fix — import feedback copy
-
-- [ ] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
-- **Test strategy: unit** — feedback string logic
-
 ### Feat — onboarding
 
 - [ ] First install empty state — hint about typing the trigger symbol in a chat input; shown only when prompt list is empty and no prompts have ever been created
@@ -193,3 +188,9 @@
 - [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
 - [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
 - **Test strategy: none** — manual verification
+
+### Fix — import feedback copy
+
+- [x] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
+- [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
+- **Test strategy: unit** — feedback string logic (`formatImportFeedback`)
