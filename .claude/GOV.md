@@ -1,4 +1,6 @@
-### 000-constitution
+# Governance
+
+## 000-constitution
 
 ```markdown
 # ROLE PERSONA
@@ -28,7 +30,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Treat data as immutable unless mutation is explicitly required.
 ```
 
-### 010-testing
+## 010-testing
 
 ```markdown
 # TESTING STANDARDS
@@ -56,107 +58,106 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use factory functions or builders for test data; avoid inline object literals.
 - Always await async operations; avoid fire-and-forget promises in tests.
 
-## Selection and verification
+## Verification
 
-- Select elements by accessibility attributes first.
 - Do not use snapshot testing for verification.
 ```
 
-### 020-concurrency
+## 020-concurrency
 
 ```markdown
 # CONCURRENCY STANDARDS
 
-## Async Lifecycle
+## Async lifecycle
 
 - Make async operations cancellable; clean up on scope exit or caller cancellation.
 - Coordinate dependent async operations explicitly; document execution order.
 - Set explicit timeouts on all external async operations.
 - Do not fire-and-forget async operations without cleanup handlers.
+- Batch independent async operations; avoid sequential execution when parallelizable.
 
-## Race Conditions
+## Race conditions
 
 - Do not ignore race conditions in concurrent flows.
 - Protect shared mutable state with locks, queues, or single-writer patterns.
 
-## Failure Handling
+## Failure handling
 
 - Handle partial failures in batched operations independently; do not fail the entire batch for a single error.
 ```
 
-### 030-error-handling
+## 030-error-handling
 
 ```markdown
 # ERROR HANDLING STANDARDS
 
-## Boundary Validation
+## Boundary validation
 
 - Validate inputs at system boundaries; reject invalid data immediately.
 - Do not use exceptions for control flow.
 
-## Error Classification
+## Error classification
 
 - Distinguish expected failures (validation, not found) from unexpected failures (null reference, network timeout).
 - Return structured error types for recoverable failures; propagate exceptions for programmer errors.
 
-## Error Propagation
+## Error propagation
 
 - Handle errors at the layer that has enough context to respond meaningfully; do not catch and rethrow without adding value.
 - Do not silently ignore errors.
 
-## Error Reporting
+## Error reporting
 
 - Include actionable context in error messages; never expose internal implementation details.
 
-## Retry Behavior
+## Retry behavior
 
 - Retry only idempotent operations with bounded attempts and backoff.
 ```
 
-### 040-performance
+## 040-performance
 
 ```markdown
 # PERFORMANCE STANDARDS
 
-## Resource Loading
+## Resource loading
 
 - Lazy load resources at architectural boundaries, not inline.
 - Do not import entire modules when subsets are sufficient.
 
-## Execution Efficiency
+## Execution efficiency
 
-- Batch independent operations; avoid sequential execution when parallelizable.
 - Defer non-critical work until after primary output completes.
 - Do not fetch data inside loops.
 
-## Data Handling
+## Data handling
 
 - Paginate or stream unbounded data sets.
 - Do not optimize without measurement.
 ```
 
-### 050-logging
+## 050-logging
 
 ```markdown
 # LOGGING STANDARDS
 
-## Log Coverage
+## Log coverage
 
 - Log state transitions at boundaries (requests received, external calls made, errors encountered).
 - Do not log in performance-critical code paths.
 
-## Log Format
+## Log format
 
 - Use structured formats with consistent metadata (timestamp, severity, correlation ID).
 - Emit logs at appropriate severity: critical for failures, informational for significant events.
 
-## Log Safety
+## Log safety
 
 - Do not log credentials, tokens, or personally identifiable information.
 - Do not log implementation details; log observable behavior.
 ```
 
-### 060-naming
+## 060-naming
 
 ```markdown
 # NAMING STANDARDS
@@ -170,12 +171,26 @@ Your primary directive is to maintain long-term system health over short-term co
 - Prefix event handlers with `handle`: `handleClick`, `handleSubmit`.
 - Name collections as plurals; name items as singulars: `users` / `user`.
 
-## Test Naming
+## Test naming
 
-- Name tests using "should" or descriptive phrases: "should validate email format".
+- Name tests with descriptive phrases that state the expected behavior.
 ```
 
-### 100-typescript
+## 070-planning
+
+```markdown
+# PLANNING STANDARDS
+
+## Planning
+
+- Analyze requests and output a numbered implementation plan before execution.
+- Challenge ambiguous or over-engineered requests before implementation.
+- Propose the simplest solution that satisfies the requirement before implementing complex patterns.
+- Write or update tests as part of every implementation plan.
+- Do not modify code without a confirmed plan.
+```
+
+## 100-typescript
 
 ```markdown
 # TYPESCRIPT STANDARDS
@@ -202,6 +217,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use built-in utility types (`Partial`, `Pick`, `Omit`) over manual type manipulation.
 - Prefer `readonly` properties for data objects.
 - Do not use non-null assertions.
+- Use `Promise.all()` for independent async operations to avoid serial waterfalls.
 
 ## Imports and configuration
 
@@ -209,13 +225,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Import from the module's source file directly; avoid barrel `index` re-exports.
 - Use `import type` for type-only imports to enable proper tree-shaking.
 - Enable `strict: true` in tsconfig.json with no exceptions.
-
-## Async patterns
-
-- Use `Promise.all()` for independent operations to avoid serial waterfalls.
 ```
 
-### 200-react
+## 200-react
 
 ```markdown
 # REACT ARCHITECTURE STANDARDS
@@ -252,9 +264,51 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Composition and props
 
 - Avoid prop drilling beyond 2 levels; use context or composition.
+
+## Error boundaries and Suspense
+
+- Place error boundaries at route level; place Suspense at data-fetching boundaries.
+- Do not use a single root-level error boundary as the only safety net.
+
+## Accessibility
+
+- Use semantic HTML elements over `div`/`span` where a native element exists (`button`, `nav`, `main`, `section`).
+- Add `aria-label` to interactive elements that have no visible text label.
 ```
 
-### 250-tailwind
+## 210-ui
+
+```markdown
+# UI COPY STANDARDS
+
+## Casing
+
+- Use sentence case for all rendered UI text: headings, labels, nav items, tab titles, and dialog titles.
+- Retain original casing for proper nouns and product names: `GitHub`, `macOS`, `TypeScript`.
+- Treat wireframe and planning doc text as structural placeholders; apply these rules to all final rendered strings regardless of how text appears in planning documents.
+
+## Punctuation
+
+- Do not use em dashes (`—`); use a comma, period, or restructure the sentence.
+- Do not add punctuation to button labels or short action strings.
+
+## Button copy
+
+- Use imperative verbs for actions: `Save`, `Delete`, `Connect`, `Cancel`.
+- Avoid padded phrasing: `Save` over `Save changes`, `Delete` over `Click to delete`.
+
+## Error messages
+
+- State what to do, not what went wrong: `Enter a valid email` over `Email is invalid`.
+- Keep messages short and actionable; one sentence maximum.
+
+## Placeholder text
+
+- Show format examples, not instructions: `name@example.com` over `Enter your email here`.
+- Reserve instructions for labels or helper text below the input.
+```
+
+## 250-tailwind
 
 ```markdown
 # TAILWIND CSS V4 STANDARDS
@@ -262,62 +316,64 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Theme variables
 
 - Use `@theme` for design tokens that generate utility classes; use `:root` for plain CSS variables with no utility counterpart.
-- Define dark mode color overrides in `.dark { }` at root level — not inside `@layer base`.
-
-## Dark mode
-
+- Define dark mode color overrides in `.dark { }` at root level, not inside `@layer base`.
 - Always pair light and dark utilities explicitly: `bg-white dark:bg-gray-900`.
 
 ## Layout and spacing
 
-- Use `flex` and `grid` for all layouts — never floats or absolute positioning for flow.
+- Use `flex` and `grid` for all layouts. Never use floats or absolute positioning for flow.
 - Use `gap-*` for sibling spacing over margins; `size-*` over `w-* h-*` for equal dimensions.
 - Mobile-first: default styles apply to mobile; use `sm:` and up to override.
 
 ## Class application
 
 - Use `cn()` from `@/lib/utils` for all conditional class application.
-- Do not use the `!` important modifier — signals a broken abstraction.
+- Do not use the `!` important modifier, as it signals a broken abstraction.
 - Do not use inline `style` props for static styling; use arbitrary values `bg-[#316ff6]` instead.
 - Use inline styles only for dynamic values from JS/API, or to set CSS variables for utility consumption.
 ```
 
-### 260-shadcn
+## 260-shadcn
 
 ```markdown
 # SHADCN/UI STANDARDS
 
+## Source files
+
+- Do not edit component files installed by the shadcn CLI; treat them as vendored. Check `components.json` for the install path. Extend behavior via wrapper components instead.
+
 ## Component authoring
 
-- Use `React.ComponentProps<typeof Primitive>` over `React.forwardRef` — forwardRef is deprecated in React 19.
+- Use `React.ComponentProps<typeof Primitive>` over `React.forwardRef`, as forwardRef is deprecated in React 19.
 - Add `data-slot="component-name"` to every primitive root for Tailwind targeting.
 
 ## Tokens and styling
 
-- Use semantic color tokens (`bg-background`, `text-foreground`, `border-border`) — never hardcoded colors like `bg-white` or `text-gray-900`.
+- Use semantic color tokens (`bg-background`, `text-foreground`, `border-border`). Never use hardcoded colors like `bg-white` or `text-gray-900`.
 - Use `cn()` from `@/lib/utils` for all className merging and conditional classes.
-- Do not override shadcn component internals with arbitrary classes — extend via `className` prop only.
+- Do not override shadcn component internals with arbitrary classes. Extend via `className` prop only.
 
 ## Composition
 
-- Compose shadcn primitives as documented — do not destructure or restructure internal component trees.
-- Use `asChild` prop with `<Slot>` for polymorphic rendering — do not wrap in extra DOM elements.
-- Use `sonner` for toasts — `toast` component is deprecated.
+- Compose shadcn primitives as documented. Do not destructure or restructure internal component trees.
+- Use `asChild` prop with `<Slot>` for polymorphic rendering. Do not wrap in extra DOM elements.
+- Use `sonner` for toasts, as the `toast` component is deprecated.
 ```
 
-### 300-testing-ts
+## 300-testing-ts
 
 ```markdown
 # TYPESCRIPT/JAVASCRIPT TESTING TOOLING
 
-## Unit and Integration
+## Unit and integration
 
 - Use Vitest for unit and integration tests.
 - Co-locate unit tests with their respective components.
 - Use `userEvent` for realistic interaction simulation in Vitest.
 - Use MSW for network mocking; avoid manual fetch or axios mocks.
+- Select elements by accessibility attributes first (`getByRole`, `getByLabelText`).
 
-## End-to-End
+## End-to-end
 
 - Use Playwright for end-to-end tests.
 - Place all Playwright tests within the `e2e/` directory; never inside `src/`.
@@ -326,9 +382,11 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use `.test.ts` / `.test.tsx` for unit tests and `.spec.ts` / `.spec.tsx` for integration tests.
 - Do not make real network calls in unit tests.
+- `describe()` labels use the exact identifier of the subject under test, preserving its natural casing: `describe('Component', ...)`, `describe('useHook', ...)`. For groupings that are not an identifier, use sentence case.
+- `it()` descriptions use "should" + sentence case: `it('should validate email format', ...)`.
 ```
 
-### 310-zod
+## 310-zod
 
 ```markdown
 # ZOD VALIDATION STANDARDS
@@ -351,7 +409,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Do not use `.passthrough()`; prefer `.strict()` at boundaries or explicit `.pick()`/`.omit()`.
 ```
 
-### 350-security-web
+## 350-security-web
 
 ```markdown
 # WEB SECURITY STANDARDS
@@ -376,18 +434,4 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Third-party scripts
 
 - Audit and pin versions for all third-party scripts loaded in the browser.
-```
-
-### 900-node
-
-```markdown
-# NODE WORKFLOW STANDARDS
-
-## Planning
-
-- Analyze requests and output a numbered implementation plan before execution.
-- Challenge ambiguous or over-engineered requests before implementation.
-- Propose the simplest solution that satisfies the requirement before implementing complex patterns.
-- Write or update tests as part of every implementation plan.
-- Do not modify code without a confirmed plan.
 ```
