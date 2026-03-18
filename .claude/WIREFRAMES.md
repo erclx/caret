@@ -34,7 +34,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
 - Keydown listener on window capture phase to intercept before host page handlers fire
-- Empty state: "No prompts yet — click the extension icon to add one"
+- Empty state: "No prompts yet, click + New to add one."
 - Dropdown width matches input element exactly
 - Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
 - Insertion: removes trigger + query text, inserts prompt body at cursor position
@@ -155,7 +155,9 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints
 
-### Empty state
+### Onboarding empty state
+
+Shown only on fresh install, before any prompt has ever been created (`hasEverHadPrompts = false`).
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -164,9 +166,26 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 │ [Prompts]  [GitHub]   + New   │
 ├────────────────────────────────┤
 │                                │
-│   No prompts yet —             │
-│   click the extension icon     │
-│   to add one                   │
+│   No prompts yet.              │
+│   Add one above, then type >   │
+│   in any chat to use it.       │
+│                                │
+└────────────────────────────────┘
+```
+
+### Empty state
+
+Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.length === 0`).
+
+```plaintext
+┌────────────────────────────────┐
+│ ⚡ Caret                ⚙️    │
+├────────────────────────────────┤
+│ [Prompts]  [GitHub]   + New   │
+├────────────────────────────────┤
+│                                │
+│   No prompts yet,              │
+│   click + New to add one.      │
 │                                │
 └────────────────────────────────┘
 ```

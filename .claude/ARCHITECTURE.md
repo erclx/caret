@@ -116,7 +116,7 @@ Insertion uses `document.execCommand('insertText')` which triggers framework syn
 
 ```ts
 // chrome.storage.local keys:
-// "prompts" → Prompt[]
+// "prompts" → Prompt[]   (key absent = never written = fresh install)
 // "settings" → Settings
 
 type Prompt = {
@@ -147,6 +147,10 @@ type Settings = {
   }
 }
 ```
+
+### Onboarding empty state
+
+`PromptList` distinguishes a fresh install (never had prompts) from a deleted-all state using a key-existence check on `chrome.storage.local`: if the `prompts` key is absent, no write has ever occurred. Once any write happens the flag is permanently `true`. No schema change needed.
 
 ### JSON export / import
 
