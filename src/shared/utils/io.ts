@@ -30,14 +30,14 @@ export function parseImport(text: string): ParseResult {
   try {
     parsed = JSON.parse(text)
   } catch {
-    return { ok: false, error: 'Invalid JSON file.' }
+    return { ok: false, error: 'Select a valid JSON file.' }
   }
 
   const result = z.array(PromptSchema).safeParse(parsed)
   if (!result.success) {
     return {
       ok: false,
-      error: 'File does not match the expected prompt format.',
+      error: 'Use a JSON file exported from Caret.',
     }
   }
 

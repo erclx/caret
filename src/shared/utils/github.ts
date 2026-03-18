@@ -36,11 +36,11 @@ function buildHeaders(pat: string): HeadersInit {
 function describeHttpError(status: number): string {
   switch (status) {
     case 401:
-      return 'Invalid token - check your PAT has repo read access'
+      return 'Check that your token has repo read access.'
     case 403:
-      return 'Token lacks read access to this repository'
+      return 'Grant your token read access to this repository.'
     case 404:
-      return 'Repository, branch, or snippets path not found'
+      return 'Check the repository, branch, and snippets path.'
     default:
       return `Request failed (${status})`
   }
@@ -57,7 +57,7 @@ export async function testConnection(
     if (res.ok) return { ok: true }
     return { ok: false, error: describeHttpError(res.status) }
   } catch {
-    return { ok: false, error: 'Network error - check your connection' }
+    return { ok: false, error: 'Check your internet connection.' }
   }
 }
 
@@ -79,7 +79,7 @@ export async function fetchSnippets(
     const entries: unknown = await dirRes.json()
 
     if (!Array.isArray(entries)) {
-      return { ok: false, error: 'Snippets path is not a directory.' }
+      return { ok: false, error: 'Enter a path to a folder of .md files.' }
     }
 
     const mdFiles = entries.filter(
@@ -108,7 +108,7 @@ export async function fetchSnippets(
     const message =
       err instanceof Error
         ? err.message
-        : 'Network error. Check your connection and try again.'
+        : 'Check your connection and try again.'
     return { ok: false, error: message }
   }
 }
