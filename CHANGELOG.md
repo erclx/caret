@@ -15,12 +15,13 @@ All notable changes to this project will be documented in this file.
 - content: invoke prompts via fuzzy-search dropdown
 - design-system: initialize shadcn/ui with zinc mono color scale
 - fuzzy: add fuzzy matching for prompt search
-- github-sync: add prompt synchronization
+- github-sync: add tooltips for synchronization features
 - icons: add extension icons
 - options: add 'Settings saved' feedback
 - options: add data import/export section
 - options: add link to generate GitHub PAT
 - options: add per-site settings page
+- options: display detailed import feedback
 - options: integrate GitHub sync configuration UI
 - options: validate trigger symbols on settings page
 - popup: prompt library UI with list, create, edit, and delete
