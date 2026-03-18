@@ -9,8 +9,8 @@ type ParseResult =
 
 type MergeResult = {
   merged: Prompt[]
-  added: number
-  updated: number
+  addedNames: string[]
+  updatedNames: string[]
 }
 
 export function exportPrompts(prompts: Prompt[]): void {
@@ -49,8 +49,8 @@ export function mergePrompts(
   incoming: Prompt[],
 ): MergeResult {
   const merged = [...existing]
-  let added = 0
-  let updated = 0
+  const addedNames: string[] = []
+  const updatedNames: string[] = []
 
   for (const prompt of incoming) {
     const index = merged.findIndex((p) => p.name === prompt.name)
@@ -62,13 +62,24 @@ export function mergePrompts(
         body: prompt.body,
         updatedAt: Date.now(),
       }
-      updated++
+      updatedNames.push(prompt.name)
     } else {
       // new prompt: preserve original timestamps, generate fresh id to avoid collisions
       merged.push({ ...prompt, id: crypto.randomUUID() })
-      added++
+      addedNames.push(prompt.name)
     }
   }
 
-  return { merged, added, updated }
+  return { merged, addedNames, updatedNames }
+}
+
+export function formatImportFeedback(
+  addedNames: string[],
+  updatedNames: string[],
+): string {
+  const parts: string[] = []
+  if (updatedNames.length > 0)
+    parts.push(`Updated: ${updatedNames.join(', ')}.`)
+  if (addedNames.length > 0) parts.push(`Added: ${addedNames.join(', ')}.`)
+  return parts.join(' ')
 }

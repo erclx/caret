@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { usePrompts } from '@/shared/hooks/use-prompts'
-import { cn } from '@/shared/utils/cn'
 import { exportPrompts, parseImport } from '@/shared/utils/io'
 
-type ImportFeedback = { type: 'success' | 'error'; message: string }
+type ImportFeedback =
+  | { type: 'success'; updatedNames: string[]; addedNames: string[] }
+  | { type: 'error'; message: string }
 
 export function DataSection() {
   const { prompts, importPrompts } = usePrompts()
@@ -22,10 +23,10 @@ export function DataSection() {
     }
   }, [])
 
-  function showImportFeedback(type: ImportFeedback['type'], message: string) {
-    setImportFeedback({ type, message })
+  function showImportFeedback(feedback: ImportFeedback, duration: number) {
+    setImportFeedback(feedback)
     if (importTimerRef.current) clearTimeout(importTimerRef.current)
-    importTimerRef.current = setTimeout(() => setImportFeedback(null), 2500)
+    importTimerRef.current = setTimeout(() => setImportFeedback(null), duration)
   }
 
   function handleExport() {
@@ -41,20 +42,23 @@ export function DataSection() {
     const result = parseImport(text)
 
     if (!result.ok) {
-      showImportFeedback('error', result.error)
+      showImportFeedback({ type: 'error', message: result.error }, 2500)
       return
     }
 
     if (result.prompts.length === 0) {
-      showImportFeedback('error', 'Select a file with at least one prompt.')
+      showImportFeedback(
+        { type: 'error', message: 'Select a file with at least one prompt.' },
+        2500,
+      )
       return
     }
 
-    const { added, updated } = await importPrompts(result.prompts)
-    const total = added + updated
+    const { addedNames, updatedNames } = await importPrompts(result.prompts)
+    const total = addedNames.length + updatedNames.length
     showImportFeedback(
-      'success',
-      `Imported ${total} prompt${total !== 1 ? 's' : ''} (${added} added, ${updated} updated).`,
+      { type: 'success', updatedNames, addedNames },
+      Math.max(3000, total * 800),
     )
   }
 
@@ -91,16 +95,24 @@ export function DataSection() {
           onChange={handleFileChange}
         />
         {importFeedback && (
-          <p
-            className={cn(
-              'text-sm',
-              importFeedback.type === 'success'
-                ? 'text-muted-foreground'
-                : 'text-destructive',
+          <div className='flex flex-col gap-0.5 text-sm'>
+            {importFeedback.type === 'error' ? (
+              <p className='text-destructive'>{importFeedback.message}</p>
+            ) : (
+              <>
+                {importFeedback.updatedNames.length > 0 && (
+                  <p className='text-muted-foreground'>
+                    Updated: {importFeedback.updatedNames.join(', ')}.
+                  </p>
+                )}
+                {importFeedback.addedNames.length > 0 && (
+                  <p className='text-muted-foreground'>
+                    Added: {importFeedback.addedNames.join(', ')}.
+                  </p>
+                )}
+              </>
             )}
-          >
-            {importFeedback.message}
-          </p>
+          </div>
         )}
       </div>
     </div>

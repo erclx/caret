@@ -73,11 +73,16 @@ export function usePrompts() {
   }, [])
 
   const importPrompts = useCallback(
-    async (incoming: Prompt[]): Promise<{ added: number; updated: number }> => {
+    async (
+      incoming: Prompt[],
+    ): Promise<{ addedNames: string[]; updatedNames: string[] }> => {
       const current = await storage.getPrompts()
-      const { merged, added, updated } = mergePrompts(current, incoming)
+      const { merged, addedNames, updatedNames } = mergePrompts(
+        current,
+        incoming,
+      )
       await storage.setPrompts(merged)
-      return { added, updated }
+      return { addedNames, updatedNames }
     },
     [],
   )
