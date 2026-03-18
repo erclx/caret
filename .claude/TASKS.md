@@ -4,15 +4,28 @@
 
 ## Up next
 
+### Fix — options page polish
+
+- [ ] Guard "Settings saved" feedback in `site-config-section.tsx` — skip if no sites were modified
+- [ ] Per-site trigger validation: show error on blur only, not on every keystroke
+- [ ] Em dash audit — grep all rendered component strings for `—`, replace with comma, period, or restructured sentence
+- **Test strategy: unit** — settings form logic; visual verification for copy
+
+### Fix — GitHub tab state + docs
+
+- [ ] Debug diff state survival across tab switch in `PromptLibrary`; if re-mount is the cause, lift state or cancel explicitly with a warning
+- [ ] Add inline link or helper text in `github-section.tsx` explaining expected repo structure: flat folder of `.md` files, filename becomes slug, non-`.md` files silently skipped
+- **Test strategy: none** — manual verification
+
+### Fix — import feedback copy
+
+- [ ] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
+- **Test strategy: unit** — feedback string logic
+
 ### Feat — onboarding
 
 - [ ] First install empty state — hint about typing the trigger symbol in a chat input; shown only when prompt list is empty and no prompts have ever been created
 - **Test strategy: none** — visual verification
-
-### Chore — icon design
-
-- [ ] Design and export icon at 16/32/48/128px (see DESIGN.md for direction)
-- [ ] Replace placeholder icons in `public/icons/`
 
 ## Done
 
