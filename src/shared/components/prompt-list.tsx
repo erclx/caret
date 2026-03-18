@@ -7,6 +7,7 @@ import type { Prompt } from '@/shared/types'
 export interface PromptListProps {
   prompts: Prompt[]
   hasQuery: boolean
+  hasEverHadPrompts: boolean
   onEdit: (prompt: Prompt) => void
   onDelete: (id: string) => void
 }
@@ -14,18 +15,34 @@ export interface PromptListProps {
 export function PromptList({
   prompts,
   hasQuery,
+  hasEverHadPrompts,
   onEdit,
   onDelete,
 }: PromptListProps) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   if (prompts.length === 0) {
+    if (hasQuery) {
+      return (
+        <div className='flex flex-1 flex-col items-center justify-center py-8 text-center'>
+          <p className='text-muted-foreground text-sm'>No prompts found.</p>
+        </div>
+      )
+    }
+    if (!hasEverHadPrompts) {
+      return (
+        <div className='flex flex-1 flex-col items-center justify-center py-8 text-center'>
+          <p className='text-muted-foreground text-sm'>No prompts yet.</p>
+          <p className='text-muted-foreground text-sm'>
+            Add one above, then type &gt; in any chat to use it.
+          </p>
+        </div>
+      )
+    }
     return (
       <div className='flex flex-1 flex-col items-center justify-center py-8 text-center'>
         <p className='text-muted-foreground text-sm'>
-          {hasQuery
-            ? 'No prompts found.'
-            : 'No prompts yet - click the extension icon to add one'}
+          No prompts yet, click + New to add one.
         </p>
       </div>
     )

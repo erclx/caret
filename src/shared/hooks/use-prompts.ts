@@ -16,20 +16,25 @@ export function sortPrompts(prompts: Prompt[]): Prompt[] {
 export function usePrompts() {
   const [prompts, setPrompts] = useState<Prompt[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [hasEverHadPrompts, setHasEverHadPrompts] = useState(false)
 
   useEffect(() => {
     let isMounted = true
 
-    storage.getPrompts().then((data) => {
-      if (isMounted) {
-        setPrompts(sortPrompts(data))
-        setIsLoading(false)
-      }
-    })
+    Promise.all([storage.getPrompts(), storage.hasEverHadPrompts()]).then(
+      ([data, everHad]) => {
+        if (isMounted) {
+          setPrompts(sortPrompts(data))
+          setHasEverHadPrompts(everHad)
+          setIsLoading(false)
+        }
+      },
+    )
 
     const unsubscribe = storage.subscribe((changes) => {
       if (changes.prompts && isMounted) {
         setPrompts(sortPrompts((changes.prompts.newValue as Prompt[]) || []))
+        setHasEverHadPrompts(true)
       }
     })
 
@@ -90,6 +95,7 @@ export function usePrompts() {
   return {
     prompts,
     isLoading,
+    hasEverHadPrompts,
     addPrompt,
     updatePrompt,
     deletePrompt,

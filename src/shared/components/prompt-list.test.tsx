@@ -11,18 +11,36 @@ const mockPrompts: Prompt[] = [
 ]
 
 describe('PromptList', () => {
-  it('should render empty state with no-prompts copy when hasQuery is false', () => {
+  it('should render onboarding copy when empty and no prompts have ever been created', () => {
     render(
       <PromptList
         prompts={[]}
         hasQuery={false}
+        hasEverHadPrompts={false}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText(/no prompts yet\./i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/add one above, then type > in any chat to use it\./i),
+    ).toBeInTheDocument()
+  })
+
+  it('should render no-prompts copy when empty and prompts have existed before', () => {
+    render(
+      <PromptList
+        prompts={[]}
+        hasQuery={false}
+        hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
       />,
     )
 
     expect(
-      screen.getByText(/no prompts yet - click the extension icon to add one/i),
+      screen.getByText(/no prompts yet, click \+ new to add one/i),
     ).toBeInTheDocument()
   })
 
@@ -31,6 +49,7 @@ describe('PromptList', () => {
       <PromptList
         prompts={[]}
         hasQuery={true}
+        hasEverHadPrompts={false}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -45,6 +64,7 @@ describe('PromptList', () => {
       <PromptList
         prompts={mockPrompts}
         hasQuery={false}
+        hasEverHadPrompts={true}
         onEdit={handleEdit}
         onDelete={vi.fn()}
       />,
@@ -62,6 +82,7 @@ describe('PromptList', () => {
       <PromptList
         prompts={mockPrompts}
         hasQuery={false}
+        hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={handleDelete}
       />,
@@ -85,6 +106,7 @@ describe('PromptList', () => {
       <PromptList
         prompts={mockPrompts}
         hasQuery={false}
+        hasEverHadPrompts={true}
         onEdit={handleEdit}
         onDelete={vi.fn()}
       />,

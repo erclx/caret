@@ -23,6 +23,11 @@ export const storage = {
     await chrome.storage.local.set({ settings })
   },
 
+  async hasEverHadPrompts(): Promise<boolean> {
+    const data = await chrome.storage.local.get('prompts')
+    return data.prompts !== undefined
+  },
+
   subscribe(
     callback: (changes: Record<string, chrome.storage.StorageChange>) => void,
   ) {

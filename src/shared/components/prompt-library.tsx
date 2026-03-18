@@ -16,8 +16,14 @@ type Tab = 'prompts' | 'github'
 type View = 'list' | 'form'
 
 export function PromptLibrary() {
-  const { prompts, isLoading, addPrompt, updatePrompt, deletePrompt } =
-    usePrompts()
+  const {
+    prompts,
+    isLoading,
+    hasEverHadPrompts,
+    addPrompt,
+    updatePrompt,
+    deletePrompt,
+  } = usePrompts()
   const githubSync = useGithubSync()
   const [view, setView] = useState<View>('list')
   const [tab, setTab] = useState<Tab>('prompts')
@@ -149,6 +155,7 @@ export function PromptLibrary() {
           <PromptList
             prompts={filteredPrompts}
             hasQuery={query.trim().length > 0}
+            hasEverHadPrompts={hasEverHadPrompts}
             onEdit={handleEdit}
             onDelete={deletePrompt}
           />
