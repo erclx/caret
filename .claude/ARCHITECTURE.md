@@ -182,7 +182,7 @@ Connection errors surface the specific cause (bad token, no access, not found) r
 
 If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
 
-`useGithubSync` is called in `PromptLibrary`, not in `GitHubView`. The result is passed down as props so sync state (diff, status, error) persists across tab switches. `GitHubView` is a pure presentational component — it owns only the `justApplied` transient UI state.
+Sync state is lifted into `PromptLibrary` so it survives tab switches.
 
 ### Sidepanel-primary: popup dormant
 
