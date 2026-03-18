@@ -56,10 +56,11 @@ export function useGithubSync() {
     if (!hasChanges) {
       const now = Date.now()
       const current = await storage.getSettings()
+      if (!current.github) return
       await updateSettings({
         ...current,
         github: {
-          ...(current.github ?? config),
+          ...current.github,
           lastSyncedAt: now,
           lastSyncedCount: result.snippets.length,
         },
@@ -118,10 +119,11 @@ export function useGithubSync() {
     ])
 
     const current = await storage.getSettings()
+    if (!current.github) return
     await updateSettings({
       ...current,
       github: {
-        ...(current.github ?? config),
+        ...current.github,
         lastSyncedAt: now,
         lastSyncedCount: snippets.length,
       },
