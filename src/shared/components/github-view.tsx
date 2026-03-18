@@ -1,4 +1,5 @@
 import { RefreshCw } from 'lucide-react'
+import { useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { useGithubSync } from '@/shared/hooks/use-github-sync'
@@ -24,6 +25,16 @@ export function GitHubView() {
     applySync,
     cancelSync,
   } = useGithubSync()
+
+  const [justApplied, setJustApplied] = useState(false)
+  const justAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  async function handleApply() {
+    await applySync()
+    setJustApplied(true)
+    if (justAppliedTimerRef.current) clearTimeout(justAppliedTimerRef.current)
+    justAppliedTimerRef.current = setTimeout(() => setJustApplied(false), 2500)
+  }
 
   if (!config) {
     return (
@@ -139,7 +150,7 @@ export function GitHubView() {
               variant='outline'
               size='sm'
               className='flex-1 dark:hover:bg-zinc-700 dark:hover:text-white'
-              onClick={applySync}
+              onClick={handleApply}
               disabled={totalChanges === 0}
             >
               Apply{' '}
@@ -178,6 +189,14 @@ export function GitHubView() {
                   ? 'Applying...'
                   : 'Sync now'}
             </Button>
+            <span
+              className={cn(
+                'text-muted-foreground text-center text-xs transition-opacity duration-500',
+                justApplied ? 'opacity-100' : 'opacity-0',
+              )}
+            >
+              Applied ✓
+            </span>
           </div>
         </>
       )}
