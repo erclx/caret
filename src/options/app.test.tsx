@@ -67,10 +67,10 @@ describe('OptionsApp', () => {
     await user.clear(claudeInput)
     await user.type(claudeInput, '!')
 
-    await user.click(screen.getByRole('button', { name: /save settings/i }))
+    await user.click(screen.getAllByRole('button', { name: /^save$/i })[0])
 
     await waitFor(() => {
-      expect(screen.getByText(/settings saved/i)).toBeVisible()
+      expect(screen.getAllByText(/^saved/i)[0]).toBeVisible()
     })
   })
 
@@ -93,7 +93,7 @@ describe('OptionsApp', () => {
     })
     await user.click(claudeCheckbox)
 
-    const saveButton = screen.getByRole('button', { name: /save settings/i })
+    const saveButton = screen.getAllByRole('button', { name: /^save$/i })[0]
     await user.click(saveButton)
 
     await waitFor(() => {

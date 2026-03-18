@@ -34,6 +34,7 @@ export function SiteConfigSection() {
       return initial
     },
   )
+  const [blurredTriggers, setBlurredTriggers] = useState<Set<string>>(new Set())
   const [isSaving, setIsSaving] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -61,6 +62,10 @@ export function SiteConfigSection() {
     }))
   }
 
+  function handleTriggerBlur(site: string) {
+    setBlurredTriggers((prev) => new Set(prev).add(site))
+  }
+
   async function handleSave() {
     if (hasInvalidTrigger) return
     setIsSaving(true)
@@ -77,6 +82,7 @@ export function SiteConfigSection() {
           )
         })
         .map(([site, config]) => updateSiteSettings(site, config))
+      if (promises.length === 0) return
       await Promise.all(promises)
       setIsSaved(true)
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
@@ -101,7 +107,9 @@ export function SiteConfigSection() {
         {DEFAULT_SITES.map((site) => {
           const config = localSites[site]
           const triggerInvalid =
-            config?.enabled && !isValidTrigger(config?.triggerSymbol)
+            blurredTriggers.has(site) &&
+            config?.enabled &&
+            !isValidTrigger(config?.triggerSymbol)
 
           return (
             <div
@@ -143,6 +151,7 @@ export function SiteConfigSection() {
                   onChange={(e) =>
                     handleChange(site, 'triggerSymbol', e.target.value)
                   }
+                  onBlur={() => handleTriggerBlur(site)}
                   maxLength={1}
                   disabled={!(config?.enabled ?? true)}
                   aria-invalid={triggerInvalid}
@@ -150,7 +159,7 @@ export function SiteConfigSection() {
                 />
                 {triggerInvalid && (
                   <p className='text-xs text-red-600 dark:text-red-400'>
-                    must be a single symbol
+                    Enter a single non-letter symbol
                   </p>
                 )}
               </div>
@@ -165,7 +174,7 @@ export function SiteConfigSection() {
             isSaved ? 'opacity-100' : 'opacity-0',
           )}
         >
-          Settings saved ✓
+          Saved ✓
         </span>
         <Button
           variant='outline'
@@ -174,7 +183,7 @@ export function SiteConfigSection() {
           disabled={isSaving || hasInvalidTrigger}
         >
           <Save className='mr-2 size-4' />
-          {isSaving ? 'Saving...' : 'Save Settings'}
+          {isSaving ? 'Saving...' : 'Save'}
         </Button>
       </div>
     </div>

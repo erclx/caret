@@ -46,7 +46,7 @@ export function DataSection() {
     }
 
     if (result.prompts.length === 0) {
-      showImportFeedback('error', 'No prompts found in file.')
+      showImportFeedback('error', 'Select a file with at least one prompt.')
       return
     }
 
