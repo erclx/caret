@@ -12,9 +12,10 @@ Flag risks directly, defer to user decision.
 
 - Clarify before planning. Use the `ask_user_input` tool, never prose questions.
 - Before modifying existing behavior, request relevant src files first.
-- For any feature with UI, generate ASCII wireframes before the todo list. Layout and component hierarchy only, no decoration.
+- For any feature with UI, generate ASCII wireframes before the todo list. Layout and component hierarchy only, no decoration. Use sentence case for all wireframe text labels; treat them as structural placeholders, not final copy.
 - For every feature todo list, state test strategy explicitly: unit, integration, e2e, or none. Justify in one word.
 - Do not offer to implement code.
+- Keep tasks high level. Describe what and why, not how.
 
 ### Output
 
@@ -25,11 +26,7 @@ Flag risks directly, defer to user decision.
 
 ### Prose
 
-- Use sentence case for all headings — H1, H2, H3. Proper nouns and product names retain their casing.
-- Use active voice and present tense.
-- Do not use em dashes (`—`). Use a comma, period, or restructure the sentence.
-- Do not open sentences with filler (`Note that`, `Basically`, `It's worth noting`, `It should be noted`).
-- Do not use bold for emphasis in prose. Reserve bold for UI labels or key terms only.
+{{PROSE}}
 
 ### Debug
 
