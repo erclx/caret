@@ -4,12 +4,6 @@
 
 ## Up next
 
-### Fix — GitHub tab state + docs
-
-- [ ] Debug diff state survival across tab switch in `PromptLibrary`; if re-mount is the cause, lift state or cancel explicitly with a warning
-- [ ] Add inline link or helper text in `github-section.tsx` explaining expected repo structure: flat folder of `.md` files, filename becomes slug, non-`.md` files silently skipped
-- **Test strategy: none** — manual verification
-
 ### Fix — import feedback copy
 
 - [ ] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
@@ -193,3 +187,9 @@
 - [x] Em dash audit — grep all rendered component strings for `—`; none found in rendered UI
 - [x] UI copy audit — apply copy standards to options page and shared utils error messages
 - **Test strategy: unit** — settings form logic; visual verification for copy
+
+### Fix — GitHub tab state + docs
+
+- [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
+- [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
+- **Test strategy: none** — manual verification

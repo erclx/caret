@@ -182,6 +182,8 @@ Connection errors surface the specific cause (bad token, no access, not found) r
 
 If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
 
+Sync state is lifted into `PromptLibrary` so it survives tab switches.
+
 ### Sidepanel-primary: popup dormant
 
 The extension icon opens the sidepanel via `chrome.action.onClicked` → `chrome.sidePanel.open()`. The popup entry point (`src/popup/`) is kept dormant for rollback but is not wired into the manifest's `action.default_popup`.
