@@ -63,3 +63,4 @@ All notable changes to this project will be documented in this file.
 - prompt-form: correct duplicate name validation for editing
 - github-sync: add guard for missing github config
 - github: handle missing github config during sync
+- options: refine options page and error copy
