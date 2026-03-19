@@ -1,5 +1,5 @@
 import { RefreshCw } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import type { GithubSettings } from '@/shared/types'
@@ -40,6 +40,13 @@ export function GitHubView({
   const hasJustAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   )
+
+  useEffect(() => {
+    return () => {
+      if (hasJustAppliedTimerRef.current)
+        clearTimeout(hasJustAppliedTimerRef.current)
+    }
+  }, [])
 
   async function handleApply() {
     await applySync()
