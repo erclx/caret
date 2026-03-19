@@ -188,7 +188,35 @@ describe('InputDetector', () => {
     expect(stateCallback).toHaveBeenCalledWith(
       expect.objectContaining({ isActive: false }),
     )
-    expect(textarea.value).toBe('Summarize this')
+    expect(textarea.value).toBe('Summarize this ')
+  })
+
+  it('should trim trailing spaces from the prompt and insert a single trailing space', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>sum')
+    vi.runAllTimers()
+
+    detector.insertPrompt('Summarize this   ')
+
+    expect(textarea.value).toBe('Summarize this ')
+  })
+
+  it('should trim trailing newlines from the prompt and insert a single trailing space', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>sum')
+    vi.runAllTimers()
+
+    detector.insertPrompt('Summarize this\n\n')
+
+    expect(textarea.value).toBe('Summarize this ')
   })
 
   it('should do nothing when insertPrompt is called while not active', () => {

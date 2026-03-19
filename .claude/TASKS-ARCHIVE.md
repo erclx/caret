@@ -182,6 +182,11 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
 - **Test strategy: unit**: feedback string logic (`formatImportFeedback`)
 
+### Feat: onboarding
+
+- [x] First install empty state: onboarding hint shown only when prompt list is empty and no prompts have ever been created; uses key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install); once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently; deleted-all state shows "No prompts yet, click + New to add one."
+- **Test strategy: unit**: empty state branching in `PromptList`
+
 ### Fix: GitHub tab state + docs
 
 - [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches

@@ -66,7 +66,7 @@ export class InputDetector {
     this.query = ''
     this.emitState()
 
-    this.adapter.insertText(text, deleteLength)
+    this.adapter.insertText(text.trimEnd() + ' ', deleteLength)
   }
 
   private handleKeydown = (e: KeyboardEvent): void => {
