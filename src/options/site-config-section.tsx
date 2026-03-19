@@ -106,7 +106,7 @@ export function SiteConfigSection() {
       <div className='flex flex-col gap-6 p-6'>
         {DEFAULT_SITES.map((site) => {
           const config = localSites[site]
-          const triggerInvalid =
+          const isTriggerInvalid =
             blurredTriggers.has(site) &&
             config?.enabled &&
             !isValidTrigger(config?.triggerSymbol)
@@ -154,10 +154,10 @@ export function SiteConfigSection() {
                   onBlur={() => handleTriggerBlur(site)}
                   maxLength={1}
                   disabled={!(config?.enabled ?? true)}
-                  aria-invalid={triggerInvalid}
+                  aria-invalid={isTriggerInvalid}
                   className='text-center font-mono'
                 />
-                {triggerInvalid && (
+                {isTriggerInvalid && (
                   <p className='text-xs text-red-600 dark:text-red-400'>
                     Enter a single non-letter symbol
                   </p>

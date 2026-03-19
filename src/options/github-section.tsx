@@ -92,7 +92,7 @@ export function GithubSection() {
     },
   )
   const [repoError, setRepoError] = useState<string | null>(null)
-  const [repoBlurred, setRepoBlurred] = useState(false)
+  const [isRepoBlurred, setRepoBlurred] = useState(false)
   const [connectionError, setConnectionError] = useState<string | null>(null)
   const [isSavingGithub, setIsSavingGithub] = useState(false)
   const [isGithubSaved, setIsGithubSaved] = useState(false)
@@ -216,7 +216,7 @@ export function GithubSection() {
               }}
               placeholder='owner/repo'
             />
-            {repoBlurred && repoError && (
+            {isRepoBlurred && repoError && (
               <p className='text-destructive text-xs'>{repoError}</p>
             )}
           </div>

@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import App from '@/options/app'
+import { App } from '@/options/app'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 
 const mockUpdateSiteSettings = vi.fn()
@@ -56,7 +56,9 @@ describe('OptionsApp', () => {
     const heading = screen.getByRole('heading', {
       name: /per-site configuration/i,
     })
-    return within(heading.closest('div')!.parentElement!)
+    const section = heading.closest('div')?.parentElement
+    if (!section) throw new Error('Site config section container not found')
+    return within(section)
   }
 
   it('should show "Settings saved" feedback after a successful save', async () => {

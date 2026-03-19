@@ -1,5 +1,5 @@
 import { RefreshCw } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import type { GithubSettings } from '@/shared/types'
@@ -36,14 +36,27 @@ export function GitHubView({
   applySync,
   cancelSync,
 }: GitHubViewProps) {
-  const [justApplied, setJustApplied] = useState(false)
-  const justAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [hasJustApplied, setJustApplied] = useState(false)
+  const hasJustAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  )
+
+  useEffect(() => {
+    return () => {
+      if (hasJustAppliedTimerRef.current)
+        clearTimeout(hasJustAppliedTimerRef.current)
+    }
+  }, [])
 
   async function handleApply() {
     await applySync()
     setJustApplied(true)
-    if (justAppliedTimerRef.current) clearTimeout(justAppliedTimerRef.current)
-    justAppliedTimerRef.current = setTimeout(() => setJustApplied(false), 2500)
+    if (hasJustAppliedTimerRef.current)
+      clearTimeout(hasJustAppliedTimerRef.current)
+    hasJustAppliedTimerRef.current = setTimeout(
+      () => setJustApplied(false),
+      2500,
+    )
   }
 
   if (!config) {
@@ -202,7 +215,7 @@ export function GitHubView({
             <span
               className={cn(
                 'text-muted-foreground text-center text-xs transition-opacity duration-500',
-                justApplied ? 'opacity-100' : 'opacity-0',
+                hasJustApplied ? 'opacity-100' : 'opacity-0',
               )}
             >
               Applied ✓

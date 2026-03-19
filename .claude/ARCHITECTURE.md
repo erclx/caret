@@ -77,7 +77,7 @@ src/
 e2e/
 ├── fixtures.ts
 ├── screenshot.ts
-└── smoke.test.ts             # Playwright e2e — overwrite with insertion tests in Feature 6
+└── ui.test.ts                ← Playwright e2e — sidepanel load, prompt insertion per site
 ```
 
 ## Key technical decisions
@@ -187,6 +187,14 @@ Connection errors surface the specific cause (bad token, no access, not found) r
 If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
 
 Sync state is lifted into `PromptLibrary` so it survives tab switches.
+
+### External data validation
+
+Schemas at external boundaries (`chrome.storage.local`, JSON import) use strict parsing — unknown keys are rejected rather than passed through. This keeps storage shape intentional and prevents silent data pollution across schema versions.
+
+### GitHub API timeouts
+
+All GitHub fetch calls have an explicit timeout. A hung request would freeze the sync UI indefinitely with no recovery path, so calls that exceed the limit are aborted and surfaced as a connection error.
 
 ### Sidepanel-primary: popup dormant
 

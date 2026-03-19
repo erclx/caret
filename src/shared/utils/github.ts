@@ -46,13 +46,18 @@ function describeHttpError(status: number): string {
   }
 }
 
+const GITHUB_TIMEOUT_MS = 10_000
+
 export async function testConnection(
   config: GithubSettings,
 ): Promise<ConnectionResult> {
   try {
     const res = await fetch(
       `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.snippetsPath}?ref=${config.branch}`,
-      { headers: buildHeaders(config.pat) },
+      {
+        headers: buildHeaders(config.pat),
+        signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS),
+      },
     )
     if (res.ok) return { ok: true }
     return { ok: false, error: describeHttpError(res.status) }
@@ -69,7 +74,7 @@ export async function fetchSnippets(
 
     const dirRes = await fetch(
       `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.snippetsPath}?ref=${config.branch}`,
-      { headers },
+      { headers, signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS) },
     )
 
     if (!dirRes.ok) {
@@ -94,7 +99,10 @@ export async function fetchSnippets(
 
     const snippets = await Promise.all(
       mdFiles.map(async (file) => {
-        const res = await fetch(file.download_url, { headers })
+        const res = await fetch(file.download_url, {
+          headers,
+          signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS),
+        })
         if (!res.ok) {
           throw new Error(`Failed to fetch ${file.name} (${res.status}).`)
         }
