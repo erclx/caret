@@ -18,12 +18,6 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
-### Chore: test coverage, GitHub feature
-
-- [ ] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
-- [ ] Add unit tests for the GitHub options section: save, disconnect, connection status
-- **Test strategy:** unit tests
-
 ### Chore: test coverage, data section and content input
 
 - [ ] Add unit tests for export and import handlers in the data section
@@ -98,3 +92,9 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 - [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
 - **Test strategy: unit and e2e**: unit covers dirty-state logic; e2e covers keyboard interaction in the real extension page
+
+### Chore: test coverage, GitHub feature
+
+- [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
+- [x] Add unit tests for the GitHub options section: save, disconnect, connection status
+- **Test strategy: unit**: no new behavior introduced; tests verify existing sync and options section logic

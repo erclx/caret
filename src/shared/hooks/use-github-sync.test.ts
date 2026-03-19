@@ -158,6 +158,203 @@ describe('useGithubSync', () => {
     })
   })
 
+  it('should set error and return to idle when fetchSnippets fails', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 401,
+    } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    expect(result.current.error).toBe(
+      'Check that your token has repo read access.',
+    )
+    expect(result.current.diff).toBeNull()
+  })
+
+  it('should enter reviewing state with diff when changes exist', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'old-prompt',
+        body: 'old body',
+        source: 'github',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'new-prompt.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/new-prompt.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'New body.',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    expect(result.current.diff).not.toBeNull()
+    expect(result.current.diff?.added).toEqual(['new-prompt'])
+    expect(result.current.diff?.removed).toEqual(['old-prompt'])
+  })
+
+  it('should apply sync: write merged prompts and return to idle', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'existing',
+        body: 'old',
+        source: 'github',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'existing.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/existing.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'updated body',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    await act(async () => {
+      await result.current.applySync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    expect(result.current.diff).toBeNull()
+
+    const savedPrompts = mockStorage.get('prompts') as {
+      name: string
+      body: string
+    }[]
+    expect(savedPrompts).toHaveLength(1)
+    expect(savedPrompts[0].name).toBe('existing')
+    expect(savedPrompts[0].body).toBe('updated body')
+
+    const savedSettings = mockStorage.get('settings') as ReturnType<
+      typeof makeSettings
+    >
+    expect(savedSettings?.github?.lastSyncedAt).toBeGreaterThan(0)
+  })
+
+  it('should cancel sync: clear diff and return to idle', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'existing',
+        body: 'body',
+        source: 'github',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'new.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/new.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'new body',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    act(() => {
+      result.current.cancelSync()
+    })
+
+    expect(result.current.status).toBe('idle')
+    expect(result.current.diff).toBeNull()
+  })
+
   it('should not cancel a review when an unrelated setting changes', async () => {
     mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
     mockStorage.set('prompts', [
