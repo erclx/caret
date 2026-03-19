@@ -162,14 +162,6 @@ Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import va
 
 Prompts filter on `name` only. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
 
-### Prompt insertion sequencing
-
-`insertPrompt` captures `deleteLength` then deactivates before calling `adapter.insertText` to prevent re-entrant `handleInput` on the synchronous input event.
-
-### ProseMirror insertion
-
-`ContentEditableAdapter.insertText` dispatches a cancellable `beforeinput` event. If the framework cancels it, `execCommand` is skipped. ProseMirror cancels and handles insertion via its own transaction system.
-
 ### Dev seeding
 
 On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `seeds.ts` writes a set of sample prompts mirroring the real `snippets/` folder content. No-op in production. Prevents implementers from testing against an empty library.
@@ -213,15 +205,6 @@ Popup and sidepanel import the same React components from `src/shared/`. Only la
 ## shadcn/ui constraints
 
 Components in `src/components/ui/` are source of truth. Never modify them directly. Override via `className` props at the usage site only.
-
-## shadcn/ui Setup
-
-Components install to `src/components/ui/` via the CLI. Install iteratively per feature — don't pre-install.
-
-```bash
-bunx shadcn@latest init          # once
-bunx shadcn@latest add [component]
-```
 
 ## Risks / open questions
 
