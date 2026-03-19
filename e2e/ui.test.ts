@@ -20,6 +20,69 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
     await expect(page.getByRole('button', { name: /new/i })).toBeVisible()
   })
 
+  test('Esc on clean edit form should return to list', async ({
+    page,
+    extensionId,
+  }) => {
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
+
+    await page.evaluate(async () => {
+      await (globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+        prompts: [
+          {
+            id: '1',
+            name: 'my-prompt',
+            body: 'Hello world.',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
+        ],
+      })
+    })
+
+    await page.reload()
+    await page.getByText('my-prompt').click()
+    await expect(page.getByLabel(/^name$/i)).toBeVisible()
+
+    await page.keyboard.press('Escape')
+
+    await expect(page.getByText('my-prompt')).toBeVisible()
+    await expect(page.getByLabel(/^name$/i)).not.toBeVisible()
+  })
+
+  test('Esc on dirty edit form should show discard confirmation', async ({
+    page,
+    extensionId,
+  }) => {
+    await page.goto(
+      `chrome-extension://${extensionId}/src/sidepanel/index.html`,
+    )
+
+    await page.evaluate(async () => {
+      await (globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+        prompts: [
+          {
+            id: '1',
+            name: 'my-prompt',
+            body: 'Hello world.',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
+        ],
+      })
+    })
+
+    await page.reload()
+    await page.getByText('my-prompt').click()
+    await page.getByLabel(/prompt body/i).pressSequentially(' extra')
+
+    await page.keyboard.press('Escape')
+
+    await expect(page.getByText(/discard changes/i)).toBeVisible()
+  })
+
   test('Should insert prompt into textarea (ChatGPT mock)', async ({
     page,
     extensionId,

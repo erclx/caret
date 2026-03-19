@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -47,6 +47,20 @@ export function PromptForm({
       setNameError('')
     }
   }
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return
+      e.preventDefault()
+      if (discardTrigger !== null) {
+        setDiscardTrigger(null)
+      } else {
+        handleRequestDiscard('cancel')
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  })
 
   function handleRequestDiscard(trigger: 'back' | 'cancel') {
     if (isDirty) {

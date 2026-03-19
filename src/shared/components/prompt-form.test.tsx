@@ -137,6 +137,54 @@ describe('PromptForm', () => {
     expect(handleCancel).toHaveBeenCalled()
   })
 
+  it('should call onCancel immediately when Esc is pressed on a clean form', async () => {
+    const handleCancel = vi.fn()
+    render(<PromptForm onSave={vi.fn()} onCancel={handleCancel} />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByLabelText(/prompt body/i))
+    await user.keyboard('{Escape}')
+
+    expect(handleCancel).toHaveBeenCalled()
+    expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
+  })
+
+  it('should show discard confirmation when Esc is pressed on a dirty form', async () => {
+    const handleCancel = vi.fn()
+    render(
+      <PromptForm
+        initialPrompt={EXISTING_PROMPT}
+        onSave={vi.fn()}
+        onCancel={handleCancel}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/prompt body/i), ' extra')
+    await user.keyboard('{Escape}')
+
+    expect(handleCancel).not.toHaveBeenCalled()
+    expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
+  })
+
+  it('should dismiss discard confirmation when Esc is pressed a second time', async () => {
+    render(
+      <PromptForm
+        initialPrompt={EXISTING_PROMPT}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/prompt body/i), ' extra')
+    await user.keyboard('{Escape}')
+    expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+    expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
+  })
+
   it('should not warn when new form has empty fields', async () => {
     const handleCancel = vi.fn()
     render(<PromptForm onSave={vi.fn()} onCancel={handleCancel} />)
