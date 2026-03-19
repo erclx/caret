@@ -153,6 +153,14 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Warn on duplicate name: prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
 - **Test strategy: unit**: duplicate detection logic
 
+### Feat: GitHub sync UX fixes
+
+- [x] Fix connection status mismatch: saving with an invalid PAT no longer writes `connectionHealth: 'error'` to the stored config; error stays local to the options form, leaving the valid stored config and sidebar dot unaffected
+- [x] Fix options form initial status: `connectionStatus` now reads from `settings.github.connectionHealth` on load instead of always defaulting to `'connected'` when a config exists
+- [x] Post-apply feedback: sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
+- [x] Dev prefill: options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
+- **Test strategy: none**: visual verification
+
 ### Feat: GitHub config improvements
 
 - [x] Realtime format validation on owner/repo field: must match `owner/repo` pattern, inline error if not
