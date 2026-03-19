@@ -65,7 +65,7 @@ Base unit is 4px. Use Tailwind's built-in scale with no custom tokens.
 
 All borders are 1px. No double borders.
 
-Shadow on the dropdown only — it floats above the host page. Subtle two-layer drop shadow.
+Shadow on the dropdown only. It floats above the host page. Subtle two-layer drop shadow.
 
 ## Border radius
 
@@ -94,7 +94,7 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 - Tab bar with plain text tabs, bottom border on the active tab
 - Edit view replaces the list inline, no modal
 
-### Sidepanel — GitHub view
+### Sidepanel: GitHub view
 
 - Connection indicator: 8px filled circle, green when connected, red on error. Only shown when GitHub is configured.
 - When not configured, the entire view is replaced by a plain link to Options.
@@ -106,7 +106,7 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 - Save button left-aligned in all section footers; feedback text pushed to the far right
 - Destructive actions sit in the same footer row as Save; supplementary hints shown as tooltip on hover, not inline
 
-### Options page — GitHub section
+### Options page: GitHub section
 
 - PAT field: full width
 - Repository and Branch fields: side by side, equal width

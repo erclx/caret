@@ -133,39 +133,11 @@ Insertion uses `document.execCommand('insertText')` which triggers framework syn
 
 ### Storage shape
 
-```ts
-// chrome.storage.local keys:
-// "prompts" → Prompt[]   (key absent = never written = fresh install)
-// "settings" → Settings
+Two keys in `chrome.storage.local`: `prompts` and `settings`. Key absence (never written) means fresh install; the presence check drives the onboarding empty state.
 
-type Prompt = {
-  id: string // nanoid
-  name: string // slug used for filtering e.g. "summarize"
-  body: string // text inserted into chat
-  createdAt: number
-  updatedAt: number
-  source?: 'github' // present only on prompts pulled via GitHub sync; absent on locally created prompts
-}
+Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, and an optional `source` flag. Source is `'github'` only on prompts pulled via GitHub sync; locally created prompts omit it. The sync diff uses `source` to determine ownership.
 
-type Settings = {
-  sites: {
-    [hostname: string]: {
-      triggerSymbol: string // default ">"
-      enabled: boolean
-    }
-  }
-  github?: {
-    pat: string // personal access token, stored in chrome.storage.local
-    owner: string // repo owner
-    repo: string // repo name
-    branch: string // default "main"
-    snippetsPath: string // path to snippets folder, default "snippets"
-    lastSyncedAt?: number // timestamp of last sync (applied or up-to-date)
-    lastSyncedCount?: number // number of snippets in last sync
-    connectionHealth?: 'connected' | 'error' // persisted after each save attempt; absent means treat as connected
-  }
-}
-```
+Settings holds per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt; absent means treat as connected.
 
 ### Onboarding empty state
 
@@ -175,7 +147,7 @@ type Settings = {
 
 Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using name-based last-write-wins — duplicate names overwrite the existing body while preserving the existing `id`; new prompts get a fresh `crypto.randomUUID()`.
 
-## Filtering strategy
+### Filtering strategy
 
 Prompts filter on `name` only. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
 
@@ -219,7 +191,7 @@ The extension icon opens the sidepanel via `chrome.action.onClicked` → `chrome
 
 Popup and sidepanel import the same React components from `src/shared/`. Only layout/width differs.
 
-## shadcn/ui constraints
+### shadcn/ui constraints
 
 Components in `src/components/ui/` are source of truth. Never modify them directly. Override via `className` props at the usage site only.
 

@@ -52,13 +52,13 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
 - Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
 - Dropdown width matches input element exactly
-- Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
+- Anchored above input; repositions when the input resizes
 - Insertion: removes trigger + query text, inserts prompt body at cursor position
 - After insertion dropdown dismisses and focus returns to chat input
 
 ## 2. Sidepanel
 
-> Popup code is kept but not surfaced. `chrome.action.onClicked` opens the sidepanel.
+> Popup code is kept but not surfaced. The extension icon opens the sidepanel.
 > All prompt management lives here.
 
 ### List view
@@ -167,7 +167,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty
 - Prompt body: required, must not be empty
 - Save writes to `chrome.storage.local` immediately, returns to list
-- Textarea scrollbar: thin 4px zinc thumb, transparent track (styled in `index.css`)
+- Textarea scrollbar: thin zinc thumb, transparent track
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints
 
@@ -206,7 +206,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — not configured
+### GitHub tab: not configured
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -220,7 +220,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — configured, never synced
+### GitHub tab: configured, never synced
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -235,7 +235,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — diff view
+### GitHub tab: diff view
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -258,7 +258,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — post-sync
+### GitHub tab: post-sync
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -283,7 +283,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 - PAT optional for public repos; required for private
 - Filename slug is the `.md` filename without the extension; file content becomes the prompt body
 
-## 3. Options Page
+## 3. Options page
 
 Section order: Data → Per-site configuration → GitHub sync.
 
@@ -377,12 +377,12 @@ Notes on per-site rows:
 - Import validates JSON with Zod before writing to storage; shows error on invalid file
 - Import merge conflict (duplicate name): last-write-wins
 - Trigger symbol editable per site; toggle enable/disable per site without losing trigger config
-- PAT stored in `chrome.storage.local` — displayed masked after save; not encrypted (documented risk)
-- PAT field: `type="password"`, full width
+- PAT displayed masked after save; not encrypted (documented risk)
+- PAT field: full width, masked
 - Repository and Branch fields: side by side, equal width
 - `?` icon on each field label opens a tooltip with usage hint; no arrow on tooltip
 - `●` connection dot: green = connected, red = error, gray = not configured; updates on save
-- No inline validation on PAT format — error shown only after failed save attempt
+- No inline validation on PAT format. Error shown only after a failed save attempt.
 - "Saved ✓" appears inline right of Save button, fades after 2.5s
 - Disconnect shown only when GitHub is configured; no confirmation dialog
-- Max width `max-w-3xl`, centered
+- Constrained max width, centered
