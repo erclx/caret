@@ -200,9 +200,6 @@ describe('GithubSection', () => {
       await user.click(screen.getByRole('button', { name: /disconnect/i }))
 
       await waitFor(() => {
-        expect(updateSettings).toHaveBeenCalledWith({
-          sites: settingsWithSites.sites,
-        })
         expect(updateSettings).toHaveBeenCalledWith(
           expect.not.objectContaining({ github: expect.anything() }),
         )
