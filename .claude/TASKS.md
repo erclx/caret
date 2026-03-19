@@ -18,6 +18,17 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
+### Fix: focus ring thickness and clipping
+
+- [ ] Reduce focus ring width on buttons, inputs, and textareas: current 3px is visually heavy
+- [ ] Fix focus ring clipping on edge items in the scrollable prompt list: parent overflow cuts off the ring
+- **Test strategy: none**: visual verification
+
+### Fix: trailing space after prompt insertion
+
+- [ ] Append a trailing space when inserting a prompt so the user can continue typing immediately without pressing space
+- **Test strategy: unit**: insertion output in detector
+
 ### Chore: logo
 
 - [ ] Design logo in Figma
