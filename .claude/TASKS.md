@@ -2,11 +2,6 @@
 
 ## Up next
 
-### Fix — slash trigger conflict on Claude.ai and ChatGPT
-
-- [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com — conflicts with their native slash command menus
-- **Test strategy: unit** — validation logic
-
 ### Fix — per-site config section sizing
 
 - [ ] Reduce trigger input width (single char) and tighten overall card density
@@ -228,3 +223,8 @@
 
 - [x] PAT, repository, and per-site config revert to defaults after refresh despite saved config
 - **Test strategy: unit** — settings form initialization
+
+### Fix — slash trigger conflict on Claude.ai and ChatGPT
+
+- [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com — conflicts with their native slash command menus
+- **Test strategy: unit** — validation logic
