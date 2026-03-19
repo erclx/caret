@@ -169,6 +169,55 @@ describe('InputDetector', () => {
     )
   })
 
+  it('should insert text and emit deactivated state when insertPrompt is called while active', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>sum')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: true, query: 'sum' }),
+    )
+    stateCallback.mockClear()
+
+    detector.insertPrompt('Summarize this')
+
+    expect(stateCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ isActive: false }),
+    )
+    expect(textarea.value).toBe('Summarize this')
+  })
+
+  it('should do nothing when insertPrompt is called while not active', () => {
+    const textarea = document.createElement('textarea')
+    textarea.value = 'hello'
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    detector.insertPrompt('Summarize this')
+
+    expect(stateCallback).not.toHaveBeenCalled()
+    expect(textarea.value).toBe('hello')
+  })
+
+  it('should update the query as user types after the trigger', () => {
+    const textarea = document.createElement('textarea')
+    document.body.appendChild(textarea)
+    detector.attach(textarea)
+    detector.setTriggerSymbol('>')
+
+    typeIntoTextarea(textarea, '>sum')
+    vi.runAllTimers()
+
+    expect(stateCallback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isActive: true, query: 'sum' }),
+    )
+  })
+
   it('should update state on resize', () => {
     const textarea = document.createElement('textarea')
     document.body.appendChild(textarea)

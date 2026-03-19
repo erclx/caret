@@ -45,6 +45,39 @@ describe('createAdapter', () => {
 })
 
 describe('TextareaAdapter', () => {
+  describe('getValue', () => {
+    it('should return the current value of the textarea', () => {
+      expect(new TextareaAdapter(makeTextarea('hello')).getValue()).toBe(
+        'hello',
+      )
+    })
+  })
+
+  describe('getCursorPosition', () => {
+    it('should return the selectionEnd position', () => {
+      const el = makeTextarea('hello')
+      el.setSelectionRange(3, 3)
+      expect(new TextareaAdapter(el).getCursorPosition()).toBe(3)
+    })
+  })
+
+  describe('getTextBeforeCursor', () => {
+    it('should return text from start up to cursor position', () => {
+      const el = makeTextarea('hello world')
+      el.setSelectionRange(5, 5)
+      expect(new TextareaAdapter(el).getTextBeforeCursor()).toBe('hello')
+    })
+  })
+
+  describe('getRect', () => {
+    it('should delegate to getBoundingClientRect', () => {
+      const el = makeTextarea()
+      const rect = { top: 10, left: 20 } as DOMRect
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(rect)
+      expect(new TextareaAdapter(el).getRect()).toBe(rect)
+    })
+  })
+
   describe('insertText', () => {
     it('should replace trigger+query with inserted text', () => {
       const el = makeTextarea('>sum')
@@ -92,6 +125,23 @@ describe('TextareaAdapter', () => {
 })
 
 describe('ContentEditableAdapter', () => {
+  describe('getValue', () => {
+    it('should return the text content of the element', () => {
+      expect(
+        new ContentEditableAdapter(makeContentEditable('hello')).getValue(),
+      ).toBe('hello')
+    })
+  })
+
+  describe('getRect', () => {
+    it('should delegate to getBoundingClientRect', () => {
+      const el = makeContentEditable()
+      const rect = { top: 5, left: 15 } as DOMRect
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(rect)
+      expect(new ContentEditableAdapter(el).getRect()).toBe(rect)
+    })
+  })
+
   describe('getCursorPosition', () => {
     it('should return 0 when selection is outside the element', () => {
       const el = makeContentEditable('hello')
