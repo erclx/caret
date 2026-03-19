@@ -4,7 +4,8 @@ import { SiteConfigSection } from '@/options/site-config-section'
 import { useSettings } from '@/shared/hooks/use-settings'
 
 export function App() {
-  const { isLoading } = useSettings()
+  const { settings, isLoading, updateSettings, updateSiteSettings } =
+    useSettings()
 
   if (isLoading) {
     return (
@@ -22,8 +23,11 @@ export function App() {
           <h1 className='text-3xl font-bold tracking-tight'>Caret settings</h1>
         </div>
         <DataSection />
-        <SiteConfigSection />
-        <GithubSection />
+        <SiteConfigSection
+          settings={settings}
+          updateSiteSettings={updateSiteSettings}
+        />
+        <GithubSection settings={settings} updateSettings={updateSettings} />
       </div>
     </div>
   )

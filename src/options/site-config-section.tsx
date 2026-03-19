@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
-import { useSettings } from '@/shared/hooks/use-settings'
+import type { Settings } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
 const DEFAULT_SITES = ['claude.ai', 'gemini.google.com', 'chatgpt.com']
@@ -16,12 +16,22 @@ interface SiteConfig {
   enabled: boolean
 }
 
+interface SiteConfigSectionProps {
+  settings: Settings
+  updateSiteSettings: (
+    hostname: string,
+    siteSettings: Settings['sites'][string],
+  ) => Promise<void>
+}
+
 function isValidTrigger(value: string): boolean {
   return SYMBOL_RE.test(value)
 }
 
-export function SiteConfigSection() {
-  const { settings, updateSiteSettings } = useSettings()
+export function SiteConfigSection({
+  settings,
+  updateSiteSettings,
+}: SiteConfigSectionProps) {
   const [localSites, setLocalSites] = useState<Record<string, SiteConfig>>(
     () => {
       const initial: Record<string, SiteConfig> = {}

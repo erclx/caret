@@ -62,3 +62,4 @@ All notable changes to this project will be documented in this file.
 - github: handle missing github config during sync
 - options: refine options page and error copy
 - github: clear sync feedback timer on unmount
+- options: pass settings through props from single hook

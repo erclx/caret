@@ -2,11 +2,6 @@
 
 ## Up next
 
-### Fix — options page fields reset on refresh
-
-- [ ] PAT, repository, and per-site config revert to defaults after refresh despite saved config
-- **Test strategy: unit** — settings form initialization
-
 ### Fix — slash trigger conflict on Claude.ai and ChatGPT
 
 - [ ] Warn when trigger symbol is `/` on claude.ai or chatgpt.com — conflicts with their native slash command menus
@@ -228,3 +223,8 @@
 
 - [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
 - **Test strategy: e2e** — `bun run test:e2e`
+
+### Fix — options page fields reset on refresh
+
+- [x] PAT, repository, and per-site config revert to defaults after refresh despite saved config
+- **Test strategy: unit** — settings form initialization

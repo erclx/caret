@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/options/app'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 
+const mockUpdateSettings = vi.fn()
 const mockUpdateSiteSettings = vi.fn()
 const mockImportPrompts = vi.fn()
 
@@ -18,6 +19,7 @@ vi.mock('@/shared/hooks/use-settings', () => ({
       },
     },
     isLoading: false,
+    updateSettings: mockUpdateSettings,
     updateSiteSettings: mockUpdateSiteSettings,
   }),
 }))
@@ -33,6 +35,8 @@ vi.mock('@/shared/hooks/use-prompts', () => ({
 describe('OptionsApp', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockUpdateSettings.mockResolvedValue(undefined)
+    mockUpdateSiteSettings.mockResolvedValue(undefined)
   })
 
   it('should render default sites with loaded settings', () => {

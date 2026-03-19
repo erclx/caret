@@ -196,6 +196,10 @@ Schemas at external boundaries (`chrome.storage.local`, JSON import) use strict 
 
 All GitHub fetch calls have an explicit timeout. A hung request would freeze the sync UI indefinitely with no recovery path, so calls that exceed the limit are aborted and surfaced as a connection error.
 
+### Options page: single `useSettings` instance
+
+`useSettings` is called once in `app.tsx`; `settings`, `updateSettings`, and `updateSiteSettings` are passed as props to child sections. Each child calling the hook independently creates a separate async load, so local `useState` initializers run before data arrives and fields reset to defaults. Owning the single call in the loading-gate parent guarantees children mount with fully-loaded data.
+
 ### Sidepanel-primary: popup dormant
 
 The extension icon opens the sidepanel via `chrome.action.onClicked` → `chrome.sidePanel.open()`. The popup entry point (`src/popup/`) is kept dormant for rollback but is not wired into the manifest's `action.default_popup`.
