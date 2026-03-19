@@ -10,7 +10,7 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 - Prompts sorted with local prompts first, then by last updated
 - Prompt names must be unique and kebab-case (e.g., `my-prompt`)
 - Trigger symbol with fuzzy search on prompt names
-- Keyboard navigation: `↑↓` to move, `Enter` or `Tab` to insert, `Esc` to dismiss
+- Keyboard navigation: `↑↓` to move, `Enter` or `Tab` to insert, `Esc` to dismiss (or discard unsaved changes in prompt forms)
 - Per-site trigger symbol config to avoid conflicts with native commands. The extension warns if the `/` symbol is used on `claude.ai` or `chatgpt.com` due to native slash menu conflicts.
 - Popup and side panel UI for managing prompts
 - Quick access to settings from the prompt library
@@ -30,7 +30,7 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) or load 
 4. Once configured, switch to the 'GitHub' tab in the prompt library to view and sync prompts from your repository. The sync status will now show "Up to date" when no changes are pending, and a confirmation message "Applied ✓" will appear after applying changes.
 5. To backup or restore your prompts, navigate to the settings page and use the export/import options.
 6. In any supported chat input, type `>` followed by a prompt name to search.
-7. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss.
+7. Use `↑↓` to navigate, `Enter` or `Tab` to insert, `Esc` to dismiss (or discard unsaved changes in prompt forms).
 
 Supported sites: Claude.ai, Gemini, ChatGPT.
 
