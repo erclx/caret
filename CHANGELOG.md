@@ -8,31 +8,21 @@ All notable changes to this project will be documented in this file.
 
 - prompts: add onboarding empty state for new users
 - github: add connection health, disconnect, and UX improvements
-
 - github-sync: auto-cancel on config change
 - github: config validation and connection testing
-- github-sync: add tooltips for synchronization features
 - content: add trigger detection and command palette UI in chat inputs
 - content: invoke prompts via fuzzy-search dropdown
 - design-system: initialize shadcn/ui with zinc mono color scale
 - fuzzy: add fuzzy matching for prompt search
-- github-sync: add tooltips for synchronization features
 - icons: add extension icons
 - options: add 'Settings saved' feedback
-- options: add data import/export section
-- options: add link to generate GitHub PAT
 - options: add per-site settings page
 - options: display detailed import feedback
 - options: integrate GitHub sync configuration UI
 - options: validate trigger symbols on settings page
 - popup: prompt library UI with list, create, edit, and delete
 - prompt-form: add kebab-case validation for prompt names
-- prompt-form: implement two-anchor dirty discard confirmation
-- prompt-form: implement dirty state warning
-- prompt-library: add clear button to search input
-- prompt-library: add tabbed view and search functionality
 - prompt-library: integrate GitHub sync view
-- prompts: insert selected prompt content into chat inputs
 - prompts: sort by updated date and source
 - sidepanel: prompt library UI with list, create, edit, and delete
 - storage: dev seeding with sample prompts on first run
@@ -41,6 +31,12 @@ All notable changes to this project will be documented in this file.
 - prompt-form: add duplicate name validation
 - github-sync: add visual feedback for apply
 - github-sync: add disconnect and connection health persistence
+- prompt-form: add discard confirmation for unsaved changes
+- options: enhance UI and add PAT link
+- github-sync: add github prompt synchronization and tooltips
+- data-io: add prompt import/export and search clear button
+- prompt-library: implement tabbed view and search, update prompt form
+- prompts: enable insertion and improve filtering
 
 ### Changed
 
@@ -53,16 +49,16 @@ All notable changes to this project will be documented in this file.
 - project: rename to Caret and refine description
 - sidepanel: add base background color
 - ui: adjust options page header and sidepanel background styles
-- ui: migrate primary management interface to the sidepanel
 - github-sync: refine connection status logic
+- sidepanel: migrate primary interface from popup
 
 ### Fixed
 
 - options: guard saved feedback and validate trigger input
-
 - dropdown: dismiss on outside click and window resize
 - ui: improve dropdown and options interactions
 - prompt-form: correct duplicate name validation for editing
 - github-sync: add guard for missing github config
 - github: handle missing github config during sync
 - options: refine options page and error copy
+- github: clear sync feedback timer on unmount
