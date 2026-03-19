@@ -3,7 +3,7 @@ import { GithubSection } from '@/options/github-section'
 import { SiteConfigSection } from '@/options/site-config-section'
 import { useSettings } from '@/shared/hooks/use-settings'
 
-export default function App() {
+export function App() {
   const { isLoading } = useSettings()
 
   if (isLoading) {

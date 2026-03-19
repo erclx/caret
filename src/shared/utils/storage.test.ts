@@ -65,7 +65,7 @@ vi.stubGlobal('chrome', {
   },
 })
 
-describe('Storage Utilities', () => {
+describe('storage utilities', () => {
   beforeEach(() => {
     mockStorage.clear()
     listeners = []

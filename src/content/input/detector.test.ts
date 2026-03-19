@@ -31,7 +31,7 @@ function typeIntoTextarea(textarea: HTMLTextAreaElement, text: string) {
   }
 }
 
-describe('InputDetector integration', () => {
+describe('InputDetector', () => {
   let detector: InputDetector
   let stateCallback: ReturnType<typeof vi.fn>
 
