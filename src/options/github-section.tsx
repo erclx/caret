@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip'
-import { useSettings } from '@/shared/hooks/use-settings'
+import type { Settings } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 import { testConnection, validateOwnerRepo } from '@/shared/utils/github'
 import { storage } from '@/shared/utils/storage'
@@ -57,8 +57,15 @@ function FieldLabel({ htmlFor, hint, children }: FieldLabelProps) {
   )
 }
 
-export function GithubSection() {
-  const { settings, updateSettings } = useSettings()
+interface GithubSectionProps {
+  settings: Settings
+  updateSettings: (newSettings: Settings) => Promise<void>
+}
+
+export function GithubSection({
+  settings,
+  updateSettings,
+}: GithubSectionProps) {
   const [localGithub, setLocalGithub] = useState<LocalGithub>(() => {
     if (settings.github) {
       return {
