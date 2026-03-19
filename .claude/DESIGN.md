@@ -71,6 +71,10 @@ Shadow on the dropdown only. It floats above the host page. Subtle two-layer dro
 
 4px everywhere.
 
+## Focus rings
+
+2px ring on all interactive elements, using the `--ring` token at 50% opacity. Reduced from the shadcn default of 3px to match the overall minimal visual weight. Containers that clip with `overflow-hidden` need at least 4px of inset padding on any side where a focusable element sits flush against the boundary; otherwise the ring is clipped.
+
 ## Motion
 
 None for MVP. Speed over delight for a keyboard-driven tool.

@@ -25,6 +25,7 @@ sidepanel
 sonner
 tanstack
 testuser
+textareas
 tolower
 toupper
 unconfigured

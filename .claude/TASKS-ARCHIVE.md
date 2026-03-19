@@ -176,6 +176,12 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] UI copy audit: apply copy standards to options page and shared utils error messages
 - **Test strategy: unit**: settings form logic; visual verification for copy
 
+### Fix: import feedback copy
+
+- [x] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
+- [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
+- **Test strategy: unit**: feedback string logic (`formatImportFeedback`)
+
 ### Fix: GitHub tab state + docs
 
 - [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches

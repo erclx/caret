@@ -193,7 +193,7 @@ Popup and sidepanel import the same React components from `src/shared/`. Only la
 
 ### shadcn/ui constraints
 
-Components in `src/components/ui/` are source of truth. Never modify them directly. Override via `className` props at the usage site only.
+Components in `src/components/ui/` are source of truth. Project-wide baseline defaults (such as focus ring width) may be modified directly in the primitive. Override per-component appearance via `className` props at the usage site.
 
 ## Risks / open questions
 

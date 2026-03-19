@@ -18,18 +18,17 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
+### Fix: trailing space after prompt insertion
+
+- [ ] Append a trailing space when inserting a prompt so the user can continue typing immediately without pressing space
+- **Test strategy: unit**: insertion output in detector
+
 ### Chore: logo
 
 - [ ] Design logo in Figma
 - **Test strategy: none**: visual verification
 
 ## Done
-
-### Fix: import feedback copy
-
-- [x] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
-- [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
-- **Test strategy: unit**: feedback string logic (`formatImportFeedback`)
 
 ### Feat: onboarding
 
@@ -84,3 +83,9 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 - [x] Add unit tests for export and import handlers in the data section
 - [x] Improve unit test coverage for the content script input detection and insertion paths
 - **Test strategy: unit**: no new behavior introduced; tests verify existing data section and adapter/detector logic
+
+### Fix: focus ring thickness and clipping
+
+- [x] Reduce focus ring width on buttons, inputs, and textareas: 3px was visually heavy
+- [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent `overflow-hidden` cut off the ring
+- **Test strategy: none**: visual verification
