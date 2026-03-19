@@ -19,6 +19,7 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 ## Collaboration rules
 
 - Follow `standards/prose.md` for all document edits
+- When editing any doc, read surrounding content first and match its depth, length, and tone
 - Reason through the approach and confirm with the user before making any edits
 - After implementing changes, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`
 - After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
