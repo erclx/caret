@@ -18,22 +18,12 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
-### Fix: trailing space after prompt insertion
-
-- [ ] Append a trailing space when inserting a prompt so the user can continue typing immediately without pressing space
-- **Test strategy: unit**: insertion output in detector
-
 ### Chore: logo
 
 - [ ] Design logo in Figma
 - **Test strategy: none**: visual verification
 
 ## Done
-
-### Feat: onboarding
-
-- [x] First install empty state: onboarding hint shown only when prompt list is empty and no prompts have ever been created; uses key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install); once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently; deleted-all state shows "No prompts yet, click + New to add one."
-- **Test strategy: unit**: empty state branching in `PromptList`
 
 ### Chore: governance compliance pass
 
@@ -89,3 +79,8 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 - [x] Reduce focus ring width on buttons, inputs, and textareas: 3px was visually heavy
 - [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent `overflow-hidden` cut off the ring
 - **Test strategy: none**: visual verification
+
+### Fix: trailing space after prompt insertion
+
+- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
+- **Test strategy: unit**: insertion output in detector
