@@ -2,11 +2,6 @@
 
 ## Up next
 
-### Fix — per-site config section sizing
-
-- [ ] Reduce trigger input width (single char) and tighten overall card density
-- **Test strategy: none** — visual verification
-
 ### Chore — logo
 
 - [ ] Design logo in Figma
@@ -228,3 +223,11 @@
 
 - [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com — conflicts with their native slash command menus
 - **Test strategy: unit** — validation logic
+
+### Fix — options page UI polish
+
+- [x] Tighten per-site config section typography and sizing
+- [x] Align save button placement across sections — both left-aligned
+- [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
+- [x] Update wireframes to reflect current options page layout and section order
+- **Test strategy: none** — visual verification

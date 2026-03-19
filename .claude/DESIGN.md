@@ -109,6 +109,8 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 - Max width: 640px, centered
 - Section headers: `heading` size, `--text-foreground`, sentence case — deliberately full contrast (not muted) to create clear hierarchy against the muted description text below
 - Toggles: shadcn Switch, zinc only (no accent color)
+- Save buttons: left-aligned in all section footers; "Saved ✓" feedback pushed to far right via `ml-auto`
+- Destructive actions (e.g. Disconnect): inline in the same footer row as Save, far right; supplementary hint shown as tooltip on hover, not as persistent inline text
 
 ### Options Page — GitHub Sync Section
 

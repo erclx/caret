@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- options: polish UI layout and styling for options page
 - options: guard saved feedback and validate trigger input
 - dropdown: dismiss on outside click and window resize
 - ui: improve dropdown and options interactions
