@@ -67,3 +67,4 @@ All notable changes to this project will be documented in this file.
 - options: pass settings through props from single hook
 - options: display slash conflict warning for sensitive sites
 - ui: reduce focus ring thickness and prevent clipping
+- input: normalize trailing space after prompt insertion
