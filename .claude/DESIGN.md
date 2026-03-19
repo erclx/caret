@@ -1,129 +1,101 @@
 # Design
 
-> Minimal & invisible. Renders on top of other tools — must never compete with them visually.
-
-## General rules
-
-All UI text uses sentence case — never title case. Proper nouns and product names retain their casing.
+> Minimal and invisible. Renders on top of other tools. Must never compete with them visually.
 
 ## Personality
 
 **Utilitarian. Sharp. Out of the way.** If the user notices the design, we've failed.
 
+## General rules
+
+All UI text uses sentence case. Proper nouns and product names retain their casing.
+
 ## Color
 
-No accent. Mono zinc scale only. These are the actual shadcn HSL variable overrides in `index.css` — not a separate token system. Two palettes switched via `prefers-color-scheme`.
+No accent. Mono zinc scale only. Defined as shadcn HSL variable overrides in `index.css`, switched via `prefers-color-scheme`.
 
-| shadcn variable      | Light (`0 0% 98%`) | Dark (`240 4% 15%`) | Usage                         |
-| -------------------- | ------------------ | ------------------- | ----------------------------- |
-| `--background`       | `0 0% 98%`         | `240 4% 15%`        | Popup, sidepanel, dropdown bg |
-| `--card`             | `0 0% 100%`        | `240 3.7% 15.9%`    | Cards, input bg               |
-| `--border`           | `240 5.9% 90%`     | `240 3.7% 25%`      | All borders                   |
-| `--foreground`       | `240 10% 3.9%`     | `0 0% 98%`          | Body text, prompt names       |
-| `--muted-foreground` | `240 3.8% 46.1%`   | `240 5% 64.9%`      | Preview text, hints, labels   |
-| `--accent`           | `240 4.8% 95.9%`   | `240 3.7% 22%`      | Dropdown selected row, hover  |
-| `--destructive`      | `0 72% 51%`        | `0 72% 51%`         | Delete, error                 |
+| Variable             | Tone                         | Usage                        |
+| -------------------- | ---------------------------- | ---------------------------- |
+| `--background`       | Near-white / dark charcoal   | Page and panel backgrounds   |
+| `--card`             | White / slightly raised dark | Cards, input fields          |
+| `--border`           | Light gray / dark gray       | All borders                  |
+| `--foreground`       | Near-black / near-white      | Body text, prompt names      |
+| `--muted-foreground` | Mid gray                     | Preview text, hints, labels  |
+| `--accent`           | Very light gray / dim dark   | Selected row, hover state    |
+| `--destructive`      | Red                          | Delete actions, error states |
 
-Buttons use `--text-primary` on `--surface` with `--border` outline. Selection = background shift only, no color pop.
+Buttons use `--foreground` on `--card` with a `--border` outline. Selection is a background shift only, no color pop.
 
 ## Typography
 
-**Font: Geist.** Applied explicitly to all roots (popup, sidepanel, content script shadow DOM). Never inherits from host page.
+Font: Geist. Applied explicitly to all entry point roots. Never inherits from the host page.
 
-```css
-font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
-```
+| Role      | Size | Weight | Usage                        |
+| --------- | ---- | ------ | ---------------------------- |
+| `label`   | 13px | 500    | Prompt name in dropdown row  |
+| `preview` | 12px | 400    | Truncated body preview       |
+| `body`    | 13px | 400    | List items, general text     |
+| `heading` | 14px | 600    | Section headers              |
+| `hint`    | 11px | 400    | Keyboard hints, empty states |
 
-| Role      | Size | Weight | Usage                       |
-| --------- | ---- | ------ | --------------------------- |
-| `label`   | 13px | 500    | Prompt name in dropdown row |
-| `preview` | 12px | 400    | Truncated body preview      |
-| `body`    | 13px | 400    | List items, general text    |
-| `heading` | 14px | 600    | Section headers             |
-| `hint`    | 11px | 400    | Keyboard hints, empty state |
-
-> Keyboard hint footer text: `↑↓ navigate · Enter/Tab insert · Esc close`
-
-All sizes in `px` — surfaces are fixed-width, rem scaling irrelevant.
+All sizes in `px`. Surfaces are fixed-width, so rem scaling is irrelevant.
 
 ## Spacing
 
-Base unit: **4px**. Use Tailwind's built-in scale (`p-1` = 4px, `p-2` = 8px, etc.) — no custom tokens needed.
+Base unit is 4px. Use Tailwind's built-in scale with no custom tokens.
 
-## Border Radius
+## Borders and shadows
 
-**4px everywhere.** Maps to shadcn's `--radius: 0.25rem`.
+All borders are 1px. No double borders.
 
-## Borders & Shadows
+Shadow on the dropdown only — it floats above the host page. Subtle two-layer drop shadow.
 
-Borders: `1px solid --border`. No double borders.
+## Border radius
 
-Shadow: dropdown only (floats above host page).
-
-```css
-box-shadow:
-  0 4px 6px -1px rgb(0 0 0 / 0.1),
-  0 2px 4px -2px rgb(0 0 0 / 0.1);
-```
+4px everywhere.
 
 ## Motion
 
-None for MVP. Speed > delight for a keyboard-driven tool.
+None for MVP. Speed over delight for a keyboard-driven tool.
 
-## Component Notes
+## Components
 
-> Widths below are starting points — verify in browser.
+> Widths are starting points. Verify in browser.
 
 ### Dropdown
 
-- Width: matches input element exactly
-- Max height: 280px, then scrollable (rows are ~48px with two-line name + preview layout)
-- Row: `[name label] ··· [preview muted, truncated 1 line]`
-- Selected state: `--selected` bg only, no border or left bar
-- No search input inside dropdown — filtering happens by typing after the trigger symbol in the chat input (intentional)
-- Footer hint: `↑↓ navigate · Enter/Tab insert · Esc close`, `hint` size, `--text-muted`
-- Empty state: `"No prompts yet - click the extension icon to add one"`
-
-### Popup
-
-> Dormant — extension icon now opens the sidepanel. Popup kept for rollback only.
+- Width matches the input element exactly
+- Max height 280px, then scrollable
+- Each row shows the prompt name and a one-line truncated preview
+- Selected row uses accent background only, no border or left bar
+- No search input inside the dropdown. The user filters by typing in the chat input after the trigger symbol.
+- Keyboard hint footer in muted hint text
 
 ### Sidepanel
 
-- Width: ~380px (user-resizable)
-- Same components as popup, wider layout shows name + preview per row
-- Edit view: full list replacement, `← Back` top-left, no modal
-- Tab bar: `[Prompts] [GitHub]` — plain text tabs, `--border` bottom, selected tab uses `--text-primary`, unselected uses `--text-muted`
+- Width ~380px, user-resizable
+- Tab bar with plain text tabs, bottom border on the active tab
+- Edit view replaces the list inline, no modal
 
-### Sidepanel — GitHub Sync View
+### Sidepanel — GitHub view
 
-- Connection indicator: 8px filled circle driven by `connectionHealth` in settings — `green-500` connected / `red-500` error; inline with repo name in `--text-muted`. Only shown when GitHub is configured — when unconfigured the entire view is replaced by the "Set up in Options →" link (no dot displayed)
-- Status line: `hint` size, `--text-muted` — e.g. "Synced just now · 8 snippets", "Up to date · 8 snippets" (transient, after a no-change sync), or "Never synced"
-- Sync button: standard outline button, full width, lucide `RefreshCw` icon 16px left of label
-- Diff list: monospace slug names, `body` size; prefix symbols `+` in `green-600`/`green-400`, `~` in `zinc-500`, `-` in `--destructive`; "N unchanged" in `--text-muted` below list
-- Apply button: `--text-primary` on `--surface`, shows count inline e.g. "Apply 3 changes"
-- Not configured state: replace sync button with `"Set up in Options →"` link, `--text-muted`
+- Connection indicator: 8px filled circle, green when connected, red on error. Only shown when GitHub is configured.
+- When not configured, the entire view is replaced by a plain link to Options.
 
-### Options Page
+### Options page
 
-- Max width: 640px, centered
-- Section headers: `heading` size, `--text-foreground`, sentence case — deliberately full contrast (not muted) to create clear hierarchy against the muted description text below
-- Toggles: shadcn Switch, zinc only (no accent color)
-- Save buttons: left-aligned in all section footers; "Saved ✓" feedback pushed to far right via `ml-auto`
-- Destructive actions (e.g. Disconnect): inline in the same footer row as Save, far right; supplementary hint shown as tooltip on hover, not as persistent inline text
+- Max width 640px, centered
+- Section headers use full-contrast foreground text to create hierarchy against the muted description text below
+- Save button left-aligned in all section footers; feedback text pushed to the far right
+- Destructive actions sit in the same footer row as Save; supplementary hints shown as tooltip on hover, not inline
 
-### Options Page — GitHub Sync Section
+### Options page — GitHub section
 
-- PAT input: `type="password"`, masked after save, full width
+- PAT field: full width
 - Repository and Branch fields: side by side, equal width
-- Snippets path field: full width, placeholder `snippets`
-- Save button: standard outline, left-aligned
-- Connection status: inline right of Save — 8px dot + short label ("Connected" / "Not configured" / "Error"), `hint` size
-- No inline validation on PAT format — only show error state after a failed save attempt
-- Field labels have a `HelpCircle` icon (16px, `--text-muted`) that shows a tooltip on hover; tooltip styled zinc-800/zinc-700 via `className` override at usage site; `TooltipPrimitive.Arrow` is removed from the shared `tooltip.tsx` component (no arrow anywhere)
-- PAT field has a "Create a token on GitHub →" link below the input, `--text-muted`, opens in new tab
-- Repository field accepts `owner/repo` combined input and parses into separate `owner` and `repo` fields on change
-- Disconnect button: shown below the save footer only when GitHub is configured; outline style, `--destructive` text, no confirmation; hint below: "Your synced prompts will not be removed."
+- Snippets path field: full width
+- No inline validation on PAT format. Error shown only after a failed save attempt.
+- Disconnect shown only when GitHub is configured. No confirmation dialog.
 
 ## Iconography
 
