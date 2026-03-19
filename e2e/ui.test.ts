@@ -16,9 +16,7 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
     await page.goto(
       `chrome-extension://${extensionId}/src/sidepanel/index.html`,
     )
-    await expect(
-      page.getByText(/no prompts yet — click the extension icon to add one/i),
-    ).toBeVisible()
+    await expect(page.getByText(/no prompts yet\./i)).toBeVisible()
     await expect(page.getByRole('button', { name: /new/i })).toBeVisible()
   })
 

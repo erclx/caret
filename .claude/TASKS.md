@@ -1,10 +1,30 @@
 # Tasks
 
-## In progress
-
 ## Up next
 
+### Fix — options page fields reset on refresh
+
+- [ ] PAT, repository, and per-site config revert to defaults after refresh despite saved config
+- **Test strategy: unit** — settings form initialization
+
+### Fix — slash trigger conflict on Claude.ai and ChatGPT
+
+- [ ] Warn when trigger symbol is `/` on claude.ai or chatgpt.com — conflicts with their native slash command menus
+- **Test strategy: unit** — validation logic
+
+### Fix — per-site config section sizing
+
+- [ ] Reduce trigger input width (single char) and tighten overall card density
+- **Test strategy: none** — visual verification
+
+### Chore — logo
+
+- [ ] Design logo in Figma
+- **Test strategy: none** — visual verification
+
 ## Done
+
+### Chore — planning & document setup
 
 - [x] Planning & document setup
 
@@ -203,3 +223,8 @@
 - [x] Add `.strict()` to Zod schemas at external data boundaries
 - [x] Fix `describe()` label casing in test files
 - [x] Add `AbortSignal.timeout()` to all external GitHub fetch calls
+
+### Fix — e2e stale empty-state assertion
+
+- [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
+- **Test strategy: e2e** — `bun run test:e2e`
