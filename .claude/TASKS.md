@@ -7,6 +7,18 @@
 - [ ] Handle `keydown` Esc in the prompt edit form — trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean)
 - **Test strategy:** unit test in `prompt-form.test.tsx`; e2e in `e2e/ui.test.ts`
 
+### Chore — test coverage: GitHub feature
+
+- [ ] Add unit tests for the GitHub sync flow — apply, cancel, error, and diff states
+- [ ] Add unit tests for the GitHub options section — save, disconnect, connection status
+- **Test strategy:** unit tests
+
+### Chore — test coverage: data section and content input
+
+- [ ] Add unit tests for export and import handlers in the data section
+- [ ] Improve unit test coverage for the content script input detection and insertion paths
+- **Test strategy:** unit tests
+
 ### Chore — logo
 
 - [ ] Design logo in Figma
