@@ -2,20 +2,6 @@
 
 Chrome extension (MV3) that lets users save reusable prompts and invoke them via a trigger symbol + fuzzy dropdown directly inside Claude.ai, Gemini, and ChatGPT.
 
-## Key paths
-
-- `src/content/` — injected UI and input detection per site
-- `src/sidepanel/` — primary prompt library UI (extension icon opens this)
-- `src/popup/` — dormant, kept for rollback only
-- `src/options/` — per-site trigger config and settings page
-- `src/shared/` — hooks, types, utils and components shared across entry points
-- `manifest.config.ts` — extension manifest (entry points, permissions, icons)
-- `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
-
-## Memory
-
-- Write all memory files to `.claude/memory/`, not `~/.claude/projects/`
-
 ## Collaboration rules
 
 - Follow `standards/prose.md` for all document edits
@@ -32,3 +18,17 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - Check `.claude/DESIGN.md` for tokens, typography, spacing, and component rules
 - Check `.claude/REQUIREMENTS.md` for feature scope and non-goals
 - Check `.claude/GOV.md` for coding standards before writing or editing any code
+
+## Key paths
+
+- `src/content/` — injected UI and input detection per site
+- `src/sidepanel/` — primary prompt library UI (extension icon opens this)
+- `src/popup/` — dormant, kept for rollback only
+- `src/options/` — per-site trigger config and settings page
+- `src/shared/` — hooks, types, utils and components shared across entry points
+- `manifest.config.ts` — extension manifest (entry points, permissions, icons)
+- `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
+
+## Memory
+
+- Write all memory files to `.claude/memory/`, not `~/.claude/projects/`
