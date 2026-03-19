@@ -33,7 +33,6 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Max 6 rows visible before scroll
 - Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
-- Keydown listener on window capture phase to intercept before host page handlers fire
 - Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
 - Dropdown width matches input element exactly
 - Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
@@ -265,8 +264,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 - Apply does full replace of all prompts then returns to post-sync state
 - Not configured: show "Set up in Options →" link instead of sync button
 - PAT optional for public repos; required for private
-- Each sync: 1 directory listing request + 1 per snippet file (N+1 total)
-- Filename → slug: strip `.md` extension; file content → prompt body
+- Filename slug is the `.md` filename without the extension; file content becomes the prompt body
 
 ## 3. Options Page
 
