@@ -6,6 +6,15 @@
 
 ## Done
 
+### Chore — governance compliance pass
+
+- [] Replace default exports with named exports across all entry points
+- [] Replace non-null assertions with explicit null checks
+- [] Rename boolean variables to follow `is/has/should/can` prefix convention
+- [] Add `.strict()` to Zod schemas at external data boundaries
+- [] Fix `describe()` label casing in test files
+- [] Add `AbortSignal.timeout()` to all external GitHub fetch calls
+
 - [x] Planning & document setup
 
 - [x] Design setup
