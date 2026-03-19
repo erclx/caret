@@ -11,7 +11,7 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 - Prompt names must be unique and kebab-case (e.g., `my-prompt`)
 - Trigger symbol with fuzzy search on prompt names
 - Keyboard navigation: `↑↓` to move, `Enter` or `Tab` to insert, `Esc` to dismiss
-- Per-site trigger symbol config to avoid conflicts with native commands
+- Per-site trigger symbol config to avoid conflicts with native commands. The extension warns if the `/` symbol is used on `claude.ai` or `chatgpt.com` due to native slash menu conflicts.
 - Popup and side panel UI for managing prompts
 - Quick access to settings from the prompt library
 - JSON export and import for backup and restore

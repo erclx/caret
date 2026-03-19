@@ -86,6 +86,8 @@ e2e/
 
 Claude.ai natively intercepts `/` for its own command menu. Using `>` by default avoids DOM race conditions. Users can override per site in options.
 
+`/` is not blocked as a trigger value. If a user saves `/` for `claude.ai` or `chatgpt.com`, `site-config-section.tsx` shows an amber warning immediately on load and while the value is active. The warning is non-blocking: the user can still save. Gemini has no native slash command, so no warning is shown there.
+
 ### Trigger detection: word boundary rule
 
 The trigger symbol only fires when it appears at position 0 in the input, or is immediately preceded by whitespace. Typing a symbol mid-word (e.g. `word>`) must not open the dropdown. Detection checks the character at `cursorPosition - 1` before activating.

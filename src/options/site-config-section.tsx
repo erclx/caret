@@ -11,6 +11,8 @@ const DEFAULT_SITES = ['claude.ai', 'gemini.google.com', 'chatgpt.com']
 
 const SYMBOL_RE = /^[^a-zA-Z0-9\s]$/
 
+const SLASH_CONFLICT_SITES = new Set(['claude.ai', 'chatgpt.com'])
+
 interface SiteConfig {
   triggerSymbol: string
   enabled: boolean
@@ -26,6 +28,10 @@ interface SiteConfigSectionProps {
 
 function isValidTrigger(value: string): boolean {
   return SYMBOL_RE.test(value)
+}
+
+function isSlashConflict(site: string, symbol: string): boolean {
+  return SLASH_CONFLICT_SITES.has(site) && symbol === '/'
 }
 
 export function SiteConfigSection({
@@ -120,6 +126,8 @@ export function SiteConfigSection({
             blurredTriggers.has(site) &&
             config?.enabled &&
             !isValidTrigger(config?.triggerSymbol)
+          const isSlashWarning =
+            config?.enabled && isSlashConflict(site, config?.triggerSymbol)
 
           return (
             <div
@@ -170,6 +178,11 @@ export function SiteConfigSection({
                 {isTriggerInvalid && (
                   <p className='text-xs text-red-600 dark:text-red-400'>
                     Enter a single non-letter symbol
+                  </p>
+                )}
+                {!isTriggerInvalid && isSlashWarning && (
+                  <p className='text-xs text-amber-600 dark:text-amber-400'>
+                    / conflicts with this site's native slash menu
                   </p>
                 )}
               </div>
