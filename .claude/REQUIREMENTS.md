@@ -14,7 +14,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 
 ## Non-goals
 
-- Cloud sync or user accounts (MVP) — GitHub sync is explicitly read-only and personal; not a backend or account system
+- Cloud sync or user accounts (MVP). GitHub sync is explicitly read-only and personal, not a backend or account system.
 - Prompt variables/placeholders (MVP)
 - Collaboration or shared libraries (MVP)
 - Mobile or Firefox support (MVP)
@@ -29,10 +29,10 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 1. **Prompt library CRUD** — create, edit, delete prompts with a name (slug) and body text
 2. **Trigger detection** — user types configurable symbol (default: `>`) in chat input → dropdown appears; only fires at position 0 or after whitespace, never mid-word
 3. **Fuzzy filter dropdown** — command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
-4. **Keyboard nav** — ↑↓, Ctrl+J/K, Ctrl+N/P to move; Enter to insert; Escape to dismiss
+4. **Keyboard nav** — ↑↓, Ctrl+J (down), Ctrl+P (up) to move; Enter to insert; Escape to dismiss
 5. **Prompt insertion** — inserts prompt text at cursor position in the chat input
 6. **Per-site trigger config** — configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
-7. **Side panel UI** — manage library from Chrome side panel; extension icon opens sidepanel via `chrome.action.onClicked`; popup entry kept dormant for rollback
+7. **Side panel UI** — manage library from Chrome side panel; extension icon opens sidepanel; popup entry kept dormant for rollback
 8. **Options page** — full settings including per-site trigger symbol config and GitHub sync config
 9. **JSON export/import** — backup and restore prompt library
 10. **GitHub sync** — pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
