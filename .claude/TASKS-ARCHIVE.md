@@ -175,3 +175,9 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Em dash audit: grep all rendered component strings for `—`; none found in rendered UI
 - [x] UI copy audit: apply copy standards to options page and shared utils error messages
 - **Test strategy: unit**: settings form logic; visual verification for copy
+
+### Fix: GitHub tab state + docs
+
+- [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
+- [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
+- **Test strategy: none**: manual verification
