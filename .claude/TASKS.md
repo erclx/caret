@@ -18,11 +18,6 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
-### Fix: Esc to cancel in edit form
-
-- [ ] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean)
-- **Test strategy:** unit (dirty-state check) and e2e (keyboard interaction)
-
 ### Chore: test coverage, GitHub feature
 
 - [ ] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
@@ -41,14 +36,6 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 - **Test strategy: none**: visual verification
 
 ## Done
-
-### Feat: GitHub sync UX fixes
-
-- [x] Fix connection status mismatch: saving with an invalid PAT no longer writes `connectionHealth: 'error'` to the stored config; error stays local to the options form, leaving the valid stored config and sidebar dot unaffected
-- [x] Fix options form initial status: `connectionStatus` now reads from `settings.github.connectionHealth` on load instead of always defaulting to `'connected'` when a config exists
-- [x] Post-apply feedback: sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
-- [x] Dev prefill: options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
-- **Test strategy: none**: visual verification
 
 ### Fix: options page polish
 
@@ -106,3 +93,8 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 - [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
 - [x] Update wireframes to reflect current options page layout and section order
 - **Test strategy: none**: visual verification
+
+### Fix: Esc to cancel in edit form
+
+- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
+- **Test strategy: unit and e2e**: unit covers dirty-state logic; e2e covers keyboard interaction in the real extension page
