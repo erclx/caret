@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- options: enhance UI and add PAT link
 - prompts: add onboarding empty state for new users
 - github: add connection health, disconnect, and UX improvements
 - github-sync: auto-cancel on config change
@@ -32,7 +33,6 @@ All notable changes to this project will be documented in this file.
 - github-sync: add visual feedback for apply
 - github-sync: add disconnect and connection health persistence
 - prompt-form: add discard confirmation for unsaved changes
-- options: enhance UI and add PAT link
 - github-sync: add github prompt synchronization and tooltips
 - data-io: add prompt import/export and search clear button
 - prompt-library: implement tabbed view and search, update prompt form
@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- prompt-form: handle Esc key to cancel edit or dismiss discard
 - options: polish UI layout and styling for options page
 - options: guard saved feedback and validate trigger input
 - dropdown: dismiss on outside click and window resize
