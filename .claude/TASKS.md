@@ -18,32 +18,12 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 
 ## Up next
 
-### Chore: test coverage, data section and content input
-
-- [ ] Add unit tests for export and import handlers in the data section
-- [ ] Improve unit test coverage for the content script input detection and insertion paths
-- **Test strategy:** unit tests
-
 ### Chore: logo
 
 - [ ] Design logo in Figma
 - **Test strategy: none**: visual verification
 
 ## Done
-
-### Fix: options page polish
-
-- [x] Guard "Saved ✓" feedback in `site-config-section.tsx`; skip if no sites were modified
-- [x] Per-site trigger validation: show error on blur only, not on every keystroke
-- [x] Em dash audit: grep all rendered component strings for `—`; none found in rendered UI
-- [x] UI copy audit: apply copy standards to options page and shared utils error messages
-- **Test strategy: unit**: settings form logic; visual verification for copy
-
-### Fix: GitHub tab state + docs
-
-- [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
-- [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
-- **Test strategy: none**: manual verification
 
 ### Fix: import feedback copy
 
@@ -98,3 +78,9 @@ Two sections only: Up next and Done. When completing a task, append it at the bo
 - [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
 - [x] Add unit tests for the GitHub options section: save, disconnect, connection status
 - **Test strategy: unit**: no new behavior introduced; tests verify existing sync and options section logic
+
+### Chore: test coverage, data section and content input
+
+- [x] Add unit tests for export and import handlers in the data section
+- [x] Improve unit test coverage for the content script input detection and insertion paths
+- **Test strategy: unit**: no new behavior introduced; tests verify existing data section and adapter/detector logic
