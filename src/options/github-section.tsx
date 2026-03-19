@@ -288,33 +288,40 @@ export function GithubSection({
                   : 'Not configured'}
             </span>
           </div>
-          <span
-            className={cn(
-              'text-muted-foreground ml-auto text-sm transition-opacity duration-500',
-              isGithubSaved ? 'opacity-100' : 'opacity-0',
+          <div className='ml-auto flex items-center gap-3'>
+            <span
+              className={cn(
+                'text-muted-foreground text-sm transition-opacity duration-500',
+                isGithubSaved ? 'opacity-100' : 'opacity-0',
+              )}
+            >
+              Saved ✓
+            </span>
+            {settings.github && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant='outline'
+                    className='text-destructive hover:text-destructive dark:hover:bg-zinc-700'
+                    onClick={handleDisconnect}
+                  >
+                    Disconnect
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side='top'
+                  className='max-w-64 bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700'
+                >
+                  Your synced prompts will not be removed.
+                </TooltipContent>
+              </Tooltip>
             )}
-          >
-            Saved ✓
-          </span>
+          </div>
         </div>
         {connectionError && (
           <p className='text-destructive text-xs'>{connectionError}</p>
         )}
       </div>
-      {settings.github && (
-        <div className='border-border flex flex-col gap-2 border-t p-6'>
-          <Button
-            variant='outline'
-            className='text-destructive hover:text-destructive w-fit dark:hover:bg-zinc-700'
-            onClick={handleDisconnect}
-          >
-            Disconnect
-          </Button>
-          <p className='text-muted-foreground text-xs'>
-            Your synced prompts will not be removed.
-          </p>
-        </div>
-      )}
     </div>
   )
 }

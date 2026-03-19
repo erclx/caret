@@ -132,10 +132,10 @@ export function SiteConfigSection({
           return (
             <div
               key={site}
-              className='border-border bg-background flex flex-col justify-between gap-4 rounded-md border p-5 sm:flex-row sm:items-center'
+              className='border-border bg-background flex flex-col justify-between gap-4 rounded-md border px-6 py-5 sm:flex-row sm:items-center'
             >
               <div className='flex flex-col gap-2'>
-                <Label className='text-base font-medium'>{site}</Label>
+                <Label className='text-sm font-medium'>{site}</Label>
                 <div className='flex items-center gap-2'>
                   <input
                     type='checkbox'
@@ -155,10 +155,10 @@ export function SiteConfigSection({
                   </Label>
                 </div>
               </div>
-              <div className='flex w-full flex-col gap-1 sm:w-32'>
+              <div className='flex w-full flex-col gap-1 sm:w-20'>
                 <Label
                   htmlFor={`trigger-${site}`}
-                  className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'
+                  className='text-muted-foreground text-xs font-semibold'
                 >
                   Trigger
                 </Label>
@@ -190,15 +190,7 @@ export function SiteConfigSection({
           )
         })}
       </div>
-      <div className='border-border bg-muted/50 flex items-center justify-end gap-4 rounded-b-lg border-t p-6'>
-        <span
-          className={cn(
-            'text-muted-foreground text-sm transition-opacity duration-500',
-            isSaved ? 'opacity-100' : 'opacity-0',
-          )}
-        >
-          Saved ✓
-        </span>
+      <div className='border-border bg-muted/50 flex items-center gap-4 rounded-b-lg border-t p-6'>
         <Button
           variant='outline'
           className='dark:hover:bg-zinc-700 dark:hover:text-white'
@@ -208,6 +200,14 @@ export function SiteConfigSection({
           <Save className='mr-2 size-4' />
           {isSaving ? 'Saving...' : 'Save'}
         </Button>
+        <span
+          className={cn(
+            'text-muted-foreground ml-auto text-sm transition-opacity duration-500',
+            isSaved ? 'opacity-100' : 'opacity-0',
+          )}
+        >
+          Saved ✓
+        </span>
       </div>
     </div>
   )
