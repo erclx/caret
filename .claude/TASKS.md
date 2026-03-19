@@ -2,6 +2,11 @@
 
 ## Up next
 
+### Fix — Esc to cancel in edit form
+
+- [ ] Handle `keydown` Esc in the prompt edit form — trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean)
+- **Test strategy:** unit test in `prompt-form.test.tsx`; e2e in `e2e/ui.test.ts`
+
 ### Chore — logo
 
 - [ ] Design logo in Figma
