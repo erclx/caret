@@ -1,6 +1,23 @@
 # Wireframes
 
-> ASCII wireframes for planning purposes. Not final design — structure and layout only.
+ASCII wireframes for planning purposes. Structure and layout only, not final design. Update this doc when a new surface is designed or a layout decision changes.
+
+What belongs:
+
+- ASCII diagrams showing layout, hierarchy, and component placement
+- A context sentence per section describing when and where it appears
+- All meaningful states: empty, loading, error, and any variant where the layout changes significantly
+- Exact UI copy strings: labels, empty states, confirmation text, hints
+- Interaction rules: what triggers what, navigation flow, confirmation behavior
+- Intentional omissions with a brief reason, so they are not re-added later
+
+What does not belong:
+
+- Implementation details (event listeners, API call counts, storage keys); those live in ARCHITECTURE.md
+- Visual decisions (colors, spacing, typography); those live in DESIGN.md
+- Pixel values or final measurements; verify those in the browser
+
+Use `←` for inline annotations inside diagrams. Use sentence case for all text labels. Document state variants as separate subsections when the layout changes. Keep behavior bullets to UX only: what the user sees and does, not how the code handles it.
 
 ## 1. In-Chat Dropdown (Command Palette)
 
@@ -33,16 +50,15 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Max 6 rows visible before scroll
 - Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
-- Keydown listener on window capture phase to intercept before host page handlers fire
-- Empty state: "No prompts yet, click + New to add one."
+- Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
 - Dropdown width matches input element exactly
-- Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
+- Anchored above input; repositions when the input resizes
 - Insertion: removes trigger + query text, inserts prompt body at cursor position
 - After insertion dropdown dismisses and focus returns to chat input
 
 ## 2. Sidepanel
 
-> Popup code is kept but not surfaced. `chrome.action.onClicked` opens the sidepanel.
+> Popup code is kept but not surfaced. The extension icon opens the sidepanel.
 > All prompt management lives here.
 
 ### List view
@@ -151,7 +167,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty
 - Prompt body: required, must not be empty
 - Save writes to `chrome.storage.local` immediately, returns to list
-- Textarea scrollbar: thin 4px zinc thumb, transparent track (styled in `index.css`)
+- Textarea scrollbar: thin zinc thumb, transparent track
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints
 
@@ -190,7 +206,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — not configured
+### GitHub tab: not configured
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -204,7 +220,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — configured, never synced
+### GitHub tab: configured, never synced
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -219,7 +235,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — diff view
+### GitHub tab: diff view
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -242,7 +258,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-### GitHub tab — post-sync
+### GitHub tab: post-sync
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -259,16 +275,15 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 
 **GitHub behavior:**
 
-- `●` indicator: green = connected · red = error · gray = not configured
+- `●` indicator: green = connected · red = error; when not configured no dot is shown — the whole view shows "Set up in Options →" instead
 - Sync is always manual — no auto-sync
 - Cancel on diff discards fetch, does not modify storage
 - Apply does full replace of all prompts then returns to post-sync state
 - Not configured: show "Set up in Options →" link instead of sync button
 - PAT optional for public repos; required for private
-- Each sync: 1 directory listing request + 1 per snippet file (N+1 total)
-- Filename → slug: strip `.md` extension; file content → prompt body
+- Filename slug is the `.md` filename without the extension; file content becomes the prompt body
 
-## 3. Options Page
+## 3. Options page
 
 Section order: Data → Per-site configuration → GitHub sync.
 
@@ -362,12 +377,12 @@ Notes on per-site rows:
 - Import validates JSON with Zod before writing to storage; shows error on invalid file
 - Import merge conflict (duplicate name): last-write-wins
 - Trigger symbol editable per site; toggle enable/disable per site without losing trigger config
-- PAT stored in `chrome.storage.local` — displayed masked after save; not encrypted (documented risk)
-- PAT field: `type="password"`, full width
+- PAT displayed masked after save; not encrypted (documented risk)
+- PAT field: full width, masked
 - Repository and Branch fields: side by side, equal width
 - `?` icon on each field label opens a tooltip with usage hint; no arrow on tooltip
 - `●` connection dot: green = connected, red = error, gray = not configured; updates on save
-- No inline validation on PAT format — error shown only after failed save attempt
+- No inline validation on PAT format. Error shown only after a failed save attempt.
 - "Saved ✓" appears inline right of Save button, fades after 2.5s
 - Disconnect shown only when GitHub is configured; no confirmation dialog
-- Max width `max-w-3xl`, centered
+- Constrained max width, centered

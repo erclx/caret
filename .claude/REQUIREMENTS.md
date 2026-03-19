@@ -1,5 +1,22 @@
 # Requirements
 
+Describe what the product does and why. Not how it works; that lives in ARCHITECTURE.md. Update this doc when scope changes, goals shift, or a non-goal is promoted to a feature.
+
+What belongs:
+
+- The problem being solved and for whom
+- User-facing goals stated as outcomes, not implementation
+- Explicit non-goals: scope boundaries that prevent feature creep. Mark deferred items "(deferred)" to signal they are not permanently excluded.
+- MVP features as a numbered list: feature name and one-line description; no implementation detail
+- Tech stack as a plain list of tools; rationale lives in ARCHITECTURE.md
+- Hard constraints that shape all decisions
+
+What does not belong:
+
+- Implementation details, API names, or internal component references
+- Rationale for tech choices; that lives in ARCHITECTURE.md
+- Anything that describes how a feature is built rather than what it does
+
 ## Problem
 
 Power users of AI chat tools (Claude.ai, Gemini, ChatGPT) repeatedly type the same prompts.
@@ -14,7 +31,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 
 ## Non-goals
 
-- Cloud sync or user accounts (MVP) — GitHub sync is explicitly read-only and personal; not a backend or account system
+- Cloud sync or user accounts (MVP). GitHub sync is explicitly read-only and personal, not a backend or account system.
 - Prompt variables/placeholders (MVP)
 - Collaboration or shared libraries (MVP)
 - Mobile or Firefox support (MVP)
@@ -26,16 +43,16 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 
 ## MVP features
 
-1. **Prompt library CRUD** — create, edit, delete prompts with a name (slug) and body text
-2. **Trigger detection** — user types configurable symbol (default: `>`) in chat input → dropdown appears; only fires at position 0 or after whitespace, never mid-word
-3. **Fuzzy filter dropdown** — command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
-4. **Keyboard nav** — ↑↓, Ctrl+J/K, Ctrl+N/P to move; Enter to insert; Escape to dismiss
-5. **Prompt insertion** — inserts prompt text at cursor position in the chat input
-6. **Per-site trigger config** — configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
-7. **Side panel UI** — manage library from Chrome side panel; extension icon opens sidepanel via `chrome.action.onClicked`; popup entry kept dormant for rollback
-8. **Options page** — full settings including per-site trigger symbol config and GitHub sync config
-9. **JSON export/import** — backup and restore prompt library
-10. **GitHub sync** — pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
+1. **Prompt library CRUD**: create, edit, delete prompts with a name (slug) and body text
+2. **Trigger detection**: user types configurable symbol (default: `>`) in chat input → dropdown appears; only fires at position 0 or after whitespace, never mid-word
+3. **Fuzzy filter dropdown**: command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
+4. **Keyboard nav**: ↑↓, Ctrl+J (down), Ctrl+P (up) to move; Enter to insert; Escape to dismiss
+5. **Prompt insertion**: inserts prompt text at cursor position in the chat input
+6. **Per-site trigger config**: configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
+7. **Side panel UI**: manage library from Chrome side panel; extension icon opens sidepanel; popup entry kept dormant for rollback
+8. **Options page**: full settings including per-site trigger symbol config and GitHub sync config
+9. **JSON export/import**: backup and restore prompt library
+10. **GitHub sync**: pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
 
 ## Tech Stack
 
@@ -57,4 +74,4 @@ See `DESIGN.md` for all theme, token, typography, and component-specific decisio
 - No external backend for MVP
 - Must not break native slash commands on Claude.ai
 - chrome.storage.local (up to 10MB)
-- GitHub PAT stored in chrome.storage.local — acceptable for personal use; not encrypted
+- GitHub PAT stored in chrome.storage.local, acceptable for personal use; not encrypted

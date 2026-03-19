@@ -2,6 +2,23 @@
 
 Chrome extension (MV3) that lets users save reusable prompts and invoke them via a trigger symbol + fuzzy dropdown directly inside Claude.ai, Gemini, and ChatGPT.
 
+## Collaboration rules
+
+- Follow `standards/prose.md` for all document edits
+- When editing any doc, read surrounding content first and match its depth, length, and tone
+- Reason through the approach and confirm with the user before making any edits
+- After implementing changes, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`
+- After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
+
+## Before making changes
+
+- Check `.claude/TASKS.md` for current scope and status
+- Check `.claude/ARCHITECTURE.md` for decisions already made
+- Check `.claude/WIREFRAMES.md` for intended UI layout and behavior
+- Check `.claude/DESIGN.md` for tokens, typography, spacing, and component rules
+- Check `.claude/REQUIREMENTS.md` for feature scope and non-goals
+- Check `.claude/GOV.md` for coding standards before writing or editing any code
+
 ## Key paths
 
 - `src/content/` — injected UI and input detection per site
@@ -12,19 +29,6 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - `manifest.config.ts` — extension manifest (entry points, permissions, icons)
 - `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
 
-## Collaboration rules
+## Memory
 
-- Follow `standards/prose.md` for all document edits
-- Reason through the approach and confirm with the user before making any edits
-- After implementing changes, run `bun run format && bun run lint && bun run test:run`
-- After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
-- After editing `e2e/ui.test.ts`, run `bun run test:e2e` to verify all e2e tests pass
-
-## Before making changes
-
-- Check `.claude/TASKS.md` for current scope and status
-- Check `.claude/ARCHITECTURE.md` for decisions already made
-- Check `.claude/WIREFRAMES.md` for intended UI layout and behavior
-- Check `.claude/DESIGN.md` for tokens, typography, spacing, and component rules
-- Check `.claude/REQUIREMENTS.md` for feature scope and non-goals
-- Check `.claude/GOV.md` for coding standards before writing or editing any code
+- Write all memory files to `.claude/memory/`, not `~/.claude/projects/`
