@@ -1,8 +1,6 @@
 # Governance
 
-## 000-constitution
-
-```markdown
+<rule name="000-constitution">
 # ROLE PERSONA
 
 You are a Senior Principal Architect.
@@ -28,11 +26,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Favor explicit behavior over implicit magic or conventions.
 - Ensure data and configuration reside in designated Single Source of Truth locations.
 - Treat data as immutable unless mutation is explicitly required.
-```
+  </rule>
 
-## 010-testing
-
-```markdown
+<rule name="010-testing">
 # TESTING STANDARDS
 
 ## Test structure
@@ -61,11 +57,9 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Verification
 
 - Do not use snapshot testing for verification.
-```
+  </rule>
 
-## 020-concurrency
-
-```markdown
+<rule name="020-concurrency">
 # CONCURRENCY STANDARDS
 
 ## Async lifecycle
@@ -84,11 +78,9 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Failure handling
 
 - Handle partial failures in batched operations independently; do not fail the entire batch for a single error.
-```
+  </rule>
 
-## 030-error-handling
-
-```markdown
+<rule name="030-error-handling">
 # ERROR HANDLING STANDARDS
 
 ## Boundary validation
@@ -113,11 +105,9 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Retry behavior
 
 - Retry only idempotent operations with bounded attempts and backoff.
-```
+  </rule>
 
-## 040-performance
-
-```markdown
+<rule name="040-performance">
 # PERFORMANCE STANDARDS
 
 ## Resource loading
@@ -134,11 +124,9 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Paginate or stream unbounded data sets.
 - Do not optimize without measurement.
-```
+  </rule>
 
-## 050-logging
-
-```markdown
+<rule name="050-logging">
 # LOGGING STANDARDS
 
 ## Log coverage
@@ -155,11 +143,9 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Do not log credentials, tokens, or personally identifiable information.
 - Do not log implementation details; log observable behavior.
-```
+  </rule>
 
-## 060-naming
-
-```markdown
+<rule name="060-naming">
 # NAMING STANDARDS
 
 ## Semantics
@@ -174,11 +160,9 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Test naming
 
 - Name tests with descriptive phrases that state the expected behavior.
-```
+  </rule>
 
-## 070-planning
-
-```markdown
+<rule name="070-planning">
 # PLANNING STANDARDS
 
 ## Planning
@@ -188,11 +172,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Propose the simplest solution that satisfies the requirement before implementing complex patterns.
 - Write or update tests as part of every implementation plan.
 - Do not modify code without a confirmed plan.
-```
+  </rule>
 
-## 100-typescript
-
-```markdown
+<rule name="100-typescript">
 # TYPESCRIPT STANDARDS
 
 ## Casing conventions
@@ -225,11 +207,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Import from the module's source file directly; avoid barrel `index` re-exports.
 - Use `import type` for type-only imports to enable proper tree-shaking.
 - Enable `strict: true` in tsconfig.json with no exceptions.
-```
+  </rule>
 
-## 200-react
-
-```markdown
+<rule name="200-react">
 # REACT ARCHITECTURE STANDARDS
 
 ## Export conventions
@@ -274,18 +254,15 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use semantic HTML elements over `div`/`span` where a native element exists (`button`, `nav`, `main`, `section`).
 - Add `aria-label` to interactive elements that have no visible text label.
-```
+  </rule>
 
-## 210-ui
-
-```markdown
+<rule name="210-ui">
 # UI COPY STANDARDS
 
 ## Casing
 
 - Use sentence case for all rendered UI text: headings, labels, nav items, tab titles, and dialog titles.
 - Retain original casing for proper nouns and product names: `GitHub`, `macOS`, `TypeScript`.
-- Treat wireframe and planning doc text as structural placeholders; apply these rules to all final rendered strings regardless of how text appears in planning documents.
 
 ## Punctuation
 
@@ -306,11 +283,9 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Show format examples, not instructions: `name@example.com` over `Enter your email here`.
 - Reserve instructions for labels or helper text below the input.
-```
+  </rule>
 
-## 250-tailwind
-
-```markdown
+<rule name="250-tailwind">
 # TAILWIND CSS V4 STANDARDS
 
 ## Theme variables
@@ -331,11 +306,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Do not use the `!` important modifier, as it signals a broken abstraction.
 - Do not use inline `style` props for static styling; use arbitrary values `bg-[#316ff6]` instead.
 - Use inline styles only for dynamic values from JS/API, or to set CSS variables for utility consumption.
-```
+  </rule>
 
-## 260-shadcn
-
-```markdown
+<rule name="260-shadcn">
 # SHADCN/UI STANDARDS
 
 ## Source files
@@ -358,11 +331,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Compose shadcn primitives as documented. Do not destructure or restructure internal component trees.
 - Use `asChild` prop with `<Slot>` for polymorphic rendering. Do not wrap in extra DOM elements.
 - Use `sonner` for toasts, as the `toast` component is deprecated.
-```
+  </rule>
 
-## 300-testing-ts
-
-```markdown
+<rule name="300-testing-ts">
 # TYPESCRIPT/JAVASCRIPT TESTING TOOLING
 
 ## Unit and integration
@@ -384,11 +355,9 @@ Your primary directive is to maintain long-term system health over short-term co
 - Do not make real network calls in unit tests.
 - `describe()` labels use the exact identifier of the subject under test, preserving its natural casing: `describe('Component', ...)`, `describe('useHook', ...)`. For groupings that are not an identifier, use sentence case.
 - `it()` descriptions use "should" + sentence case: `it('should validate email format', ...)`.
-```
+  </rule>
 
-## 310-zod
-
-```markdown
+<rule name="310-zod">
 # ZOD VALIDATION STANDARDS
 
 ## Type inference
@@ -407,11 +376,9 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Do not use `z.any()`; use `z.unknown()` for truly ambiguous inputs.
 - Do not use `.passthrough()`; prefer `.strict()` at boundaries or explicit `.pick()`/`.omit()`.
-```
+  </rule>
 
-## 350-security-web
-
-```markdown
+<rule name="350-security-web">
 # WEB SECURITY STANDARDS
 
 ## Link safety
@@ -434,4 +401,4 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Third-party scripts
 
 - Audit and pin versions for all third-party scripts loaded in the browser.
-```
+  </rule>
