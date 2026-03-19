@@ -88,6 +88,86 @@ describe('OptionsApp', () => {
     })
   })
 
+  it('should show slash conflict warning immediately on load for claude.ai', () => {
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
+
+    expect(
+      screen.getByText("/ conflicts with this site's native slash menu"),
+    ).toBeInTheDocument()
+  })
+
+  it('should show slash conflict warning immediately when chatgpt.com trigger is set to /', async () => {
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
+    const user = userEvent.setup()
+
+    const chatgptInput = screen.getByRole('textbox', {
+      name: /trigger symbol for chatgpt\.com/i,
+    })
+    await user.clear(chatgptInput)
+    await user.type(chatgptInput, '/')
+
+    expect(
+      screen.getAllByText("/ conflicts with this site's native slash menu"),
+    ).toHaveLength(2)
+  })
+
+  it('should not show slash conflict warning for gemini.google.com with /', async () => {
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
+    const user = userEvent.setup()
+
+    const geminiInput = screen.getByRole('textbox', {
+      name: /trigger symbol for gemini\.google\.com/i,
+    })
+    await user.clear(geminiInput)
+    await user.type(geminiInput, '/')
+
+    // Only claude.ai (loaded with /) should show a warning, not gemini
+    expect(
+      screen.getAllByText("/ conflicts with this site's native slash menu"),
+    ).toHaveLength(1)
+  })
+
+  it('should allow saving with / despite the conflict warning', async () => {
+    render(
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>,
+    )
+    const user = userEvent.setup()
+
+    const chatgptInput = screen.getByRole('textbox', {
+      name: /trigger symbol for chatgpt\.com/i,
+    })
+    await user.clear(chatgptInput)
+    await user.type(chatgptInput, '/')
+    await user.tab()
+
+    const saveButton = getSiteConfigSection().getByRole('button', {
+      name: /^save$/i,
+    })
+    expect(saveButton).not.toBeDisabled()
+    await user.click(saveButton)
+
+    await waitFor(() => {
+      expect(mockUpdateSiteSettings).toHaveBeenCalledWith('chatgpt.com', {
+        triggerSymbol: '/',
+        enabled: true,
+      })
+    })
+  })
+
   it('should only call updateSiteSettings for modified sites on save', async () => {
     render(
       <TooltipProvider>
