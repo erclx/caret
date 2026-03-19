@@ -49,7 +49,7 @@ export function PromptList({
   }
 
   return (
-    <div className='-mx-4 flex-1 overflow-y-auto px-4 pb-4'>
+    <div className='flex-1 overflow-y-auto pb-4'>
       <div className='flex flex-col gap-2'>
         {prompts.map((prompt) => {
           if (confirmDeleteId === prompt.id) {
