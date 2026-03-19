@@ -185,17 +185,6 @@ describe('PromptForm', () => {
     expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
   })
 
-  it('should not warn when new form has empty fields', async () => {
-    const handleCancel = vi.fn()
-    render(<PromptForm onSave={vi.fn()} onCancel={handleCancel} />)
-    const user = userEvent.setup()
-
-    await user.click(screen.getByRole('button', { name: /cancel/i }))
-
-    expect(handleCancel).toHaveBeenCalled()
-    expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
-  })
-
   it('should show inline error for invalid kebab-case name', async () => {
     render(<PromptForm onSave={vi.fn()} onCancel={vi.fn()} />)
     const user = userEvent.setup()

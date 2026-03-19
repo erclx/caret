@@ -177,7 +177,9 @@ describe('PromptLibrary', () => {
 
     await user.click(screen.getByRole('button', { name: /github/i }))
 
-    expect(screen.getByText(/set up in options/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText(/set up in options/i)).toBeInTheDocument()
+    })
     expect(
       screen.queryByPlaceholderText(/search prompts/i),
     ).not.toBeInTheDocument()
