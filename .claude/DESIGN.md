@@ -12,17 +12,17 @@ All UI text uses sentence case — never title case. Proper nouns and product na
 
 ## Color
 
-No accent. Mono zinc scale only. These override shadcn's default HSL variables in `index.css` — not a separate token system. Two palettes switched via `prefers-color-scheme`.
+No accent. Mono zinc scale only. These are the actual shadcn HSL variable overrides in `index.css` — not a separate token system. Two palettes switched via `prefers-color-scheme`.
 
-| Token            | Light                | Dark                       | Usage                         |
-| ---------------- | -------------------- | -------------------------- | ----------------------------- |
-| `--background`   | `zinc-50` (#fafafa)  | `240 4% 15%` (#222226)     | Popup, sidepanel, dropdown bg |
-| `--surface`      | `white` (#ffffff)    | `240 3.7% 15.9%` (#27272a) | Cards, input bg               |
-| `--border`       | `zinc-200` (#e4e4e7) | `240 3.7% 25%` (#3a3a42)   | All borders                   |
-| `--text-primary` | `zinc-900` (#18181b) | `zinc-50` (#fafafa)        | Body text, prompt names       |
-| `--text-muted`   | `zinc-500` (#71717a) | `zinc-400` (#a1a1aa)       | Preview text, hints, labels   |
-| `--selected`     | `zinc-100` (#f4f4f5) | `240 3.7% 22%` (#333338)   | Dropdown selected row, hover  |
-| `--destructive`  | `red-600` (#dc2626)  | `0 72% 51%` (#e03131)      | Delete, error                 |
+| shadcn variable      | Light (`0 0% 98%`) | Dark (`240 4% 15%`) | Usage                         |
+| -------------------- | ------------------ | ------------------- | ----------------------------- |
+| `--background`       | `0 0% 98%`         | `240 4% 15%`        | Popup, sidepanel, dropdown bg |
+| `--card`             | `0 0% 100%`        | `240 3.7% 15.9%`    | Cards, input bg               |
+| `--border`           | `240 5.9% 90%`     | `240 3.7% 25%`      | All borders                   |
+| `--foreground`       | `240 10% 3.9%`     | `0 0% 98%`          | Body text, prompt names       |
+| `--muted-foreground` | `240 3.8% 46.1%`   | `240 5% 64.9%`      | Preview text, hints, labels   |
+| `--accent`           | `240 4.8% 95.9%`   | `240 3.7% 22%`      | Dropdown selected row, hover  |
+| `--destructive`      | `0 72% 51%`        | `0 72% 51%`         | Delete, error                 |
 
 Buttons use `--text-primary` on `--surface` with `--border` outline. Selection = background shift only, no color pop.
 
@@ -97,7 +97,7 @@ None for MVP. Speed > delight for a keyboard-driven tool.
 
 ### Sidepanel — GitHub Sync View
 
-- Connection indicator: 8px filled circle driven by `connectionHealth` in settings — `green-500` connected (or absent, fallback) / `red-500` error / `zinc-400` not configured; inline with repo name in `--text-muted`
+- Connection indicator: 8px filled circle driven by `connectionHealth` in settings — `green-500` connected / `red-500` error; inline with repo name in `--text-muted`. Only shown when GitHub is configured — when unconfigured the entire view is replaced by the "Set up in Options →" link (no dot displayed)
 - Status line: `hint` size, `--text-muted` — e.g. "Synced just now · 8 snippets", "Up to date · 8 snippets" (transient, after a no-change sync), or "Never synced"
 - Sync button: standard outline button, full width, lucide `RefreshCw` icon 16px left of label
 - Diff list: monospace slug names, `body` size; prefix symbols `+` in `green-600`/`green-400`, `~` in `zinc-500`, `-` in `--destructive`; "N unchanged" in `--text-muted` below list

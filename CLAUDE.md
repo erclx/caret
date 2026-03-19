@@ -12,13 +12,16 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - `manifest.config.ts` — extension manifest (entry points, permissions, icons)
 - `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
 
+## Memory
+
+- Write all memory files to `.claude/memory/`, not `~/.claude/projects/`
+
 ## Collaboration rules
 
 - Follow `standards/prose.md` for all document edits
 - Reason through the approach and confirm with the user before making any edits
-- After implementing changes, run `bun run format && bun run lint && bun run test:run`
+- After implementing changes, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`
 - After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
-- After editing `e2e/ui.test.ts`, run `bun run test:e2e` to verify all e2e tests pass
 
 ## Before making changes
 

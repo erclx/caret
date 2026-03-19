@@ -34,7 +34,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N intentionally excluded — Ctrl+K conflicts with Claude.ai native formatting shortcut
 - Keydown listener on window capture phase to intercept before host page handlers fire
-- Empty state: "No prompts yet, click + New to add one."
+- Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
 - Dropdown width matches input element exactly
 - Anchored above input via `getBoundingClientRect`; ResizeObserver repositions on input resize
 - Insertion: removes trigger + query text, inserts prompt body at cursor position
@@ -259,7 +259,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 
 **GitHub behavior:**
 
-- `●` indicator: green = connected · red = error · gray = not configured
+- `●` indicator: green = connected · red = error; when not configured no dot is shown — the whole view shows "Set up in Options →" instead
 - Sync is always manual — no auto-sync
 - Cancel on diff discards fetch, does not modify storage
 - Apply does full replace of all prompts then returns to post-sync state
