@@ -6,15 +6,6 @@
 
 ## Done
 
-### Chore — governance compliance pass
-
-- [] Replace default exports with named exports across all entry points
-- [] Replace non-null assertions with explicit null checks
-- [] Rename boolean variables to follow `is/has/should/can` prefix convention
-- [] Add `.strict()` to Zod schemas at external data boundaries
-- [] Fix `describe()` label casing in test files
-- [] Add `AbortSignal.timeout()` to all external GitHub fetch calls
-
 - [x] Planning & document setup
 
 - [x] Design setup
@@ -203,3 +194,12 @@
 
 - [x] First install empty state — onboarding hint shown only when prompt list is empty and no prompts have ever been created; uses key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install); once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently; deleted-all state shows "No prompts yet, click + New to add one."
 - **Test strategy: unit** — empty state branching in `PromptList`
+
+### Chore — governance compliance pass
+
+- [x] Replace default exports with named exports across all entry points
+- [x] Replace non-null assertions with explicit null checks
+- [x] Rename boolean variables to follow `is/has/should/can` prefix convention
+- [x] Add `.strict()` to Zod schemas at external data boundaries
+- [x] Fix `describe()` label casing in test files
+- [x] Add `AbortSignal.timeout()` to all external GitHub fetch calls
