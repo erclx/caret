@@ -2,11 +2,6 @@
 
 ## Up next
 
-### Fix — e2e stale empty-state assertion
-
-- [ ] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
-- **Test strategy: e2e** — `bun run test:e2e`
-
 ### Fix — options page fields reset on refresh
 
 - [ ] PAT, repository, and per-site config revert to defaults after refresh despite saved config
@@ -228,3 +223,8 @@
 - [x] Add `.strict()` to Zod schemas at external data boundaries
 - [x] Fix `describe()` label casing in test files
 - [x] Add `AbortSignal.timeout()` to all external GitHub fetch calls
+
+### Fix — e2e stale empty-state assertion
+
+- [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
+- **Test strategy: e2e** — `bun run test:e2e`
