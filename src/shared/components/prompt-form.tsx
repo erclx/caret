@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -48,19 +48,24 @@ export function PromptForm({
     }
   }
 
+  const onEscRef = useRef<() => void>(() => {})
+  onEscRef.current = () => {
+    if (discardTrigger !== null) {
+      setDiscardTrigger(null)
+    } else {
+      handleRequestDiscard('cancel')
+    }
+  }
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key !== 'Escape') return
       e.preventDefault()
-      if (discardTrigger !== null) {
-        setDiscardTrigger(null)
-      } else {
-        handleRequestDiscard('cancel')
-      }
+      onEscRef.current()
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  })
+  }, [])
 
   function handleRequestDiscard(trigger: 'back' | 'cancel') {
     if (isDirty) {
