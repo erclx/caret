@@ -118,6 +118,10 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 - No inline validation on PAT format. Error shown only after a failed save attempt.
 - Disconnect shown only when GitHub is configured. No confirmation dialog.
 
+## Logo
+
+`>` glyph mark in a 4px rounded-square container, mono zinc palette. Icon-only at all sizes; no wordmark at 16–128px. The rounded-square container handles varied backgrounds in the Chrome toolbar and store grid. Export as PNG at 16, 32, 48, and 128px.
+
 ## Iconography
 
 lucide-react, 16px, stroke 1.5px, `currentColor`. No filled icons. No custom icons for MVP.
