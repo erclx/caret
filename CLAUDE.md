@@ -19,6 +19,11 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - After implementing changes, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`
 - After editing `e2e/screenshot.ts`, run `bun run screenshot` to verify all captures succeed
 
+## Spelling
+
+- Add unknown words to the appropriate dictionary defined in `cspell.json`
+- Keep dictionary files sorted alphabetically
+
 ## Key paths
 
 - `src/content/` — injected UI and input detection per site
