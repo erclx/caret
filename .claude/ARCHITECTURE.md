@@ -196,6 +196,22 @@ Popup and sidepanel import the same React components from `src/shared/`. Only la
 
 Components in `src/components/ui/` are source of truth. Project-wide baseline defaults (such as focus ring width) may be modified directly in the primitive. Override per-component appearance via `className` props at the usage site.
 
+### CI: parallel jobs, gate only on data dependency
+
+Static checks, unit tests, and build run in parallel on every PR. `needs` is reserved for jobs that require an artifact from a prior job or that are prohibitively expensive relative to their gate. `e2e-tests` gates on `build` because it requires the built extension; `release` gates on all three parallel jobs plus `e2e-tests` because it should not publish until everything passes.
+
+### Release: `changelogithub` for GitHub Release notes, not CHANGELOG.md
+
+`changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. `CHANGELOG.md` is manually curated and is not touched by CI. The two surfaces serve different audiences: the GitHub Release is for repository visitors scanning a tag; `CHANGELOG.md` is for internal tracking.
+
+### Release: e2e tests run in release workflow only, not on PRs
+
+Running Playwright on every PR adds 3–5 minutes per run and requires Chrome installation. The pre-push hook already runs `bun run check` locally. E2e is reserved for the release gate where correctness is critical before a publish.
+
+### Release: `npm version --no-git-tag-version` to keep version and tag in sync
+
+`package.json` version is the source of truth for the zip filename (`crx-caret-{version}.zip`). The release script bumps the version with `npm version --no-git-tag-version`, then commits and tags manually using a conventional commit message. This keeps the commit message format consistent with the rest of the project rather than using npm's default format.
+
 ## Risks / open questions
 
 - **Claude.ai input insertion** — ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
