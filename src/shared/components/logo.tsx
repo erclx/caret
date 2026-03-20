@@ -13,7 +13,7 @@ export function Logo({
       aria-hidden='true'
     >
       <polyline
-        points='38,22 90,64 38,106'
+        points='38,18 84,64 38,110'
         stroke='currentColor'
         strokeWidth={strokeWidth}
         strokeLinecap='round'
