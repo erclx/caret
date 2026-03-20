@@ -18,13 +18,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Chore: logo
-
-- [ ] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
-- [ ] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
-- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
-- **Test strategy: none**: visual verification
-
 ### Chore: CI/CD pipeline
 
 - [ ] Add a GitHub Actions workflow: on version tag push, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`, then build and zip `dist/`
@@ -38,6 +31,7 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [ ] Write short description (132 char max) and full store description, drawing from the README
 - [ ] Add a privacy policy page (required: extension requests `storage`, `sidePanel`, and `scripting` permissions)
 - [ ] Produce at least one 1280×800 screenshot of the sidepanel in use
+- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
 - [ ] Register developer account ($5 one-time fee) if not done
 - [ ] Submit for review
 - **Test strategy: none**: human review by Chrome Web Store team
@@ -50,43 +44,11 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ### Chore: visual UI testing
 
-- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab, and options page
+- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
 - [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
 - **Test strategy: visual regression via Playwright screenshots**
 
 ## Done
-
-### Chore: governance compliance pass
-
-- [x] Replace default exports with named exports across all entry points
-- [x] Replace non-null assertions with explicit null checks
-- [x] Rename boolean variables to follow `is/has/should/can` prefix convention
-- [x] Add `.strict()` to Zod schemas at external data boundaries
-- [x] Fix `describe()` label casing in test files
-- [x] Add `AbortSignal.timeout()` to all external GitHub fetch calls
-
-### Fix: e2e stale empty-state assertion
-
-- [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
-- **Test strategy: e2e**: `bun run test:e2e`
-
-### Fix: options page fields reset on refresh
-
-- [x] PAT, repository, and per-site config revert to defaults after refresh despite saved config
-- **Test strategy: unit**: settings form initialization
-
-### Fix: slash trigger conflict on Claude.ai and ChatGPT
-
-- [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com: conflicts with their native slash command menus
-- **Test strategy: unit**: validation logic
-
-### Fix: options page UI polish
-
-- [x] Tighten per-site config section typography and sizing
-- [x] Align save button placement across sections: both left-aligned
-- [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
-- [x] Update wireframes to reflect current options page layout and section order
-- **Test strategy: none**: visual verification
 
 ### Fix: Esc to cancel in edit form
 
@@ -115,3 +77,9 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 - [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
 - **Test strategy: unit**: insertion output in detector
+
+### Chore: logo
+
+- [x] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
+- [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
+- **Test strategy: none**: visual verification

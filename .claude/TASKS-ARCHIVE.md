@@ -192,3 +192,35 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
 - [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
 - **Test strategy: none**: manual verification
+
+### Chore: governance compliance pass
+
+- [x] Replace default exports with named exports across all entry points
+- [x] Replace non-null assertions with explicit null checks
+- [x] Rename boolean variables to follow `is/has/should/can` prefix convention
+- [x] Add `.strict()` to Zod schemas at external data boundaries
+- [x] Fix `describe()` label casing in test files
+- [x] Add `AbortSignal.timeout()` to all external GitHub fetch calls
+
+### Fix: e2e stale empty-state assertion
+
+- [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
+- **Test strategy: e2e**: `bun run test:e2e`
+
+### Fix: options page fields reset on refresh
+
+- [x] PAT, repository, and per-site config revert to defaults after refresh despite saved config
+- **Test strategy: unit**: settings form initialization
+
+### Fix: slash trigger conflict on Claude.ai and ChatGPT
+
+- [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com: conflicts with their native slash command menus
+- **Test strategy: unit**: validation logic
+
+### Fix: options page UI polish
+
+- [x] Tighten per-site config section typography and sizing
+- [x] Align save button placement across sections: both left-aligned
+- [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
+- [x] Update wireframes to reflect current options page layout and section order
+- **Test strategy: none**: visual verification

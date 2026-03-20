@@ -9,6 +9,7 @@ import type { Prompt } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
 import { GitHubView } from './github-view'
+import { Logo } from './logo'
 import { PromptForm } from './prompt-form'
 import { PromptList } from './prompt-list'
 
@@ -85,10 +86,13 @@ export function PromptLibrary() {
 
   return (
     <div className='flex h-full flex-col gap-3 overflow-hidden px-1 pt-1'>
+      <h1 className='sr-only'>Caret</h1>
       <div className='flex shrink-0 items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <img src='/logo.png' alt='' className='size-5' aria-hidden='true' />
-          <span className='text-foreground text-sm font-semibold'>Caret</span>
+          <Logo className='size-4' />
+          <span className='text-foreground translate-y-px text-sm font-semibold'>
+            Caret
+          </span>
         </div>
         <Button
           variant='ghost'
