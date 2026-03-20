@@ -122,6 +122,9 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 
 `>` glyph mark in a 4px rounded-square container, mono zinc palette. Icon-only at all sizes; no wordmark at 16–128px. The rounded-square container handles varied backgrounds in the Chrome toolbar and store grid. Export as PNG at 16, 32, 48, and 128px.
 
+- Container: zinc-900 (`#18181b`), solid fill, no stroke, 4px radius, single variant
+- Glyph: white (`#ffffff`), geometric path (not a text character), two segments meeting at a point, 90 degrees total (each segment 45 degrees from vertical), bounding box 40% of container size, round stroke caps, 1.5px stroke at 16px scaled proportionally, 25% padding on each side
+
 ## Iconography
 
 lucide-react, 16px, stroke 1.5px, `currentColor`. No filled icons. No custom icons for MVP.

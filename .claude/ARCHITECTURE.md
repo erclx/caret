@@ -64,6 +64,7 @@ src/
 └── shared/
     ├── components/
     │   ├── github-view.tsx   # GitHub tab UI: status, diff, sync controls
+    │   ├── logo.tsx          # Inline SVG logo mark, currentColor, no container
     │   ├── prompt-form.tsx
     │   ├── prompt-form.test.tsx
     │   ├── prompt-library.tsx
