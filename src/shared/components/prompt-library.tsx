@@ -86,6 +86,7 @@ export function PromptLibrary() {
 
   return (
     <div className='flex h-full flex-col gap-3 overflow-hidden px-1 pt-1'>
+      <h1 className='sr-only'>Caret</h1>
       <div className='flex shrink-0 items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Logo className='size-4' />
