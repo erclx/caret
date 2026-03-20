@@ -20,9 +20,8 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ### Chore: logo
 
-- [ ] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
-- [ ] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
-- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
+- [x] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
+- [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
 - **Test strategy: none**: visual verification
 
 ### Chore: CI/CD pipeline
@@ -38,6 +37,7 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [ ] Write short description (132 char max) and full store description, drawing from the README
 - [ ] Add a privacy policy page (required: extension requests `storage`, `sidePanel`, and `scripting` permissions)
 - [ ] Produce at least one 1280×800 screenshot of the sidepanel in use
+- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
 - [ ] Register developer account ($5 one-time fee) if not done
 - [ ] Submit for review
 - **Test strategy: none**: human review by Chrome Web Store team
@@ -50,7 +50,7 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ### Chore: visual UI testing
 
-- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab, and options page
+- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
 - [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
 - **Test strategy: visual regression via Playwright screenshots**
 
