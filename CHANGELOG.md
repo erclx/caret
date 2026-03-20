@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- prompt library: add screen reader only heading
+- options: add screen reader only heading
+- ui: add SVG logo component and integrate into UI
 - options: enhance UI and add PAT link
 - prompts: add onboarding empty state for new users
 - github: add connection health, disconnect, and UX improvements
@@ -54,6 +57,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- logo: adjust polyline points for visual accuracy
 - prompt-form: handle Esc key to cancel edit or dismiss discard
 - options: polish UI layout and styling for options page
 - options: guard saved feedback and validate trigger input
