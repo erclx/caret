@@ -1,5 +1,6 @@
 bun
 bunx
+changelogithub
 clsx
 commitlint
 contenteditable
