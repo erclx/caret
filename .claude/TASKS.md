@@ -20,8 +20,39 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ### Chore: logo
 
-- [ ] Design logo in Figma
+- [ ] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
+- [ ] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
+- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
 - **Test strategy: none**: visual verification
+
+### Chore: CI/CD pipeline
+
+- [ ] Add a GitHub Actions workflow: on version tag push, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`, then build and zip `dist/`
+- [ ] Attach the zip to a GitHub Release with an auto-generated changelog via `changelogithub`
+- [ ] Automate Chrome Web Store publish via `chrome-web-store-upload-cli` after a successful release
+- **Test strategy: none**: pipeline correctness verified by a test tag push
+
+### Chore: Chrome Web Store listing
+
+- [ ] Write `README.md` with install instructions, feature overview, and supported sites
+- [ ] Write short description (132 char max) and full store description, drawing from the README
+- [ ] Add a privacy policy page (required: extension requests `storage`, `sidePanel`, and `scripting` permissions)
+- [ ] Produce at least one 1280×800 screenshot of the sidepanel in use
+- [ ] Register developer account ($5 one-time fee) if not done
+- [ ] Submit for review
+- **Test strategy: none**: human review by Chrome Web Store team
+
+### Chore: demo
+
+- [ ] Record a short screen capture showing trigger invocation, prompt selection, and insertion across at least one supported site
+- [ ] Export as GIF or MP4 for use in the README and store listing
+- **Test strategy: none**: visual verification
+
+### Chore: visual UI testing
+
+- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab, and options page
+- [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
+- **Test strategy: visual regression via Playwright screenshots**
 
 ## Done
 
