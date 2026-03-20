@@ -14,4 +14,5 @@ timonwong
 turbopack
 Vite
 vitest
+webstore
 zod
