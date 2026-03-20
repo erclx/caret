@@ -130,7 +130,7 @@ test.describe('Extension UI and Prompt Insertion E2E', () => {
 
     await page.keyboard.press('Enter')
 
-    await expect(textarea).toHaveValue('This is a test prompt body.')
+    await expect(textarea).toHaveValue('This is a test prompt body. ')
   })
 
   test('Should insert prompt into contenteditable (Gemini mock)', async ({
