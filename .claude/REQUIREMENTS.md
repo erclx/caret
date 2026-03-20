@@ -54,7 +54,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 9. **JSON export/import**: backup and restore prompt library
 10. **GitHub sync**: pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
 
-## Tech Stack
+## Tech stack
 
 - React 19 + TypeScript + Vite (via @crxjs/vite-plugin, Manifest V3)
 - Tailwind v4
