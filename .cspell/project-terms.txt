@@ -32,3 +32,4 @@ unconfigured
 unstub
 Wireframes
 wireframes
+wordmark
