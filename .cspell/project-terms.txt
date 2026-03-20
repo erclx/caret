@@ -4,6 +4,7 @@ borderless
 bradlc
 caret
 dbaeumer
+devconsole
 esbenp
 frontmatter
 lintstagedrc

@@ -18,13 +18,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Chore: CI/CD pipeline
-
-- [ ] Add a GitHub Actions workflow: on version tag push, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`, then build and zip `dist/`
-- [ ] Attach the zip to a GitHub Release with an auto-generated changelog via `changelogithub`
-- [ ] Automate Chrome Web Store publish via `chrome-web-store-upload-cli` after a successful release
-- **Test strategy: none**: pipeline correctness verified by a test tag push
-
 ### Chore: Chrome Web Store listing
 
 - [ ] Write `README.md` with install instructions, feature overview, and supported sites
@@ -83,3 +76,10 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
 - [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
 - **Test strategy: none**: visual verification
+
+### Chore: CI/CD pipeline
+
+- [x] Add a GitHub Actions workflow: on version tag push, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`, then build and zip `dist/`
+- [x] Attach the zip to a GitHub Release with an auto-generated changelog via `changelogithub`
+- [x] Automate Chrome Web Store publish via `chrome-web-store-upload-cli` after a successful release
+- **Test strategy: none**: pipeline correctness verified by a test tag push
