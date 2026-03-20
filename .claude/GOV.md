@@ -41,18 +41,21 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Test user-visible behavior rather than implementation details.
 - Do not test private functions or internal state directly.
-- Cover critical paths and edge cases; do not target arbitrary coverage percentages.
+- Cover critical paths and edge cases.
+- Do not target arbitrary coverage percentages.
 
 ## Organization and isolation
 
-- Group related tests using the framework's nesting mechanism; keep nesting shallow (max 2 levels).
-- Ensure tests are independent; each test should run in isolation without side effects.
+- Group related tests using the framework's nesting mechanism.
+- Keep nesting shallow (max 2 levels).
+- Ensure tests are independent with no shared side effects.
 - Clean up side effects and restore state after each test.
 
 ## Test data and async
 
-- Use factory functions or builders for test data; avoid inline object literals.
-- Always await async operations; avoid fire-and-forget promises in tests.
+- Use factory functions or builders for test data over inline object literals.
+- Always await async operations.
+- Do not fire-and-forget promises in tests.
 
 ## Verification
 
@@ -91,16 +94,19 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Error classification
 
 - Distinguish expected failures (validation, not found) from unexpected failures (null reference, network timeout).
-- Return structured error types for recoverable failures; propagate exceptions for programmer errors.
+- Return structured error types for recoverable failures.
+- Propagate exceptions for programmer errors.
 
 ## Error propagation
 
-- Handle errors at the layer that has enough context to respond meaningfully; do not catch and rethrow without adding value.
+- Handle errors at the layer with enough context to respond meaningfully.
+- Do not catch and rethrow without adding value.
 - Do not silently ignore errors.
 
 ## Error reporting
 
-- Include actionable context in error messages; never expose internal implementation details.
+- Include actionable context in error messages.
+- Never expose internal implementation details in error messages.
 
 ## Retry behavior
 
@@ -150,12 +156,13 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Semantics
 
-- Prefer descriptive names over abbreviations; `getUserProfile` over `getUP`.
-- Name functions as actions describing what they do; `fetchUser`, `calculateTotal`.
+- Prefer descriptive names over abbreviations: `getUserProfile` over `getUP`.
+- Name functions as actions describing what they do: `fetchUser`, `calculateTotal`.
 - Prefix booleans with `is`, `has`, `should`, or `can`: `isLoading`, `hasAccess`.
-- Avoid negative boolean names; `isEnabled` over `isNotDisabled`.
+- Avoid negative boolean names: `isEnabled` over `isNotDisabled`.
 - Prefix event handlers with `handle`: `handleClick`, `handleSubmit`.
-- Name collections as plurals; name items as singulars: `users` / `user`.
+- Name collections as plurals: `users`.
+- Name items as singulars: `user`.
 
 ## Test naming
 
@@ -186,7 +193,8 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Type declarations
 
-- Enforce explicit types or strict inference; use `unknown` over `any` absolutely.
+- Enforce explicit types or strict inference.
+- Use `unknown` over `any`.
 - Use `interface` for object shapes and component props.
 - Use `type` for unions, intersections, and utility types.
 - Do not prefix interfaces with `I`.
@@ -199,13 +207,13 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use built-in utility types (`Partial`, `Pick`, `Omit`) over manual type manipulation.
 - Prefer `readonly` properties for data objects.
 - Do not use non-null assertions.
-- Use `Promise.all()` for independent async operations to avoid serial waterfalls.
+- Use `Promise.all()` for independent async operations.
 
 ## Imports and configuration
 
 - Use absolute imports mapping `@/` to `src/`.
-- Import from the module's source file directly; avoid barrel `index` re-exports.
-- Use `import type` for type-only imports to enable proper tree-shaking.
+- Import from the module's source file directly over barrel `index` re-exports.
+- Use `import type` for type-only imports.
 - Enable `strict: true` in tsconfig.json with no exceptions.
   </rule>
 
@@ -225,16 +233,16 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Component patterns
 
-- Use function declarations for components, not arrow functions.
+- Use function declarations for components over arrow functions.
 - Define TypeScript interfaces for props immediately above the component.
 - Use `<>` shorthand for fragments unless key prop is required.
-- Use stable, unique keys for list items; never use array index.
-- Extract components when JSX exceeds a single responsibility; prefer composition of small components.
+- Use stable, unique keys for list items over array index.
+- Extract components when JSX exceeds a single responsibility.
 
 ## State and effects
 
 - Encapsulate data fetching and complex effects in custom hooks.
-- Do not use `useEffect` for derived state; use `useMemo`.
+- Use `useMemo` for derived state over `useEffect`.
 
 ## Memoization
 
@@ -247,13 +255,16 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Error boundaries and Suspense
 
-- Place error boundaries at route level; place Suspense at data-fetching boundaries.
+- Place error boundaries at route level.
+- Place Suspense at data-fetching boundaries.
 - Do not use a single root-level error boundary as the only safety net.
 
 ## Accessibility
 
-- Use semantic HTML elements over `div`/`span` where a native element exists (`button`, `nav`, `main`, `section`).
-- Add `aria-label` to interactive elements that have no visible text label.
+- Use semantic HTML elements over `div`/`span` where a native element exists.
+- Add `aria-label` to interactive elements with no visible text label.
+- Always provide an `alt` prop on `<img>` elements.
+- Use `alt=""` for decorative images with no informational value.
   </rule>
 
 <rule name="210-ui">
@@ -277,12 +288,19 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Error messages
 
 - State what to do, not what went wrong: `Enter a valid email` over `Email is invalid`.
-- Keep messages short and actionable; one sentence maximum.
+- Keep messages short and actionable.
+- One sentence maximum.
 
 ## Placeholder text
 
-- Show format examples, not instructions: `name@example.com` over `Enter your email here`.
+- Show format examples over instructions: `name@example.com` over `Enter your email here`.
 - Reserve instructions for labels or helper text below the input.
+
+## Alt text
+
+- Describe the content or function of the image, not its appearance.
+- Keep alt text concise; avoid prefixes like "Image of" or "Photo of".
+- Alt text for functional images (icons, buttons) should describe the action, not the graphic.
   </rule>
 
 <rule name="250-tailwind">
@@ -290,22 +308,25 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Theme variables
 
-- Use `@theme` for design tokens that generate utility classes; use `:root` for plain CSS variables with no utility counterpart.
-- Define dark mode color overrides in `.dark { }` at root level, not inside `@layer base`.
+- Use `@theme` for design tokens that generate utility classes.
+- Use `:root` for plain CSS variables with no utility counterpart.
+- Define dark mode color overrides in `.dark { }` at root level over `@layer base`.
 - Always pair light and dark utilities explicitly: `bg-white dark:bg-gray-900`.
 
 ## Layout and spacing
 
-- Use `flex` and `grid` for all layouts. Never use floats or absolute positioning for flow.
-- Use `gap-*` for sibling spacing over margins; `size-*` over `w-* h-*` for equal dimensions.
+- Use `flex` and `grid` for all layouts.
+- Never use floats or absolute positioning for flow.
+- Use `gap-*` for sibling spacing over margins.
+- Use `size-*` over `w-* h-*` for equal dimensions.
 - Mobile-first: default styles apply to mobile; use `sm:` and up to override.
 
 ## Class application
 
 - Use `cn()` from `@/lib/utils` for all conditional class application.
-- Do not use the `!` important modifier, as it signals a broken abstraction.
+- Do not use the `!` important modifier.
 - Do not use inline `style` props for static styling; use arbitrary values `bg-[#316ff6]` instead.
-- Use inline styles only for dynamic values from JS/API, or to set CSS variables for utility consumption.
+- Use inline styles only for dynamic values from JS/API or to set CSS variables for utility consumption.
   </rule>
 
 <rule name="260-shadcn">
@@ -313,24 +334,29 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Source files
 
-- Do not edit component files installed by the shadcn CLI; treat them as vendored. Check `components.json` for the install path. Extend behavior via wrapper components instead.
+- Do not edit component files installed by the shadcn CLI; treat them as vendored.
+- Check `components.json` for the install path.
+- Extend behavior via wrapper components over modifying installed files.
 
 ## Component authoring
 
-- Use `React.ComponentProps<typeof Primitive>` over `React.forwardRef`, as forwardRef is deprecated in React 19.
+- Use `React.ComponentProps<typeof Primitive>` over `React.forwardRef`.
 - Add `data-slot="component-name"` to every primitive root for Tailwind targeting.
 
 ## Tokens and styling
 
-- Use semantic color tokens (`bg-background`, `text-foreground`, `border-border`). Never use hardcoded colors like `bg-white` or `text-gray-900`.
+- Use semantic color tokens (`bg-background`, `text-foreground`, `border-border`) over hardcoded colors.
 - Use `cn()` from `@/lib/utils` for all className merging and conditional classes.
-- Do not override shadcn component internals with arbitrary classes. Extend via `className` prop only.
+- Do not override shadcn component internals with arbitrary classes.
+- Extend via `className` prop only.
 
 ## Composition
 
-- Compose shadcn primitives as documented. Do not destructure or restructure internal component trees.
-- Use `asChild` prop with `<Slot>` for polymorphic rendering. Do not wrap in extra DOM elements.
-- Use `sonner` for toasts, as the `toast` component is deprecated.
+- Compose shadcn primitives as documented.
+- Do not destructure or restructure internal component trees.
+- Use `asChild` prop with `<Slot>` for polymorphic rendering.
+- Do not wrap primitives in extra DOM elements.
+- Use `sonner` for toasts over the deprecated `toast` component.
   </rule>
 
 <rule name="300-testing-ts">
@@ -340,21 +366,29 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use Vitest for unit and integration tests.
 - Co-locate unit tests with their respective components.
-- Use `userEvent` for realistic interaction simulation in Vitest.
+- Use `userEvent` over synthetic events for interaction simulation.
 - Use MSW for network mocking; avoid manual fetch or axios mocks.
 - Select elements by accessibility attributes first (`getByRole`, `getByLabelText`).
 
 ## End-to-end
 
 - Use Playwright for end-to-end tests.
-- Place all Playwright tests within the `e2e/` directory; never inside `src/`.
+- Place all Playwright tests within the `e2e/` directory.
+- Never place Playwright tests inside `src/`.
+
+## Timers and async
+
+- Never use `vi.useFakeTimers()` in `beforeEach` when tests use `waitFor`, `act`, or `userEvent`.
+- Scope fake timers to the individual test that needs them.
+- Restore real timers with `vi.useRealTimers()` in a matching `afterEach`.
 
 ## Conventions
 
-- Use `.test.ts` / `.test.tsx` for unit tests and `.spec.ts` / `.spec.tsx` for integration tests.
+- Use `.test.ts` / `.test.tsx` for unit tests.
+- Use `.spec.ts` / `.spec.tsx` for integration tests.
 - Do not make real network calls in unit tests.
-- `describe()` labels use the exact identifier of the subject under test, preserving its natural casing: `describe('Component', ...)`, `describe('useHook', ...)`. For groupings that are not an identifier, use sentence case.
-- `it()` descriptions use "should" + sentence case: `it('should validate email format', ...)`.
+- `describe()` labels use the exact identifier of the subject under test in its natural casing.
+- `it()` descriptions use "should" + sentence case.
   </rule>
 
 <rule name="310-zod">
@@ -387,7 +421,8 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Content sanitization
 
-- Sanitize all user-generated content rendered via `dangerouslySetInnerHTML` using DOMPurify or equivalent; never use without sanitization.
+- Sanitize all user-generated content rendered via `dangerouslySetInnerHTML` using DOMPurify or equivalent.
+- Never use `dangerouslySetInnerHTML` without sanitization.
 
 ## Input validation
 
@@ -396,7 +431,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Storage and tokens
 
 - Do not store sensitive data (tokens, passwords, PII) in `localStorage` or `sessionStorage`.
-- Store authentication tokens in httpOnly cookies; never expose to JavaScript.
+- Store authentication tokens in httpOnly cookies over exposing them to JavaScript.
 
 ## Third-party scripts
 
