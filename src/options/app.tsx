@@ -18,6 +18,7 @@ export function App() {
   return (
     <div className='bg-background text-foreground min-h-screen p-8'>
       <div className='mx-auto max-w-3xl'>
+        <h1 className='sr-only'>Caret settings</h1>
         <DataSection />
         <SiteConfigSection
           settings={settings}
