@@ -1,0 +1,1 @@
+Storage holds the user's prompt library and settings. All data is written to chrome.storage.local and never leaves the device.
