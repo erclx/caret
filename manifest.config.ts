@@ -4,7 +4,8 @@ import pkg from './package.json'
 
 export default defineManifest({
   manifest_version: 3,
-  name: pkg.name,
+  name: 'Caret',
+  short_name: 'Caret',
   version: pkg.version,
   icons: {
     16: 'public/icons/16.png',
@@ -20,7 +21,7 @@ export default defineManifest({
       128: 'public/icons/128.png',
     },
   },
-  permissions: ['sidePanel', 'contentSettings', 'storage'],
+  permissions: ['sidePanel', 'storage'],
   background: {
     service_worker: 'src/background/index.ts',
     type: 'module',
