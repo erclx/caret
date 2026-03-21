@@ -7,6 +7,7 @@ export type DiffResult = {
   updated: string[]
   removed: string[]
   unchanged: string[]
+  skipped: string[]
 }
 
 type FetchResult =
@@ -124,6 +125,7 @@ export async function fetchSnippets(
 export function computeDiff(
   current: Prompt[],
   incoming: Snippet[],
+  localNames: Set<string> = new Set(),
 ): DiffResult {
   const currentMap = new Map(current.map((p) => [p.name, p.body]))
   const incomingMap = new Map(incoming.map((s) => [s.name, s.body]))
@@ -132,10 +134,15 @@ export function computeDiff(
   const updated: string[] = []
   const unchanged: string[] = []
   const removed: string[] = []
+  const skipped: string[] = []
 
   for (const [name, body] of incomingMap) {
     if (!currentMap.has(name)) {
-      added.push(name)
+      if (localNames.has(name)) {
+        skipped.push(name)
+      } else {
+        added.push(name)
+      }
     } else if (currentMap.get(name) !== body) {
       updated.push(name)
     } else {
@@ -149,5 +156,5 @@ export function computeDiff(
     }
   }
 
-  return { added, updated, removed, unchanged }
+  return { added, updated, removed, unchanged, skipped }
 }

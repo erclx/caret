@@ -303,6 +303,64 @@ describe('useGithubSync', () => {
     expect(savedSettings?.github?.lastSyncedAt).toBeGreaterThan(0)
   })
 
+  it('should not add a github prompt when a local prompt with the same name exists', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'chat-mode',
+        body: 'local body',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'chat-mode.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/chat-mode.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'github body',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    // No review shown — skipped-only diffs have no actionable changes
+    expect(result.current.diff).toBeNull()
+
+    // Local prompt is untouched
+    const savedPrompts = mockStorage.get('prompts') as {
+      name: string
+      body: string
+      source?: string
+    }[]
+    expect(savedPrompts).toHaveLength(1)
+    expect(savedPrompts[0].name).toBe('chat-mode')
+    expect(savedPrompts[0].body).toBe('local body')
+    expect(savedPrompts[0].source).toBeUndefined()
+  })
+
   it('should cancel sync: clear diff and return to idle', async () => {
     mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
     mockStorage.set('prompts', [

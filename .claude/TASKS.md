@@ -18,6 +18,11 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
+### Fix: duplicate prompts on GitHub sync when local and remote share a name
+
+- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
+- **Test strategy: unit**: new test covers the name-collision case in the sync apply path
+
 ### Chore: Chrome Web Store listing
 
 - [x] Write `README.md` with install instructions, feature overview, and supported sites

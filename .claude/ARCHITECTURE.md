@@ -164,6 +164,8 @@ Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file
 
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 
+If a GitHub snippet name matches a local prompt name, it is placed in a `skipped` category rather than `added`. The local prompt is preserved and the GitHub version is not imported. Skipped entries are shown in the diff review UI with a neutral indicator so the user understands why they were not added.
+
 PAT is optional for public repos; required for private.
 
 Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message.
