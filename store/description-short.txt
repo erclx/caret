@@ -1,0 +1,1 @@
+Save reusable prompts and invoke them via type-to-search dropdown inside Claude.ai, Gemini, and ChatGPT.
