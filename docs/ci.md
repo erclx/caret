@@ -56,4 +56,4 @@ Add these to **Settings → Secrets and variables → Actions** before the first
 
 ## Chrome Web Store
 
-The [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) is where extensions are managed. The first publish must be done manually to get the `CWS_EXTENSION_ID`. After that, `bun run release` handles the full publish cycle.
+For detailed steps on setting up the Chrome Web Store listing, including the initial manual publish and obtaining API credentials, refer to [store/listing.md](../store/listing.md). After the initial setup, `bun run release` handles the full publish cycle.
