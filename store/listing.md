@@ -12,28 +12,46 @@ Get these right before the first submission. They cannot change after the listin
 
 Everything else is editable at any time without re-review: descriptions, privacy policy URL, category, screenshots, promo tile, and store icon. New extension zips (version updates) always go through review, but that is expected.
 
-## Step 1: Produce the 1280×800 screenshot
+## Step 1: Produce store assets in Figma
+
+Follow `store/figma-store-icon.md` to produce `store/icon.png`, `store/figma-icons.md` to produce the manifest icons, and `store/figma-promo-tile.md` to produce `store/promo-440x280.png`.
+
+## Step 2: Produce the 1280×800 screenshot
 
 1. Build the extension: `bun run build`.
 2. Load the unpacked extension in Chrome: open `chrome://extensions/`, enable Developer mode, click "Load unpacked", select `dist/`.
-3. Open a supported chat site (Claude.ai or ChatGPT) in a tab.
-4. Click the Caret icon to open the side panel.
-5. Click in the chat input and type `>` to open the dropdown.
-6. Take a full-window OS screenshot (Win+Shift+S on Windows, Cmd+Shift+4 on Mac).
-7. Crop or resize to exactly 1280×800 in any image editor.
-8. Save as `store/screenshot-1280x800.png`.
+3. Use FancyZones to snap the Chrome window to exactly 1280×800.
+4. Open Claude.ai in a tab.
+5. Click the Caret icon to open the side panel.
+6. Click in the chat input and type `>` to open the dropdown.
+7. Capture the window with OBS and save as `store/screenshot-1280x800.png`.
 
-## Step 2: Produce the 440×280 promo tile
+## Step 3: Record the demo
 
-In Figma:
+Best done in the same Chrome session as step 2, with the extension already loaded.
 
-1. Create a 440×280 canvas.
-2. Use the zinc palette from `DESIGN.md` for the background.
-3. Place the Caret logo (`public/icons/128.png`) and the name "Caret".
-4. Add a short tagline, e.g. "Prompt library for AI chat".
-5. Export as PNG and save as `store/promo-440x280.png`.
+### Record (OBS Studio)
 
-## Step 3: Enable GitHub Pages for the privacy policy
+1. Create a scene with a Display Capture source at 1920×1080, 30 fps.
+2. In Settings → Output, set format to MP4 and note the output folder.
+3. Use FancyZones to snap Chrome into a side-by-side layout: side panel on the right, claude.ai on the left.
+4. Click Start Recording and perform this sequence: click the Caret icon to open the side panel → click New → enter a name (e.g. `summarize`) and a short body → Save → click into the claude.ai chat input → type `>` → type `sum` to filter → press Enter to insert.
+5. Click Stop Recording. Aim for raw footage around 60–90 seconds.
+
+### Edit (DaVinci Resolve)
+
+6. Import the raw clip and trim dead time at the start and end.
+7. Add a zoom-in on the side panel form while creating the prompt. The fields are small at full 1080p.
+8. Add a zoom-in on the chat input when the dropdown appears. This is the moment to make legible.
+9. Add minimal on-screen text labels (white, bottom-center, ~2 seconds each): `"Click Caret icon"` when opening the panel, `"Type > to invoke"` before typing in the chat input, `"Enter to insert"` on the keypress.
+10. Trim to 30–40 seconds total.
+
+### Export
+
+11. Export as `store/demo.mp4`.
+12. Add it to `README.md` once the file exists.
+
+## Step 4: Enable GitHub Pages for the privacy policy
 
 1. Go to the repo on GitHub → Settings → Pages.
 2. Under "Source", select "Deploy from a branch".
@@ -41,13 +59,12 @@ In Figma:
 4. Save. GitHub assigns a URL in the form `https://erclx.github.io/caret`.
 5. The privacy policy URL becomes `https://erclx.github.io/caret/privacy`. Use this in the listing form.
 
-## Step 4: Upload the package
+## Step 5: Upload the package
 
-1. Zip the `dist/` folder: `cd dist && zip -r ../caret.zip . && cd ..`.
-2. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and click "New item".
-3. Upload `caret.zip`. The dashboard assigns an extension ID. Save it.
+1. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and click "New item".
+2. Upload the zip from `release/`. The dashboard assigns an extension ID. Save it.
 
-## Step 5: Fill in the Store listing tab
+## Step 6: Fill in the Store listing tab
 
 - Full description: copy from `store/description-full.txt`
 - Short description: copy from `store/description-short.txt`
@@ -57,9 +74,7 @@ In Figma:
 - Category: Developer Tools
 - Support URL: `https://github.com/erclx/caret/issues`
 
-## Step 6: Fill in the Privacy tab
-
-Copy text from the files in `store/` for each field.
+## Step 7: Fill in the Privacy tab
 
 - Single purpose: copy from `store/privacy-single-purpose.txt`
 - sidePanel justification: copy from `store/privacy-sidepanel-justification.txt`
@@ -69,13 +84,13 @@ Copy text from the files in `store/` for each field.
 - Data usage: check none of the data categories; check all three certifications
 - Privacy policy URL: `https://erclx.github.io/caret/privacy`
 
-## Step 7: Add contact email and submit
+## Step 8: Add contact email and submit
 
 1. Go to the Account tab, add your contact email, and complete the verification.
 2. Confirm all fields are complete: descriptions, privacy policy URL, category, store icon, and screenshots.
 3. Click "Submit for review". Chrome review typically takes one to three business days.
 
-## Step 8: Get Chrome Web Store API credentials
+## Step 9: Get Chrome Web Store API credentials
 
 The release workflow needs four secrets to publish automatically. To generate them:
 
@@ -97,26 +112,16 @@ The release workflow needs four secrets to publish automatically. To generate th
    ```
    Copy the `refresh_token` value from the response.
 
-## Step 9: Add secrets to the GitHub repo
+## Step 10: Add secrets to the GitHub repo
 
 Go to the repo → Settings → Secrets and variables → Actions → New repository secret. Add all four:
 
 | Name                | Value       |
 | ------------------- | ----------- |
-| `CWS_EXTENSION_ID`  | from step 4 |
-| `CWS_CLIENT_ID`     | from step 8 |
-| `CWS_CLIENT_SECRET` | from step 8 |
-| `CWS_REFRESH_TOKEN` | from step 8 |
-
-## Step 10: Record the demo
-
-Best done in the same Chrome session as step 1.
-
-1. Use Loom, OBS, or the system screen recorder.
-2. Record this sequence: open side panel → create a prompt → switch to a chat tab → type `>` → filter by name → insert.
-3. Keep it under 60 seconds.
-4. Export as GIF or MP4 and save to `store/demo.gif` (or `store/demo.mp4`).
-5. Add it to `README.md` once the file exists.
+| `CWS_EXTENSION_ID`  | from step 5 |
+| `CWS_CLIENT_ID`     | from step 9 |
+| `CWS_CLIENT_SECRET` | from step 9 |
+| `CWS_REFRESH_TOKEN` | from step 9 |
 
 ## Step 11: Update the README store link
 
