@@ -12,15 +12,7 @@ Get these right before the first submission. They cannot change after the listin
 
 Everything else is editable at any time without re-review: descriptions, privacy policy URL, category, screenshots, promo tile, and store icon. New extension zips (version updates) always go through review, but that is expected.
 
-## Step 1: Enable GitHub Pages for the privacy policy
-
-1. Go to the repo on GitHub → Settings → Pages.
-2. Under "Source", select "Deploy from a branch".
-3. Set branch to `main`, folder to `/docs`.
-4. Save. GitHub assigns a URL in the form `https://erclx.github.io/caret`.
-5. The privacy policy URL becomes `https://erclx.github.io/caret/privacy`. Use this in the listing form.
-
-## Step 2: Produce the 1280×800 screenshot
+## Step 1: Produce the 1280×800 screenshot
 
 1. Build the extension: `bun run build`.
 2. Load the unpacked extension in Chrome: open `chrome://extensions/`, enable Developer mode, click "Load unpacked", select `dist/`.
@@ -31,7 +23,7 @@ Everything else is editable at any time without re-review: descriptions, privacy
 7. Crop or resize to exactly 1280×800 in any image editor.
 8. Save as `store/screenshot-1280x800.png`.
 
-## Step 3: Produce the 440×280 promo tile
+## Step 2: Produce the 440×280 promo tile
 
 In Figma:
 
@@ -41,23 +33,49 @@ In Figma:
 4. Add a short tagline, e.g. "Prompt library for AI chat".
 5. Export as PNG and save as `store/promo-440x280.png`.
 
-## Step 4: Create the listing and get the extension ID
+## Step 3: Enable GitHub Pages for the privacy policy
 
-The CI pipeline auto-publishes on version tags, but the listing must be created manually once to get an extension ID.
+1. Go to the repo on GitHub → Settings → Pages.
+2. Under "Source", select "Deploy from a branch".
+3. Set branch to `main`, folder to `/docs`.
+4. Save. GitHub assigns a URL in the form `https://erclx.github.io/caret`.
+5. The privacy policy URL becomes `https://erclx.github.io/caret/privacy`. Use this in the listing form.
 
-1. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and click "New item".
-2. Zip the `dist/` folder: `cd dist && zip -r ../caret.zip . && cd ..`.
+## Step 4: Upload the package
+
+1. Zip the `dist/` folder: `cd dist && zip -r ../caret.zip . && cd ..`.
+2. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and click "New item".
 3. Upload `caret.zip`. The dashboard assigns an extension ID. Save it.
-4. Fill in the listing fields:
-   - Full description: copy from `store/description-full.txt`
-   - Short description: copy from `store/description-short.txt` if the field exists; some dashboard versions omit it
-   - Store icon: upload `store/icon.png`
-   - Screenshots: upload `store/screenshot-1280x800.png`
-   - Small promo tile: upload `store/promo-440x280.png`
-   - Privacy policy URL: the GitHub Pages URL from step 1
-   - Category: Developer Tools
 
-## Step 5: Get Chrome Web Store API credentials
+## Step 5: Fill in the Store listing tab
+
+- Full description: copy from `store/description-full.txt`
+- Short description: copy from `store/description-short.txt`
+- Store icon: upload `store/icon.png`
+- Screenshots: upload `store/screenshot-1280x800.png`
+- Small promo tile: upload `store/promo-440x280.png`
+- Category: Developer Tools
+- Support URL: `https://github.com/erclx/caret/issues`
+
+## Step 6: Fill in the Privacy tab
+
+Copy text from the files in `store/` for each field.
+
+- Single purpose: copy from `store/privacy-single-purpose.txt`
+- sidePanel justification: copy from `store/privacy-sidepanel-justification.txt`
+- storage justification: copy from `store/privacy-storage-justification.txt`
+- Host permission justification: copy from `store/privacy-host-permission-justification.txt`
+- Remote code: select "No, I am not using remote code"
+- Data usage: check none of the data categories; check all three certifications
+- Privacy policy URL: `https://erclx.github.io/caret/privacy`
+
+## Step 7: Add contact email and submit
+
+1. Go to the Account tab, add your contact email, and complete the verification.
+2. Confirm all fields are complete: descriptions, privacy policy URL, category, store icon, and screenshots.
+3. Click "Submit for review". Chrome review typically takes one to three business days.
+
+## Step 8: Get Chrome Web Store API credentials
 
 The release workflow needs four secrets to publish automatically. To generate them:
 
@@ -79,20 +97,20 @@ The release workflow needs four secrets to publish automatically. To generate th
    ```
    Copy the `refresh_token` value from the response.
 
-## Step 6: Add secrets to the GitHub repo
+## Step 9: Add secrets to the GitHub repo
 
 Go to the repo → Settings → Secrets and variables → Actions → New repository secret. Add all four:
 
 | Name                | Value       |
 | ------------------- | ----------- |
 | `CWS_EXTENSION_ID`  | from step 4 |
-| `CWS_CLIENT_ID`     | from step 5 |
-| `CWS_CLIENT_SECRET` | from step 5 |
-| `CWS_REFRESH_TOKEN` | from step 5 |
+| `CWS_CLIENT_ID`     | from step 8 |
+| `CWS_CLIENT_SECRET` | from step 8 |
+| `CWS_REFRESH_TOKEN` | from step 8 |
 
-## Step 7: Record the demo
+## Step 10: Record the demo
 
-Best done in the same Chrome session as step 2.
+Best done in the same Chrome session as step 1.
 
 1. Use Loom, OBS, or the system screen recorder.
 2. Record this sequence: open side panel → create a prompt → switch to a chat tab → type `>` → filter by name → insert.
@@ -100,7 +118,7 @@ Best done in the same Chrome session as step 2.
 4. Export as GIF or MP4 and save to `store/demo.gif` (or `store/demo.mp4`).
 5. Add it to `README.md` once the file exists.
 
-## Step 8: Update the README store link
+## Step 11: Update the README store link
 
 Replace the placeholder in `README.md` with the real URL once the listing is live:
 
@@ -108,12 +126,7 @@ Replace the placeholder in `README.md` with the real URL once the listing is liv
 Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/caret/YOUR_EXTENSION_ID)
 ```
 
-## Step 9: Submit for review
-
-1. Confirm all fields are complete: descriptions, privacy policy URL, category, store icon, and screenshots.
-2. Click "Submit for review". Chrome review typically takes one to three business days.
-
-## Step 10: Cut a release tag
+## Step 12: Cut a release tag
 
 Once the listing is approved, run:
 
