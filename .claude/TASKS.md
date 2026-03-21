@@ -22,10 +22,11 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 - [ ] Write `README.md` with install instructions, feature overview, and supported sites
 - [ ] Write short description (132 char max) and full store description, drawing from the README
-- [ ] Add a privacy policy page (required: extension requests `storage`, `sidePanel`, and `scripting` permissions)
-- [ ] Produce at least one 1280×800 screenshot of the sidepanel in use
+- [ ] Add a privacy policy page hosted via GitHub Pages (required: extension requests `storage` and `sidePanel` permissions; confirm whether `contentSettings` is still used and remove it from the manifest if not)
+- [ ] Produce at least one 1280×800 screenshot of the sidepanel in use; compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visible
 - [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
-- [ ] Register developer account ($5 one-time fee) if not done
+- [ ] Update the manifest display name to a human-readable value and add a `short_name`
+- [ ] Register developer account ($5 one-time fee) if not done; this blocks submission
 - [ ] Submit for review
 - **Test strategy: none**: human review by Chrome Web Store team
 

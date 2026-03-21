@@ -32,6 +32,7 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - `src/options/` — per-site trigger config and settings page
 - `src/shared/` — hooks, types, utils and components shared across entry points
 - `manifest.config.ts` — extension manifest (entry points, permissions, icons)
+- `store/` — Chrome Web Store assets (descriptions, store icon, screenshots, promo tiles)
 - `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
 
 ## Memory
