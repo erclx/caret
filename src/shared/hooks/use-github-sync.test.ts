@@ -343,13 +343,21 @@ describe('useGithubSync', () => {
     })
 
     await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    expect(result.current.diff?.skipped).toEqual(['chat-mode'])
+    expect(result.current.diff?.added).toHaveLength(0)
+
+    // Apply with only skipped entries — local prompt must be untouched
+    await act(async () => {
+      await result.current.applySync()
+    })
+
+    await waitFor(() => {
       expect(result.current.status).toBe('idle')
     })
 
-    // No review shown — skipped-only diffs have no actionable changes
-    expect(result.current.diff).toBeNull()
-
-    // Local prompt is untouched
     const savedPrompts = mockStorage.get('prompts') as {
       name: string
       body: string

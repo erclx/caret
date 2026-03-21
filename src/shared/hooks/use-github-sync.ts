@@ -54,7 +54,8 @@ export function useGithubSync() {
     const hasChanges =
       diffResult.added.length +
         diffResult.updated.length +
-        diffResult.removed.length >
+        diffResult.removed.length +
+        diffResult.skipped.length >
       0
 
     if (!hasChanges) {
