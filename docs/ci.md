@@ -17,9 +17,9 @@ The script prompts for a bump type (patch, minor, or major), updates `package.js
 ### Job order
 
 ```plaintext
-static-checks ─┐
-unit-tests     ├─ e2e-tests ─ release ─ publish
-build          ─┘
+static-checks ─────────────┐
+unit-tests     ─────────────┼─ release ─ publish
+build          ─ e2e-tests ─┘
 ```
 
 `static-checks`, `unit-tests`, and `build` run in parallel. `e2e-tests` gates on `build`. `release` gates on all three parallel jobs plus `e2e-tests`, creates the GitHub Release via `changelogithub`, and attaches the zip. `publish` gates on `release` and uploads to the Chrome Web Store.
@@ -33,15 +33,27 @@ Add these to **Settings → Secrets and variables → Actions** before the first
 - `CWS_EXTENSION_ID`: the extension ID in the Chrome Web Store URL, available after the first manual upload
 - `CWS_CLIENT_ID`: from a Google Cloud OAuth 2.0 Desktop app client
 - `CWS_CLIENT_SECRET`: from the same OAuth client
-- `CWS_REFRESH_TOKEN`: run `bunx chrome-webstore-upload-cli login --client-id <id> --client-secret <secret>` locally, authorize in the browser, and copy the printed token
+- `CWS_REFRESH_TOKEN`: obtained via the Google OAuth flow described below
 
 ### Google Cloud setup
 
 1. Create a project at [Google Cloud Console](https://console.cloud.google.com).
 2. Enable the Chrome Web Store API.
-3. Go to **APIs & Services → Credentials → Create credentials → OAuth client ID**, set type to Desktop app, and download the credentials.
-4. Run the login command above to obtain the refresh token.
+3. Go to **APIs & Services → Credentials → Create credentials → OAuth client ID**, set type to Desktop app. Copy the client ID and client secret.
+4. Open the following URL in a browser, replacing `CLIENT_ID` with your value:
+   `https://accounts.google.com/o/oauth2/auth?client_id=CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/chromewebstore&response_type=code`
+5. Sign in with the account that owns the developer dashboard. Copy the authorization code shown.
+6. Exchange the code for a refresh token:
+   ```bash
+   curl -X POST https://oauth2.googleapis.com/token \
+     -d client_id=CLIENT_ID \
+     -d client_secret=CLIENT_SECRET \
+     -d code=AUTHORIZATION_CODE \
+     -d grant_type=authorization_code \
+     -d redirect_uri=urn:ietf:wg:oauth:2.0:oob
+   ```
+   Copy the `refresh_token` value from the response.
 
 ## Chrome Web Store
 
-The [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) is where extensions are managed. The first publish must be done manually to get the `CWS_EXTENSION_ID`. After that, `bun run release` handles the full publish cycle.
+For detailed steps on setting up the Chrome Web Store listing, including the initial manual publish and obtaining API credentials, refer to [store/listing.md](../store/listing.md). After the initial setup, `bun run release` handles the full publish cycle.

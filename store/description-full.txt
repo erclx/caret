@@ -1,0 +1,25 @@
+Claude.ai, Gemini, and ChatGPT have no native way to save and reuse prompts. Caret adds one. Save any prompt once, then type a trigger symbol in the chat input to search and insert it without leaving the keyboard. All data stays in your browser with nothing sent to any server.
+
+HOW IT WORKS
+
+Type your trigger symbol (default: >) at the start of a message or after a space. A dropdown opens with your saved prompts. Type to filter, use arrow keys or Ctrl+J/Ctrl+P to move, and press Enter or Tab to insert the prompt at your cursor. Press Escape to dismiss.
+
+FEATURES
+
+• Prompt library: create, edit, and delete prompts with a name and body
+• Type-to-search dropdown: command-palette style, appears above the chat input
+• Keyboard navigation: arrow keys, Ctrl+J/Ctrl+P, Enter or Tab to insert, Escape to dismiss
+• Per-site trigger config: set a different symbol per site to avoid conflicts with native shortcuts
+• GitHub sync: pull prompts from a GitHub repository; read-only and manual
+• JSON export and import: back up and restore your library
+• Local storage: all data stays in your browser with nothing sent to any server
+
+SUPPORTED SITES
+
+• Claude.ai
+• Gemini
+• ChatGPT
+
+PRIVACY
+
+Caret does not collect or transmit any personal data. All prompts and settings are stored locally in your browser. GitHub sync only contacts api.github.com when you manually trigger it.

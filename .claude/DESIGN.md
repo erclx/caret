@@ -123,7 +123,9 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 `>` glyph mark in a 4px rounded-square container, mono zinc palette. Icon-only at all sizes; no wordmark at 16–128px. The rounded-square container handles varied backgrounds in the Chrome toolbar and store grid. Export as PNG at 16, 32, 48, and 128px.
 
 - Container: zinc-900 (`#18181b`), solid fill, no stroke, 4px radius, single variant
-- Glyph: white (`#ffffff`), geometric path (not a text character), two segments meeting at a point, 90 degrees total (each segment 45 degrees from vertical), bounding box 40% of container size, round stroke caps, 16px stroke in a 128px viewBox (scales proportionally), 25% padding on each side
+- Glyph: white (`#ffffff`), geometric path (not a text character), two segments meeting at a point, 90 degrees total (each segment 45 degrees from vertical), bounding box 40% of container size, butt stroke caps, miter join at apex, 16px stroke in a 128px viewBox (scales proportionally), 25% padding on each side
+- Manifest icons (`public/icons/`): full-bleed at 16, 32, 48, and 128px
+- Store icon (`store/icon.png`): 96x96 artwork centered in a 128x128 transparent canvas with 16px padding on each side; Chrome applies its own frame and rounding on top
 
 ## Iconography
 

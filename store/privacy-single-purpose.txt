@@ -1,0 +1,1 @@
+Caret saves reusable text prompts and inserts them into AI chat interfaces. Users type a trigger character to open a fuzzy-search dropdown and select a prompt for insertion.

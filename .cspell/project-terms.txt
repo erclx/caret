@@ -18,6 +18,7 @@ Noto
 octocat
 parallelizable
 scannability
+sideload
 Segoe
 serviceworker
 shadcn

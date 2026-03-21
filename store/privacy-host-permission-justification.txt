@@ -1,0 +1,1 @@
+The content script injects the trigger dropdown into text inputs on AI chat sites. It activates only when the user types the configured trigger character and does not read, collect, or transmit page content.
