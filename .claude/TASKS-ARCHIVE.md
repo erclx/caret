@@ -4,15 +4,10 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 ### Chore: planning & document setup
 
-- [x] Planning & document setup
+- [x] Set up planning docs and initial project structure
+- [x] Configure design system: shadcn, zinc palette, Geist font, light/dark mode
 
-- [x] Design setup
-  - [x] Run `bunx shadcn@latest init`
-  - [x] Set `--radius: 0.25rem` (4px)
-  - [x] Override shadcn HSL variables with zinc scale (see DESIGN.md)
-  - [x] Import Geist font, apply to all roots
-  - [x] Verify light/dark mode via `prefers-color-scheme`
-  - **Test strategy: none**: visual verification in browser
+> Test strategy: visual verification
 
 ### Feature 1: Prompt storage layer
 
@@ -22,7 +17,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Build `useSettings` hook (read/write per-site config)
 - [x] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
 - [x] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files; overwrite the existing smoke test)
-- **Test strategy: unit**: pure logic, no DOM needed
+
+> Test strategy: pure logic
 
 ### Feature 2: Popup & sidepanel prompt library UI
 
@@ -30,7 +26,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] PromptForm component (create/edit)
 - [x] Delete with confirmation
 - [x] Wire popup/sidepanel to usePrompts
-- **Test strategy: unit**: component logic; e2e deferred
+
+> Test strategy: component logic
 
 ### Feature 3: Options page
 
@@ -38,7 +35,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Per-site trigger symbol config UI
 - [x] Enable/disable per site toggle
 - [x] Wire to useSettings
-- **Test strategy: unit**: settings form logic
+
+> Test strategy: settings form logic
 
 ### Feature 4: Content script: Input detection
 
@@ -46,7 +44,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Abstract input adapter (contenteditable vs textarea)
 - [x] Trigger symbol detection on keydown; symbol must be at position 0 or immediately preceded by whitespace; mid-word trigger (e.g. `word>`) must not fire
 - [x] Position/reposition on resize
-- **Test strategy: integration**: needs real DOM shapes per site
+
+> Test strategy: real DOM shapes per site
 
 ### Feature 5: Content script: Dropdown
 
@@ -54,7 +53,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Fuzzy filter against prompt library
 - [x] Keyboard nav: ↑↓, Ctrl+J (down), Ctrl+P (up), Enter/Tab, Escape
 - [x] Position/reposition on resize
-- **Test strategy: integration**: component + keyboard interaction
+
+> Test strategy: component and keyboard interaction
 
 ### Feature 6: Prompt insertion
 
@@ -104,7 +104,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Export prompts as JSON download
 - [x] Import from JSON file with Zod validation
 - [x] Handle merge conflicts (duplicate names)
-- **Test strategy: unit**: pure parse/validate logic
+
+> Test strategy: parse and validate logic
 
 ### Feature 8: GitHub Sync
 
@@ -118,7 +119,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Post-sync summary via `lastSyncedAt` / `lastSyncedCount` in settings
 - [x] Dev seeding: seed GitHub config from `VITE_GITHUB_*` env vars in background `onInstalled`
 - [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`; `app.tsx` is loading gate and composition only
-- **Test strategy: unit**: fetch parsing and mapping logic; e2e deferred (requires live PAT)
+
+> Test strategy: fetch parsing and mapping logic
 
 ### Chore: UI polish
 
@@ -126,13 +128,15 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Fix options page white flash on load
 - [x] Prompt form layout: textarea fills available height, buttons always visible below it
 - [x] Add PAT setup link in GitHub config section
-- **Test strategy: none**: visual verification in browser
+
+> Test strategy: visual verification
 
 ### Feat: prompt list improvements
 
 - [x] Name field: realtime kebab-case validation with inline error
 - [x] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
-- **Test strategy: unit**: validation logic
+
+> Test strategy: validation logic
 
 ### Chore: screenshot script rewrite
 
@@ -140,18 +144,21 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Remove stale popup captures
 - [x] Add dropdown capture on mocked chat page
 - [x] Add Gemini e2e insertion test (parity with Claude and ChatGPT)
-- **Test strategy: none**: visual output, manually verified
+
+> Test strategy: visual output, manually verified
 
 ### Feat: unsaved changes warning in prompt form
 
 - [x] Warn before discarding a dirty form: Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
 - [x] Two-anchor confirmation: Back shows confirmation at top replacing `← Back`; Cancel shows confirmation at bottom replacing Cancel/Save; Keep editing restores the replaced row
-- **Test strategy: unit**: dirty state detection
+
+> Test strategy: dirty state detection
 
 ### Feat: prompt form improvements
 
 - [x] Warn on duplicate name: prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
-- **Test strategy: unit**: duplicate detection logic
+
+> Test strategy: duplicate detection logic
 
 ### Feat: GitHub sync UX fixes
 
@@ -159,14 +166,16 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Fix options form initial status: `connectionStatus` now reads from `settings.github.connectionHealth` on load instead of always defaulting to `'connected'` when a config exists
 - [x] Post-apply feedback: sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
 - [x] Dev prefill: options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
-- **Test strategy: none**: visual verification
+
+> Test strategy: visual verification
 
 ### Feat: GitHub config improvements
 
 - [x] Realtime format validation on owner/repo field: must match `owner/repo` pattern, inline error if not
 - [x] Informative error messages on sync failure: surface the specific cause (bad PAT, repo not found, wrong path) rather than a generic error
 - [x] Auto-cancel sync when config changes mid-review: stale diff should not be applied against a different config
-- **Test strategy: unit**: validation logic and diff cancellation
+
+> Test strategy: validation logic and diff cancellation
 
 ### Fix: options page polish
 
@@ -174,24 +183,28 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Per-site trigger validation: show error on blur only, not on every keystroke
 - [x] Em dash audit: grep all rendered component strings for `—`; none found in rendered UI
 - [x] UI copy audit: apply copy standards to options page and shared utils error messages
-- **Test strategy: unit**: settings form logic; visual verification for copy
+
+> Test strategy: settings form logic and visual verification
 
 ### Fix: import feedback copy
 
 - [x] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
 - [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
-- **Test strategy: unit**: feedback string logic (`formatImportFeedback`)
+
+> Test strategy: feedback string logic
 
 ### Feat: onboarding
 
 - [x] First install empty state: onboarding hint shown only when prompt list is empty and no prompts have ever been created; uses key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install); once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently; deleted-all state shows "No prompts yet, click + New to add one."
-- **Test strategy: unit**: empty state branching in `PromptList`
+
+> Test strategy: empty state branching
 
 ### Fix: GitHub tab state + docs
 
 - [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
 - [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
-- **Test strategy: none**: manual verification
+
+> Test strategy: manual verification
 
 ### Chore: governance compliance pass
 
@@ -205,17 +218,20 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 ### Fix: e2e stale empty-state assertion
 
 - [x] Update sidepanel empty-state assertion in `e2e/ui.test.ts` to match current onboarding copy
-- **Test strategy: e2e**: `bun run test:e2e`
+
+> Test strategy: e2e
 
 ### Fix: options page fields reset on refresh
 
 - [x] PAT, repository, and per-site config revert to defaults after refresh despite saved config
-- **Test strategy: unit**: settings form initialization
+
+> Test strategy: settings form initialization
 
 ### Fix: slash trigger conflict on Claude.ai and ChatGPT
 
 - [x] Warn when trigger symbol is `/` on claude.ai or chatgpt.com: conflicts with their native slash command menus
-- **Test strategy: unit**: validation logic
+
+> Test strategy: validation logic
 
 ### Fix: options page UI polish
 
@@ -223,4 +239,5 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Align save button placement across sections: both left-aligned
 - [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
 - [x] Update wireframes to reflect current options page layout and section order
-- **Test strategy: none**: visual verification
+
+> Test strategy: visual verification

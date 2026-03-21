@@ -18,6 +18,78 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
+### Chore: demo
+
+- [ ] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [ ] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [ ] Export as `store/demo.mp4`
+- [ ] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
+
+### Chore: visual UI testing
+
+- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
+- [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
+
+> Test strategy: visual regression via Playwright screenshots
+
+## Done
+
+### Fix: duplicate prompts on GitHub sync when local and remote share a name
+
+- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
+
+> Test strategy: name-collision case in sync apply
+
+### Fix: Esc to cancel in edit form
+
+- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
+
+> Test strategy: dirty-state and keyboard interaction
+
+### Chore: test coverage, GitHub feature
+
+- [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
+- [x] Add unit tests for the GitHub options section: save, disconnect, connection status
+
+> Test strategy: sync and options section logic
+
+### Chore: test coverage, data section and content input
+
+- [x] Add unit tests for export and import handlers in the data section
+- [x] Improve unit test coverage for the content script input detection and insertion paths
+
+> Test strategy: data section and input detection
+
+### Fix: focus ring thickness and clipping
+
+- [x] Reduce focus ring width on buttons, inputs, and textareas: default width was visually heavy
+- [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent clip cut off the ring
+
+> Test strategy: visual verification
+
+### Fix: trailing space after prompt insertion
+
+- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
+
+> Test strategy: insertion output
+
+### Chore: logo
+
+- [x] Design `>` glyph mark in a rounded-square container, zinc palette
+- [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
+
+> Test strategy: visual verification
+
+### Chore: CI/CD pipeline
+
+- [x] Add a GitHub Actions workflow: on version tag push, run checks, build, and zip the extension
+- [x] Attach the zip to a GitHub Release with an auto-generated changelog
+- [x] Automate Chrome Web Store publish after a successful release
+
+> Test strategy: pipeline verified by test tag push
+
 ### Chore: Chrome Web Store listing
 
 - [x] Write `README.md` with install instructions, feature overview, and supported sites
@@ -29,65 +101,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Register developer account ($5 one-time fee) if not done; this blocks submission
 - [x] Fill in Privacy practices tab: single purpose description, host permission justification, remote code justification, sidePanel and storage justifications, data usage certification
 - [x] Add and verify contact email on the Account tab
-- [ ] Submit for review
-- **Test strategy: none**: human review by Chrome Web Store team
+- [x] Submit for review
 
-### Chore: demo
-
-- [ ] Record a short screen capture showing trigger invocation, prompt selection, and insertion across at least one supported site
-- [ ] Export as GIF or MP4 for use in the README and store listing
-- **Test strategy: none**: visual verification
-
-### Chore: visual UI testing
-
-- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
-- [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
-- **Test strategy: visual regression via Playwright screenshots**
-
-## Done
-
-### Fix: duplicate prompts on GitHub sync when local and remote share a name
-
-- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
-- **Test strategy: unit**: new test covers the name-collision case in the sync apply path
-
-### Fix: Esc to cancel in edit form
-
-- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
-- **Test strategy: unit and e2e**: unit covers dirty-state logic; e2e covers keyboard interaction in the real extension page
-
-### Chore: test coverage, GitHub feature
-
-- [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
-- [x] Add unit tests for the GitHub options section: save, disconnect, connection status
-- **Test strategy: unit**: no new behavior introduced; tests verify existing sync and options section logic
-
-### Chore: test coverage, data section and content input
-
-- [x] Add unit tests for export and import handlers in the data section
-- [x] Improve unit test coverage for the content script input detection and insertion paths
-- **Test strategy: unit**: no new behavior introduced; tests verify existing data section and adapter/detector logic
-
-### Fix: focus ring thickness and clipping
-
-- [x] Reduce focus ring width on buttons, inputs, and textareas: 3px was visually heavy
-- [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent `overflow-hidden` cut off the ring
-- **Test strategy: none**: visual verification
-
-### Fix: trailing space after prompt insertion
-
-- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
-- **Test strategy: unit**: insertion output in detector
-
-### Chore: logo
-
-- [x] Design `>` glyph mark in a 4px rounded-square container, zinc palette, matching DESIGN.md tokens
-- [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
-- **Test strategy: none**: visual verification
-
-### Chore: CI/CD pipeline
-
-- [x] Add a GitHub Actions workflow: on version tag push, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`, then build and zip `dist/`
-- [x] Attach the zip to a GitHub Release with an auto-generated changelog via `changelogithub`
-- [x] Automate Chrome Web Store publish via `chrome-web-store-upload-cli` after a successful release
-- **Test strategy: none**: pipeline correctness verified by a test tag push
+> Test strategy: Chrome Web Store human review
