@@ -1,0 +1,124 @@
+# Chrome Web Store listing
+
+Steps to complete the Caret listing. Developer account is registered and dashboard is accessible. Work through these in order; the API secrets must be in place before auto-publish works.
+
+## What is permanent
+
+Get these right before the first submission. They cannot change after the listing goes live.
+
+- **Extension ID**: assigned when you upload the first zip. Fixed forever. Every credential and deep link will reference it.
+- **Owner account**: the Google account that creates the listing owns it permanently. Use the right account from the start.
+- **Permissions**: adding permissions after publish triggers re-review and can cause rejection. The manifest currently declares `sidePanel` and `storage`. Confirm this is correct before uploading.
+
+Everything else is editable at any time without re-review: descriptions, privacy policy URL, category, screenshots, promo tile, and store icon. New extension zips (version updates) always go through review, but that is expected.
+
+## Step 1: Enable GitHub Pages for the privacy policy
+
+1. Go to the repo on GitHub → Settings → Pages.
+2. Under "Source", select "Deploy from a branch".
+3. Set branch to `main`, folder to `/docs`.
+4. Save. GitHub assigns a URL in the form `https://erclx.github.io/caret`.
+5. The privacy policy URL becomes `https://erclx.github.io/caret/privacy`. Use this in the listing form.
+
+## Step 2: Produce the 1280×800 screenshot
+
+1. Build the extension: `bun run build`.
+2. Load the unpacked extension in Chrome: open `chrome://extensions/`, enable Developer mode, click "Load unpacked", select `dist/`.
+3. Open a supported chat site (Claude.ai or ChatGPT) in a tab.
+4. Click the Caret icon to open the side panel.
+5. Click in the chat input and type `>` to open the dropdown.
+6. Take a full-window OS screenshot (Win+Shift+S on Windows, Cmd+Shift+4 on Mac).
+7. Crop or resize to exactly 1280×800 in any image editor.
+8. Save as `store/screenshot-1280x800.png`.
+
+## Step 3: Produce the 440×280 promo tile
+
+In Figma:
+
+1. Create a 440×280 canvas.
+2. Use the zinc palette from `DESIGN.md` for the background.
+3. Place the Caret logo (`public/icons/128.png`) and the name "Caret".
+4. Add a short tagline, e.g. "Prompt library for AI chat".
+5. Export as PNG and save as `store/promo-440x280.png`.
+
+## Step 4: Create the listing and get the extension ID
+
+The CI pipeline auto-publishes on version tags, but the listing must be created manually once to get an extension ID.
+
+1. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and click "New item".
+2. Zip the `dist/` folder: `cd dist && zip -r ../caret.zip . && cd ..`.
+3. Upload `caret.zip`. The dashboard assigns an extension ID. Save it.
+4. Fill in the listing fields:
+   - Full description: copy from `store/description-full.txt`
+   - Short description: copy from `store/description-short.txt` if the field exists; some dashboard versions omit it
+   - Store icon: upload `store/icon.png`
+   - Screenshots: upload `store/screenshot-1280x800.png`
+   - Small promo tile: upload `store/promo-440x280.png`
+   - Privacy policy URL: the GitHub Pages URL from step 1
+   - Category: Developer Tools
+
+## Step 5: Get Chrome Web Store API credentials
+
+The release workflow needs four secrets to publish automatically. To generate them:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) and create a new project (name it anything, e.g. `caret-cws`).
+2. Go to APIs & Services → Library, search for "Chrome Web Store API", and enable it.
+3. Go to APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID.
+4. Set application type to "Desktop app" and click Create. Copy the client ID and client secret.
+5. Open the following URL in a browser, replacing `CLIENT_ID` with your value:
+   `https://accounts.google.com/o/oauth2/auth?client_id=CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/chromewebstore&response_type=code`
+6. Sign in with the account that owns the developer dashboard. Copy the authorization code shown.
+7. Exchange the code for a refresh token:
+   ```bash
+   curl -X POST https://oauth2.googleapis.com/token \
+     -d client_id=CLIENT_ID \
+     -d client_secret=CLIENT_SECRET \
+     -d code=AUTHORIZATION_CODE \
+     -d grant_type=authorization_code \
+     -d redirect_uri=urn:ietf:wg:oauth:2.0:oob
+   ```
+   Copy the `refresh_token` value from the response.
+
+## Step 6: Add secrets to the GitHub repo
+
+Go to the repo → Settings → Secrets and variables → Actions → New repository secret. Add all four:
+
+| Name                | Value       |
+| ------------------- | ----------- |
+| `CWS_EXTENSION_ID`  | from step 4 |
+| `CWS_CLIENT_ID`     | from step 5 |
+| `CWS_CLIENT_SECRET` | from step 5 |
+| `CWS_REFRESH_TOKEN` | from step 5 |
+
+## Step 7: Record the demo
+
+Best done in the same Chrome session as step 2.
+
+1. Use Loom, OBS, or the system screen recorder.
+2. Record this sequence: open side panel → create a prompt → switch to a chat tab → type `>` → filter by name → insert.
+3. Keep it under 60 seconds.
+4. Export as GIF or MP4 and save to `store/demo.gif` (or `store/demo.mp4`).
+5. Add it to `README.md` once the file exists.
+
+## Step 8: Update the README store link
+
+Replace the placeholder in `README.md` with the real URL once the listing is live:
+
+```markdown
+Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/caret/YOUR_EXTENSION_ID)
+```
+
+## Step 9: Submit for review
+
+1. Confirm all fields are complete: descriptions, privacy policy URL, category, store icon, and screenshots.
+2. Click "Submit for review". Chrome review typically takes one to three business days.
+
+## Step 10: Cut a release tag
+
+Once the listing is approved, run:
+
+```bash
+bun run release
+```
+
+This bumps the version, commits, tags, and pushes. The CI pipeline runs all checks, builds the extension, creates a GitHub Release, and calls `chrome-webstore-upload-cli` to upload the zip automatically. All subsequent releases follow the same path with no manual steps.
