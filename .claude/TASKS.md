@@ -20,13 +20,15 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ### Chore: Chrome Web Store listing
 
-- [ ] Write `README.md` with install instructions, feature overview, and supported sites
-- [ ] Write short description (132 char max) and full store description, drawing from the README
-- [ ] Add a privacy policy page hosted via GitHub Pages (required: extension requests `storage` and `sidePanel` permissions; confirm whether `contentSettings` is still used and remove it from the manifest if not)
-- [ ] Produce at least one 1280×800 screenshot of the sidepanel in use; compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visible
-- [ ] Export a 440×280 promo tile for the Chrome Web Store small promo slot
-- [ ] Update the manifest display name to a human-readable value and add a `short_name`
-- [ ] Register developer account ($5 one-time fee) if not done; this blocks submission
+- [x] Write `README.md` with install instructions, feature overview, and supported sites
+- [x] Write short description (132 char max) and full store description, drawing from the README
+- [x] Add a privacy policy page hosted via GitHub Pages (required: extension requests `storage` and `sidePanel` permissions; confirm whether `contentSettings` is still used and remove it from the manifest if not)
+- [x] Produce at least one 1280×800 screenshot of the sidepanel in use; compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visible
+- [x] Export a 440×280 promo tile for the Chrome Web Store small promo slot
+- [x] Update the manifest display name to a human-readable value and add a `short_name`
+- [x] Register developer account ($5 one-time fee) if not done; this blocks submission
+- [x] Fill in Privacy practices tab: single purpose description, host permission justification, remote code justification, sidePanel and storage justifications, data usage certification
+- [x] Add and verify contact email on the Account tab
 - [ ] Submit for review
 - **Test strategy: none**: human review by Chrome Web Store team
 
