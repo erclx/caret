@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- assets: add updated extension icons and store assets
+- docs: add comprehensive guide for Chrome Web Store listing
+- store: add full and short descriptions for Chrome Web Store listing
+- snippets: add step-by-step generator and refine Figma prompt
+- docs: add privacy policy
+
+### Changed
+
+- ci: update Chrome Web Store section to reference listing guide
+- store: refine Chrome Web Store listing steps and privacy section
+- prompts: replace seed prompts with general-purpose examples
+- readme: overhaul content for clarity and store readiness
+- extension: update extension name to 'Caret' and remove 'contentSettings' permission
+
+### Added
+
 - prompt library: add screen reader only heading
 - options: add screen reader only heading
 - ui: add SVG logo component and integrate into UI
