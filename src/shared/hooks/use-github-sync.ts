@@ -43,14 +43,19 @@ export function useGithubSync() {
       return
     }
 
+    const localNames = new Set(
+      prompts.filter((p) => p.source !== 'github').map((p) => p.name),
+    )
     const diffResult = computeDiff(
       prompts.filter((p) => p.source === 'github'),
       result.snippets,
+      localNames,
     )
     const hasChanges =
       diffResult.added.length +
         diffResult.updated.length +
-        diffResult.removed.length >
+        diffResult.removed.length +
+        diffResult.skipped.length >
       0
 
     if (!hasChanges) {

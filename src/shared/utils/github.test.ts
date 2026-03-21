@@ -319,6 +319,30 @@ describe('computeDiff', () => {
     expect(result.added).toEqual(['new-prompt'])
   })
 
+  it('should mark incoming as skipped when the name matches a local prompt', () => {
+    const localNames = new Set(['chat-mode'])
+    const result = computeDiff(
+      [],
+      [{ name: 'chat-mode', body: 'github body' }],
+      localNames,
+    )
+
+    expect(result.skipped).toEqual(['chat-mode'])
+    expect(result.added).toHaveLength(0)
+  })
+
+  it('should add incoming prompts not in localNames even when localNames is provided', () => {
+    const localNames = new Set(['local-only'])
+    const result = computeDiff(
+      [],
+      [{ name: 'new-prompt', body: 'body' }],
+      localNames,
+    )
+
+    expect(result.added).toEqual(['new-prompt'])
+    expect(result.skipped).toHaveLength(0)
+  })
+
   it('should handle a mix of added, updated, removed, and unchanged', () => {
     const current = [
       makePrompt({ name: 'unchanged', body: 'same' }),

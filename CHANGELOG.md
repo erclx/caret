@@ -73,6 +73,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- github-sync: preserve local prompts on name collision with remote snippets
+- github-sync: show sync review screen when only skipped changes are detected
 - logo: adjust polyline points for visual accuracy
 - prompt-form: handle Esc key to cancel edit or dismiss discard
 - options: polish UI layout and styling for options page

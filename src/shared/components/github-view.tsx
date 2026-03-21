@@ -103,7 +103,8 @@ export function GitHubView({
             {diff.added.length +
               diff.updated.length +
               diff.removed.length +
-              diff.unchanged.length}{' '}
+              diff.unchanged.length +
+              diff.skipped.length}{' '}
             snippets fetched
           </p>
           <div className='flex-1 overflow-y-auto'>
@@ -146,6 +147,16 @@ export function GitHubView({
                     <span className='text-muted-foreground ml-auto'>
                       removed
                     </span>
+                  </div>
+                ))}
+                {diff.skipped.map((name) => (
+                  <div
+                    key={name}
+                    className='flex items-center gap-2 font-mono text-xs'
+                  >
+                    <span className='text-muted-foreground'>·</span>
+                    <span className='text-muted-foreground'>{name}</span>
+                    <span className='text-muted-foreground ml-auto'>local</span>
                   </div>
                 ))}
                 {diff.unchanged.length > 0 && (

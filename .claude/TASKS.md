@@ -46,6 +46,11 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Done
 
+### Fix: duplicate prompts on GitHub sync when local and remote share a name
+
+- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
+- **Test strategy: unit**: new test covers the name-collision case in the sync apply path
+
 ### Fix: Esc to cancel in edit form
 
 - [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation

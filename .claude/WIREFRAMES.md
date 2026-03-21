@@ -244,13 +244,14 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 │ [Prompts]  [GitHub]            │
 ├────────────────────────────────┤
 │ ● Connected · owner/repo       │
-│ 8 snippets fetched             │
+│ 9 snippets fetched             │
 ├────────────────────────────────┤
 │ CHANGES                        │
 │                                │
-│ + chat-mode        new         │
+│ + new-prompt       new         │
 │ ~ summarize        modified    │
 │ - old-snippet      removed     │
+│ · chat-mode        local       │
 │                                │
 │ 5 unchanged                    │
 ├────────────────────────────────┤
@@ -278,7 +279,8 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 - `●` indicator: green = connected · red = error; when not configured no dot is shown — the whole view shows "Set up in Options →" instead
 - Sync is always manual — no auto-sync
 - Cancel on diff discards fetch, does not modify storage
-- Apply does full replace of all prompts then returns to post-sync state
+- Apply is surgical: added snippets are inserted, updated prompts patch body only, removed prompts are deleted, local prompts are untouched
+- Skipped entries (`·`) are GitHub snippets whose name matches a local prompt; they are not imported and the local prompt is preserved
 - Not configured: show "Set up in Options →" link instead of sync button
 - PAT optional for public repos; required for private
 - Filename slug is the `.md` filename without the extension; file content becomes the prompt body

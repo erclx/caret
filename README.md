@@ -12,7 +12,7 @@ Available on the [Chrome Web Store](#) (link available after listing goes live).
 - Trigger symbol and type-to-search dropdown in any supported chat input
 - Keyboard navigation: ↑↓ or Ctrl+J/Ctrl+P to move, Enter or Tab to insert, Escape to dismiss
 - Per-site trigger config: set a different symbol per site to avoid conflicts with native shortcuts
-- GitHub sync: pull prompts from a repository, read-only and manual
+- GitHub sync: pull prompts from a repository, read-only; local prompts are kept if a remote prompt shares the same name
 - JSON export and import for backup and restore
 - All data stays in your browser with nothing sent to any server
 
