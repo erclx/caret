@@ -42,7 +42,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └─────────────────────────────────────────┘
 ```
 
-**Behavior:**
+Behavior:
 
 - Trigger: user types `>` (configurable per site)
 - Symbol only fires at position 0 or immediately after whitespace — mid-word does not trigger (e.g. `word>` must not open dropdown)
@@ -82,7 +82,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └────────────────────────────────┘
 ```
 
-**Behavior:**
+Behavior:
 
 - Click anywhere on row → opens edit form (full replace, no modal)
 - Hover → background shift + pointer cursor
@@ -156,7 +156,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 └────────────────────────────────┘
 ```
 
-**Behavior:**
+Behavior:
 
 - `← Back` and Cancel both check dirty state before navigating
 - Dirty = values differ from initial; new form with empty fields is never dirty
@@ -166,7 +166,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty
 - Prompt body: required, must not be empty
-- Save writes to `chrome.storage.local` immediately, returns to list
+- Save persists the prompt immediately and returns to list
 - Textarea scrollbar: thin zinc thumb, transparent track
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints
@@ -274,7 +274,7 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 └────────────────────────────────┘
 ```
 
-**GitHub behavior:**
+GitHub behavior:
 
 - `●` indicator: green = connected · red = error; when not configured no dot is shown — the whole view shows "Set up in Options →" instead
 - Sync is always manual — no auto-sync
@@ -283,7 +283,6 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 - Skipped entries (`·`) are GitHub snippets whose name matches a local prompt; they are not imported and the local prompt is preserved
 - Not configured: show "Set up in Options →" link instead of sync button
 - PAT optional for public repos; required for private
-- Filename slug is the `.md` filename without the extension; file content becomes the prompt body
 
 ## 3. Options page
 
@@ -373,7 +372,7 @@ Notes on per-site rows:
 └───────────────────────────────────────────────┘
 ```
 
-**Behavior:**
+Behavior:
 
 - Export downloads `caret-backup.json`
 - Import validates JSON with Zod before writing to storage; shows error on invalid file

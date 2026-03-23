@@ -31,36 +31,34 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 
 ## Non-goals
 
-- Cloud sync or user accounts (MVP). GitHub sync is explicitly read-only and personal, not a backend or account system.
-- Prompt variables/placeholders (MVP)
-- Collaboration or shared libraries (MVP)
-- Mobile or Firefox support (MVP)
+- Cloud sync or user accounts. GitHub sync is read-only and personal, not a backend or account system.
+- Collaboration or shared libraries. GitHub sync covers the read-only sharing case; real-time or multi-user collaboration is out.
+- Mobile or Firefox support
 - Floating badge or overlay injected into chat sites
 - Categories or tags (bet on fuzzy search + slug naming conventions)
-- Multi-paragraph / document-length prompts (sentence to paragraph max)
-- Per-site theming / blending with host site styles (MVP)
-- Push/write back to GitHub — extension is read-only; GitHub is source of truth
+- Per-site theming / blending with host site styles
+- Push/write back to GitHub: extension is read-only; GitHub is source of truth
 
 ## MVP features
 
-1. **Prompt library CRUD**: create, edit, delete prompts with a name (slug) and body text
-2. **Trigger detection**: user types configurable symbol (default: `>`) in chat input → dropdown appears; only fires at position 0 or after whitespace, never mid-word
-3. **Fuzzy filter dropdown**: command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
-4. **Keyboard nav**: ↑↓, Ctrl+J (down), Ctrl+P (up) to move; Enter to insert; Escape to dismiss
-5. **Prompt insertion**: inserts prompt text at cursor position in the chat input
-6. **Per-site trigger config**: configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
-7. **Side panel UI**: manage library from Chrome side panel; extension icon opens sidepanel; popup entry kept dormant for rollback
-8. **Options page**: full settings including per-site trigger symbol config and GitHub sync config
-9. **JSON export/import**: backup and restore prompt library
-10. **GitHub sync**: pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
+1. Prompt library CRUD: create, edit, delete prompts with a name (slug) and body text
+2. Trigger detection: user types configurable symbol (default: `>`) in chat input → dropdown appears; only fires at position 0 or after whitespace, never mid-word
+3. Fuzzy filter dropdown: command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
+4. Keyboard nav: ↑↓, Ctrl+J (down), Ctrl+P (up) to move; Enter to insert; Escape to dismiss
+5. Prompt insertion: inserts prompt text at cursor position in the chat input
+6. Per-site trigger config: configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
+7. Side panel UI: manage library from Chrome side panel; extension icon opens sidepanel; popup entry kept dormant for rollback
+8. Options page: full settings including per-site trigger symbol config and GitHub sync config
+9. JSON export/import: backup and restore prompt library
+10. GitHub sync: pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
 
 ## Tech stack
 
-- React 19 + TypeScript + Vite (via @crxjs/vite-plugin, Manifest V3)
+- React 19 + TypeScript + Vite
 - Tailwind v4
-- shadcn/ui — headless, Tailwind-native, tree-shakeable
-- lucide-react — icons
-- Zod — schema validation for prompts and settings
+- shadcn/ui
+- lucide-react
+- Zod
 - vitest (unit/integration), Playwright (e2e)
 - chrome.storage.local
 
@@ -71,7 +69,8 @@ See `DESIGN.md` for all theme, token, typography, and component-specific decisio
 ## Constraints
 
 - Manifest V3 only
-- No external backend for MVP
+- No external backend
 - Must not break native slash commands on Claude.ai
 - chrome.storage.local (up to 10MB)
 - GitHub PAT stored in chrome.storage.local, acceptable for personal use; not encrypted
+- New site support is added manually: update the manifest `matches` list and add a site-specific adapter. No user-configurable site support.

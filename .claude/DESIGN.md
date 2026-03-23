@@ -21,7 +21,7 @@ Use tables for token systems, one row per token. Use short bullets for component
 
 ## Personality
 
-**Utilitarian. Sharp. Out of the way.** If the user notices the design, we've failed.
+Utilitarian. Sharp. Out of the way. If the user notices the design, we've failed.
 
 ## General rules
 
@@ -77,7 +77,7 @@ Shadow on the dropdown only. It floats above the host page. Subtle two-layer dro
 
 ## Motion
 
-None for MVP. Speed over delight for a keyboard-driven tool.
+None. Speed over delight for a keyboard-driven tool.
 
 ## Components
 
@@ -129,4 +129,4 @@ None for MVP. Speed over delight for a keyboard-driven tool.
 
 ## Iconography
 
-lucide-react, 16px, stroke 1.5px, `currentColor`. No filled icons. No custom icons for MVP.
+lucide-react, 16px, stroke 1.5px, `currentColor`. No filled icons. No custom icons.

@@ -2,9 +2,13 @@
 
 Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbol in any supported chat input to search and insert saved prompts without leaving the keyboard.
 
+## Demo
+
+[Watch the demo on YouTube](https://youtu.be/p6Gc-wPjgO4)
+
 ## Installation
 
-Available on the [Chrome Web Store](#) (link available after listing goes live).
+Available on the [Chrome Web Store](https://chromewebstore.google.com/detail/caret/bpmdbibldelkpncegllkeegdpblgehgk).
 
 ## Features
 

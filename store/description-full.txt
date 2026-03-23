@@ -1,4 +1,4 @@
-Claude.ai, Gemini, and ChatGPT have no native way to save and reuse prompts. Caret adds one. Save any prompt once, then type a trigger symbol in the chat input to search and insert it without leaving the keyboard. All data stays in your browser with nothing sent to any server.
+Save any prompt once. Type a trigger symbol in the chat input to search and insert it without leaving the keyboard. All data stays in your browser with nothing sent to any server.
 
 HOW IT WORKS
 

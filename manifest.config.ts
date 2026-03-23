@@ -29,7 +29,11 @@ export default defineManifest({
   content_scripts: [
     {
       js: ['src/content/main.tsx'],
-      matches: ['https://*/*'],
+      matches: [
+        'https://claude.ai/*',
+        'https://gemini.google.com/*',
+        'https://chatgpt.com/*',
+      ],
     },
   ],
   side_panel: {
