@@ -98,19 +98,9 @@ The release workflow needs four secrets to publish automatically. To generate th
 2. Go to APIs & Services → Library, search for "Chrome Web Store API", and enable it.
 3. Go to APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID.
 4. Set application type to "Desktop app" and click Create. Copy the client ID and client secret.
-5. Open the following URL in a browser, replacing `CLIENT_ID` with your value:
-   `https://accounts.google.com/o/oauth2/auth?client_id=CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/chromewebstore&response_type=code`
-6. Sign in with the account that owns the developer dashboard. Copy the authorization code shown.
-7. Exchange the code for a refresh token:
-   ```bash
-   curl -X POST https://oauth2.googleapis.com/token \
-     -d client_id=CLIENT_ID \
-     -d client_secret=CLIENT_SECRET \
-     -d code=AUTHORIZATION_CODE \
-     -d grant_type=authorization_code \
-     -d redirect_uri=urn:ietf:wg:oauth:2.0:oob
-   ```
-   Copy the `refresh_token` value from the response.
+5. Add `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, and `CWS_AUTH_CODE` to `.env.local`. Leave `CWS_AUTH_CODE` blank for now.
+6. Run `bash scripts/cws-token.sh`. With no auth code set, it prints the OAuth URL with your client ID already filled in. Open that URL, sign in with the account that owns the developer dashboard, and copy the authorization code shown.
+7. Set `CWS_AUTH_CODE` in `.env.local` and re-run `bash scripts/cws-token.sh`. It prints the `refresh_token` value.
 
 ## Step 10: Add secrets to the GitHub repo
 
