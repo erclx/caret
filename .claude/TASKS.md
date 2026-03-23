@@ -18,15 +18,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Chore: demo
-
-- [ ] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
-- [ ] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
-- [ ] Export as `store/demo.mp4`
-- [ ] Add to `README.md` once the file exists
-
-> Test strategy: visual verification
-
 ### Chore: visual UI testing
 
 - [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
@@ -35,6 +26,15 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 > Test strategy: visual regression via Playwright screenshots
 
 ## Done
+
+### Chore: demo
+
+- [x] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [x] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [x] Export as `store/demo.mp4`
+- [x] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
 
 ### Fix: duplicate prompts on GitHub sync when local and remote share a name
 
