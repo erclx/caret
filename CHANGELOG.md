@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- github: fetching snippets no longer blocked by CORS when PAT is configured
 - manifest: restrict content script to supported sites only
 - github-sync: preserve local prompts on name collision with remote snippets
 - github-sync: show sync review screen when only skipped changes are detected
