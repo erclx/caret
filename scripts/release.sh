@@ -110,7 +110,18 @@ open_pr() {
   local version=$1
   gh pr create \
     --title "chore(release): v${version}" \
-    --body "Bump version to ${version}. The tag was pushed separately to trigger the release workflow." \
+    --body "## Summary
+
+- Bump version to ${version}
+
+## Key changes
+
+- \`package.json\` version bumped to ${version}
+
+## Testing
+
+- Tag \`v${version}\` was pushed separately to trigger the release workflow
+- Verify CI passes and the workflow publishes to the Chrome Web Store" \
     --base main
 }
 
