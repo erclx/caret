@@ -241,3 +241,9 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Update wireframes to reflect current options page layout and section order
 
 > Test strategy: visual verification
+
+### Fix: duplicate prompts on GitHub sync when local and remote share a name
+
+- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
+
+> Test strategy: name-collision case in sync apply
