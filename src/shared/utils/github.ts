@@ -101,7 +101,6 @@ export async function fetchSnippets(
     const snippets = await Promise.all(
       mdFiles.map(async (file) => {
         const res = await fetch(file.download_url, {
-          headers,
           signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS),
         })
         if (!res.ok) {
