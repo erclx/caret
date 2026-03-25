@@ -71,6 +71,7 @@ check_dependencies() {
   command -v git >/dev/null 2>&1 || log_error "git is not installed"
   command -v npm >/dev/null 2>&1 || log_error "npm is not installed"
   command -v node >/dev/null 2>&1 || log_error "node is not installed"
+  command -v gh >/dev/null 2>&1 || log_error "gh is not installed"
 }
 
 check_git_state() {
@@ -92,13 +93,25 @@ bump_version() {
 
 commit_and_tag() {
   local version=$1
+  local branch="chore/release-v${version}"
+  git checkout -b "$branch"
   git add package.json
   git commit -m "chore(release): v${version}"
   git tag "v${version}"
 }
 
 push_release() {
-  git push --follow-tags
+  local version=$1
+  git push -u origin "chore/release-v${version}"
+  git push origin "v${version}"
+}
+
+open_pr() {
+  local version=$1
+  gh pr create \
+    --title "chore(release): v${version}" \
+    --body "Bump version to ${version}. The tag was pushed separately to trigger the release workflow." \
+    --base main
 }
 
 main() {
@@ -130,11 +143,17 @@ main() {
   log_info "Tagged v${new_version}"
 
   log_step "Pushing"
-  push_release
+  push_release "$new_version"
+  log_info "Branch and tag pushed"
+
+  log_step "Opening PR"
+  local pr_url
+  pr_url=$(open_pr "$new_version")
+  log_info "PR: ${pr_url}"
 
   trap - EXIT
   echo -e "${GREY}└${NC}\n"
-  echo -e "${GREEN}✓ Released v${new_version} — workflow triggered${NC}"
+  echo -e "${GREEN}✓ Released v${new_version} — workflow triggered, PR open${NC}"
 }
 
 main "$@"
