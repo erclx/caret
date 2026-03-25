@@ -27,12 +27,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Done
 
-### Fix: duplicate prompts on GitHub sync when local and remote share a name
-
-- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
-
-> Test strategy: name-collision case in sync apply
-
 ### Fix: Esc to cancel in edit form
 
 - [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
@@ -86,7 +80,7 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Write `README.md` with install instructions, feature overview, and supported sites
 - [x] Write short description (132 char max) and full store description, drawing from the README
 - [x] Add a privacy policy page hosted via GitHub Pages (required: extension requests `storage` and `sidePanel` permissions; confirm whether `contentSettings` is still used and remove it from the manifest if not)
-- [x] Produce at least one 1280×800 screenshot of the sidepanel in use; compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visible
+- [x] Produce at least one 1280×800 screenshot of the sidepanel in use; compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visual
 - [x] Export a 440×280 promo tile for the Chrome Web Store small promo slot
 - [x] Update the manifest display name to a human-readable value and add a `short_name`
 - [x] Register developer account ($5 one-time fee) if not done; this blocks submission
@@ -95,6 +89,15 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Submit for review
 
 > Test strategy: Chrome Web Store human review
+
+### Chore: demo
+
+- [x] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [x] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [x] Export as `store/demo.mp4`
+- [x] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
 
 ### Fix: GitHub sync CORS error with PAT configured
 
