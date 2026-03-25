@@ -241,3 +241,12 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Update wireframes to reflect current options page layout and section order
 
 > Test strategy: visual verification
+
+### Chore: demo
+
+- [x] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [x] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [x] Export as `store/demo.mp4`
+- [x] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
