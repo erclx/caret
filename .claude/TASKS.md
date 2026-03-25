@@ -27,12 +27,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Done
 
-### Fix: duplicate prompts on GitHub sync when local and remote share a name
-
-- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
-
-> Test strategy: name-collision case in sync apply
-
 ### Fix: Esc to cancel in edit form
 
 - [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
@@ -95,6 +89,15 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Submit for review
 
 > Test strategy: Chrome Web Store human review
+
+### Chore: demo
+
+- [x] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [x] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [x] Export as `store/demo.mp4`
+- [x] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
 
 ### Fix: GitHub sync CORS error with PAT configured
 
