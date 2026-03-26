@@ -9,6 +9,7 @@ GREY='\033[0;90m'
 NC='\033[0m'
 
 log_info() { echo -e "${GREY}│${NC} ${GREEN}✓${NC} $1"; }
+log_add() { echo -e "${GREY}│${NC} ${GREEN}+${NC} $1"; }
 log_error() {
   echo -e "${GREY}│${NC} ${RED}✗${NC} $1"
   exit 1
@@ -163,7 +164,7 @@ main() {
 
   log_step "Bumping changelog"
   bump_changelog "$new_version"
-  log_info "CHANGELOG.md updated"
+  log_add "CHANGELOG.md updated"
 
   log_step "Committing and tagging"
   commit_and_tag "$new_version"
