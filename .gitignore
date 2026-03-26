@@ -32,6 +32,7 @@ screenshots
 
 # Claude
 .claude/.tmp/
+.claude/memory/
 
 # VS Code
 .vscode/*

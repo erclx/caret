@@ -24,6 +24,10 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - Add unknown words to the appropriate dictionary defined in `cspell.json`
 - Keep dictionary files sorted alphabetically
 
+## Snippets
+
+- When a snippet is referenced with `@`, execute its instructions immediately using available session context
+
 ## Key paths
 
 - `src/content/` — injected UI and input detection per site
@@ -34,7 +38,9 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - `manifest.config.ts` — extension manifest (entry points, permissions, icons)
 - `store/` — Chrome Web Store assets (descriptions, store icon, screenshots, promo tiles)
 - `.claude/` — planning docs (requirements, architecture, wireframes, design, tasks)
+- `docs/` — CI workflow, development setup, and privacy policy reference
 
 ## Memory
 
 - Write all memory files to `.claude/memory/`, not `~/.claude/projects/`
+- Follow `standards/prose.md` when writing memory file content
