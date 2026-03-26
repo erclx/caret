@@ -34,6 +34,7 @@ Skills provide Claude Code with domain-specific constraints and rules inline, so
 - Link to `references/` files explicitly so Claude knows to load them
 - Use progressive disclosure: `SKILL.md` for core instructions, `references/` for detail, `scripts/` for deterministic operations
 - Headers: sentence case for all levels (H1, H2, H3)
+- When executing multiple independent operations (file reads, shell commands), run them in parallel to reduce latency
 
 ## Scripts
 
@@ -49,6 +50,11 @@ Skills provide Claude Code with domain-specific constraints and rules inline, so
 - Invoke manually with `/skill-name` or `/<plugin>:skill-name` for plugin skills
 - Plugin skills are namespaced: `plugin-name:skill-name`
 - Priority order when names conflict: enterprise > personal > project > plugin
+
+## Execution
+
+- Task skills with preview+execute patterns must execute commands immediately after outputting the preview. Do not include "confirm before running" language or pause for user input.
+- Claude Code's tool permission dialog is the confirmation gate. The user hits Enter to approve or Escape to interrupt and revise.
 
 ## Examples
 
