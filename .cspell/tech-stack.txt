@@ -5,8 +5,11 @@ clsx
 commitlint
 contenteditable
 crxjs
+elif
+esac
 lucide
 nextjs
+pipefail
 shadcn
 shellcheck
 tailwindcss

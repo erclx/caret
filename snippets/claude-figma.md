@@ -1,7 +1,5 @@
 Read the relevant spec from `.claude/DESIGN.md` and any other design files needed, then write step-by-step Figma instructions to produce the component exactly.
 
-The component to draw: $ARGUMENTS
-
 For each step, specify the exact tool or keyboard shortcut to activate, which panel or field to click, and the exact value to enter.
 
 - Cover frame or group setup (dimensions, corner radius, fill).
