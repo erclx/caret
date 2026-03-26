@@ -7,6 +7,11 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - For any command that produces a FINAL COMMAND block, always show PREVIEW first. Never run a command without it.
 - If the user responds with a short affirmation or clearly signals intent to proceed, execute the FINAL COMMAND immediately without re-explaining or re-previewing.
 
+## Spelling
+
+- Add unknown words to the appropriate dictionary defined in `cspell.json`
+- Keep dictionary files sorted alphabetically
+
 ## Key Paths
 
 - `src/content/` — injected UI and input detection per site
