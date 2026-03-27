@@ -10,6 +10,15 @@ const mockPrompts: Prompt[] = [
   { id: '2', name: 'prompt-2', body: 'Body 2', createdAt: 0, updatedAt: 0 },
 ]
 
+const labeledPrompt: Prompt = {
+  id: '3',
+  name: 'summarize',
+  label: 'claude',
+  body: 'Summarize this.',
+  createdAt: 0,
+  updatedAt: 0,
+}
+
 describe('PromptList', () => {
   it('should render onboarding copy when empty and no prompts have ever been created', () => {
     render(
@@ -98,6 +107,36 @@ describe('PromptList', () => {
     await user.click(screen.getByRole('button', { name: /confirm delete/i }))
 
     expect(handleDelete).toHaveBeenCalledWith('1')
+  })
+
+  it('should render label and name for a labeled prompt', () => {
+    render(
+      <PromptList
+        prompts={[labeledPrompt]}
+        hasQuery={false}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText(/claude/)).toBeInTheDocument()
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+  })
+
+  it('should render name only for an unlabeled prompt', () => {
+    render(
+      <PromptList
+        prompts={[mockPrompts[0]]}
+        hasQuery={false}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText('prompt-1')).toBeInTheDocument()
+    expect(screen.queryByText('·')).not.toBeInTheDocument()
   })
 
   it('should not trigger onEdit when the delete button is clicked', async () => {

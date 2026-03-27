@@ -27,12 +27,16 @@ function makePrompt(overrides: Partial<Prompt> = {}): Prompt {
   }
 }
 
-function makeDirectoryEntry(name: string) {
+function makeFileEntry(name: string, path = 'snippets') {
   return {
     name,
     type: 'file',
-    download_url: `https://raw.githubusercontent.com/testuser/snippets/main/snippets/${name}`,
+    download_url: `https://raw.githubusercontent.com/testuser/snippets/main/${path}/${name}`,
   }
+}
+
+function makeDirEntry(name: string) {
+  return { name, type: 'dir', download_url: null }
 }
 
 describe('fetchSnippets', () => {
@@ -50,7 +54,7 @@ describe('fetchSnippets', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [makeDirectoryEntry('summarize.md')],
+        json: async () => [makeFileEntry('summarize.md')],
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
@@ -62,7 +66,11 @@ describe('fetchSnippets', () => {
     expect(result.ok).toBe(true)
     if (result.ok) {
       expect(result.snippets).toEqual([
-        { name: 'summarize', body: 'Summarize the following text.' },
+        {
+          name: 'summarize',
+          body: 'Summarize the following text.',
+          label: undefined,
+        },
       ])
     }
   })
@@ -73,7 +81,7 @@ describe('fetchSnippets', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [makeDirectoryEntry('fix-grammar.md')],
+        json: async () => [makeFileEntry('fix-grammar.md')],
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
@@ -95,7 +103,7 @@ describe('fetchSnippets', () => {
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [
-          makeDirectoryEntry('summarize.md'),
+          makeFileEntry('summarize.md'),
           {
             name: 'README.txt',
             type: 'file',
@@ -107,6 +115,11 @@ describe('fetchSnippets', () => {
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'Summarize.',
+      } as Response)
+      // images/ subdir listing — empty, no .md files
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [],
       } as Response)
 
     const result = await fetchSnippets(mockConfig)
@@ -158,7 +171,7 @@ describe('fetchSnippets', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [makeDirectoryEntry('summarize.md')],
+        json: async () => [makeFileEntry('summarize.md')],
       } as Response)
       .mockResolvedValueOnce({
         ok: false,
@@ -176,7 +189,7 @@ describe('fetchSnippets', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [makeDirectoryEntry('summarize.md')],
+        json: async () => [makeFileEntry('summarize.md')],
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
@@ -189,6 +202,100 @@ describe('fetchSnippets', () => {
     if (result.ok) {
       expect(result.snippets[0].body).toBe('Summarize the text.')
     }
+  })
+
+  it('should recurse into subdirectories and assign the folder name as label', async () => {
+    const mockFetch = vi.mocked(fetch)
+
+    mockFetch
+      // Root listing: one subdir "claude", no root .md files
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [makeDirEntry('claude')],
+      } as Response)
+      // claude/ listing
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [makeFileEntry('summarize.md', 'snippets/claude')],
+      } as Response)
+      // claude/summarize.md content
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'Summarize this.',
+      } as Response)
+
+    const result = await fetchSnippets(mockConfig)
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.snippets).toHaveLength(1)
+      expect(result.snippets[0]).toEqual({
+        name: 'summarize',
+        body: 'Summarize this.',
+        label: 'claude',
+      })
+    }
+  })
+
+  it('should fetch both root snippets and subdirectory snippets', async () => {
+    const mockFetch = vi.mocked(fetch)
+
+    mockFetch
+      // Root listing: one root file and one subdir
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          makeFileEntry('fix-grammar.md'),
+          makeDirEntry('claude'),
+        ],
+      } as Response)
+      // fix-grammar.md content (root file fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'Fix grammar.',
+      } as Response)
+      // claude/ listing
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [makeFileEntry('summarize.md', 'snippets/claude')],
+      } as Response)
+      // claude/summarize.md content
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'Summarize this.',
+      } as Response)
+
+    const result = await fetchSnippets(mockConfig)
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.snippets).toHaveLength(2)
+      const names = result.snippets.map((s) => s.name)
+      expect(names).toContain('fix-grammar')
+      expect(names).toContain('summarize')
+      const labeled = result.snippets.find((s) => s.name === 'summarize')
+      expect(labeled?.label).toBe('claude')
+      const unlabeled = result.snippets.find((s) => s.name === 'fix-grammar')
+      expect(unlabeled?.label).toBeUndefined()
+    }
+  })
+
+  it('should return an error when a subdirectory fetch fails', async () => {
+    const mockFetch = vi.mocked(fetch)
+
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [makeDirEntry('claude')],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+      } as Response)
+
+    const result = await fetchSnippets(mockConfig)
+
+    expect(result.ok).toBe(false)
   })
 })
 
@@ -281,19 +388,19 @@ describe('computeDiff', () => {
   it('should mark all incoming as added when current is empty', () => {
     const result = computeDiff([], [{ name: 'new-prompt', body: 'body' }])
 
-    expect(result.added).toEqual(['new-prompt'])
+    expect(result.added).toEqual([{ name: 'new-prompt', label: undefined }])
     expect(result.updated).toHaveLength(0)
     expect(result.removed).toHaveLength(0)
     expect(result.unchanged).toHaveLength(0)
   })
 
-  it('should mark prompts as unchanged when name and body match', () => {
+  it('should mark prompts as unchanged when composite key and body match', () => {
     const current = [makePrompt({ name: 'summarize', body: 'Summarize this.' })]
     const incoming = [{ name: 'summarize', body: 'Summarize this.' }]
 
     const result = computeDiff(current, incoming)
 
-    expect(result.unchanged).toEqual(['summarize'])
+    expect(result.unchanged).toEqual([{ name: 'summarize', label: undefined }])
     expect(result.added).toHaveLength(0)
     expect(result.updated).toHaveLength(0)
     expect(result.removed).toHaveLength(0)
@@ -305,7 +412,7 @@ describe('computeDiff', () => {
 
     const result = computeDiff(current, incoming)
 
-    expect(result.updated).toEqual(['summarize'])
+    expect(result.updated).toEqual([{ name: 'summarize', label: undefined }])
     expect(result.unchanged).toHaveLength(0)
   })
 
@@ -315,31 +422,31 @@ describe('computeDiff', () => {
 
     const result = computeDiff(current, incoming)
 
-    expect(result.removed).toEqual(['old-prompt'])
-    expect(result.added).toEqual(['new-prompt'])
+    expect(result.removed).toEqual([{ name: 'old-prompt', label: undefined }])
+    expect(result.added).toEqual([{ name: 'new-prompt', label: undefined }])
   })
 
-  it('should mark incoming as skipped when the name matches a local prompt', () => {
-    const localNames = new Set(['chat-mode'])
+  it('should mark incoming as skipped when the composite key matches a local prompt', () => {
+    const localKeys = new Set(['\x00chat-mode'])
     const result = computeDiff(
       [],
       [{ name: 'chat-mode', body: 'github body' }],
-      localNames,
+      localKeys,
     )
 
-    expect(result.skipped).toEqual(['chat-mode'])
+    expect(result.skipped).toEqual([{ name: 'chat-mode', label: undefined }])
     expect(result.added).toHaveLength(0)
   })
 
-  it('should add incoming prompts not in localNames even when localNames is provided', () => {
-    const localNames = new Set(['local-only'])
+  it('should add incoming prompts not in localKeys even when localKeys is provided', () => {
+    const localKeys = new Set(['\x00local-only'])
     const result = computeDiff(
       [],
       [{ name: 'new-prompt', body: 'body' }],
-      localNames,
+      localKeys,
     )
 
-    expect(result.added).toEqual(['new-prompt'])
+    expect(result.added).toEqual([{ name: 'new-prompt', label: undefined }])
     expect(result.skipped).toHaveLength(0)
   })
 
@@ -357,9 +464,35 @@ describe('computeDiff', () => {
 
     const result = computeDiff(current, incoming)
 
-    expect(result.unchanged).toEqual(['unchanged'])
-    expect(result.updated).toEqual(['updated'])
-    expect(result.removed).toEqual(['removed'])
-    expect(result.added).toEqual(['added'])
+    expect(result.unchanged).toEqual([{ name: 'unchanged', label: undefined }])
+    expect(result.updated).toEqual([{ name: 'updated', label: undefined }])
+    expect(result.removed).toEqual([{ name: 'removed', label: undefined }])
+    expect(result.added).toEqual([{ name: 'added', label: undefined }])
+  })
+
+  it('should treat same name with different labels as distinct composite keys', () => {
+    const current = [
+      makePrompt({ name: 'summarize', label: 'claude', body: 'body' }),
+    ]
+    const incoming = [{ name: 'summarize', label: 'writing', body: 'body' }]
+
+    const result = computeDiff(current, incoming)
+
+    expect(result.added).toEqual([{ name: 'summarize', label: 'writing' }])
+    expect(result.removed).toEqual([{ name: 'summarize', label: 'claude' }])
+    expect(result.unchanged).toHaveLength(0)
+  })
+
+  it('should match labeled prompts by composite key', () => {
+    const current = [
+      makePrompt({ name: 'summarize', label: 'claude', body: 'old' }),
+    ]
+    const incoming = [{ name: 'summarize', label: 'claude', body: 'new' }]
+
+    const result = computeDiff(current, incoming)
+
+    expect(result.updated).toEqual([{ name: 'summarize', label: 'claude' }])
+    expect(result.added).toHaveLength(0)
+    expect(result.removed).toHaveLength(0)
   })
 })

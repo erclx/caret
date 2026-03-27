@@ -16,6 +16,8 @@ import { PromptList } from './prompt-list'
 type Tab = 'prompts' | 'github'
 type View = 'list' | 'form'
 
+const UNLABELED = '__unlabeled__'
+
 export function PromptLibrary() {
   const {
     prompts,
@@ -29,14 +31,33 @@ export function PromptLibrary() {
   const [view, setView] = useState<View>('list')
   const [tab, setTab] = useState<Tab>('prompts')
   const [query, setQuery] = useState('')
+  const [activeLabels, setActiveLabels] = useState<Set<string>>(new Set())
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
   const searchRef = useRef<HTMLInputElement | null>(null)
 
+  const allLabels = useMemo(() => {
+    const labels = new Set<string>()
+    for (const p of prompts) {
+      if (p.label) labels.add(p.label)
+    }
+    return [...labels].sort()
+  }, [prompts])
+
+  const hasUnlabeled = useMemo(() => prompts.some((p) => !p.label), [prompts])
+
   const filteredPrompts = useMemo(() => {
+    let result = prompts
     const trimmed = query.trim().toLowerCase()
-    if (!trimmed) return prompts
-    return prompts.filter((p) => p.name.toLowerCase().includes(trimmed))
-  }, [prompts, query])
+    if (trimmed)
+      result = result.filter((p) => p.name.toLowerCase().includes(trimmed))
+    if (activeLabels.size > 0) {
+      result = result.filter((p) => {
+        const key = p.label ?? UNLABELED
+        return activeLabels.has(key)
+      })
+    }
+    return result
+  }, [prompts, query, activeLabels])
 
   if (isLoading) {
     return (
@@ -56,7 +77,11 @@ export function PromptLibrary() {
     setView('form')
   }
 
-  async function handleSave(data: { name: string; body: string }) {
+  async function handleSave(data: {
+    name: string
+    label?: string
+    body: string
+  }) {
     if (editingPrompt) {
       await updatePrompt(editingPrompt.id, data)
     } else {
@@ -69,14 +94,29 @@ export function PromptLibrary() {
     setView('list')
   }
 
-  const existingNames = prompts.map((p) => p.name)
+  function handleToggleLabel(key: string) {
+    setActiveLabels((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) {
+        next.delete(key)
+      } else {
+        next.add(key)
+      }
+      return next
+    })
+  }
+
+  const existingPrompts = prompts.map((p) => ({ label: p.label, name: p.name }))
+  const hasActiveFilter = query.trim().length > 0 || activeLabels.size > 0
+  const showPills = allLabels.length > 0
 
   if (view === 'form') {
     return (
-      <div className='flex h-full flex-col overflow-hidden pr-2'>
+      <div className='flex h-full flex-col overflow-hidden pt-1 pr-2 pb-1'>
         <PromptForm
           initialPrompt={editingPrompt}
-          existingNames={existingNames}
+          existingPrompts={existingPrompts}
+          existingLabels={allLabels}
           onSave={handleSave}
           onCancel={handleBack}
         />
@@ -110,7 +150,7 @@ export function PromptLibrary() {
             <button
               key={t}
               className={cn(
-                'rounded-md px-3 py-1 text-sm font-medium capitalize transition-colors',
+                'focus-visible:ring-ring/50 rounded-md px-3 py-1 text-sm font-medium capitalize transition-colors outline-none focus-visible:ring-2',
                 tab === t
                   ? 'bg-accent text-accent-foreground'
                   : 'text-muted-foreground hover:text-foreground',
@@ -145,7 +185,7 @@ export function PromptLibrary() {
             />
             {query && (
               <button
-                className='text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2 transition-colors'
+                className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
                 onClick={() => {
                   setQuery('')
                   searchRef.current?.focus()
@@ -156,9 +196,57 @@ export function PromptLibrary() {
               </button>
             )}
           </div>
+          {showPills && (
+            <div className='flex shrink-0 flex-wrap gap-1.5'>
+              <button
+                className={cn(
+                  'focus-visible:ring-ring/50 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
+                  activeLabels.size === 0
+                    ? 'bg-accent text-foreground'
+                    : 'border-border text-muted-foreground border bg-transparent',
+                )}
+                onClick={() => setActiveLabels(new Set())}
+              >
+                All
+              </button>
+              {allLabels.map((l) => (
+                <button
+                  key={l}
+                  className={cn(
+                    'focus-visible:ring-ring/50 flex items-center gap-1 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
+                    activeLabels.has(l)
+                      ? 'bg-accent text-foreground'
+                      : 'border-border text-muted-foreground border bg-transparent',
+                  )}
+                  onClick={() => handleToggleLabel(l)}
+                >
+                  {l}
+                  {activeLabels.has(l) && (
+                    <X className='size-2.5' aria-hidden />
+                  )}
+                </button>
+              ))}
+              {hasUnlabeled && (
+                <button
+                  className={cn(
+                    'focus-visible:ring-ring/50 flex items-center gap-1 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
+                    activeLabels.has(UNLABELED)
+                      ? 'bg-accent text-foreground'
+                      : 'border-border text-muted-foreground border bg-transparent',
+                  )}
+                  onClick={() => handleToggleLabel(UNLABELED)}
+                >
+                  Unlabeled
+                  {activeLabels.has(UNLABELED) && (
+                    <X className='size-2.5' aria-hidden />
+                  )}
+                </button>
+              )}
+            </div>
+          )}
           <PromptList
             prompts={filteredPrompts}
-            hasQuery={query.trim().length > 0}
+            hasQuery={hasActiveFilter}
             hasEverHadPrompts={hasEverHadPrompts}
             onEdit={handleEdit}
             onDelete={deletePrompt}

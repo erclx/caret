@@ -231,8 +231,12 @@ describe('useGithubSync', () => {
     })
 
     expect(result.current.diff).not.toBeNull()
-    expect(result.current.diff?.added).toEqual(['new-prompt'])
-    expect(result.current.diff?.removed).toEqual(['old-prompt'])
+    expect(result.current.diff?.added).toEqual([
+      { name: 'new-prompt', label: undefined },
+    ])
+    expect(result.current.diff?.removed).toEqual([
+      { name: 'old-prompt', label: undefined },
+    ])
   })
 
   it('should apply sync: write merged prompts and return to idle', async () => {
@@ -346,7 +350,9 @@ describe('useGithubSync', () => {
       expect(result.current.status).toBe('reviewing')
     })
 
-    expect(result.current.diff?.skipped).toEqual(['chat-mode'])
+    expect(result.current.diff?.skipped).toEqual([
+      { name: 'chat-mode', label: undefined },
+    ])
     expect(result.current.diff?.added).toHaveLength(0)
 
     // Apply with only skipped entries — local prompt must be untouched
@@ -419,6 +425,71 @@ describe('useGithubSync', () => {
 
     expect(result.current.status).toBe('idle')
     expect(result.current.diff).toBeNull()
+  })
+
+  it('should apply label from subdirectory snippet to the saved prompt', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [])
+
+    vi.mocked(fetch)
+      // Root listing: one subdirectory "claude"
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [{ name: 'claude', type: 'dir', download_url: null }],
+      } as Response)
+      // claude/ listing
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'summarize.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/claude/summarize.md',
+          },
+        ],
+      } as Response)
+      // claude/summarize.md content
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'Summarize this.',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    expect(result.current.diff?.added).toEqual([
+      { name: 'summarize', label: 'claude' },
+    ])
+
+    await act(async () => {
+      await result.current.applySync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    const savedPrompts = mockStorage.get('prompts') as {
+      name: string
+      label?: string
+      source: string
+    }[]
+    expect(savedPrompts).toHaveLength(1)
+    expect(savedPrompts[0].name).toBe('summarize')
+    expect(savedPrompts[0].label).toBe('claude')
+    expect(savedPrompts[0].source).toBe('github')
   })
 
   it('should not cancel a review when an unrelated setting changes', async () => {

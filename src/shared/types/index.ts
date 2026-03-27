@@ -4,6 +4,7 @@ export const PromptSchema = z
   .object({
     id: z.string(),
     name: z.string(),
+    label: z.string().optional(),
     body: z.string(),
     createdAt: z.number(),
     updatedAt: z.number(),

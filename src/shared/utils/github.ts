@@ -1,13 +1,15 @@
 import type { GithubSettings, Prompt } from '@/shared/types'
 
-export type Snippet = { name: string; body: string }
+export type Snippet = { label?: string; name: string; body: string }
+
+export type DiffEntry = { label?: string; name: string }
 
 export type DiffResult = {
-  added: string[]
-  updated: string[]
-  removed: string[]
-  unchanged: string[]
-  skipped: string[]
+  added: DiffEntry[]
+  updated: DiffEntry[]
+  removed: DiffEntry[]
+  unchanged: DiffEntry[]
+  skipped: DiffEntry[]
 }
 
 type FetchResult =
@@ -19,7 +21,7 @@ export type ConnectionResult = { ok: true } | { ok: false; error: string }
 type DirectoryEntry = {
   name: string
   type: string
-  download_url: string
+  download_url: string | null
 }
 
 export const OWNER_REPO_RE = /^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/
@@ -45,6 +47,10 @@ function describeHttpError(status: number): string {
     default:
       return `Request failed (${status})`
   }
+}
+
+function compositeKey(label: string | undefined, name: string): string {
+  return `${label ?? ''}\x00${name}`
 }
 
 const GITHUB_TIMEOUT_MS = 10_000
@@ -88,30 +94,65 @@ export async function fetchSnippets(
       return { ok: false, error: 'Enter a path to a folder of .md files.' }
     }
 
-    const mdFiles = entries.filter(
-      (e): e is DirectoryEntry =>
+    function isMdFile(e: unknown): e is DirectoryEntry {
+      return (
         typeof e === 'object' &&
         e !== null &&
         typeof (e as DirectoryEntry).name === 'string' &&
         (e as DirectoryEntry).type === 'file' &&
         (e as DirectoryEntry).name.endsWith('.md') &&
-        typeof (e as DirectoryEntry).download_url === 'string',
-    )
+        typeof (e as DirectoryEntry).download_url === 'string'
+      )
+    }
 
-    const snippets = await Promise.all(
-      mdFiles.map(async (file) => {
-        const res = await fetch(file.download_url, {
-          signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS),
-        })
-        if (!res.ok) {
-          throw new Error(`Failed to fetch ${file.name} (${res.status}).`)
-        }
-        const body = await res.text()
-        return { name: file.name.replace(/\.md$/, ''), body: body.trim() }
-      }),
-    )
+    function isSubdir(e: unknown): e is DirectoryEntry {
+      return (
+        typeof e === 'object' &&
+        e !== null &&
+        typeof (e as DirectoryEntry).name === 'string' &&
+        (e as DirectoryEntry).type === 'dir'
+      )
+    }
 
-    return { ok: true, snippets }
+    async function fetchMdFile(
+      file: DirectoryEntry,
+      label?: string,
+    ): Promise<Snippet> {
+      const res = await fetch(file.download_url as string, {
+        signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS),
+      })
+      if (!res.ok) {
+        throw new Error(`Failed to fetch ${file.name} (${res.status}).`)
+      }
+      const body = await res.text()
+      return { name: file.name.replace(/\.md$/, ''), body: body.trim(), label }
+    }
+
+    async function fetchSubdir(dir: DirectoryEntry): Promise<Snippet[]> {
+      const res = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.snippetsPath}/${dir.name}?ref=${config.branch}`,
+        { headers, signal: AbortSignal.timeout(GITHUB_TIMEOUT_MS) },
+      )
+      if (!res.ok) {
+        throw new Error(
+          `Failed to fetch directory ${dir.name} (${res.status}).`,
+        )
+      }
+      const subdirEntries: unknown = await res.json()
+      if (!Array.isArray(subdirEntries)) return []
+      return Promise.all(
+        subdirEntries
+          .filter(isMdFile)
+          .map((file) => fetchMdFile(file, dir.name)),
+      )
+    }
+
+    const results = await Promise.all([
+      Promise.all(entries.filter(isMdFile).map((file) => fetchMdFile(file))),
+      ...entries.filter(isSubdir).map(fetchSubdir),
+    ])
+
+    return { ok: true, snippets: results.flat() }
   } catch (err) {
     const message =
       err instanceof Error
@@ -124,34 +165,41 @@ export async function fetchSnippets(
 export function computeDiff(
   current: Prompt[],
   incoming: Snippet[],
-  localNames: Set<string> = new Set(),
+  localKeys: Set<string> = new Set(),
 ): DiffResult {
-  const currentMap = new Map(current.map((p) => [p.name, p.body]))
-  const incomingMap = new Map(incoming.map((s) => [s.name, s.body]))
+  const currentMap = new Map(
+    current.map((p) => [compositeKey(p.label, p.name), p.body]),
+  )
+  const incomingMap = new Map(
+    incoming.map((s) => [
+      compositeKey(s.label, s.name),
+      { label: s.label, name: s.name, body: s.body },
+    ]),
+  )
 
-  const added: string[] = []
-  const updated: string[] = []
-  const unchanged: string[] = []
-  const removed: string[] = []
-  const skipped: string[] = []
+  const added: DiffEntry[] = []
+  const updated: DiffEntry[] = []
+  const unchanged: DiffEntry[] = []
+  const removed: DiffEntry[] = []
+  const skipped: DiffEntry[] = []
 
-  for (const [name, body] of incomingMap) {
-    if (!currentMap.has(name)) {
-      if (localNames.has(name)) {
-        skipped.push(name)
+  for (const [key, { label, name, body }] of incomingMap) {
+    if (!currentMap.has(key)) {
+      if (localKeys.has(key)) {
+        skipped.push({ label, name })
       } else {
-        added.push(name)
+        added.push({ label, name })
       }
-    } else if (currentMap.get(name) !== body) {
-      updated.push(name)
+    } else if (currentMap.get(key) !== body) {
+      updated.push({ label, name })
     } else {
-      unchanged.push(name)
+      unchanged.push({ label, name })
     }
   }
 
-  for (const name of currentMap.keys()) {
-    if (!incomingMap.has(name)) {
-      removed.push(name)
+  for (const p of current) {
+    if (!incomingMap.has(compositeKey(p.label, p.name))) {
+      removed.push({ label: p.label, name: p.name })
     }
   }
 

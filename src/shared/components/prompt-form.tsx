@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
@@ -5,11 +6,17 @@ import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Textarea } from '@/shared/components/ui/textarea'
 import type { Prompt } from '@/shared/types'
+import { cn } from '@/shared/utils/cn'
 
 export interface PromptFormProps {
   initialPrompt?: Prompt | null
-  existingNames?: string[]
-  onSave: (data: { name: string; body: string }) => Promise<void>
+  existingPrompts?: { label?: string; name: string }[]
+  existingLabels?: string[]
+  onSave: (data: {
+    name: string
+    label?: string
+    body: string
+  }) => Promise<void>
   onCancel: () => void
 }
 
@@ -17,14 +24,17 @@ const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 export function PromptForm({
   initialPrompt,
-  existingNames = [],
+  existingPrompts = [],
+  existingLabels = [],
   onSave,
   onCancel,
 }: PromptFormProps) {
   const initialName = initialPrompt?.name ?? ''
+  const initialLabel = initialPrompt?.label ?? ''
   const initialBody = initialPrompt?.body ?? ''
 
   const [name, setName] = useState(initialName)
+  const [label, setLabel] = useState(initialLabel)
   const [nameError, setNameError] = useState('')
   const [body, setBody] = useState(initialBody)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,7 +42,19 @@ export function PromptForm({
     'back' | 'cancel' | null
   >(null)
 
-  const isDirty = name !== initialName || body !== initialBody
+  const isDirty =
+    name !== initialName ||
+    body !== initialBody ||
+    (label || '') !== (initialLabel || '')
+
+  function isDuplicatePair(n: string, l: string): boolean {
+    const isEditingSelf =
+      n === initialName && (l || '') === (initialLabel || '')
+    if (isEditingSelf) return false
+    return existingPrompts.some(
+      (p) => p.name === n && (p.label ?? '') === (l || ''),
+    )
+  }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
@@ -41,10 +63,23 @@ export function PromptForm({
       setNameError(
         'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
       )
-    } else if (val && val !== initialName && existingNames.includes(val)) {
-      setNameError('A prompt with this name already exists')
+    } else if (val && isDuplicatePair(val, label)) {
+      setNameError('A prompt with this name and label already exists')
     } else {
       setNameError('')
+    }
+  }
+
+  function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value
+    setLabel(val)
+    // Re-validate name against the new label value
+    if (name && KEBAB_RE.test(name)) {
+      if (isDuplicatePair(name, val)) {
+        setNameError('A prompt with this name and label already exists')
+      } else {
+        setNameError('')
+      }
     }
   }
 
@@ -79,7 +114,12 @@ export function PromptForm({
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      await onSave({ name, body })
+      const trimmedLabel = label.trim()
+      await onSave({
+        name,
+        body,
+        ...(trimmedLabel ? { label: trimmedLabel } : {}),
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -118,7 +158,7 @@ export function PromptForm({
       ) : (
         <button
           type='button'
-          className='text-muted-foreground hover:text-foreground flex w-fit shrink-0 items-center gap-1 text-sm transition-colors'
+          className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-fit shrink-0 items-center gap-1 rounded text-sm transition-colors outline-none focus-visible:ring-2'
           onClick={() => handleRequestDiscard('back')}
         >
           ← Back
@@ -135,6 +175,46 @@ export function PromptForm({
           className='text-sm'
         />
         {nameError && <p className='text-destructive text-xs'>{nameError}</p>}
+      </div>
+      <div className='flex shrink-0 flex-col gap-2'>
+        <Label htmlFor='label'>Label</Label>
+        <Input
+          id='label'
+          value={label}
+          onChange={handleLabelChange}
+          placeholder='e.g. writing'
+          className='text-sm'
+        />
+        {existingLabels.length > 0 && (
+          <div className='flex flex-wrap gap-1'>
+            {existingLabels.map((l) => (
+              <button
+                key={l}
+                type='button'
+                className={cn(
+                  'border-border text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
+                  label === l && 'bg-accent text-foreground',
+                )}
+                onClick={() => {
+                  const next = label === l ? '' : l
+                  setLabel(next)
+                  if (name && KEBAB_RE.test(name)) {
+                    if (isDuplicatePair(name, next)) {
+                      setNameError(
+                        'A prompt with this name and label already exists',
+                      )
+                    } else {
+                      setNameError('')
+                    }
+                  }
+                }}
+              >
+                {l}
+                {label === l && <X className='size-2.5' aria-hidden />}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       <div className='flex min-h-0 flex-1 flex-col gap-2'>
         <Label htmlFor='body'>Prompt body</Label>

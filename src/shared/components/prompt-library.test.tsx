@@ -26,9 +26,36 @@ const mockPrompts: Prompt[] = [
   },
 ]
 
+const labeledPrompts: Prompt[] = [
+  {
+    id: '1',
+    name: 'summarize',
+    label: 'claude',
+    body: 'Summarize this',
+    createdAt: 0,
+    updatedAt: 0,
+  },
+  {
+    id: '2',
+    name: 'draft',
+    label: 'writing',
+    body: 'Draft an email',
+    createdAt: 0,
+    updatedAt: 0,
+  },
+  {
+    id: '3',
+    name: 'fix-grammar',
+    body: 'Fix grammar',
+    createdAt: 0,
+    updatedAt: 0,
+  },
+]
+
 const mockUsePrompts = {
   prompts: mockPrompts,
   isLoading: false,
+  hasEverHadPrompts: true,
   addPrompt: mockAddPrompt,
   updatePrompt: mockUpdatePrompt,
   deletePrompt: mockDeletePrompt,
@@ -137,6 +164,107 @@ describe('PromptLibrary', () => {
     await waitFor(() => {
       expect(screen.getByText('summarize')).toBeInTheDocument()
     })
+  })
+
+  it('should not show label filter pills when no prompts have labels', () => {
+    render(<PromptLibrary />)
+
+    expect(
+      screen.queryByRole('button', { name: /^all$/i }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should show label filter pills when labeled prompts exist', () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+
+    expect(screen.getByRole('button', { name: /^all$/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /^claude$/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /^writing$/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should show Unlabeled pill when unlabeled prompts exist', () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+
+    expect(
+      screen.getByRole('button', { name: /^unlabeled$/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should not show Unlabeled pill when all prompts have labels', () => {
+    mockUsePrompts.prompts = labeledPrompts.filter((p) => p.label)
+    render(<PromptLibrary />)
+
+    expect(
+      screen.queryByRole('button', { name: /^unlabeled$/i }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should filter to only unlabeled prompts when Unlabeled pill is clicked', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /^unlabeled$/i }))
+
+    expect(screen.getByText('fix-grammar')).toBeInTheDocument()
+    expect(screen.queryByText('summarize')).not.toBeInTheDocument()
+    expect(screen.queryByText('draft')).not.toBeInTheDocument()
+  })
+
+  it('should filter to only labeled prompts when a label pill is clicked', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+    expect(screen.queryByText('draft')).not.toBeInTheDocument()
+    expect(screen.queryByText('fix-grammar')).not.toBeInTheDocument()
+  })
+
+  it('should show All prompts again when All pill is clicked after a label filter', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+    await user.click(screen.getByRole('button', { name: /^all$/i }))
+
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+    expect(screen.getByText('draft')).toBeInTheDocument()
+    expect(screen.getByText('fix-grammar')).toBeInTheDocument()
+  })
+
+  it('should allow multiple label pills to be active simultaneously', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+    await user.click(screen.getByRole('button', { name: /^writing$/i }))
+
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+    expect(screen.getByText('draft')).toBeInTheDocument()
+    expect(screen.queryByText('fix-grammar')).not.toBeInTheDocument()
+  })
+
+  it('should apply text search and label filter together with AND logic', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+    await user.type(screen.getByPlaceholderText(/search prompts/i), 'sum')
+
+    expect(screen.getByText('summarize')).toBeInTheDocument()
+    expect(screen.queryByText('draft')).not.toBeInTheDocument()
   })
 
   it('should return to list without saving when cancel is clicked', async () => {

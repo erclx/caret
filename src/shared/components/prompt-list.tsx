@@ -94,6 +94,11 @@ export function PromptList({
             >
               <div className='flex flex-col overflow-hidden'>
                 <span className='text-foreground truncate text-sm font-medium'>
+                  {prompt.label && (
+                    <span className='text-muted-foreground'>
+                      {prompt.label} ·{' '}
+                    </span>
+                  )}
                   {prompt.name}
                 </span>
                 <span className='text-muted-foreground truncate text-xs'>

@@ -42,10 +42,19 @@ describe('parseImport', () => {
     const result = parseImport(JSON.stringify([]))
     expect(result).toEqual({ ok: true, prompts: [] })
   })
+
+  it('should parse prompts with labels', () => {
+    const prompt = makePrompt({ label: 'claude' })
+    const result = parseImport(JSON.stringify([prompt]))
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.prompts[0].label).toBe('claude')
+    }
+  })
 })
 
 describe('mergePrompts', () => {
-  it('should add all incoming prompts when there are no name conflicts', () => {
+  it('should add all incoming prompts when there are no composite key conflicts', () => {
     const existing = [makePrompt({ id: 'e1', name: 'existing' })]
     const incoming = [makePrompt({ id: 'i1', name: 'new-prompt' })]
 
@@ -59,7 +68,7 @@ describe('mergePrompts', () => {
     expect(merged).toHaveLength(2)
   })
 
-  it('should overwrite the body of an existing prompt with the same name (last-write-wins)', () => {
+  it('should overwrite the body of an existing prompt with the same composite key (last-write-wins)', () => {
     const existing = [
       makePrompt({ id: 'e1', name: 'summarize', body: 'old body' }),
     ]
@@ -113,6 +122,69 @@ describe('mergePrompts', () => {
     const { merged } = mergePrompts(existing, incoming)
 
     expect(merged[0].id).not.toBe('original-id')
+  })
+
+  it('should treat same name with different label as a new prompt', () => {
+    const existing = [
+      makePrompt({ id: 'e1', name: 'summarize', label: 'claude' }),
+    ]
+    const incoming = [
+      makePrompt({ id: 'i1', name: 'summarize', label: 'writing' }),
+    ]
+
+    const { merged, addedNames, updatedNames } = mergePrompts(
+      existing,
+      incoming,
+    )
+
+    expect(addedNames).toEqual(['writing · summarize'])
+    expect(updatedNames).toEqual([])
+    expect(merged).toHaveLength(2)
+  })
+
+  it('should update a prompt when both name and label match', () => {
+    const existing = [
+      makePrompt({ id: 'e1', name: 'summarize', label: 'claude', body: 'old' }),
+    ]
+    const incoming = [
+      makePrompt({ id: 'i1', name: 'summarize', label: 'claude', body: 'new' }),
+    ]
+
+    const { merged, updatedNames } = mergePrompts(existing, incoming)
+
+    expect(updatedNames).toEqual(['claude · summarize'])
+    expect(merged[0].body).toBe('new')
+    expect(merged[0].id).toBe('e1')
+  })
+
+  it('should treat unlabeled and labeled prompts with the same name as distinct', () => {
+    const existing = [makePrompt({ id: 'e1', name: 'summarize' })]
+    const incoming = [
+      makePrompt({ id: 'i1', name: 'summarize', label: 'claude' }),
+    ]
+
+    const { merged, addedNames } = mergePrompts(existing, incoming)
+
+    expect(addedNames).toEqual(['claude · summarize'])
+    expect(merged).toHaveLength(2)
+  })
+
+  it('should format added name without label prefix when label is absent', () => {
+    const existing: Prompt[] = []
+    const incoming = [makePrompt({ name: 'fix-grammar' })]
+
+    const { addedNames } = mergePrompts(existing, incoming)
+
+    expect(addedNames).toEqual(['fix-grammar'])
+  })
+
+  it('should format added name with label prefix when label is present', () => {
+    const existing: Prompt[] = []
+    const incoming = [makePrompt({ name: 'fix-grammar', label: 'writing' })]
+
+    const { addedNames } = mergePrompts(existing, incoming)
+
+    expect(addedNames).toEqual(['writing · fix-grammar'])
   })
 })
 

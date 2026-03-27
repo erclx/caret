@@ -8,6 +8,10 @@ import { storage } from '@/shared/utils/storage'
 
 type SyncStatus = 'idle' | 'fetching' | 'reviewing' | 'applying'
 
+function compositeKey(label: string | undefined, name: string): string {
+  return `${label ?? ''}\x00${name}`
+}
+
 export function useGithubSync() {
   const { settings, updateSettings } = useSettings()
   const { prompts } = usePrompts()
@@ -43,13 +47,15 @@ export function useGithubSync() {
       return
     }
 
-    const localNames = new Set(
-      prompts.filter((p) => p.source !== 'github').map((p) => p.name),
+    const localKeys = new Set(
+      prompts
+        .filter((p) => p.source !== 'github')
+        .map((p) => compositeKey(p.label, p.name)),
     )
     const diffResult = computeDiff(
       prompts.filter((p) => p.source === 'github'),
       result.snippets,
-      localNames,
+      localKeys,
     )
     const hasChanges =
       diffResult.added.length +
@@ -86,29 +92,47 @@ export function useGithubSync() {
     setStatus('applying')
 
     const now = Date.now()
-    const removedSet = new Set(diff.removed)
-    const updatedSet = new Set(diff.updated)
-    const snippetsByName = new Map(snippets.map((s) => [s.name, s]))
+    const removedSet = new Set(
+      diff.removed.map((e) => compositeKey(e.label, e.name)),
+    )
+    const updatedSet = new Set(
+      diff.updated.map((e) => compositeKey(e.label, e.name)),
+    )
+    const snippetsByKey = new Map(
+      snippets.map((s) => [compositeKey(s.label, s.name), s]),
+    )
 
     const localPrompts = prompts.filter((p) => p.source !== 'github')
 
     const keptGithubPrompts = prompts
-      .filter((p) => p.source === 'github' && !removedSet.has(p.name))
+      .filter(
+        (p) =>
+          p.source === 'github' &&
+          !removedSet.has(compositeKey(p.label, p.name)),
+      )
       .map((p) => {
-        if (updatedSet.has(p.name)) {
-          const incoming = snippetsByName.get(p.name)
-          return incoming ? { ...p, body: incoming.body, updatedAt: now } : p
+        if (updatedSet.has(compositeKey(p.label, p.name))) {
+          const incoming = snippetsByKey.get(compositeKey(p.label, p.name))
+          return incoming
+            ? {
+                ...p,
+                body: incoming.body,
+                label: incoming.label,
+                updatedAt: now,
+              }
+            : p
         }
         return p
       })
 
-    const addedPrompts = diff.added.flatMap((name) => {
-      const snippet = snippetsByName.get(name)
+    const addedPrompts = diff.added.flatMap((entry) => {
+      const snippet = snippetsByKey.get(compositeKey(entry.label, entry.name))
       if (!snippet) return []
       return [
         {
           id: crypto.randomUUID(),
           name: snippet.name,
+          ...(snippet.label ? { label: snippet.label } : {}),
           body: snippet.body,
           source: 'github' as const,
           createdAt: now,
