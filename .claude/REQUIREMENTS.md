@@ -35,7 +35,6 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 - Collaboration or shared libraries. GitHub sync covers the read-only sharing case; real-time or multi-user collaboration is out.
 - Mobile or Firefox support
 - Floating badge or overlay injected into chat sites
-- Categories or tags (bet on fuzzy search + slug naming conventions)
 - Per-site theming / blending with host site styles
 - Push/write back to GitHub: extension is read-only; GitHub is source of truth
 
@@ -51,6 +50,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 8. Options page: full settings including per-site trigger symbol config and GitHub sync config
 9. JSON export/import: backup and restore prompt library
 10. GitHub sync: pull snippets from a GitHub repo into the extension; manual sync only; GitHub is source of truth; read-only from extension side
+11. Labels: optional single label per prompt for grouping and filtering; label filter pills in the sidepanel list; label field in the edit form with autocomplete; the same prompt name can appear under different labels
 
 ## Tech stack
 

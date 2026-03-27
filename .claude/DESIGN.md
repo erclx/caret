@@ -88,6 +88,7 @@ None. Speed over delight for a keyboard-driven tool.
 - Width matches the input element exactly
 - Max height 280px, then scrollable
 - Each row shows the prompt name and a one-line truncated preview
+- Labeled prompts render as `label · name` in the name line: label in `--muted-foreground`, separator `·` in `--muted-foreground`, name in `--foreground`. Unlabeled prompts show name only.
 - Selected row uses accent background only, no border or left bar
 - No search input inside the dropdown. The user filters by typing in the chat input after the trigger symbol.
 - Keyboard hint footer in muted hint text
@@ -97,6 +98,19 @@ None. Speed over delight for a keyboard-driven tool.
 - Width ~380px, user-resizable
 - Tab bar with plain text tabs, bottom border on the active tab
 - Edit view replaces the list inline, no modal
+
+### Sidepanel: label filter pills
+
+- Shown only when at least one labeled prompt exists; hidden otherwise
+- Pills are small, low-contrast: `--card` background, `--border` border, `--muted-foreground` text, 4px radius
+- Active pill shifts to `--accent` background with `--foreground` text; no border change
+- Multiple pills can be active simultaneously. `All` is active only when no label pills are selected; clicking it clears all active pills.
+- `All` pill is always first and always present when the row is shown; label pills follow in alphabetical order
+- No scroll on the pills row; if labels are numerous they wrap
+
+### Sidepanel: prompt list rows
+
+- Labeled prompts render as `label · name` in the name line using the same color split as the dropdown: label and separator in `--muted-foreground`, name in `--foreground`.
 
 ### Sidepanel: GitHub view
 
