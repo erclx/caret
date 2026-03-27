@@ -13,6 +13,7 @@ const SEED_PROMPTS = [
   {
     id: 'seed-1',
     name: 'summarize',
+    label: 'claude',
     body: 'Summarize the following text into 3 concise bullet points.',
     createdAt: Date.now(),
     updatedAt: Date.now(),
@@ -20,14 +21,23 @@ const SEED_PROMPTS = [
   {
     id: 'seed-2',
     name: 'refactor',
+    label: 'claude',
     body: 'Refactor the following code to improve readability and maintainability without altering its behavior.',
     createdAt: Date.now(),
     updatedAt: Date.now(),
   },
   {
     id: 'seed-3',
-    name: 'explain',
-    body: 'Explain this concept using simple terms as if talking to a high school student.',
+    name: 'draft-email',
+    label: 'writing',
+    body: 'Draft a professional email based on the following notes:',
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
+  {
+    id: 'seed-4',
+    name: 'proofread',
+    body: 'Proofread this. Fix grammar, spelling, and clarity.',
     createdAt: Date.now(),
     updatedAt: Date.now(),
   },
@@ -136,6 +146,12 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.waitForLoadState('networkidle')
   await shot(listPage, 'sidepanel', `${scheme}-list.png`)
 
+  await listPage.getByRole('button', { name: /^claude$/i }).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-list-filtered.png`)
+  await listPage.getByRole('button', { name: /^all$/i }).click()
+  await listPage.waitForTimeout(200)
+
   await listPage
     .getByRole('button', { name: /delete prompt/i })
     .first()
@@ -151,7 +167,7 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
 
   await listPage.getByRole('button', { name: /cancel/i }).click()
   await listPage.waitForTimeout(200)
-  await listPage.getByText(SEED_PROMPTS[0].name, { exact: true }).click()
+  await listPage.getByText(SEED_PROMPTS[0].name).first().click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-edit.png`)
 
