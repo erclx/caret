@@ -18,57 +18,19 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Feature: labels
+### Fix: GitHub sync skips prompt with matching key but different body silently
 
-- [ ] Add `label?: string` to `PromptSchema`; update import merge key to `(label, name)` composite
-- [ ] Update GitHub sync to recurse one level into subdirectories and derive label from folder name; update diff identity key to `(label, name)` composite
-- [ ] Add label field to the prompt edit form with datalist autocomplete; validate uniqueness per `(label, name)` pair
-- [ ] Add label filter pills to the sidepanel list view; apply alongside text search with AND logic
-- [ ] Show `label · name` in trigger dropdown rows for labeled prompts
+- [ ] When a local prompt and an incoming GitHub snippet share the same composite key but have different bodies, sync currently reports the prompt as up to date rather than flagging it as skipped or changed; surface the distinction to the user
 
-> Test strategy: unit tests for schema boundary, merge composite key, diff composite key and subdirectory fetch, form per-label uniqueness validation, filter pills rendering and interaction
+> Test strategy: unit test for the diff case; manual verification in installed extension
 
-### Chore: visual UI testing
+### Fix: import feedback is noisy with many entries
 
-- [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page
-- [ ] Wire screenshot comparisons into CI to catch regressions on every PR once baselines are stable
+- [ ] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added; redesign the feedback to be scannable regardless of entry count
 
-> Test strategy: visual regression via Playwright screenshots
+> Test strategy: visual verification with a large import fixture
 
 ## Done
-
-### Fix: Esc to cancel in edit form
-
-- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
-
-> Test strategy: dirty-state and keyboard interaction
-
-### Chore: test coverage, GitHub feature
-
-- [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
-- [x] Add unit tests for the GitHub options section: save, disconnect, connection status
-
-> Test strategy: sync and options section logic
-
-### Chore: test coverage, data section and content input
-
-- [x] Add unit tests for export and import handlers in the data section
-- [x] Improve unit test coverage for the content script input detection and insertion paths
-
-> Test strategy: data section and input detection
-
-### Fix: focus ring thickness and clipping
-
-- [x] Reduce focus ring width on buttons, inputs, and textareas: default width was visually heavy
-- [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent clip cut off the ring
-
-> Test strategy: visual verification
-
-### Fix: trailing space after prompt insertion
-
-- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
-
-> Test strategy: insertion output
 
 ### Chore: logo
 
@@ -114,3 +76,13 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Fix CORS failure when syncing snippets with a PAT configured; the auth header on the file fetch triggered a preflight that GitHub's raw content server rejects
 
 > Test strategy: manual verification in installed extension with PAT configured
+
+### Feature: labels
+
+- [x] Add `label?: string` to `PromptSchema`; update import merge key to `(label, name)` composite
+- [x] Update GitHub sync to recurse one level into subdirectories and derive label from folder name; update diff identity key to `(label, name)` composite
+- [x] Add label field to the prompt edit form with clickable label chips; validate uniqueness per `(label, name)` pair
+- [x] Add label filter pills to the sidepanel list view; apply alongside text search with AND logic
+- [x] Show `label · name` in trigger dropdown rows for labeled prompts
+
+> Test strategy: unit tests for schema boundary, merge composite key, diff composite key and subdirectory fetch, form per-label uniqueness validation, filter pills rendering and interaction

@@ -247,3 +247,36 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
 
 > Test strategy: name-collision case in sync apply
+
+### Fix: Esc to cancel in edit form
+
+- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
+
+> Test strategy: dirty-state and keyboard interaction
+
+### Chore: test coverage, GitHub feature
+
+- [x] Add unit tests for the GitHub sync flow: apply, cancel, error, and diff states
+- [x] Add unit tests for the GitHub options section: save, disconnect, connection status
+
+> Test strategy: sync and options section logic
+
+### Chore: test coverage, data section and content input
+
+- [x] Add unit tests for export and import handlers in the data section
+- [x] Improve unit test coverage for the content script input detection and insertion paths
+
+> Test strategy: data section and input detection
+
+### Fix: focus ring thickness and clipping
+
+- [x] Reduce focus ring width on buttons, inputs, and textareas: default width was visually heavy
+- [x] Fix focus ring clipping on edge items in the scrollable prompt list and sidepanel header: parent clip cut off the ring
+
+> Test strategy: visual verification
+
+### Fix: trailing space after prompt insertion
+
+- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
+
+> Test strategy: insertion output

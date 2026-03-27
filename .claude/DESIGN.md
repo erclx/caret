@@ -75,6 +75,8 @@ Shadow on the dropdown only. It floats above the host page. Subtle two-layer dro
 
 2px ring on all interactive elements, using the `--ring` token at 50% opacity. Reduced from the shadcn default of 3px to match the overall minimal visual weight. Containers that clip with `overflow-hidden` need at least 4px of inset padding on any side where a focusable element sits flush against the boundary; otherwise the ring is clipped.
 
+Custom `<button>` elements that do not use a shadcn component must suppress the browser default outline and apply the project ring explicitly. Without this, the browser outline flashes before the custom ring renders.
+
 ## Motion
 
 None. Speed over delight for a keyboard-driven tool.
@@ -104,8 +106,9 @@ None. Speed over delight for a keyboard-driven tool.
 - Shown only when at least one labeled prompt exists; hidden otherwise
 - Pills are small, low-contrast: `--card` background, `--border` border, `--muted-foreground` text, 4px radius
 - Active pill shifts to `--accent` background with `--foreground` text; no border change
+- Active pills show a small X icon on the right to make deselection discoverable
 - Multiple pills can be active simultaneously. `All` is active only when no label pills are selected; clicking it clears all active pills.
-- `All` pill is always first and always present when the row is shown; label pills follow in alphabetical order
+- `All` pill is always first; label pills follow in alphabetical order; `Unlabeled` pill is last and appears only when unlabeled prompts exist alongside at least one labeled prompt
 - No scroll on the pills row; if labels are numerous they wrap
 
 ### Sidepanel: prompt list rows
