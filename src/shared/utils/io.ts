@@ -7,7 +7,7 @@ type ParseResult =
   | { ok: true; prompts: Prompt[] }
   | { ok: false; error: string }
 
-type MergeResult = {
+interface MergeResult {
   merged: Prompt[]
   addedNames: string[]
   updatedNames: string[]

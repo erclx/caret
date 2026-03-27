@@ -108,7 +108,7 @@ export function PromptLibrary() {
 
   const existingPrompts = prompts.map((p) => ({ label: p.label, name: p.name }))
   const hasActiveFilter = query.trim().length > 0 || activeLabels.size > 0
-  const showPills = allLabels.length > 0
+  const hasLabels = allLabels.length > 0
 
   if (view === 'form') {
     return (
@@ -196,7 +196,7 @@ export function PromptLibrary() {
               </button>
             )}
           </div>
-          {showPills && (
+          {hasLabels && (
             <div className='flex shrink-0 flex-wrap gap-1.5'>
               <button
                 className={cn(

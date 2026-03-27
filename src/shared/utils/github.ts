@@ -18,7 +18,7 @@ type FetchResult =
 
 export type ConnectionResult = { ok: true } | { ok: false; error: string }
 
-type DirectoryEntry = {
+interface DirectoryEntry {
   name: string
   type: string
   download_url: string | null
