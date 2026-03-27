@@ -18,6 +18,16 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
+### Feature: labels
+
+- [ ] Add `label?: string` to `PromptSchema`; update import merge key to `(label, name)` composite
+- [ ] Update GitHub sync to recurse one level into subdirectories and derive label from folder name; update diff identity key to `(label, name)` composite
+- [ ] Add label field to the prompt edit form with datalist autocomplete; validate uniqueness per `(label, name)` pair
+- [ ] Add label filter pills to the sidepanel list view; apply alongside text search with AND logic
+- [ ] Show `label · name` in trigger dropdown rows for labeled prompts
+
+> Test strategy: unit tests for schema boundary, merge composite key, diff composite key and subdirectory fetch, form per-label uniqueness validation, filter pills rendering and interaction
+
 ### Chore: visual UI testing
 
 - [ ] Add Playwright screenshot baselines for sidepanel list, edit form, GitHub tab (not-configured state), and options page

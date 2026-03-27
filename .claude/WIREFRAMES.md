@@ -27,12 +27,12 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 ┌─────────────────────────────────────────┐
 │   summarize...                          │  ← no search input; filter is typed
 ├─────────────────────────────────────────┤  directly in chat input after trigger
-│ ▶ summarize        Summarize the fol... │  ← selected
-│   fix-grammar      Fix grammar and s... │
-│   explain-code     Explain this code... │
-│   bullet-points    Convert this into... │
-│   eli5             Explain this like... │
-│   translate-en     Translate the fol... │
+│ ▶ claude · summarize  Summarize the f.. │  ← selected; label shown for labeled prompts
+│   claude · fix-code   Fix and explain.. │
+│   fix-grammar         Fix grammar an... │  ← unlabeled prompt; no label prefix
+│   bullet-points       Convert this i... │
+│   eli5                Explain this l... │
+│   writing · draft     Draft an email... │
 ├─────────────────────────────────────────┤
 │ ↑↓ navigate · Enter/Tab insert · Esc close  │
 └─────────────────────────────────────────┘
@@ -44,6 +44,7 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 
 Behavior:
 
+- Labeled prompts render as `label · name` in the name line. Unlabeled prompts show name only.
 - Trigger: user types `>` (configurable per site)
 - Symbol only fires at position 0 or immediately after whitespace — mid-word does not trigger (e.g. `word>` must not open dropdown)
 - Filters in real time as user types after trigger symbol in the chat input — no separate search field inside the dropdown (intentional design decision)
@@ -71,19 +72,26 @@ Behavior:
 ├────────────────────────────────┤
 │ 🔍 Search prompts...        ✕ │  ← X appears only when query is non-empty; clears and refocuses
 ├────────────────────────────────┤
-│ summarize              🗑️     │  ← whole row clickable to edit; no pencil icon
+│ [All] [claude] [writing]      │  ← label filter pills; only shown when ≥1 labeled prompt exists
+├────────────────────────────────┤
+│ claude · summarize     🗑️     │  ← whole row clickable to edit; no pencil icon
 │ Summarize the following...     │
 ├────────────────────────────────┤
-│ fix-grammar            🗑️     │
+│ fix-grammar            🗑️     │  ← unlabeled prompt; no label prefix
 │ Fix grammar and spelling...    │
 ├────────────────────────────────┤
-│ explain-code           🗑️     │
+│ claude · explain-code  🗑️     │
 │ Explain this code in simp...   │
 └────────────────────────────────┘
 ```
 
 Behavior:
 
+- Label filter pills: `All` is always first; remaining pills are existing labels sorted alphabetically. Pills row is hidden when no labeled prompts exist.
+- Clicking a label pill toggles it on or off. Multiple pills can be active simultaneously. `All` clears all active pills and is shown with accent background only when nothing is selected.
+- When label pills are active, unlabeled prompts are hidden. Only prompts whose label is in the active set are shown.
+- Label filter and text search apply together with AND logic. Empty state when the combination returns nothing: "No prompts found."
+- Label filter state is session-only; resets to All when the sidepanel closes.
 - Click anywhere on row → opens edit form (full replace, no modal)
 - Hover → background shift + pointer cursor
 - 🗑️ click → inline confirmation expands in-row:
@@ -104,6 +112,11 @@ Behavior:
 │ Name                           │  ← was "Trigger name"; simplified
 │ ┌──────────────────────────┐   │
 │ │ summarize                │   │
+│ └──────────────────────────┘   │
+│                                │
+│ Label                          │  ← optional; free-text with autocomplete
+│ ┌──────────────────────────┐   │
+│ │ claude                   │   │  ← suggests existing labels; accepts new values
 │ └──────────────────────────┘   │
 │                                │
 │ Prompt body                    │
@@ -164,7 +177,8 @@ Behavior:
 - Keep editing dismisses the confirmation and restores whichever row was replaced
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
-- Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty
+- Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty. The same name is allowed if the label differs.
+- Label field: optional, no format restriction. Free-text with suggestions from existing labels; accepts values not in the suggestion list. An empty value means no label. Label is included in the dirty-state check.
 - Prompt body: required, must not be empty
 - Save persists the prompt immediately and returns to list
 - Textarea scrollbar: thin zinc thumb, transparent track
@@ -248,10 +262,11 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 ├────────────────────────────────┤
 │ CHANGES                        │
 │                                │
-│ + new-prompt       new         │
-│ ~ summarize        modified    │
-│ - old-snippet      removed     │
-│ · chat-mode        local       │
+│ + claude · new-prompt  new     │  ← label shown when present
+│ ~ writing · summarize  modified│
+│ - claude · summarize   removed │  ← a folder move shows as remove + add
+│ + writing · summarize  new     │
+│ · chat-mode            local   │  ← unlabeled local prompt; no label prefix
 │                                │
 │ 5 unchanged                    │
 ├────────────────────────────────┤
@@ -279,8 +294,10 @@ GitHub behavior:
 - `●` indicator: green = connected · red = error; when not configured no dot is shown — the whole view shows "Set up in Options →" instead
 - Sync is always manual — no auto-sync
 - Cancel on diff discards fetch, does not modify storage
-- Apply is surgical: added snippets are inserted, updated prompts patch body only, removed prompts are deleted, local prompts are untouched
-- Skipped entries (`·`) are GitHub snippets whose name matches a local prompt; they are not imported and the local prompt is preserved
+- Apply is surgical: added snippets are inserted, updated prompts patch body and label, removed prompts are deleted, local prompts are untouched
+- Diff entries show `label · name` when a label is present; unlabeled entries show name only
+- A file moved between GitHub subdirectories (label change) appears as two entries: a remove at the old composite key and an add at the new one
+- Skipped entries (`·`) are GitHub snippets whose `(label, name)` composite key matches a local prompt; they are not imported and the local prompt is preserved
 - Not configured: show "Set up in Options →" link instead of sync button
 - PAT optional for public repos; required for private
 

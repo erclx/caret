@@ -136,7 +136,7 @@ Insertion uses `document.execCommand('insertText')` which triggers framework syn
 
 Two keys in `chrome.storage.local`: `prompts` and `settings`. Key absence (never written) means fresh install; the presence check drives the onboarding empty state.
 
-Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, and an optional `source` flag. Source is `'github'` only on prompts pulled via GitHub sync; locally created prompts omit it. The sync diff uses `source` to determine ownership.
+Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, an optional `source` flag, and an optional `label` string. Source is `'github'` only on prompts pulled via GitHub sync; locally created prompts omit it. The sync diff uses `source` to determine ownership. Label is a free-form string that groups prompts for filtering; it is not required and has no restricted character set.
 
 Settings holds per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt; absent means treat as connected.
 
@@ -146,11 +146,13 @@ Settings holds per-hostname config (trigger symbol and enabled toggle) and an op
 
 ### JSON export / import
 
-Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using name-based last-write-wins — duplicate names overwrite the existing body while preserving the existing `id`; new prompts get a fresh `crypto.randomUUID()`.
+Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using `(label ?? '', name)` composite key last-write-wins — matching composite keys overwrite the existing body while preserving the existing `id`; new composite keys get a fresh `crypto.randomUUID()`. Backups from before labels were introduced import cleanly; all entries land as unlabeled and merge on `('' , name)`.
 
 ### Filtering strategy
 
-Prompts filter on `name` only. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
+The trigger dropdown filters on `name` only across all prompts, regardless of label. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
+
+The sidepanel list has two independent filter dimensions: a text search on `name`, and a set of active label pills (multi-select). Both apply with AND logic when set. When label pills are active, unlabeled prompts are hidden. Label filter state is session-only and resets to All on close.
 
 ### Dev seeding
 
@@ -160,11 +162,13 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 Extension pulls from GitHub; it never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
 
-Flow: fetch directory listing from GitHub Contents API → fetch each `.md` file → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
+Flow: fetch directory listing from GitHub Contents API → for each subdirectory entry recurse one level to fetch its `.md` files (label = directory name); fetch root-level `.md` files with no label → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
 
-Apply uses the diff, not a full replace. Added snippets get `source: 'github'` and a fresh `id`. Updated prompts patch `body` and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
+The diff identity key is `(label ?? '', name)`. A file moved between GitHub subdirectories (label change, same name) appears in the diff as a remove entry at the old composite key and an add entry at the new one. Subdirectory recursion adds one API request per subdirectory on top of the root listing and per-file fetches; this stays within rate limits for personal use.
 
-If a GitHub snippet name matches a local prompt name, it is placed in a `skipped` category rather than `added`. The local prompt is preserved and the GitHub version is not imported. Skipped entries are shown in the diff review UI with a neutral indicator so the user understands why they were not added.
+Apply uses the diff, not a full replace. Added snippets get `source: 'github'`, a fresh `id`, and the folder-derived `label`. Updated prompts patch `body`, `label`, and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
+
+If a GitHub snippet's `(label, name)` composite key matches a local prompt's composite key, it is placed in a `skipped` category rather than `added`. The local prompt is preserved and the GitHub version is not imported. Skipped entries are shown in the diff review UI with a neutral indicator so the user understands why they were not added.
 
 PAT is optional for public repos; required for private.
 
