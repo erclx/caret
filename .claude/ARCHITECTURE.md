@@ -204,7 +204,7 @@ Static checks, unit tests, and build run in parallel on every PR. `needs` is res
 
 ### Release: `changelogithub` generates all release notes; no CHANGELOG.md
 
-`changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. There is no `CHANGELOG.md` — the GitHub Release is the changelog. This works because commits follow Conventional Commits and PRs are well-scoped, so the generated notes are the authoritative record.
+`changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. There is no `CHANGELOG.md`. The GitHub Release is the changelog. This works because commits follow Conventional Commits and PRs are well-scoped, so the generated notes are the authoritative record.
 
 ### Release: e2e tests run in release workflow only, not on PRs
 
