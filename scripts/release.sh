@@ -92,22 +92,11 @@ bump_version() {
   npm version "$bump_type" --no-git-tag-version >/dev/null
 }
 
-bump_changelog() {
-  local version=$1
-  local date
-  date=$(date +%Y-%m-%d)
-  local changelog="CHANGELOG.md"
-  [ -f "$changelog" ] || log_error "CHANGELOG.md not found"
-  grep -q "## \[Unreleased\]" "$changelog" || log_error "No [Unreleased] section found in CHANGELOG.md"
-  sed -i "s/## \[Unreleased\]/## [v${version}] - ${date}/" "$changelog"
-  sed -i "0,/## \[v${version}\] - ${date}/s//## [Unreleased]\n\n## [v${version}] - ${date}/" "$changelog"
-}
-
 commit_and_tag() {
   local version=$1
   local branch="chore/release-v${version}"
   git checkout -b "$branch"
-  git add package.json CHANGELOG.md
+  git add package.json
   git commit -m "chore(release): v${version}"
   git tag "v${version}"
 }
@@ -124,12 +113,11 @@ open_pr() {
     --title "chore(release): v${version}" \
     --body "## Summary
 
-Bump version to ${version} and promote changelog to [v${version}].
+Bump version to ${version}.
 
 ## Key Changes
 
-- \`package.json\` version bumped to ${version}.
-- \`CHANGELOG.md\` \`[Unreleased]\` section promoted to \`[v${version}]\`." \
+- \`package.json\` version bumped to ${version}." \
     --base main
 }
 
@@ -156,10 +144,6 @@ main() {
   local new_version
   new_version=$(get_version)
   log_info "${current_version} → ${new_version}"
-
-  log_step "Bumping changelog"
-  bump_changelog "$new_version"
-  log_add "CHANGELOG.md updated"
 
   log_step "Committing and tagging"
   commit_and_tag "$new_version"

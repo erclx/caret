@@ -12,7 +12,7 @@ Push a `v*` tag to trigger a release. Use the release script rather than tagging
 bun run release
 ```
 
-The script prompts for a bump type (patch, minor, or major), updates `package.json` and `CHANGELOG.md`, commits with `chore(release): vX.X.X`, tags, and pushes. The workflow fires automatically on the tag push.
+The script prompts for a bump type (patch, minor, or major), updates `package.json`, commits with `chore(release): vX.X.X`, tags, and pushes. The workflow fires automatically on the tag push. Release notes are generated automatically by `changelogithub` from conventional commits and written to the GitHub Release.
 
 ### Job order
 

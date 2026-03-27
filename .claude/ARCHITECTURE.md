@@ -202,9 +202,9 @@ Components in `src/components/ui/` are source of truth. Project-wide baseline de
 
 Static checks, unit tests, and build run in parallel on every PR. `needs` is reserved for jobs that require an artifact from a prior job or that are prohibitively expensive relative to their gate. `e2e-tests` gates on `build` because it requires the built extension; `release` gates on all three parallel jobs plus `e2e-tests` because it should not publish until everything passes.
 
-### Release: `changelogithub` for GitHub Release notes, not CHANGELOG.md
+### Release: `changelogithub` generates all release notes; no CHANGELOG.md
 
-`changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. `CHANGELOG.md` is manually curated and is not touched by CI. The two surfaces serve different audiences: the GitHub Release is for repository visitors scanning a tag; `CHANGELOG.md` is for internal tracking.
+`changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. There is no `CHANGELOG.md`. The GitHub Release is the changelog. This works because commits follow Conventional Commits and PRs are well-scoped, so the generated notes are the authoritative record.
 
 ### Release: e2e tests run in release workflow only, not on PRs
 
