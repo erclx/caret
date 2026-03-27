@@ -9,6 +9,7 @@ GREY='\033[0;90m'
 NC='\033[0m'
 
 log_info() { echo -e "${GREY}│${NC} ${GREEN}✓${NC} $1"; }
+log_add() { echo -e "${GREY}│${NC} ${GREEN}+${NC} $1"; }
 log_error() {
   echo -e "${GREY}│${NC} ${RED}✗${NC} $1"
   exit 1
@@ -91,11 +92,22 @@ bump_version() {
   npm version "$bump_type" --no-git-tag-version >/dev/null
 }
 
+bump_changelog() {
+  local version=$1
+  local date
+  date=$(date +%Y-%m-%d)
+  local changelog="CHANGELOG.md"
+  [ -f "$changelog" ] || log_error "CHANGELOG.md not found"
+  grep -q "## \[Unreleased\]" "$changelog" || log_error "No [Unreleased] section found in CHANGELOG.md"
+  sed -i "s/## \[Unreleased\]/## [v${version}] - ${date}/" "$changelog"
+  sed -i "0,/## \[v${version}\] - ${date}/s//## [Unreleased]\n\n## [v${version}] - ${date}/" "$changelog"
+}
+
 commit_and_tag() {
   local version=$1
   local branch="chore/release-v${version}"
   git checkout -b "$branch"
-  git add package.json
+  git add package.json CHANGELOG.md
   git commit -m "chore(release): v${version}"
   git tag "v${version}"
 }
@@ -112,16 +124,12 @@ open_pr() {
     --title "chore(release): v${version}" \
     --body "## Summary
 
-- Bump version to ${version}
+Bump version to ${version} and promote changelog to [v${version}].
 
-## Key changes
+## Key Changes
 
-- \`package.json\` version bumped to ${version}
-
-## Testing
-
-- Tag \`v${version}\` was pushed separately to trigger the release workflow
-- Verify CI passes and the workflow publishes to the Chrome Web Store" \
+- \`package.json\` version bumped to ${version}.
+- \`CHANGELOG.md\` \`[Unreleased]\` section promoted to \`[v${version}]\`." \
     --base main
 }
 
@@ -148,6 +156,10 @@ main() {
   local new_version
   new_version=$(get_version)
   log_info "${current_version} → ${new_version}"
+
+  log_step "Bumping changelog"
+  bump_changelog "$new_version"
+  log_add "CHANGELOG.md updated"
 
   log_step "Committing and tagging"
   commit_and_tag "$new_version"

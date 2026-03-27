@@ -51,7 +51,7 @@ Generates a production build and a zip in `release/`.
 - `bun run check:full` — `check` plus end-to-end tests
 - `bun run snapshot` — generate project snapshot in `.claude/.tmp/SNAPSHOT.md`
 - `bun run screenshot` — generate extension screenshots
-- `bun run release` — bump version, tag, and push to trigger the release workflow
+- `bun run release` — bump version and changelog, tag, and push to trigger the release workflow
 - `bun run clean` — remove `node_modules` and temporary files
 - `bun run update` — update dependencies and run full verification
 
