@@ -124,17 +124,12 @@ open_pr() {
     --title "chore(release): v${version}" \
     --body "## Summary
 
-- Bump version to ${version}
+Bump version to ${version} and promote changelog to [v${version}].
 
-## Key changes
+## Key Changes
 
-- \`package.json\` version bumped to ${version}
-- \`CHANGELOG.md\` \`[Unreleased]\` section promoted to \`[v${version}]\`
-
-## Testing
-
-- Tag \`v${version}\` was pushed separately to trigger the release workflow
-- Verify CI passes and the workflow publishes to the Chrome Web Store" \
+- \`package.json\` version bumped to ${version}.
+- \`CHANGELOG.md\` \`[Unreleased]\` section promoted to \`[v${version}]\`." \
     --base main
 }
 
