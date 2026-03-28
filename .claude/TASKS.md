@@ -18,12 +18,6 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Fix: GitHub sync skips prompt with matching key but different body silently
-
-- [ ] When a local prompt and an incoming GitHub snippet share the same composite key but have different bodies, sync currently reports the prompt as up to date rather than flagging it as skipped or changed. Surface the distinction to the user
-
-> Test strategy: unit test for the diff case, manual verification in installed extension
-
 ### Fix: import feedback is noisy with many entries
 
 - [ ] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added. Redesign the feedback to be scannable regardless of entry count
@@ -86,3 +80,9 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Show `label · name` in trigger dropdown rows for labeled prompts
 
 > Test strategy: unit tests for schema boundary, merge composite key, diff composite key and subdirectory fetch, form per-label uniqueness validation, filter pills rendering and interaction
+
+### Fix: GitHub sync skips prompt with matching key but different body silently
+
+- [x] When a local prompt and an incoming GitHub snippet share the same composite key but have different bodies, sync currently reports the prompt as up to date rather than flagging it as skipped or changed. Surface the distinction to the user
+
+> Test strategy: unit test for the diff case, manual verification in installed extension

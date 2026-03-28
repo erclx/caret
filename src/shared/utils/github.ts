@@ -165,7 +165,7 @@ export async function fetchSnippets(
 export function computeDiff(
   current: Prompt[],
   incoming: Snippet[],
-  localKeys: Set<string> = new Set(),
+  localKeys: Map<string, string> = new Map(),
 ): DiffResult {
   const currentMap = new Map(
     current.map((p) => [compositeKey(p.label, p.name), p.body]),
@@ -185,8 +185,13 @@ export function computeDiff(
 
   for (const [key, { label, name, body }] of incomingMap) {
     if (!currentMap.has(key)) {
-      if (localKeys.has(key)) {
-        skipped.push({ label, name })
+      const localBody = localKeys.get(key)
+      if (localBody !== undefined) {
+        if (localBody === body) {
+          unchanged.push({ label, name })
+        } else {
+          skipped.push({ label, name })
+        }
       } else {
         added.push({ label, name })
       }

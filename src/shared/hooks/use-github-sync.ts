@@ -46,10 +46,10 @@ export function useGithubSync() {
       return
     }
 
-    const localKeys = new Set(
+    const localKeys = new Map(
       prompts
         .filter((p) => p.source !== 'github')
-        .map((p) => compositeKey(p.label, p.name)),
+        .map((p) => [compositeKey(p.label, p.name), p.body]),
     )
     const diffResult = computeDiff(
       prompts.filter((p) => p.source === 'github'),
