@@ -373,7 +373,6 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'summarize')
-    // label field left empty — different from 'claude'
 
     expect(
       screen.queryByText(/a prompt with this name and label already exists/i),
@@ -410,13 +409,11 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'summarize')
-    // No duplicate yet (unlabeled vs labeled)
     expect(
       screen.queryByText(/a prompt with this name and label already exists/i),
     ).not.toBeInTheDocument()
 
     await user.type(screen.getByLabelText(/^label$/i), 'writing')
-    // Now it matches
     expect(
       screen.getByText(/a prompt with this name and label already exists/i),
     ).toBeInTheDocument()

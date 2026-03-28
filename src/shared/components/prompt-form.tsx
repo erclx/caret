@@ -73,7 +73,6 @@ export function PromptForm({
   function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
     setLabel(val)
-    // Re-validate name against the new label value
     if (name && KEBAB_RE.test(name)) {
       if (isDuplicatePair(name, val)) {
         setNameError('A prompt with this name and label already exists')

@@ -70,7 +70,6 @@ export function mergePrompts(
     const index = indexByKey.get(key) ?? -1
 
     if (index !== -1) {
-      // last-write-wins: incoming body overwrites existing, existing id preserved
       merged[index] = {
         ...merged[index],
         body: prompt.body,
@@ -79,7 +78,6 @@ export function mergePrompts(
       }
       updatedNames.push(label)
     } else {
-      // new prompt: preserve original timestamps, generate fresh id to avoid collisions
       merged.push({ ...prompt, id: crypto.randomUUID() })
       indexByKey.set(key, merged.length - 1)
       addedNames.push(label)

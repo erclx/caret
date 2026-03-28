@@ -28,7 +28,6 @@ export function useGithubSync() {
     ? `${config.owner}/${config.repo}/${config.branch}/${config.snippetsPath}`
     : null
 
-  // If the config changed since the sync started, the diff is stale.
   const isStaleReview = status === 'reviewing' && syncConfigKey !== configKey
   const effectiveStatus: SyncStatus = isStaleReview ? 'idle' : status
 

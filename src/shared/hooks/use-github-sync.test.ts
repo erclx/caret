@@ -355,7 +355,6 @@ describe('useGithubSync', () => {
     ])
     expect(result.current.diff?.added).toHaveLength(0)
 
-    // Apply with only skipped entries — local prompt must be untouched
     await act(async () => {
       await result.current.applySync()
     })
@@ -432,12 +431,10 @@ describe('useGithubSync', () => {
     mockStorage.set('prompts', [])
 
     vi.mocked(fetch)
-      // Root listing: one subdirectory "claude"
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [{ name: 'claude', type: 'dir', download_url: null }],
       } as Response)
-      // claude/ listing
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [
@@ -449,7 +446,6 @@ describe('useGithubSync', () => {
           },
         ],
       } as Response)
-      // claude/summarize.md content
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'Summarize this.',

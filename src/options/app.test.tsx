@@ -133,7 +133,6 @@ describe('OptionsApp', () => {
     await user.clear(geminiInput)
     await user.type(geminiInput, '/')
 
-    // Only claude.ai (loaded with /) should show a warning, not gemini
     expect(
       screen.getAllByText("/ conflicts with this site's native slash menu"),
     ).toHaveLength(1)
