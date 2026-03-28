@@ -24,7 +24,7 @@ Caret requests the following permissions:
 - `storage`: read and write prompt library and settings data locally
 - `sidePanel`: open the side panel when the extension icon is clicked
 
-No permission is used to collect browsing history, track activity, or access data unrelated to prompt management.
+No permission collects browsing history, tracks activity, or accesses data unrelated to prompt management.
 
 ## Contact
 

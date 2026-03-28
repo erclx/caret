@@ -17,9 +17,9 @@ Available on the [Chrome Web Store](https://chromewebstore.google.com/detail/car
 - Trigger symbol and type-to-search dropdown in any supported chat input
 - Keyboard navigation: ↑↓ or Ctrl+J/Ctrl+P to move, Enter or Tab to insert, Escape to dismiss
 - Per-site trigger config: set a different symbol per site to avoid conflicts with native shortcuts
-- GitHub sync: pulls prompts from a repository read-only. Subdirectories map to labels, and local prompts are preserved when a remote prompt shares the same name and label.
+- GitHub sync: pulls prompts from a repository. Sync is read-only. Subdirectories map to labels, and local prompts are preserved when a remote prompt shares the same name and label.
 - JSON export and import for backup and restore
-- All data stays in your browser with nothing sent to any server
+- All data stays in your browser. Nothing is sent to any server.
 
 ## Usage
 
