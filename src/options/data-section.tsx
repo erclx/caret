@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { usePrompts } from '@/shared/hooks/use-prompts'
-import { exportPrompts, parseImport } from '@/shared/utils/io'
+import {
+  exportPrompts,
+  formatImportFeedback,
+  parseImport,
+} from '@/shared/utils/io'
 
 type ImportFeedback =
   | { type: 'success'; updatedNames: string[]; addedNames: string[] }
@@ -95,22 +99,16 @@ export function DataSection() {
           onChange={handleFileChange}
         />
         {importFeedback && (
-          <div className='flex flex-col gap-0.5 text-sm'>
+          <div className='text-sm'>
             {importFeedback.type === 'error' ? (
               <p className='text-destructive'>{importFeedback.message}</p>
             ) : (
-              <>
-                {importFeedback.updatedNames.length > 0 && (
-                  <p className='text-muted-foreground'>
-                    Updated: {importFeedback.updatedNames.join(', ')}.
-                  </p>
+              <p className='text-muted-foreground'>
+                {formatImportFeedback(
+                  importFeedback.addedNames,
+                  importFeedback.updatedNames,
                 )}
-                {importFeedback.addedNames.length > 0 && (
-                  <p className='text-muted-foreground'>
-                    Added: {importFeedback.addedNames.join(', ')}.
-                  </p>
-                )}
-              </>
+              </p>
             )}
           </div>
         )}
