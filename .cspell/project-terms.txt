@@ -5,6 +5,7 @@ bradlc
 caret
 dbaeumer
 devconsole
+erclx
 esbenp
 frontmatter
 lintstagedrc
@@ -25,6 +26,7 @@ shadcn
 shfmt
 sidepanel
 sonner
+subfolders
 tanstack
 testuser
 textareas
