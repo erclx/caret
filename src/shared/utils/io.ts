@@ -21,6 +21,12 @@ function displayName(label: string | undefined, name: string): string {
   return label ? `${label} · ${name}` : name
 }
 
+function truncateNames(names: string[]): string {
+  if (names.length <= 3) return names.join(', ')
+  const rest = names.length - 3
+  return `${names.slice(0, 3).join(', ')} and ${rest} more`
+}
+
 export function exportPrompts(prompts: Prompt[]): void {
   const json = JSON.stringify(prompts, null, 2)
   const blob = new Blob([json], { type: 'application/json' })
@@ -91,9 +97,14 @@ export function formatImportFeedback(
   addedNames: string[],
   updatedNames: string[],
 ): string {
+  if (addedNames.length === 0 && updatedNames.length === 0)
+    return 'All prompts are already up to date.'
   const parts: string[] = []
   if (updatedNames.length > 0)
-    parts.push(`Updated: ${updatedNames.join(', ')}.`)
-  if (addedNames.length > 0) parts.push(`Added: ${addedNames.join(', ')}.`)
+    parts.push(
+      `Updated ${updatedNames.length}: ${truncateNames(updatedNames)}.`,
+    )
+  if (addedNames.length > 0)
+    parts.push(`Added ${addedNames.length}: ${truncateNames(addedNames)}.`)
   return parts.join(' ')
 }
