@@ -101,7 +101,7 @@ describe('DataSection', () => {
       })
     })
 
-    it('should show "Added" names after a successful import', async () => {
+    it('should show "Added" count and name after a successful import', async () => {
       mockImportPrompts.mockResolvedValue({
         addedNames: ['summarize'],
         updatedNames: [],
@@ -111,11 +111,11 @@ describe('DataSection', () => {
       await user.upload(fileInput, makeFile(JSON.stringify(PROMPTS)))
 
       await waitFor(() => {
-        expect(screen.getByText('Added: summarize.')).toBeInTheDocument()
+        expect(screen.getByText('Added 1: summarize.')).toBeInTheDocument()
       })
     })
 
-    it('should show "Updated" names after a successful import', async () => {
+    it('should show "Updated" count and name after a successful import', async () => {
       mockImportPrompts.mockResolvedValue({
         addedNames: [],
         updatedNames: ['summarize'],
@@ -125,11 +125,11 @@ describe('DataSection', () => {
       await user.upload(fileInput, makeFile(JSON.stringify(PROMPTS)))
 
       await waitFor(() => {
-        expect(screen.getByText('Updated: summarize.')).toBeInTheDocument()
+        expect(screen.getByText('Updated 1: summarize.')).toBeInTheDocument()
       })
     })
 
-    it('should show both "Updated" and "Added" lines when import has both', async () => {
+    it('should show combined feedback when import has both updated and added', async () => {
       mockImportPrompts.mockResolvedValue({
         addedNames: ['new-prompt'],
         updatedNames: ['summarize'],
@@ -143,8 +143,25 @@ describe('DataSection', () => {
       await user.upload(fileInput, makeFile(JSON.stringify(prompts)))
 
       await waitFor(() => {
-        expect(screen.getByText('Updated: summarize.')).toBeInTheDocument()
-        expect(screen.getByText('Added: new-prompt.')).toBeInTheDocument()
+        expect(
+          screen.getByText('Updated 1: summarize. Added 1: new-prompt.'),
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('should show up-to-date message when import produces no changes', async () => {
+      mockImportPrompts.mockResolvedValue({
+        addedNames: [],
+        updatedNames: [],
+      })
+      const { user, fileInput } = renderSection()
+
+      await user.upload(fileInput, makeFile(JSON.stringify(PROMPTS)))
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('All prompts are already up to date.'),
+        ).toBeInTheDocument()
       })
     })
 
@@ -163,14 +180,14 @@ describe('DataSection', () => {
       await user.upload(fileInput, makeFile(JSON.stringify(PROMPTS)))
 
       await waitFor(() => {
-        expect(screen.getByText('Added: summarize.')).toBeInTheDocument()
+        expect(screen.getByText('Added 1: summarize.')).toBeInTheDocument()
       })
 
       await act(async () => {
         vi.advanceTimersByTime(3001)
       })
 
-      expect(screen.queryByText('Added: summarize.')).not.toBeInTheDocument()
+      expect(screen.queryByText('Added 1: summarize.')).not.toBeInTheDocument()
 
       vi.useRealTimers()
     })

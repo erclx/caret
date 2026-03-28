@@ -189,23 +189,49 @@ describe('mergePrompts', () => {
 })
 
 describe('formatImportFeedback', () => {
-  it('should list updated and added names when both are present', () => {
+  it('should show updated and added counts with names when both are present', () => {
     expect(formatImportFeedback(['c'], ['a', 'b'])).toBe(
-      'Updated: a, b. Added: c.',
+      'Updated 2: a, b. Added 1: c.',
     )
   })
 
-  it('should show only updated names when nothing was added', () => {
+  it('should show only updated count and names when nothing was added', () => {
     expect(formatImportFeedback([], ['summarize', 'refactor'])).toBe(
-      'Updated: summarize, refactor.',
+      'Updated 2: summarize, refactor.',
     )
   })
 
-  it('should show only added names when nothing was updated', () => {
-    expect(formatImportFeedback(['new-prompt'], [])).toBe('Added: new-prompt.')
+  it('should show only added count and name when nothing was updated', () => {
+    expect(formatImportFeedback(['new-prompt'], [])).toBe(
+      'Added 1: new-prompt.',
+    )
   })
 
-  it('should return an empty string when both arrays are empty', () => {
-    expect(formatImportFeedback([], [])).toBe('')
+  it('should return the up-to-date message when both arrays are empty', () => {
+    expect(formatImportFeedback([], [])).toBe(
+      'All prompts are already up to date.',
+    )
+  })
+
+  it('should show all names inline when count is exactly 3', () => {
+    expect(formatImportFeedback(['a', 'b', 'c'], [])).toBe('Added 3: a, b, c.')
+  })
+
+  it('should truncate names beyond 3 with a remainder count', () => {
+    expect(formatImportFeedback(['a', 'b', 'c', 'd', 'e'], [])).toBe(
+      'Added 5: a, b, c and 2 more.',
+    )
+  })
+
+  it('should truncate updated names beyond 3 with a remainder count', () => {
+    expect(formatImportFeedback([], ['a', 'b', 'c', 'd', 'e', 'f'])).toBe(
+      'Updated 6: a, b, c and 3 more.',
+    )
+  })
+
+  it('should truncate both segments independently when both exceed 3 entries', () => {
+    expect(
+      formatImportFeedback(['a', 'b', 'c', 'd'], ['w', 'x', 'y', 'z']),
+    ).toBe('Updated 4: w, x, y and 1 more. Added 4: a, b, c and 1 more.')
   })
 })
