@@ -168,7 +168,7 @@ The diff identity key is `(label ?? '', name)`. A file moved between GitHub subd
 
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'`, a fresh `id`, and the folder-derived `label`. Updated prompts patch `body`, `label`, and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 
-If a GitHub snippet's `(label, name)` composite key matches a local prompt's composite key, it is placed in a `skipped` category rather than `added`. The local prompt is preserved and the GitHub version is not imported. Skipped entries are shown in the diff review UI with a neutral indicator so the user understands why they were not added.
+When a GitHub snippet's `(label, name)` composite key matches a local prompt's composite key, the diff compares bodies. If the bodies match, the snippet routes to `unchanged` and no review is shown. If the bodies differ, the snippet routes to `skipped`: the local prompt is preserved, the GitHub version is not imported, and the entry appears in the diff review UI with a neutral indicator so the user understands why it was not applied.
 
 PAT is optional for public repos and required for private ones.
 

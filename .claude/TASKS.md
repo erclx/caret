@@ -18,11 +18,15 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Fix: import feedback is noisy with many entries
+### Chore: manual test fixture system
 
-- [ ] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added. Redesign the feedback to be scannable regardless of entry count
+- [ ] Create a `manual/` folder at repo root with a subdirectory per feature area: import-export and github-sync
+- [ ] Populate import-export with JSON fixtures and a step-by-step verification doc
+- [ ] Add a docs page describing the folder structure and how to use it
+- [ ] Migrate dev seed data to derive from a fixture file so seeds and import test fixtures share one source of truth
+- [ ] Add a rule to the project instructions: keep fixtures and verification steps in sync when feature behavior changes
 
-> Test strategy: visual verification with a large import fixture
+> Test strategy: review that fixtures load correctly and seed data matches fixture content after migration
 
 ## Done
 
@@ -86,3 +90,9 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] When a local prompt and an incoming GitHub snippet share the same composite key but have different bodies, sync currently reports the prompt as up to date rather than flagging it as skipped or changed. Surface the distinction to the user
 
 > Test strategy: unit test for the diff case, manual verification in installed extension
+
+### Fix: import feedback is noisy with many entries
+
+- [x] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added. Redesign the feedback to be scannable regardless of entry count
+
+> Test strategy: visual verification with a large import fixture

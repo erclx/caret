@@ -317,8 +317,9 @@ Section order: Data → Per-site configuration → GitHub sync.
 │ [↓ Export prompts as JSON            ]      │
 │ [↑ Import prompts from JSON          ]      │
 │                                             │
-│ Added: foo, bar.          ← success feedback│
-│ Updated: baz.               fades after Ns  │
+│ Updated 2: baz, qux. Added 1: foo.          │  ← single line, count + names, fades after Ns
+│ Added 5: a, b, c and 2 more.                │  ← truncates after 3 names when count > 3
+│ All prompts are already up to date.         │  ← when import produces no changes
 └─────────────────────────────────────────────┘
 ```
 
