@@ -116,7 +116,6 @@ describe('fetchSnippets', () => {
         ok: true,
         text: async () => 'Summarize.',
       } as Response)
-      // images/ subdir listing — empty, no .md files
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [],
@@ -208,17 +207,14 @@ describe('fetchSnippets', () => {
     const mockFetch = vi.mocked(fetch)
 
     mockFetch
-      // Root listing: one subdir "claude", no root .md files
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [makeDirEntry('claude')],
       } as Response)
-      // claude/ listing
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [makeFileEntry('summarize.md', 'snippets/claude')],
       } as Response)
-      // claude/summarize.md content
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'Summarize this.',
@@ -241,7 +237,6 @@ describe('fetchSnippets', () => {
     const mockFetch = vi.mocked(fetch)
 
     mockFetch
-      // Root listing: one root file and one subdir
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [
@@ -249,17 +244,14 @@ describe('fetchSnippets', () => {
           makeDirEntry('claude'),
         ],
       } as Response)
-      // fix-grammar.md content (root file fetch)
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'Fix grammar.',
       } as Response)
-      // claude/ listing
       .mockResolvedValueOnce({
         ok: true,
         json: async () => [makeFileEntry('summarize.md', 'snippets/claude')],
       } as Response)
-      // claude/summarize.md content
       .mockResolvedValueOnce({
         ok: true,
         text: async () => 'Summarize this.',
