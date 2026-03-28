@@ -418,8 +418,8 @@ describe('computeDiff', () => {
     expect(result.added).toEqual([{ name: 'new-prompt', label: undefined }])
   })
 
-  it('should mark incoming as skipped when the composite key matches a local prompt', () => {
-    const localKeys = new Set(['\x00chat-mode'])
+  it('should mark incoming as skipped when composite key matches a local prompt with a different body', () => {
+    const localKeys = new Map([['\x00chat-mode', 'local body']])
     const result = computeDiff(
       [],
       [{ name: 'chat-mode', body: 'github body' }],
@@ -430,8 +430,21 @@ describe('computeDiff', () => {
     expect(result.added).toHaveLength(0)
   })
 
+  it('should mark incoming as unchanged when composite key and body match a local prompt', () => {
+    const localKeys = new Map([['\x00chat-mode', 'same body']])
+    const result = computeDiff(
+      [],
+      [{ name: 'chat-mode', body: 'same body' }],
+      localKeys,
+    )
+
+    expect(result.unchanged).toEqual([{ name: 'chat-mode', label: undefined }])
+    expect(result.skipped).toHaveLength(0)
+    expect(result.added).toHaveLength(0)
+  })
+
   it('should add incoming prompts not in localKeys even when localKeys is provided', () => {
-    const localKeys = new Set(['\x00local-only'])
+    const localKeys = new Map([['\x00local-only', 'body']])
     const result = computeDiff(
       [],
       [{ name: 'new-prompt', body: 'body' }],

@@ -307,6 +307,102 @@ describe('useGithubSync', () => {
     expect(savedSettings?.github?.lastSyncedAt).toBeGreaterThan(0)
   })
 
+  it('should enter reviewing state with skipped diff when local prompt has same key but different body', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'chat-mode',
+        body: 'local body',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'chat-mode.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/chat-mode.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'github body',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('reviewing')
+    })
+
+    expect(result.current.diff?.skipped).toEqual([
+      { name: 'chat-mode', label: undefined },
+    ])
+    expect(result.current.upToDateCount).toBeNull()
+  })
+
+  it('should skip reviewing and return upToDateCount when local prompt body matches incoming snippet', async () => {
+    mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
+    mockStorage.set('prompts', [
+      {
+        id: 'p1',
+        name: 'chat-mode',
+        body: 'shared body',
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ])
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          {
+            name: 'chat-mode.md',
+            type: 'file',
+            download_url:
+              'https://raw.githubusercontent.com/testuser/snippets/main/snippets/chat-mode.md',
+          },
+        ],
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'shared body',
+      } as Response)
+
+    const { result } = renderHook(() => useGithubSync())
+
+    await waitFor(() => {
+      expect(result.current.config).toBeDefined()
+    })
+
+    await act(async () => {
+      await result.current.sync()
+    })
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle')
+    })
+
+    expect(result.current.upToDateCount).toBe(1)
+    expect(result.current.diff).toBeNull()
+  })
+
   it('should not add a github prompt when a local prompt with the same name exists', async () => {
     mockStorage.set('settings', makeSettings({ github: BASE_CONFIG }))
     mockStorage.set('prompts', [
