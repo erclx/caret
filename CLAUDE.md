@@ -11,6 +11,13 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 - Check `.claude/REQUIREMENTS.md` for feature scope and non-goals
 - Check `.claude/GOV.md` for coding standards before writing or editing any code
 
+## Shipping
+
+- Before running `/toolkit:git-ship`, read store files in parallel and update any that are stale
+- On any user-visible feature change, check `store/description-short.txt` and `store/description-full.txt`
+- On any permission change in `manifest.config.ts`, check `store/privacy-single-purpose.txt`, `store/privacy-host-permission-justification.txt`, `store/privacy-sidepanel-justification.txt`, and `store/privacy-storage-justification.txt`
+- `store/listing.md` and `store/figma-*.md` are procedural docs and never need updating from code changes
+
 ## Collaboration rules
 
 - Before editing any doc, re-read `standards/prose.md` and the document's own preamble
