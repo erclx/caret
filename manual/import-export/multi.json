@@ -1,0 +1,23 @@
+[
+  {
+    "id": "multi-001",
+    "name": "summarize",
+    "body": "Summarize the following in three bullet points:",
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "multi-002",
+    "name": "explain",
+    "body": "Explain this to me like I am five years old:",
+    "createdAt": 1700000000001,
+    "updatedAt": 1700000000001
+  },
+  {
+    "id": "multi-003",
+    "name": "refactor",
+    "body": "Refactor this code for readability and simplicity:",
+    "createdAt": 1700000000002,
+    "updatedAt": 1700000000002
+  }
+]

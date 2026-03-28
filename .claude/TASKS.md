@@ -18,15 +18,9 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Chore: manual test fixture system
+### Nothing queued
 
-- [ ] Create a `manual/` folder at repo root with a subdirectory per feature area: import-export and github-sync
-- [ ] Populate import-export with JSON fixtures and a step-by-step verification doc
-- [ ] Add a docs page describing the folder structure and how to use it
-- [ ] Migrate dev seed data to derive from a fixture file so seeds and import test fixtures share one source of truth
-- [ ] Add a rule to the project instructions: keep fixtures and verification steps in sync when feature behavior changes
-
-> Test strategy: review that fixtures load correctly and seed data matches fixture content after migration
+- No tasks currently
 
 ## Done
 
@@ -96,3 +90,14 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added. Redesign the feedback to be scannable regardless of entry count
 
 > Test strategy: visual verification with a large import fixture
+
+### Chore: manual test fixture system
+
+- [x] Create a manual testing folder at repo root with subfolders per feature area: import-export, github-sync, sidepanel, trigger, and dark-mode
+- [x] Populate import-export with five JSON fixtures (single, multi, overflow, empty, invalid) and a verification checklist covering export, import feedback, idempotency, truncation, and round-trip
+- [x] Add verification checklists for github-sync and sidepanel GitHub tab, sidepanel CRUD and filtering, trigger and dropdown on real sites, and dark mode
+- [x] Add a docs overview page describing each folder and linking to its checklist
+- [x] Add project instruction rules to keep fixtures and checklists current on feature changes and to review them before shipping
+- [x] Leave seeds independent of fixtures: they serve different purposes and coupling them creates drift
+
+> Test strategy: visual verification. Load each fixture in the extension and confirm the expected feedback message and prompt state.

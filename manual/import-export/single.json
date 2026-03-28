@@ -1,0 +1,9 @@
+[
+  {
+    "id": "single-001",
+    "name": "summarize",
+    "body": "Summarize the following in three bullet points:",
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  }
+]
