@@ -15,8 +15,8 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Build typed `storage.ts` wrapper (get, set, subscribe)
 - [x] Build `usePrompts` hook (list, create, update, delete)
 - [x] Build `useSettings` hook (read/write per-site config)
-- [x] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content; seed storage on init when `NODE_ENV === development` and storage is empty
-- [x] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files; overwrite the existing smoke test)
+- [x] Add `seeds.ts` with sample snippets mirroring `snippets/` folder content. Seed storage on init when `NODE_ENV === development` and storage is empty
+- [x] Replace `src/test/smoke.test.ts` with unit tests for storage utils and hooks (don't create new test files, overwrite the existing smoke test)
 
 > Test strategy: pure logic
 
@@ -42,7 +42,7 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 - [x] Detect chat input per target site (Claude, Gemini, ChatGPT)
 - [x] Abstract input adapter (contenteditable vs textarea)
-- [x] Trigger symbol detection on keydown; symbol must be at position 0 or immediately preceded by whitespace; mid-word trigger (e.g. `word>`) must not fire
+- [x] Trigger symbol detection on keydown. The symbol must be at position 0 or immediately preceded by whitespace. A mid-word trigger (e.g. `word>`) must not fire
 - [x] Position/reposition on resize
 
 > Test strategy: real DOM shapes per site
@@ -110,15 +110,15 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 ### Feature 8: GitHub Sync
 
 - [x] Add GitHub config to Settings schema: `pat`, `owner`, `repo`, `branch`, `snippetsPath`
-- [x] GitHub config UI in options page (PAT input, repo details, save, connection status); test connection before saving, only persist on success
+- [x] GitHub config UI in options page (PAT input, repo details, save, connection status). Test connection before saving, only persist on success
 - [x] Dedicated sync view in sidepanel: tab bar `[Prompts] [GitHub]`, connection status, last synced timestamp, snippet count, sync button
 - [x] Fetch all `.md` files from configured `snippets/` path via GitHub Contents API
 - [x] Map filename → slug (strip `.md`), file content → prompt body
-- [x] Add `source?: 'github'` to `Prompt` schema; sync only manages prompts it owns; locally created prompts excluded from diff and untouched by apply
+- [x] Add `source?: 'github'` to `Prompt` schema. Sync only manages prompts it owns. Locally created prompts are excluded from the diff and untouched by apply
 - [x] Diff view before confirming sync: apply surgically (add, update, remove), preserving `id` and `createdAt` for unchanged and updated prompts
 - [x] Post-sync summary via `lastSyncedAt` / `lastSyncedCount` in settings
 - [x] Dev seeding: seed GitHub config from `VITE_GITHUB_*` env vars in background `onInstalled`
-- [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`; `app.tsx` is loading gate and composition only
+- [x] Options page decomposed into `data-section.tsx`, `site-config-section.tsx`, `github-section.tsx`. `app.tsx` is the loading gate and composition only
 
 > Test strategy: fetch parsing and mapping logic
 
@@ -134,7 +134,7 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 ### Feat: prompt list improvements
 
 - [x] Name field: realtime kebab-case validation with inline error
-- [x] Sort prompts by `updatedAt` descending; local prompts before GitHub-sourced
+- [x] Sort prompts by `updatedAt` descending. Local prompts before GitHub-sourced
 
 > Test strategy: validation logic
 
@@ -149,22 +149,22 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 ### Feat: unsaved changes warning in prompt form
 
-- [x] Warn before discarding a dirty form: Back and Cancel both trigger an inline confirmation row when values differ from initial; no warning if form is clean or new and empty
-- [x] Two-anchor confirmation: Back shows confirmation at top replacing `← Back`; Cancel shows confirmation at bottom replacing Cancel/Save; Keep editing restores the replaced row
+- [x] Warn before discarding a dirty form: Back and Cancel both trigger an inline confirmation row when values differ from initial. No warning if form is clean or new and empty
+- [x] Two-anchor confirmation: Back shows confirmation at top replacing `← Back`. Cancel shows confirmation at bottom replacing Cancel/Save. Keep editing restores the replaced row
 
 > Test strategy: dirty state detection
 
 ### Feat: prompt form improvements
 
-- [x] Warn on duplicate name: prevent saving a prompt whose name already exists; editing a prompt excludes itself from the check
+- [x] Warn on duplicate name: prevent saving a prompt whose name already exists. Editing a prompt excludes itself from the check
 
 > Test strategy: duplicate detection logic
 
 ### Feat: GitHub sync UX fixes
 
-- [x] Fix connection status mismatch: saving with an invalid PAT no longer writes `connectionHealth: 'error'` to the stored config; error stays local to the options form, leaving the valid stored config and sidebar dot unaffected
+- [x] Fix connection status mismatch: saving with an invalid PAT no longer writes `connectionHealth: 'error'` to the stored config. The error stays local to the options form, leaving the valid stored config and sidebar dot unaffected
 - [x] Fix options form initial status: `connectionStatus` now reads from `settings.github.connectionHealth` on load instead of always defaulting to `'connected'` when a config exists
-- [x] Post-apply feedback: sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading out after 2.5s; uses `handleApply` wrapper in `GitHubView` rather than touching the hook
+- [x] Post-apply feedback: sidepanel shows a transient "Applied ✓" message below the sync button after a diff is applied, fading after 2.5s. Uses `handleApply` wrapper in `GitHubView` rather than touching the hook
 - [x] Dev prefill: options form prefills PAT and repository fields from `VITE_GITHUB_*` env vars in development mode when no config is saved
 
 > Test strategy: visual verification
@@ -179,9 +179,9 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 ### Fix: options page polish
 
-- [x] Guard "Saved ✓" feedback in `site-config-section.tsx`; skip if no sites were modified
+- [x] Guard "Saved ✓" feedback in `site-config-section.tsx`. Skip if no sites were modified
 - [x] Per-site trigger validation: show error on blur only, not on every keystroke
-- [x] Em dash audit: grep all rendered component strings for `—`; none found in rendered UI
+- [x] Em dash audit: grep all rendered component strings for `—`. None found in rendered UI
 - [x] UI copy audit: apply copy standards to options page and shared utils error messages
 
 > Test strategy: settings form logic and visual verification
@@ -189,19 +189,19 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 ### Fix: import feedback copy
 
 - [x] Replace count-only import result string with named changes: e.g. "Updated: summarize, refactor. Added: new-prompt."
-- [x] Render Updated and Added on separate lines; dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
+- [x] Render Updated and Added on separate lines. Dynamic timeout scaled to item count (`Math.max(3000, total * 800ms)`)
 
 > Test strategy: feedback string logic
 
 ### Feat: onboarding
 
-- [x] First install empty state: onboarding hint shown only when prompt list is empty and no prompts have ever been created; uses key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install); once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently; deleted-all state shows "No prompts yet, click + New to add one."
+- [x] First install empty state: the onboarding hint shows only when the prompt list is empty and no prompts have ever been created. Uses a key-existence check on `chrome.storage.local` (`prompts` key absent means fresh install). Once any write to `prompts` occurs, `hasEverHadPrompts` flips to `true` permanently. The deleted-all state shows "No prompts yet, click + New to add one."
 
 > Test strategy: empty state branching
 
 ### Fix: GitHub tab state + docs
 
-- [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`; pass result as props so diff state survives tab switches
+- [x] Lift `useGithubSync` from `GitHubView` into `PromptLibrary`. Pass result as props so diff state survives tab switches
 - [x] Expand `snippetsPath` hint in `github-section.tsx` to note that filename (without `.md`) becomes the snippet name and non-`.md` files are skipped
 
 > Test strategy: manual verification
@@ -237,20 +237,20 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 - [x] Tighten per-site config section typography and sizing
 - [x] Align save button placement across sections: both left-aligned
-- [x] Move GitHub disconnect into footer row with tooltip hint; remove separate bordered block
+- [x] Move GitHub disconnect into footer row with tooltip hint. Remove the separate bordered block
 - [x] Update wireframes to reflect current options page layout and section order
 
 > Test strategy: visual verification
 
 ### Fix: duplicate prompts on GitHub sync when local and remote share a name
 
-- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists; local prompt is preserved and the GitHub entry is ignored
+- [x] Skip adding an incoming GitHub prompt during apply if a local prompt with the same name already exists. The local prompt is preserved and the GitHub entry is ignored
 
 > Test strategy: name-collision case in sync apply
 
 ### Fix: Esc to cancel in edit form
 
-- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean); second Esc dismisses the confirmation
+- [x] Handle Esc in the prompt edit form: trigger the same dirty-state check as Back/Cancel (show confirmation if dirty, navigate immediately if clean). A second Esc dismisses the confirmation
 
 > Test strategy: dirty-state and keyboard interaction
 
@@ -277,6 +277,6 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 
 ### Fix: trailing space after prompt insertion
 
-- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately; prompts ending with spaces or newlines get the excess stripped rather than a double space appended
+- [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately. Prompts ending with spaces or newlines get the excess stripped rather than a double space appended
 
 > Test strategy: insertion output
