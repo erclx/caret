@@ -4,14 +4,14 @@ Capture visual intent and the decisions behind it: the why behind how things loo
 
 What belongs:
 
-- Tokens described as intent ("mid gray, muted text"), not computed values; exact values live in code
+- Tokens described as intent ("mid gray, muted text"), not computed values. Exact values live in code.
 - Layout constraints and sizing rules not obvious from wireframes
 - Visual rules a developer could get wrong without guidance
 - Non-obvious omissions ("no motion", "no custom icons") that prevent scope creep
 
 What does not belong:
 
-- CSS classes, computed values, component filenames, or prop names; those live in code
+- CSS classes, computed values, component filenames, or prop names. Those live in code.
 - UX copy and interaction flows, which live in WIREFRAMES.md
 - Anything that requires updating every time the code is refactored
 
@@ -73,7 +73,7 @@ Shadow on the dropdown only. It floats above the host page. Subtle two-layer dro
 
 ## Focus rings
 
-2px ring on all interactive elements, using the `--ring` token at 50% opacity. Reduced from the shadcn default of 3px to match the overall minimal visual weight. Containers that clip with `overflow-hidden` need at least 4px of inset padding on any side where a focusable element sits flush against the boundary; otherwise the ring is clipped.
+2px ring on all interactive elements, using the `--ring` token at 50% opacity. Reduced from the shadcn default of 3px to match the overall minimal visual weight. Containers that clip with `overflow-hidden` need at least 4px of inset padding on any side where a focusable element sits flush against the boundary, or the ring is clipped.
 
 Custom `<button>` elements that do not use a shadcn component must suppress the browser default outline and apply the project ring explicitly. Without this, the browser outline flashes before the custom ring renders.
 
@@ -103,13 +103,13 @@ None. Speed over delight for a keyboard-driven tool.
 
 ### Sidepanel: label filter pills
 
-- Shown only when at least one labeled prompt exists; hidden otherwise
+- Shown only when at least one labeled prompt exists, hidden otherwise
 - Pills are small, low-contrast: `--card` background, `--border` border, `--muted-foreground` text, 4px radius
-- Active pill shifts to `--accent` background with `--foreground` text; no border change
+- Active pill shifts to `--accent` background with `--foreground` text, no border change
 - Active pills show a small X icon on the right to make deselection discoverable
-- Multiple pills can be active simultaneously. `All` is active only when no label pills are selected; clicking it clears all active pills.
-- `All` pill is always first; label pills follow in alphabetical order; `Unlabeled` pill is last and appears only when unlabeled prompts exist alongside at least one labeled prompt
-- No scroll on the pills row; if labels are numerous they wrap
+- Multiple pills can be active simultaneously. `All` is active only when no label pills are selected. Clicking it clears all active pills.
+- `All` pill is always first. Label pills follow in alphabetical order. `Unlabeled` pill is last and appears only when unlabeled prompts exist alongside at least one labeled prompt
+- No scroll on the pills row. If labels are numerous they wrap.
 
 ### Sidepanel: prompt list rows
 
@@ -124,8 +124,8 @@ None. Speed over delight for a keyboard-driven tool.
 
 - Max width 640px, centered
 - Section headers use full-contrast foreground text to create hierarchy against the muted description text below
-- Save button left-aligned in all section footers; feedback text pushed to the far right
-- Destructive actions sit in the same footer row as Save; supplementary hints shown as tooltip on hover, not inline
+- Save button left-aligned in all section footers, feedback text pushed to the far right
+- Destructive actions sit in the same footer row as Save. Supplementary hints shown as tooltip on hover, not inline
 
 ### Options page: GitHub section
 
@@ -137,12 +137,12 @@ None. Speed over delight for a keyboard-driven tool.
 
 ## Logo
 
-`>` glyph mark in a 4px rounded-square container, mono zinc palette. Icon-only at all sizes; no wordmark at 16–128px. The rounded-square container handles varied backgrounds in the Chrome toolbar and store grid. Export as PNG at 16, 32, 48, and 128px.
+`>` glyph mark in a 4px rounded-square container, mono zinc palette. Icon-only at all sizes, no wordmark at 16–128px. The rounded-square container handles varied backgrounds in the Chrome toolbar and store grid. Export as PNG at 16, 32, 48, and 128px.
 
 - Container: zinc-900 (`#18181b`), solid fill, no stroke, 4px radius, single variant
 - Glyph: white (`#ffffff`), geometric path (not a text character), two segments meeting at a point, 90 degrees total (each segment 45 degrees from vertical), bounding box 40% of container size, butt stroke caps, miter join at apex, 16px stroke in a 128px viewBox (scales proportionally), 25% padding on each side
 - Manifest icons (`public/icons/`): full-bleed at 16, 32, 48, and 128px
-- Store icon (`store/icon.png`): 96x96 artwork centered in a 128x128 transparent canvas with 16px padding on each side; Chrome applies its own frame and rounding on top
+- Store icon (`store/icon.png`): 96x96 artwork centered in a 128x128 transparent canvas with 16px padding on each side. Chrome applies its own frame and rounding on top
 
 ## Iconography
 

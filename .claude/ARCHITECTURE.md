@@ -11,9 +11,9 @@ What belongs:
 
 What does not belong:
 
-- Setup commands or install instructions; those live in README
-- How individual functions work line by line; that belongs in code comments
-- Full type definitions; those live in code. Reference the shape conceptually if needed.
+- Setup commands or install instructions. Those live in README.
+- How individual functions work line by line. That belongs in code comments.
+- Full type definitions. Those live in code. Reference the shape conceptually if needed.
 
 Name each decision clearly. Give the reasoning, especially for non-obvious choices. Skip entries where the rationale is self-evident.
 
@@ -23,39 +23,39 @@ Chrome extension (MV3) with four entry points: background service worker, conten
 
 ## Structure
 
-```
+```text
 src/
 ├── background/
-│   └── index.ts              # Service worker — storage message relay if needed
+│   └── index.ts              ← Service worker, storage message relay if needed
 ├── content/
-│   ├── main.tsx              # Entry per site (Claude, Gemini, ChatGPT)
+│   ├── main.tsx              ← Entry per site (Claude, Gemini, ChatGPT)
 │   ├── hooks/
 │   │   └── use-input-detection.ts
 │   ├── input/
-│   │   ├── adapters.ts       # Input adapter per site (contenteditable / textarea)
-│   │   ├── detector.ts       # Trigger symbol detection + ResizeObserver
+│   │   ├── adapters.ts       ← Input adapter per site (contenteditable / textarea)
+│   │   ├── detector.ts       ← Trigger symbol detection + ResizeObserver
 │   │   ├── detector.test.ts
-│   │   └── site-observer.ts  # MutationObserver — finds chat input per site
+│   │   └── site-observer.ts  ← MutationObserver, finds chat input per site
 │   └── views/
-│       ├── app.tsx           # Root content script component
+│       ├── app.tsx           ← Root content script component
 │       └── dropdown/
-│           ├── dropdown.tsx  # Command palette dropdown
+│           ├── dropdown.tsx  ← Command palette dropdown
 │           ├── dropdown.test.tsx
 │           └── use-dropdown.ts
 ├── popup/
-│   ├── app.tsx               # Prompt library management UI
+│   ├── app.tsx               ← Prompt library management UI
 │   ├── index.html
 │   └── main.tsx
 ├── sidepanel/
-│   ├── app.tsx               # Same UI as popup, wider layout
+│   ├── app.tsx               ← Same UI as popup, wider layout
 │   ├── index.html
 │   └── main.tsx
 ├── options/
-│   ├── app.tsx               # Page shell — loading gate and section composition
+│   ├── app.tsx               ← Page shell, loading gate and section composition
 │   ├── app.test.tsx
-│   ├── data-section.tsx      # Export / import prompts
-│   ├── github-section.tsx    # GitHub credentials, connection test, save
-│   ├── site-config-section.tsx # Per-site trigger symbol config
+│   ├── data-section.tsx      ← Export / import prompts
+│   ├── github-section.tsx    ← GitHub credentials, connection test, save
+│   ├── site-config-section.tsx ← Per-site trigger symbol config
 │   ├── index.html
 │   └── main.tsx
 ├── test/
@@ -63,39 +63,39 @@ src/
 ├── index.css
 └── shared/
     ├── components/
-    │   ├── github-view.tsx   # GitHub tab UI: status, diff, sync controls
-    │   ├── logo.tsx          # Inline SVG logo mark, currentColor, no container
+    │   ├── github-view.tsx   ← GitHub tab UI: status, diff, sync controls
+    │   ├── logo.tsx          ← Inline SVG logo mark, currentColor, no container
     │   ├── prompt-form.tsx
     │   ├── prompt-form.test.tsx
     │   ├── prompt-library.tsx
     │   ├── prompt-library.test.tsx
     │   ├── prompt-list.tsx
     │   ├── prompt-list.test.tsx
-    │   └── ui/               # shadcn/ui primitives (button, input, label, textarea, tooltip)
+    │   └── ui/               ← shadcn/ui primitives (button, input, label, textarea, tooltip)
     ├── hooks/
-    │   ├── use-github-sync.ts # Sync state machine: idle → fetching → reviewing → applying
+    │   ├── use-github-sync.ts ← Sync state machine: idle → fetching → reviewing → applying
     │   ├── use-github-sync.test.ts
-    │   ├── use-prompts.ts    # CRUD over chrome.storage.local
+    │   ├── use-prompts.ts    ← CRUD over chrome.storage.local
     │   ├── use-prompts.test.ts
-    │   ├── use-settings.ts   # Trigger symbol config per site
+    │   ├── use-settings.ts   ← Trigger symbol config per site
     │   └── use-settings.test.ts
     ├── types/
-    │   └── index.ts          # Prompt, Settings schemas (Zod)
+    │   └── index.ts          ← Prompt, Settings schemas (Zod)
     └── utils/
         ├── cn.ts
-        ├── fuzzy.ts          # Fuzzy match util
+        ├── fuzzy.ts          ← Fuzzy match util
         ├── fuzzy.test.ts
-        ├── github.ts         # fetchSnippets, testConnection, computeDiff (pure)
+        ├── github.ts         ← fetchSnippets, testConnection, computeDiff (pure)
         ├── github.test.ts
-        ├── io.ts             # Export (JSON download) and import (parse + merge) logic
+        ├── io.ts             ← Export (JSON download) and import (parse + merge) logic
         ├── io.test.ts
-        ├── storage.ts        # chrome.storage.local wrapper (typed, async)
+        ├── storage.ts        ← chrome.storage.local wrapper (typed, async)
         ├── storage.test.ts
-        └── seeds.ts          # Dev-only sample prompts; seeded on first run in development
+        └── seeds.ts          ← Dev-only sample prompts, seeded on first run in development
 e2e/
 ├── fixtures.ts
 ├── screenshot.ts
-└── ui.test.ts                ← Playwright e2e — sidepanel load, prompt insertion per site
+└── ui.test.ts                ← Playwright e2e: sidepanel load, prompt insertion per site
 ```
 
 ## Key technical decisions
@@ -112,7 +112,7 @@ The trigger symbol only fires when it appears at position 0 in the input, or is 
 
 ### UI: shadcn/ui + Tailwind v4 + lucide-react
 
-shadcn is headless and Tailwind-native — ships only what's used, no bloat. lucide-react is already in deps. No additional icon or component library needed. See `DESIGN.md` for theme, token, and typography decisions.
+shadcn is headless and Tailwind-native. Ships only what's used, no bloat. lucide-react is already in deps. No additional icon or component library needed. See `DESIGN.md` for theme, token, and typography decisions.
 
 ### Dropdown: command palette style, above input
 
@@ -120,25 +120,25 @@ Rendered as a React root injected adjacent to the detected input element. Positi
 
 ### Keyboard navigation
 
-↑↓ arrows, Ctrl+J (down), Ctrl+P (up) — all move selection. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded — Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
+↑↓ arrows, Ctrl+J (down), and Ctrl+P (up) all move selection. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
 
 ### Content script input detection
 
 Each target site renders its chat input differently:
 
-- Claude.ai — contenteditable div (ProseMirror)
-- Gemini — contenteditable div
-- ChatGPT — contenteditable div (also ProseMirror-based)
+- Claude.ai: contenteditable div (ProseMirror)
+- Gemini: contenteditable div
+- ChatGPT: contenteditable div (also ProseMirror-based)
 
 Insertion uses `document.execCommand('insertText')` which triggers framework synthetic events on all three. Abstracted behind an input adapter per site.
 
 ### Storage shape
 
-Two keys in `chrome.storage.local`: `prompts` and `settings`. Key absence (never written) means fresh install; the presence check drives the onboarding empty state.
+Two keys in `chrome.storage.local`: `prompts` and `settings`. Key absence (never written) means fresh install. The presence check drives the onboarding empty state.
 
-Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, an optional `source` flag, and an optional `label` string. Source is `'github'` only on prompts pulled via GitHub sync; locally created prompts omit it. The sync diff uses `source` to determine ownership. Label is a free-form string that groups prompts for filtering; it is not required and has no restricted character set.
+Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, an optional `source` flag, and an optional `label` string. Source is `'github'` only on prompts pulled via GitHub sync. Locally created prompts omit it. The sync diff uses `source` to determine ownership. Label is a free-form string that groups prompts for filtering. It is not required and has no restricted character set.
 
-Settings holds per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt; absent means treat as connected.
+Settings holds per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt. If absent, treat it as connected.
 
 ### Onboarding empty state
 
@@ -146,7 +146,7 @@ Settings holds per-hostname config (trigger symbol and enabled toggle) and an op
 
 ### JSON export / import
 
-Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using `(label ?? '', name)` composite key last-write-wins — matching composite keys overwrite the existing body while preserving the existing `id`; new composite keys get a fresh `crypto.randomUUID()`. Backups from before labels were introduced import cleanly; all entries land as unlabeled and merge on `('' , name)`.
+Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import validates the file against `PromptSchema` with Zod, then merges into storage using `(label ?? '', name)` composite key last-write-wins. Matching composite keys overwrite the existing body while preserving the existing `id`. New composite keys get a fresh `crypto.randomUUID()`. Backups from before labels were introduced import cleanly. All entries land as unlabeled and merge on `('' , name)`.
 
 ### Filtering strategy
 
@@ -160,27 +160,27 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 ### GitHub sync (read-only, GitHub is source of truth)
 
-Extension pulls from GitHub; it never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
+Extension pulls from GitHub. It never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
 
-Flow: fetch directory listing from GitHub Contents API → for each subdirectory entry recurse one level to fetch its `.md` files (label = directory name); fetch root-level `.md` files with no label → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
+Flow: fetch directory listing from GitHub Contents API → for each subdirectory entry recurse one level to fetch its `.md` files (label = directory name) → fetch root-level `.md` files with no label → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
 
-The diff identity key is `(label ?? '', name)`. A file moved between GitHub subdirectories (label change, same name) appears in the diff as a remove entry at the old composite key and an add entry at the new one. Subdirectory recursion adds one API request per subdirectory on top of the root listing and per-file fetches; this stays within rate limits for personal use.
+The diff identity key is `(label ?? '', name)`. A file moved between GitHub subdirectories (label change, same name) appears in the diff as a remove entry at the old composite key and an add entry at the new one. Subdirectory recursion adds one API request per subdirectory on top of the root listing and per-file fetches. This stays within rate limits for personal use.
 
 Apply uses the diff, not a full replace. Added snippets get `source: 'github'`, a fresh `id`, and the folder-derived `label`. Updated prompts patch `body`, `label`, and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
 
 If a GitHub snippet's `(label, name)` composite key matches a local prompt's composite key, it is placed in a `skipped` category rather than `added`. The local prompt is preserved and the GitHub version is not imported. Skipped entries are shown in the diff review UI with a neutral indicator so the user understands why they were not added.
 
-PAT is optional for public repos; required for private.
+PAT is optional for public repos and required for private ones.
 
 Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message.
 
-If the GitHub config changes while a diff is under review, the review is automatically discarded — the diff is only valid against the config it was fetched with.
+If the GitHub config changes while a diff is under review, the review is automatically discarded. The diff is only valid against the config it was fetched with.
 
 Sync state is lifted into `PromptLibrary` so it survives tab switches.
 
 ### External data validation
 
-Schemas at external boundaries (`chrome.storage.local`, JSON import) use strict parsing — unknown keys are rejected rather than passed through. This keeps storage shape intentional and prevents silent data pollution across schema versions.
+Schemas at external boundaries (`chrome.storage.local`, JSON import) use strict parsing. Unknown keys are rejected rather than passed through. This keeps storage shape intentional and prevents silent data pollution across schema versions.
 
 ### GitHub API timeouts
 
@@ -188,7 +188,7 @@ All GitHub fetch calls have an explicit timeout. A hung request would freeze the
 
 ### Options page: single `useSettings` instance
 
-`useSettings` is called once in `app.tsx`; `settings`, `updateSettings`, and `updateSiteSettings` are passed as props to child sections. Each child calling the hook independently creates a separate async load, so local `useState` initializers run before data arrives and fields reset to defaults. Owning the single call in the loading-gate parent guarantees children mount with fully-loaded data.
+`useSettings` is called once in `app.tsx`. `settings`, `updateSettings`, and `updateSiteSettings` are passed as props to child sections. Each child calling the hook independently creates a separate async load, so local `useState` initializers run before data arrives and fields reset to defaults. Owning the single call in the loading-gate parent guarantees children mount with fully-loaded data.
 
 ### Sidepanel-primary: popup dormant
 
@@ -204,9 +204,9 @@ Components in `src/components/ui/` are source of truth. Project-wide baseline de
 
 ### CI: parallel jobs, gate only on data dependency
 
-Static checks, unit tests, and build run in parallel on every PR. `needs` is reserved for jobs that require an artifact from a prior job or that are prohibitively expensive relative to their gate. `e2e-tests` gates on `build` because it requires the built extension; `release` gates on all three parallel jobs plus `e2e-tests` because it should not publish until everything passes.
+Static checks, unit tests, and build run in parallel on every PR. `needs` is reserved for jobs that require an artifact from a prior job or that are prohibitively expensive relative to their gate. `e2e-tests` gates on `build` because it requires the built extension. `release` gates on all three parallel jobs plus `e2e-tests` because it should not publish until everything passes.
 
-### Release: `changelogithub` generates all release notes; no CHANGELOG.md
+### Release: `changelogithub` generates all release notes, no CHANGELOG.md
 
 `changelogithub` auto-generates release notes from conventional commits and writes them to the GitHub Release. There is no `CHANGELOG.md`. The GitHub Release is the changelog. This works because commits follow Conventional Commits and PRs are well-scoped, so the generated notes are the authoritative record.
 
@@ -220,9 +220,9 @@ Running Playwright on every PR adds 3–5 minutes per run and requires Chrome in
 
 ## Risks / open questions
 
-- **Claude.ai input insertion** — ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
-- **ChatGPT input** — DOM structure changes frequently; content script selector targeting is fragile.
-- **Dropdown positioning** — inputs that resize dynamically need ResizeObserver to stay anchored correctly.
-- **MV3 service worker lifecycle** — background script can be killed at any time; no persistent state lives there.
-- **GitHub PAT storage** — stored in `chrome.storage.local`, not encrypted. Acceptable for personal use; document the risk clearly in the UI.
-- **GitHub API rate limits** — unauthenticated: 60 req/hour. Authenticated: 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.
+- **Claude.ai input insertion**: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
+- **ChatGPT input**: DOM structure changes frequently. Content script selector targeting is fragile.
+- **Dropdown positioning**: inputs that resize dynamically need ResizeObserver to stay anchored correctly.
+- **MV3 service worker lifecycle**: background script can be killed at any time. No persistent state lives there.
+- **GitHub PAT storage**: stored in `chrome.storage.local`, not encrypted. Acceptable for personal use. Document the risk clearly in the UI.
+- **GitHub API rate limits**: unauthenticated 60 req/hour, authenticated 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.

@@ -59,41 +59,41 @@ Generates a production build and a zip in `release/`.
 
 ```text
 src/
-├── background/      # Background service worker
+├── background/      ← Background service worker
 │   └── index.ts
-├── content/         # Content scripts injected into target sites
+├── content/         ← Content scripts injected into target sites
 │   ├── main.tsx
-│   ├── hooks/       # React hooks for content scripts
-│   ├── input/       # Input detection and adapters
-│   └── views/       # Dropdown command palette
+│   ├── hooks/       ← React hooks for content scripts
+│   ├── input/       ← Input detection and adapters
+│   └── views/       ← Dropdown command palette
 │       ├── app.tsx
 │       └── dropdown/
-├── options/         # Settings page — trigger config, data, GitHub sync
-│   ├── app.tsx      # Loading gate and section composition
+├── options/         ← Settings page for trigger config, data, and GitHub sync
+│   ├── app.tsx      ← Loading gate and section composition
 │   ├── data-section.tsx
 │   ├── github-section.tsx
 │   ├── site-config-section.tsx
 │   ├── index.html
 │   └── main.tsx
-├── popup/           # Prompt library UI (extension icon)
+├── popup/           ← Prompt library UI (extension icon)
 │   ├── app.tsx
 │   ├── index.html
 │   └── main.tsx
-├── sidepanel/       # Prompt library UI (side panel)
+├── sidepanel/       ← Prompt library UI (side panel)
 │   ├── app.tsx
 │   ├── index.html
 │   └── main.tsx
-└── shared/          # Hooks, types, components, utilities
-    ├── components/  # Reusable React components
-    │   └── ui/      # UI primitives (button, input, etc.)
+└── shared/          ← Hooks, types, components, utilities
+    ├── components/  ← Reusable React components
+    │   └── ui/      ← UI primitives (button, input, etc.)
     ├── hooks/
     ├── types/
     └── utils/
 ```
 
-## Environment Variables
+## Environment variables
 
-For local development, especially when working with GitHub sync, you can set the following environment variables in your `.env` file or directly in your shell:
+Set these environment variables in `.env` or your shell for local development, particularly for GitHub sync:
 
 - `VITE_GITHUB_PAT`: Your GitHub Personal Access Token.
 - `VITE_GITHUB_OWNER`: The owner of the GitHub repository (e.g., `my-org`).
