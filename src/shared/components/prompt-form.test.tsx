@@ -13,6 +13,15 @@ const EXISTING_PROMPT: Prompt = {
   updatedAt: 0,
 }
 
+const LABELED_PROMPT: Prompt = {
+  id: '2',
+  name: 'summarize',
+  label: 'claude',
+  body: 'Summarize this.',
+  createdAt: 0,
+  updatedAt: 0,
+}
+
 describe('PromptForm', () => {
   it('should submit new prompt data successfully', async () => {
     const handleSave = vi.fn().mockResolvedValue(undefined)
@@ -28,6 +37,105 @@ describe('PromptForm', () => {
       name: 'new-prompt',
       body: 'New body',
     })
+  })
+
+  it('should include label in submitted data when label is provided', async () => {
+    const handleSave = vi.fn().mockResolvedValue(undefined)
+    render(<PromptForm onSave={handleSave} onCancel={vi.fn()} />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
+    await user.type(screen.getByLabelText(/^label$/i), 'writing')
+    await user.type(screen.getByLabelText(/prompt body/i), 'New body')
+    await user.click(screen.getByRole('button', { name: /save/i }))
+
+    expect(handleSave).toHaveBeenCalledWith({
+      name: 'new-prompt',
+      label: 'writing',
+      body: 'New body',
+    })
+  })
+
+  it('should omit label from submitted data when label field is empty', async () => {
+    const handleSave = vi.fn().mockResolvedValue(undefined)
+    render(<PromptForm onSave={handleSave} onCancel={vi.fn()} />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
+    await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
+    await user.click(screen.getByRole('button', { name: /save/i }))
+
+    const callArg = handleSave.mock.calls[0][0] as Record<string, unknown>
+    expect('label' in callArg).toBe(false)
+  })
+
+  it('should pre-fill label field when editing a labeled prompt', () => {
+    render(
+      <PromptForm
+        initialPrompt={LABELED_PROMPT}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByLabelText(/^label$/i)).toHaveValue('claude')
+  })
+
+  it('should render label chips from existingLabels', () => {
+    render(
+      <PromptForm
+        existingLabels={['claude', 'writing']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'writing' })).toBeInTheDocument()
+  })
+
+  it('should set label when a chip is clicked', async () => {
+    const handleSave = vi.fn().mockResolvedValue(undefined)
+    render(
+      <PromptForm
+        existingLabels={['claude']}
+        onSave={handleSave}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
+    await user.click(screen.getByRole('button', { name: 'claude' }))
+    await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
+    await user.click(screen.getByRole('button', { name: /save/i }))
+
+    expect(handleSave).toHaveBeenCalledWith({
+      name: 'new-prompt',
+      label: 'claude',
+      body: 'Body text',
+    })
+  })
+
+  it('should deselect label chip when clicked again', async () => {
+    const handleSave = vi.fn().mockResolvedValue(undefined)
+    render(
+      <PromptForm
+        existingLabels={['claude']}
+        onSave={handleSave}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
+    await user.click(screen.getByRole('button', { name: 'claude' }))
+    await user.click(screen.getByRole('button', { name: 'claude' }))
+    await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
+    await user.click(screen.getByRole('button', { name: /save/i }))
+
+    const callArg = handleSave.mock.calls[0][0] as Record<string, unknown>
+    expect('label' in callArg).toBe(false)
   })
 
   it('should call onCancel immediately when form is clean', async () => {
@@ -222,10 +330,10 @@ describe('PromptForm', () => {
     expect(screen.getByRole('button', { name: /save/i })).toBeDisabled()
   })
 
-  it('should show duplicate name error when name matches an existing prompt', async () => {
+  it('should show duplicate error when name and label match an existing prompt', async () => {
     render(
       <PromptForm
-        existingNames={['existing-prompt']}
+        existingPrompts={[{ name: 'existing-prompt' }]}
         onSave={vi.fn()}
         onCancel={vi.fn()}
       />,
@@ -235,14 +343,14 @@ describe('PromptForm', () => {
     await user.type(screen.getByLabelText(/^name$/i), 'existing-prompt')
 
     expect(
-      screen.getByText(/a prompt with this name already exists/i),
+      screen.getByText(/a prompt with this name and label already exists/i),
     ).toBeInTheDocument()
   })
 
-  it('should disable save button when name is a duplicate', async () => {
+  it('should disable save button when name and label duplicate an existing prompt', async () => {
     render(
       <PromptForm
-        existingNames={['existing-prompt']}
+        existingPrompts={[{ name: 'existing-prompt' }]}
         onSave={vi.fn()}
         onCancel={vi.fn()}
       />,
@@ -254,11 +362,73 @@ describe('PromptForm', () => {
     expect(screen.getByRole('button', { name: /save/i })).toBeDisabled()
   })
 
-  it('should not show duplicate error when editing a prompt with its own name', async () => {
+  it('should allow same name when the label differs from the existing prompt', async () => {
     render(
       <PromptForm
-        initialPrompt={EXISTING_PROMPT}
-        existingNames={[EXISTING_PROMPT.name]}
+        existingPrompts={[{ name: 'summarize', label: 'claude' }]}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'summarize')
+    // label field left empty — different from 'claude'
+
+    expect(
+      screen.queryByText(/a prompt with this name and label already exists/i),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled()
+  })
+
+  it('should show duplicate error when name and label both match', async () => {
+    render(
+      <PromptForm
+        existingPrompts={[{ name: 'summarize', label: 'claude' }]}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'summarize')
+    await user.type(screen.getByLabelText(/^label$/i), 'claude')
+
+    expect(
+      screen.getByText(/a prompt with this name and label already exists/i),
+    ).toBeInTheDocument()
+  })
+
+  it('should show duplicate error when label changes to match an existing pair', async () => {
+    render(
+      <PromptForm
+        existingPrompts={[{ name: 'summarize', label: 'writing' }]}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'summarize')
+    // No duplicate yet (unlabeled vs labeled)
+    expect(
+      screen.queryByText(/a prompt with this name and label already exists/i),
+    ).not.toBeInTheDocument()
+
+    await user.type(screen.getByLabelText(/^label$/i), 'writing')
+    // Now it matches
+    expect(
+      screen.getByText(/a prompt with this name and label already exists/i),
+    ).toBeInTheDocument()
+  })
+
+  it('should not show duplicate error when editing a prompt with its own name and label', async () => {
+    render(
+      <PromptForm
+        initialPrompt={LABELED_PROMPT}
+        existingPrompts={[
+          { name: LABELED_PROMPT.name, label: LABELED_PROMPT.label },
+        ]}
         onSave={vi.fn()}
         onCancel={vi.fn()}
       />,
@@ -267,10 +437,10 @@ describe('PromptForm', () => {
     const input = screen.getByLabelText(/^name$/i)
 
     await user.clear(input)
-    await user.type(input, EXISTING_PROMPT.name)
+    await user.type(input, LABELED_PROMPT.name)
 
     expect(
-      screen.queryByText(/a prompt with this name already exists/i),
+      screen.queryByText(/a prompt with this name and label already exists/i),
     ).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled()
   })
@@ -278,7 +448,7 @@ describe('PromptForm', () => {
   it('should clear duplicate error when name is changed to a non-duplicate', async () => {
     render(
       <PromptForm
-        existingNames={['existing-prompt']}
+        existingPrompts={[{ name: 'existing-prompt' }]}
         onSave={vi.fn()}
         onCancel={vi.fn()}
       />,
@@ -288,13 +458,31 @@ describe('PromptForm', () => {
 
     await user.type(input, 'existing-prompt')
     expect(
-      screen.getByText(/a prompt with this name already exists/i),
+      screen.getByText(/a prompt with this name and label already exists/i),
     ).toBeInTheDocument()
 
     await user.clear(input)
     await user.type(input, 'new-prompt')
     expect(
-      screen.queryByText(/a prompt with this name already exists/i),
+      screen.queryByText(/a prompt with this name and label already exists/i),
     ).not.toBeInTheDocument()
+  })
+
+  it('should mark form dirty when label changes', async () => {
+    const handleCancel = vi.fn()
+    render(
+      <PromptForm
+        initialPrompt={EXISTING_PROMPT}
+        onSave={vi.fn()}
+        onCancel={handleCancel}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^label$/i), 'new-label')
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+
+    expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
+    expect(handleCancel).not.toHaveBeenCalled()
   })
 })

@@ -57,6 +57,11 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
               </span>
               <div className='flex min-w-0 flex-col gap-0.5 overflow-hidden'>
                 <span className='text-foreground truncate text-[13px] leading-tight font-medium'>
+                  {prompt.label && (
+                    <span className='text-muted-foreground'>
+                      {prompt.label} ·{' '}
+                    </span>
+                  )}
                   {prompt.name}
                 </span>
                 <span className='text-muted-foreground truncate text-[12px] leading-tight'>

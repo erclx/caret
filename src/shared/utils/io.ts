@@ -7,10 +7,18 @@ type ParseResult =
   | { ok: true; prompts: Prompt[] }
   | { ok: false; error: string }
 
-type MergeResult = {
+interface MergeResult {
   merged: Prompt[]
   addedNames: string[]
   updatedNames: string[]
+}
+
+function compositeKey(label: string | undefined, name: string): string {
+  return `${label ?? ''}\x00${name}`
+}
+
+function displayName(label: string | undefined, name: string): string {
+  return label ? `${label} · ${name}` : name
 }
 
 export function exportPrompts(prompts: Prompt[]): void {
@@ -52,21 +60,29 @@ export function mergePrompts(
   const addedNames: string[] = []
   const updatedNames: string[] = []
 
+  const indexByKey = new Map(
+    merged.map((p, i) => [compositeKey(p.label, p.name), i]),
+  )
+
   for (const prompt of incoming) {
-    const index = merged.findIndex((p) => p.name === prompt.name)
+    const key = compositeKey(prompt.label, prompt.name)
+    const label = displayName(prompt.label, prompt.name)
+    const index = indexByKey.get(key) ?? -1
 
     if (index !== -1) {
       // last-write-wins: incoming body overwrites existing, existing id preserved
       merged[index] = {
         ...merged[index],
         body: prompt.body,
+        label: prompt.label,
         updatedAt: Date.now(),
       }
-      updatedNames.push(prompt.name)
+      updatedNames.push(label)
     } else {
       // new prompt: preserve original timestamps, generate fresh id to avoid collisions
       merged.push({ ...prompt, id: crypto.randomUUID() })
-      addedNames.push(prompt.name)
+      indexByKey.set(key, merged.length - 1)
+      addedNames.push(label)
     }
   }
 

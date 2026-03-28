@@ -72,7 +72,7 @@ Behavior:
 ├────────────────────────────────┤
 │ 🔍 Search prompts...        ✕ │  ← X appears only when query is non-empty; clears and refocuses
 ├────────────────────────────────┤
-│ [All] [claude] [writing]      │  ← label filter pills; only shown when ≥1 labeled prompt exists
+│ [All] [claude] [writing] [Unlabeled] │  ← pills; only shown when ≥1 labeled prompt exists
 ├────────────────────────────────┤
 │ claude · summarize     🗑️     │  ← whole row clickable to edit; no pencil icon
 │ Summarize the following...     │
@@ -87,9 +87,9 @@ Behavior:
 
 Behavior:
 
-- Label filter pills: `All` is always first; remaining pills are existing labels sorted alphabetically. Pills row is hidden when no labeled prompts exist.
-- Clicking a label pill toggles it on or off. Multiple pills can be active simultaneously. `All` clears all active pills and is shown with accent background only when nothing is selected.
-- When label pills are active, unlabeled prompts are hidden. Only prompts whose label is in the active set are shown.
+- Label filter pills: `All` is always first; existing labels follow in alphabetical order; `Unlabeled` is last and appears only when unlabeled prompts exist alongside at least one labeled prompt. The pills row is hidden when no labeled prompts exist.
+- Clicking a label pill toggles it on or off. Active pills show an X on the right. Multiple pills can be active simultaneously. `All` clears all active pills and shows with accent background only when nothing is selected.
+- When label pills are active, only prompts whose label matches the active set are shown. Selecting `Unlabeled` shows prompts with no label.
 - Label filter and text search apply together with AND logic. Empty state when the combination returns nothing: "No prompts found."
 - Label filter state is session-only; resets to All when the sidepanel closes.
 - Click anywhere on row → opens edit form (full replace, no modal)
@@ -114,10 +114,11 @@ Behavior:
 │ │ summarize                │   │
 │ └──────────────────────────┘   │
 │                                │
-│ Label                          │  ← optional; free-text with autocomplete
+│ Label                          │  ← optional; free-text with clickable chips below
 │ ┌──────────────────────────┐   │
-│ │ claude                   │   │  ← suggests existing labels; accepts new values
+│ │ claude                   │   │  ← accepts free-text; chips toggle existing labels
 │ └──────────────────────────┘   │
+│ [claude ×] [writing]           │  ← chips; active chip shows × on right; click to toggle
 │                                │
 │ Prompt body                    │
 │ ┌──────────────────────────┐   │
@@ -178,7 +179,7 @@ Behavior:
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`) — inline error shown in real time below the field; Save disabled while error is active or name is empty. The same name is allowed if the label differs.
-- Label field: optional, no format restriction. Free-text with suggestions from existing labels; accepts values not in the suggestion list. An empty value means no label. Label is included in the dirty-state check.
+- Label field: optional, no format restriction. Free-text input with clickable chips below showing existing labels; clicking a chip sets it as the label, clicking again clears it. Accepts values not in the chip list. An empty value means no label. Label is included in the dirty-state check.
 - Prompt body: required, must not be empty
 - Save persists the prompt immediately and returns to list
 - Textarea scrollbar: thin zinc thumb, transparent track

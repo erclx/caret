@@ -1,10 +1,10 @@
 import { RefreshCw } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import type { GithubSettings } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
-import type { DiffResult } from '@/shared/utils/github'
+import type { DiffEntry, DiffResult } from '@/shared/utils/github'
 
 interface GitHubViewProps {
   status: 'idle' | 'fetching' | 'reviewing' | 'applying'
@@ -63,7 +63,7 @@ export function GitHubView({
     return (
       <div className='flex flex-1 items-center justify-center'>
         <button
-          className='text-muted-foreground hover:text-foreground text-sm underline-offset-4 transition-colors hover:underline'
+          className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 rounded text-sm underline-offset-4 transition-colors outline-none hover:underline focus-visible:ring-2'
           onClick={() => chrome.runtime.openOptionsPage()}
         >
           Set up in Options →
@@ -82,6 +82,21 @@ export function GitHubView({
       : config.lastSyncedAt
         ? `Synced ${formatSyncTime(config.lastSyncedAt)} · ${config.lastSyncedCount ?? 0} snippet${config.lastSyncedCount !== 1 ? 's' : ''}`
         : 'Never synced'
+
+  function entryKey(entry: DiffEntry): string {
+    return `${entry.label ?? ''}\x00${entry.name}`
+  }
+
+  function entryLabel(entry: DiffEntry): ReactNode {
+    return entry.label ? (
+      <>
+        <span className='text-muted-foreground'>{entry.label} · </span>
+        {entry.name}
+      </>
+    ) : (
+      entry.name
+    )
+  }
 
   return (
     <div className='flex flex-1 flex-col gap-3 overflow-hidden'>
@@ -108,54 +123,72 @@ export function GitHubView({
             snippets fetched
           </p>
           <div className='flex-1 overflow-y-auto'>
-            {totalChanges > 0 ? (
+            {totalChanges === 0 && diff.skipped.length === 0 ? (
+              <p className='text-muted-foreground text-xs'>
+                {diff.unchanged.length} unchanged - nothing to apply
+              </p>
+            ) : (
               <div className='flex flex-col gap-1'>
-                <p className='text-muted-foreground mb-1 text-xs font-semibold tracking-wider uppercase'>
-                  Changes
-                </p>
-                {diff.added.map((name) => (
+                {totalChanges > 0 && (
+                  <>
+                    <p className='text-muted-foreground mb-1 text-xs font-semibold tracking-wider uppercase'>
+                      Changes
+                    </p>
+                    {diff.added.map((entry) => (
+                      <div
+                        key={entryKey(entry)}
+                        className='flex items-center gap-2 font-mono text-xs'
+                      >
+                        <span className='text-green-600 dark:text-green-400'>
+                          +
+                        </span>
+                        <span className='text-foreground'>
+                          {entryLabel(entry)}
+                        </span>
+                        <span className='text-muted-foreground ml-auto'>
+                          new
+                        </span>
+                      </div>
+                    ))}
+                    {diff.updated.map((entry) => (
+                      <div
+                        key={entryKey(entry)}
+                        className='flex items-center gap-2 font-mono text-xs'
+                      >
+                        <span className='text-zinc-500'>~</span>
+                        <span className='text-foreground'>
+                          {entryLabel(entry)}
+                        </span>
+                        <span className='text-muted-foreground ml-auto'>
+                          modified
+                        </span>
+                      </div>
+                    ))}
+                    {diff.removed.map((entry) => (
+                      <div
+                        key={entryKey(entry)}
+                        className='flex items-center gap-2 font-mono text-xs'
+                      >
+                        <span className='text-destructive'>-</span>
+                        <span className='text-foreground'>
+                          {entryLabel(entry)}
+                        </span>
+                        <span className='text-muted-foreground ml-auto'>
+                          removed
+                        </span>
+                      </div>
+                    ))}
+                  </>
+                )}
+                {diff.skipped.map((entry) => (
                   <div
-                    key={name}
-                    className='flex items-center gap-2 font-mono text-xs'
-                  >
-                    <span className='text-green-600 dark:text-green-400'>
-                      +
-                    </span>
-                    <span className='text-foreground'>{name}</span>
-                    <span className='text-muted-foreground ml-auto'>new</span>
-                  </div>
-                ))}
-                {diff.updated.map((name) => (
-                  <div
-                    key={name}
-                    className='flex items-center gap-2 font-mono text-xs'
-                  >
-                    <span className='text-zinc-500'>~</span>
-                    <span className='text-foreground'>{name}</span>
-                    <span className='text-muted-foreground ml-auto'>
-                      modified
-                    </span>
-                  </div>
-                ))}
-                {diff.removed.map((name) => (
-                  <div
-                    key={name}
-                    className='flex items-center gap-2 font-mono text-xs'
-                  >
-                    <span className='text-destructive'>-</span>
-                    <span className='text-foreground'>{name}</span>
-                    <span className='text-muted-foreground ml-auto'>
-                      removed
-                    </span>
-                  </div>
-                ))}
-                {diff.skipped.map((name) => (
-                  <div
-                    key={name}
+                    key={entryKey(entry)}
                     className='flex items-center gap-2 font-mono text-xs'
                   >
                     <span className='text-muted-foreground'>·</span>
-                    <span className='text-muted-foreground'>{name}</span>
+                    <span className='text-muted-foreground'>
+                      {entryLabel(entry)}
+                    </span>
                     <span className='text-muted-foreground ml-auto'>local</span>
                   </div>
                 ))}
@@ -165,10 +198,6 @@ export function GitHubView({
                   </p>
                 )}
               </div>
-            ) : (
-              <p className='text-muted-foreground text-xs'>
-                {diff.unchanged.length} unchanged - nothing to apply
-              </p>
             )}
           </div>
           <div className='flex shrink-0 gap-2'>
