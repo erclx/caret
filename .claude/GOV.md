@@ -8,7 +8,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Readability and simplicity
 
-- Optimize for readability; code is read far more than written.
+- Optimize for readability. Code is read far more than it is written.
 - Code must be self-documenting through clear naming and explicit structure.
 - Comments are permitted ONLY to explain intent, never logic.
 - Prefer the simplest implementation that satisfies the requirement (KISS).
@@ -16,7 +16,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Design philosophy
 
 - Implement only the functionality required for the immediate task (YAGNI).
-- Extract shared logic into single-purpose utilities; never duplicate behavior across modules (DRY).
+- Extract shared logic into single-purpose utilities. Never duplicate behavior across modules (DRY).
 - Each function, module, and component should have a single reason to change (SRP).
 - Favor composition over inheritance.
 - Prioritize native platform capabilities over third-party libraries.
@@ -67,8 +67,8 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Async lifecycle
 
-- Make async operations cancellable; clean up on scope exit or caller cancellation.
-- Coordinate dependent async operations explicitly; document execution order.
+- Make async operations cancellable. Clean up on scope exit or caller cancellation.
+- Coordinate dependent async operations explicitly. Document execution order.
 - Set explicit timeouts on all external async operations.
 - Do not fire-and-forget async operations without cleanup handlers.
 - Batch independent async operations; avoid sequential execution when parallelizable.
@@ -80,7 +80,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Failure handling
 
-- Handle partial failures in batched operations independently; do not fail the entire batch for a single error.
+- Handle partial failures in batched operations independently. Do not fail the entire batch for a single error.
   </rule>
 
 <rule name="030-error-handling">
@@ -88,7 +88,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Boundary validation
 
-- Validate inputs at system boundaries; reject invalid data immediately.
+- Validate inputs at system boundaries. Reject invalid data immediately.
 - Do not use exceptions for control flow.
 
 ## Error classification
@@ -251,7 +251,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Composition and props
 
-- Avoid prop drilling beyond 2 levels; use context or composition.
+- Avoid prop drilling beyond 2 levels. Use context or composition.
 
 ## Error boundaries and Suspense
 
@@ -325,7 +325,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use `cn()` from `@/lib/utils` for all conditional class application.
 - Do not use the `!` important modifier.
-- Do not use inline `style` props for static styling; use arbitrary values `bg-[#316ff6]` instead.
+- Do not use inline `style` props for static styling. Use arbitrary values (`bg-[#316ff6]`) instead.
 - Use inline styles only for dynamic values from JS/API or to set CSS variables for utility consumption.
   </rule>
 
@@ -404,7 +404,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use `.strict()` for untrusted external API boundaries to prevent data pollution.
 - Use `.parse()` for blocking validation (env vars) and `.safeParse()` for recoverable flows (forms).
-- Restrict `z.coerce` usage strictly to I/O boundaries (e.g., URL params); never use for internal data flow.
+- Restrict `z.coerce` to I/O boundaries (e.g., URL params). Never use it for internal data flow.
 
 ## Schema safety
 
