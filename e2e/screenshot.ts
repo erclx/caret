@@ -226,6 +226,8 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await page.goto('https://chatgpt.com/')
   const textarea = page.locator('#prompt-textarea')
   await textarea.waitFor()
+  await page.locator('#crxjs-app').waitFor({ state: 'attached' })
+  await page.waitForTimeout(500)
   await textarea.focus()
   await page.keyboard.type('>')
   await page.waitForTimeout(500)
