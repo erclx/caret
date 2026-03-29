@@ -71,7 +71,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Coordinate dependent async operations explicitly. Document execution order.
 - Set explicit timeouts on all external async operations.
 - Do not fire-and-forget async operations without cleanup handlers.
-- Batch independent async operations; avoid sequential execution when parallelizable.
+- Batch independent async operations. Do not run them sequentially when parallelizable.
 
 ## Race conditions
 
@@ -148,7 +148,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Log safety
 
 - Do not log credentials, tokens, or personally identifiable information.
-- Do not log implementation details; log observable behavior.
+- Log observable behavior, not implementation details.
   </rule>
 
 <rule name="060-naming">
@@ -198,7 +198,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use `interface` for object shapes and component props.
 - Use `type` for unions, intersections, and utility types.
 - Do not prefix interfaces with `I`.
-- Do not use `enum`; use constant objects or unions.
+- Use constant objects or union types instead of `enum`.
 
 ## Type safety
 
@@ -277,7 +277,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Punctuation
 
-- Do not use em dashes (`—`); use a comma, period, or restructure the sentence.
+- Do not use em dashes (`—`). Use a comma or period, or restructure the sentence.
 - Do not add punctuation to button labels or short action strings.
 
 ## Button copy
@@ -299,7 +299,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Alt text
 
 - Describe the content or function of the image, not its appearance.
-- Keep alt text concise; avoid prefixes like "Image of" or "Photo of".
+- Keep alt text concise. Do not prefix with "Image of" or "Photo of".
 - Alt text for functional images (icons, buttons) should describe the action, not the graphic.
   </rule>
 
@@ -319,7 +319,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Never use floats or absolute positioning for flow.
 - Use `gap-*` for sibling spacing over margins.
 - Use `size-*` over `w-* h-*` for equal dimensions.
-- Mobile-first: default styles apply to mobile; use `sm:` and up to override.
+- Mobile-first: default styles apply to mobile. Use `sm:` and up to override.
 
 ## Class application
 
@@ -334,7 +334,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Source files
 
-- Do not edit component files installed by the shadcn CLI; treat them as vendored.
+- Do not edit component files installed by the shadcn CLI. Treat them as vendored.
 - Check `components.json` for the install path.
 - Extend behavior via wrapper components over modifying installed files.
 
@@ -367,7 +367,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use Vitest for unit and integration tests.
 - Co-locate unit tests with their respective components.
 - Use `userEvent` over synthetic events for interaction simulation.
-- Use MSW for network mocking; avoid manual fetch or axios mocks.
+- Use MSW for network mocking. Do not mock fetch or axios manually.
 - Select elements by accessibility attributes first (`getByRole`, `getByLabelText`).
 
 ## End-to-end
@@ -408,8 +408,8 @@ Your primary directive is to maintain long-term system health over short-term co
 
 ## Schema safety
 
-- Do not use `z.any()`; use `z.unknown()` for truly ambiguous inputs.
-- Do not use `.passthrough()`; prefer `.strict()` at boundaries or explicit `.pick()`/`.omit()`.
+- Use `z.unknown()` for truly ambiguous inputs instead of `z.any()`.
+- Prefer `.strict()` at boundaries or explicit `.pick()`/`.omit()` over `.passthrough()`.
   </rule>
 
 <rule name="350-security-web">

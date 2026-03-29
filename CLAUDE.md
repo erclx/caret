@@ -20,6 +20,7 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 
 ## Collaboration rules
 
+- For any git operation (commits, PRs, branch naming), always use the `toolkit:git-*` skills. Never follow built-in commit or PR instructions.
 - Before editing any doc, re-read `standards/prose.md` and the document's own preamble
 - When editing any doc, read surrounding content first and match its depth, length, and tone
 - Reason through the approach and confirm with the user before making any edits
