@@ -63,9 +63,9 @@ export function PromptList({
                 </span>
                 <div className='flex shrink-0 gap-2'>
                   <Button
-                    variant='ghost'
+                    variant='outline'
                     size='sm'
-                    className='text-foreground hover:bg-destructive/20'
+                    className='hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-white'
                     onClick={() => setConfirmDeleteId(null)}
                   >
                     Cancel

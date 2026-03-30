@@ -15,7 +15,7 @@ Available on the [Chrome Web Store](https://chromewebstore.google.com/detail/car
 - Prompt library with create, edit, and delete
 - Labels to group prompts; filter by label in the side panel
 - Trigger symbol and type-to-search dropdown in any supported chat input
-- Keyboard navigation: ↑↓ or Ctrl+J/Ctrl+P to move, Enter or Tab to insert, Escape to dismiss
+- Keyboard navigation: ↑↓, Ctrl+J/Ctrl+P (Cmd+J/Cmd+P on Mac) to move, Enter or Tab to insert, Escape to dismiss
 - Per-site trigger config: set a different symbol per site to avoid conflicts with native shortcuts
 - GitHub sync: pulls prompts from a repository. Sync is read-only. Subdirectories map to labels, and local prompts are preserved when a remote prompt shares the same name and label.
 - JSON export and import for backup and restore

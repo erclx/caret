@@ -35,8 +35,10 @@ export function useDropdown({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isDown = e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'j')
-      const isUp = e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')
+      const isDown =
+        e.key === 'ArrowDown' || ((e.ctrlKey || e.metaKey) && e.key === 'j')
+      const isUp =
+        e.key === 'ArrowUp' || ((e.ctrlKey || e.metaKey) && e.key === 'p')
       const isEnter = e.key === 'Enter' || e.key === 'Tab'
       const isEscape = e.key === 'Escape'
 

@@ -145,7 +145,7 @@ export function SiteConfigSection({
                     onChange={(e) =>
                       handleChange(site, 'enabled', e.target.checked)
                     }
-                    className='border-input accent-primary size-4 rounded bg-transparent'
+                    className='border-input accent-primary focus-visible:ring-ring/50 size-4 rounded bg-transparent outline-none focus-visible:ring-2'
                   />
                   <Label
                     htmlFor={`enable-${site}`}

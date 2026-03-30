@@ -182,8 +182,8 @@ export function GithubSection({
           <a
             href='https://github.com/settings/personal-access-tokens/new'
             target='_blank'
-            rel='noreferrer'
-            className='text-muted-foreground hover:text-foreground w-fit text-xs underline-offset-2 hover:underline'
+            rel='noopener noreferrer'
+            className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 w-fit rounded-sm text-xs underline-offset-2 outline-none hover:underline focus-visible:ring-2'
           >
             Create a token on GitHub →
           </a>

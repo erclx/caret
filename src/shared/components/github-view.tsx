@@ -99,7 +99,7 @@ export function GitHubView({
   }
 
   return (
-    <div className='flex flex-1 flex-col gap-3 overflow-hidden'>
+    <div className='flex flex-1 flex-col gap-3 overflow-hidden px-0.5'>
       <div className='flex shrink-0 items-center gap-2'>
         <span
           className={cn(
