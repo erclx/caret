@@ -20,7 +20,7 @@ Everything else is editable at any time without re-review: descriptions, privacy
 
 ## Step 2: Produce screenshots
 
-Follow `store/screenshot.md` to produce the 1280×800 screenshots.
+Follow `store/screenshots.md` to produce the 1280×800 screenshots.
 
 ## Step 3: Record the demo
 
