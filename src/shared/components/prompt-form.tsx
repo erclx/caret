@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -39,6 +39,15 @@ export function PromptForm({
   const [body, setBody] = useState(initialBody)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showDiscard, setShowDiscard] = useState(false)
+  const [isComboboxOpen, setIsComboboxOpen] = useState(false)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
+
+  const filteredLabels = useMemo(() => {
+    if (!existingLabels.length) return []
+    if (!label.trim()) return existingLabels
+    const lower = label.toLowerCase()
+    return existingLabels.filter((l) => l.toLowerCase().includes(lower))
+  }, [existingLabels, label])
 
   const isDirty =
     name !== initialName ||
@@ -68,17 +77,60 @@ export function PromptForm({
     }
   }
 
-  function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const val = e.target.value
-    setLabel(val)
-    if (name && KEBAB_RE.test(name)) {
-      if (isDuplicatePair(name, val)) {
+  function applyDuplicateCheck(n: string, l: string) {
+    if (n && KEBAB_RE.test(n)) {
+      if (isDuplicatePair(n, l)) {
         setNameError('A prompt with this name and label already exists')
       } else {
         setNameError('')
       }
     }
   }
+
+  function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value
+    setLabel(val)
+    setHighlightedIndex(-1)
+    setIsComboboxOpen(true)
+    applyDuplicateCheck(name, val)
+  }
+
+  function handleLabelKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setIsComboboxOpen(true)
+      if (filteredLabels.length > 0) {
+        setHighlightedIndex((i) =>
+          i === filteredLabels.length - 1 ? 0 : i + 1,
+        )
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setIsComboboxOpen(true)
+      if (filteredLabels.length > 0) {
+        setHighlightedIndex((i) => (i <= 0 ? filteredLabels.length - 1 : i - 1))
+      }
+    } else if (e.key === 'Enter' && isComboboxOpen && highlightedIndex >= 0) {
+      e.preventDefault()
+      selectLabel(filteredLabels[highlightedIndex])
+    } else if (e.key === 'Tab' && isComboboxOpen) {
+      setIsComboboxOpen(false)
+      setHighlightedIndex(-1)
+    } else if (e.key === 'Escape' && isComboboxOpen) {
+      e.nativeEvent.stopPropagation()
+      setIsComboboxOpen(false)
+      setHighlightedIndex(-1)
+    }
+  }
+
+  function selectLabel(l: string) {
+    setLabel(l)
+    setIsComboboxOpen(false)
+    setHighlightedIndex(-1)
+    applyDuplicateCheck(name, l)
+  }
+
+  const labelInputRef = useRef<HTMLInputElement>(null)
 
   const onEscRef = useRef<() => void>(() => {})
   onEscRef.current = () => {
@@ -171,44 +223,64 @@ export function PromptForm({
         {nameError && <p className='text-destructive text-xs'>{nameError}</p>}
       </div>
       <div className='flex shrink-0 flex-col gap-2'>
-        <Label htmlFor='label'>Label</Label>
-        <Input
-          id='label'
-          value={label}
-          onChange={handleLabelChange}
-          placeholder='e.g. writing'
-          className='text-sm'
-        />
-        {existingLabels.length > 0 && (
-          <div className='flex flex-wrap gap-1'>
-            {existingLabels.map((l) => (
-              <button
-                key={l}
-                type='button'
-                className={cn(
-                  'border-border text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
-                  label === l && 'bg-accent text-foreground',
-                )}
-                onClick={() => {
-                  const next = label === l ? '' : l
-                  setLabel(next)
-                  if (name && KEBAB_RE.test(name)) {
-                    if (isDuplicatePair(name, next)) {
-                      setNameError(
-                        'A prompt with this name and label already exists',
-                      )
-                    } else {
-                      setNameError('')
-                    }
-                  }
-                }}
-              >
-                {l}
-                {label === l && <X className='size-2.5' aria-hidden />}
-              </button>
-            ))}
-          </div>
-        )}
+        <Label htmlFor='label'>Label (optional)</Label>
+        <div
+          className='relative'
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              setIsComboboxOpen(false)
+              setHighlightedIndex(-1)
+            }
+          }}
+        >
+          <Input
+            ref={labelInputRef}
+            id='label'
+            value={label}
+            onChange={handleLabelChange}
+            onFocus={() => setIsComboboxOpen(true)}
+            onKeyDown={handleLabelKeyDown}
+            placeholder='e.g. writing'
+            className={cn('text-sm', label && 'pr-8')}
+            autoComplete='off'
+          />
+          {label && (
+            <button
+              type='button'
+              className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
+              onClick={() => {
+                setLabel('')
+                setIsComboboxOpen(false)
+                setHighlightedIndex(-1)
+                applyDuplicateCheck(name, '')
+                labelInputRef.current?.focus()
+              }}
+              aria-label='Clear label'
+            >
+              <X className='size-3.5' />
+            </button>
+          )}
+          {isComboboxOpen && filteredLabels.length > 0 && (
+            <div className='border-border bg-card absolute top-full right-0 left-0 z-10 mt-1 max-h-40 overflow-y-auto rounded-md border shadow-md'>
+              {filteredLabels.map((l, i) => (
+                <button
+                  key={l}
+                  type='button'
+                  tabIndex={-1}
+                  className={cn(
+                    'w-full px-3 py-1.5 text-left text-sm transition-colors outline-none',
+                    i === highlightedIndex
+                      ? 'bg-accent text-foreground'
+                      : 'text-foreground hover:bg-accent/50',
+                  )}
+                  onClick={() => selectLabel(l)}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <div className='flex min-h-0 flex-1 flex-col gap-2'>
         <Label htmlFor='body'>Prompt body</Label>

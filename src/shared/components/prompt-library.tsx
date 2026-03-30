@@ -1,8 +1,14 @@
-import { Plus, Settings, X } from 'lucide-react'
+import { ChevronDown, Plus, Settings, X } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
+import { Checkbox } from '@/shared/components/ui/checkbox'
 import { Input } from '@/shared/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/components/ui/popover'
 import { useGithubSync } from '@/shared/hooks/use-github-sync'
 import { usePrompts } from '@/shared/hooks/use-prompts'
 import type { Prompt } from '@/shared/types'
@@ -175,78 +181,100 @@ export function PromptLibrary() {
 
       {tab === 'prompts' && (
         <>
-          <div className='relative shrink-0'>
-            <Input
-              ref={searchRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder='Search prompts...'
-              className='text-sm'
-            />
-            {query && (
-              <button
-                className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
-                onClick={() => {
-                  setQuery('')
-                  searchRef.current?.focus()
-                }}
-                aria-label='Clear search'
-              >
-                <X className='size-3.5' />
-              </button>
-            )}
-          </div>
-          {hasLabels && (
-            <div className='flex shrink-0 flex-wrap gap-1.5'>
-              <button
-                className={cn(
-                  'focus-visible:ring-ring/50 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
-                  activeLabels.size === 0
-                    ? 'bg-accent text-foreground'
-                    : 'border-border text-muted-foreground border bg-transparent',
-                )}
-                onClick={() => setActiveLabels(new Set())}
-              >
-                All
-              </button>
-              {allLabels.map((l) => (
+          <div className='flex shrink-0 items-center gap-2'>
+            <div className='relative flex-1'>
+              <Input
+                ref={searchRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder='Search prompts...'
+                className='text-sm'
+              />
+              {query && (
                 <button
-                  key={l}
-                  className={cn(
-                    'focus-visible:ring-ring/50 flex items-center gap-1 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
-                    activeLabels.has(l)
-                      ? 'bg-accent text-foreground'
-                      : 'border-border text-muted-foreground border bg-transparent',
-                  )}
-                  onClick={() => handleToggleLabel(l)}
+                  className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
+                  onClick={() => {
+                    setQuery('')
+                    searchRef.current?.focus()
+                  }}
+                  aria-label='Clear search'
                 >
-                  {l}
-                  {activeLabels.has(l) && (
-                    <X className='size-2.5' aria-hidden />
-                  )}
-                </button>
-              ))}
-              {hasUnlabeled && (
-                <button
-                  className={cn(
-                    'focus-visible:ring-ring/50 flex items-center gap-1 rounded px-2 py-0.5 text-xs transition-colors outline-none focus-visible:ring-2',
-                    activeLabels.has(UNLABELED)
-                      ? 'bg-accent text-foreground'
-                      : 'border-border text-muted-foreground border bg-transparent',
-                  )}
-                  onClick={() => handleToggleLabel(UNLABELED)}
-                >
-                  Unlabeled
-                  {activeLabels.has(UNLABELED) && (
-                    <X className='size-2.5' aria-hidden />
-                  )}
+                  <X className='size-3.5' />
                 </button>
               )}
             </div>
-          )}
+            {hasLabels && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    className={cn(
+                      'h-9 shrink-0 gap-1 text-xs',
+                      activeLabels.size === 0 && 'text-muted-foreground',
+                    )}
+                  >
+                    Label
+                    {activeLabels.size > 0 && (
+                      <span className='text-foreground'>
+                        · {activeLabels.size}
+                      </span>
+                    )}
+                    <ChevronDown className='size-3' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className='w-44 p-2'>
+                  <div className='border-border mb-1 flex justify-end border-b pb-1'>
+                    <button
+                      className={cn(
+                        'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 rounded text-xs transition-colors outline-none focus-visible:ring-2',
+                        activeLabels.size === 0 && 'invisible',
+                      )}
+                      tabIndex={activeLabels.size === 0 ? -1 : 0}
+                      aria-hidden={activeLabels.size === 0}
+                      onClick={() => setActiveLabels(new Set())}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <div className='flex max-h-48 flex-col gap-0.5 overflow-y-auto'>
+                    {allLabels.map((l) => (
+                      <div
+                        key={l}
+                        className='hover:bg-accent/50 flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm'
+                        onClick={() => handleToggleLabel(l)}
+                      >
+                        <Checkbox
+                          checked={activeLabels.has(l)}
+                          aria-label={l}
+                          onCheckedChange={() => handleToggleLabel(l)}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <span className='flex-1'>{l}</span>
+                      </div>
+                    ))}
+                    {hasUnlabeled && (
+                      <div
+                        className='hover:bg-accent/50 flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm'
+                        onClick={() => handleToggleLabel(UNLABELED)}
+                      >
+                        <Checkbox
+                          checked={activeLabels.has(UNLABELED)}
+                          aria-label='Unlabeled'
+                          onCheckedChange={() => handleToggleLabel(UNLABELED)}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <span className='flex-1'>Unlabeled</span>
+                      </div>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
           <PromptList
             prompts={filteredPrompts}
-            hasQuery={hasActiveFilter}
+            hasActiveFilter={hasActiveFilter}
             hasEverHadPrompts={hasEverHadPrompts}
             onEdit={handleEdit}
             onDelete={deletePrompt}

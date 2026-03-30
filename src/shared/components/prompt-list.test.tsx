@@ -24,7 +24,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={[]}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={false}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
@@ -41,7 +41,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={[]}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
@@ -53,11 +53,11 @@ describe('PromptList', () => {
     ).toBeInTheDocument()
   })
 
-  it('should render empty state with no-results copy when hasQuery is true', () => {
+  it('should render empty state with no-results copy when hasActiveFilter is true', () => {
     render(
       <PromptList
         prompts={[]}
-        hasQuery={true}
+        hasActiveFilter={true}
         hasEverHadPrompts={false}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
@@ -72,7 +72,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={mockPrompts}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={handleEdit}
         onDelete={vi.fn()}
@@ -90,7 +90,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={mockPrompts}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={handleDelete}
@@ -113,7 +113,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={[labeledPrompt]}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
@@ -128,7 +128,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={[mockPrompts[0]]}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={vi.fn()}
         onDelete={vi.fn()}
@@ -144,7 +144,7 @@ describe('PromptList', () => {
     render(
       <PromptList
         prompts={mockPrompts}
-        hasQuery={false}
+        hasActiveFilter={false}
         hasEverHadPrompts={true}
         onEdit={handleEdit}
         onDelete={vi.fn()}
