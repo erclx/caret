@@ -18,9 +18,12 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 ## Up next
 
-### Nothing queued
+### Chore: re-record demo for labels
 
-- No tasks currently
+- [ ] Record, edit, and export a new demo following `store/demo.md`. The existing demo predates labels and does not show filter pills or `label · name` display
+- [ ] Upload to YouTube and update the link in `README.md`
+
+> Test strategy: visual verification
 
 ## Done
 
@@ -101,3 +104,9 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Leave seeds independent of fixtures: they serve different purposes and coupling them creates drift
 
 > Test strategy: visual verification. Load each fixture in the extension and confirm the expected feedback message and prompt state.
+
+### Fix: dropdown screenshots missing the dropdown
+
+- [x] Both dropdown captures showed only the textarea because the trigger was typed before the extension was ready. Add synchronization so the dropdown appears correctly in both light and dark shots.
+
+> Test strategy: visual verification of regenerated screenshots
