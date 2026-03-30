@@ -14,8 +14,14 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 ## Shipping
 
 - Before running `/toolkit:git-ship`, read store files and `manual/` verify files in parallel and update any that are stale
-- On any user-visible feature change, check `store/description-short.txt` and `store/description-full.txt`
-- On any permission change in `manifest.config.ts`, check `store/privacy-single-purpose.txt`, `store/privacy-host-permission-justification.txt`, `store/privacy-sidepanel-justification.txt`, and `store/privacy-storage-justification.txt`
+- On any user-visible feature change, check:
+  - `store/description-short.txt`
+  - `store/description-full.txt`
+- On any permission change in `manifest.config.ts`, check:
+  - `store/privacy-single-purpose.txt`
+  - `store/privacy-host-permission-justification.txt`
+  - `store/privacy-sidepanel-justification.txt`
+  - `store/privacy-storage-justification.txt`
 - `store/listing.md` and `store/figma-*.md` are procedural docs and never need updating from code changes
 
 ## Collaboration rules
@@ -53,11 +59,13 @@ Chrome extension (MV3) that lets users save reusable prompts and invoke them via
 
 ## Manual testing
 
-- When a change affects import/export behavior, update the fixtures in `manual/import-export/` and `manual/import-export/verify.md`
-- When a change affects GitHub sync behavior, update `manual/github-sync/verify.md`
-- When a change affects the sidepanel UI or prompt form, update `manual/sidepanel/verify.md`
-- When a change affects trigger behavior, dropdown, or per-site config, update `manual/trigger/verify.md`
-- When a change affects theming or dark mode styles, update `manual/dark-mode/verify.md`
+When a change touches a tested area, update the corresponding fixtures and verify file:
+
+- Import/export behavior → `manual/import-export/` and `manual/import-export/verify.md`
+- GitHub sync behavior → `manual/github-sync/verify.md`
+- Sidepanel UI or prompt form → `manual/sidepanel/verify.md`
+- Trigger behavior, dropdown, or per-site config → `manual/trigger/verify.md`
+- Theming or dark mode styles → `manual/dark-mode/verify.md`
 
 ## Memory
 
