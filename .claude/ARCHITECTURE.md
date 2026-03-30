@@ -152,7 +152,7 @@ Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import va
 
 The trigger dropdown filters on `name` only across all prompts, regardless of label. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
 
-The sidepanel list has two independent filter dimensions: a text search on `name`, and a set of active label pills (multi-select). Both apply with AND logic when set. When label pills are active, unlabeled prompts are hidden. Label filter state is session-only and resets to All on close.
+The sidepanel list has two independent filter dimensions: a text search on `name`, and a label filter popover (multi-select, opened from a button at the right of the search row). Both apply with AND logic when set. When label filters are active, unlabeled prompts are hidden. Label filter state is session-only and resets to all on close.
 
 ### Dev seeding
 

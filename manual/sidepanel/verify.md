@@ -13,13 +13,18 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 - [ ] Enter an invalid name (e.g. `My Prompt`) → error: `Use lowercase letters, numbers, and hyphens (e.g. my-prompt)`.
 - [ ] Enter a valid name and body, leave Label blank → prompt saves and appears in the list without a label.
 - [ ] Create a second prompt with the same name and no label → error: `A prompt with this name and label already exists`.
-- [ ] Create a prompt with a label (e.g. `writing`) → prompt saves and the `writing` label chip appears in the filter bar.
+- [ ] Create a prompt with a label (e.g. `writing`) → prompt saves and a "Label" filter button appears in the search row.
 
-## Label chips in the form
+## Label combobox in the form
 
-- [ ] Open the form with at least one existing label → existing label chips appear below the Label field.
-- [ ] Click a label chip → it fills the Label field and the chip shows an active state.
-- [ ] Click the active chip again → label is cleared.
+- [ ] Open the form with at least one existing label → focus the Label field → a dropdown of existing labels appears.
+- [ ] Type partial text in the Label field → dropdown narrows to matching labels only.
+- [ ] Click a label from the dropdown → it fills the Label field and the dropdown closes.
+- [ ] Press ArrowDown to highlight an option, then Enter to select it → label fills and dropdown closes.
+- [ ] Press Tab while the dropdown is open → dropdown closes and focus moves to the Prompt body field.
+- [ ] Press Escape while the dropdown is open → dropdown closes, no discard confirmation appears.
+- [ ] With a label value present, click the × inside the label field → field clears and focus returns to the label input.
+- [ ] Type a label not in the list → it is accepted as free text and saved normally.
 
 ## Edit
 
@@ -39,13 +44,17 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 ## Delete
 
 - [ ] Delete a prompt → it is removed from the list.
-- [ ] Delete the only prompt with a given label → that label chip disappears from the filter bar.
+- [ ] Delete the only prompt with a given label → that label no longer appears in the "Label" filter popover.
 
 ## Search and filter
 
 - [ ] Type part of a prompt name in the search box → list filters in real time.
 - [ ] Clear the search with the × button → full list restored and search box focused.
-- [ ] Click a label chip in the filter bar → list shows only prompts with that label.
-- [ ] Click "All" → filter clears.
-- [ ] With prompts that have no label, click "Unlabeled" → only unlabeled prompts shown.
+- [ ] Click the "Label" button → popover opens with a checkbox list of existing labels.
+- [ ] Click the padding area of a label row (not the checkbox itself) → filter toggles correctly.
+- [ ] Check a label in the popover → list shows only prompts with that label. Button shows a badge count (e.g. "1").
+- [ ] Check multiple labels → list shows prompts matching any checked label. Badge updates.
+- [ ] Uncheck all labels → full list restored and badge disappears.
+- [ ] With prompts that have no label, check "Unlabeled" in the popover → only unlabeled prompts shown.
 - [ ] Combine search text with a label filter → both constraints apply simultaneously.
+- [ ] Close the sidepanel and reopen → label filters reset to none.
