@@ -70,9 +70,7 @@ Behavior:
 ├────────────────────────────────┤
 │ [Prompts]  [GitHub]   + New   │  ← tab bar, + New scoped to Prompts tab, hides on GitHub tab
 ├────────────────────────────────┤
-│ 🔍 Search prompts...        ✕ │  ← X appears only when query is non-empty, clears and refocuses
-├────────────────────────────────┤
-│ [All] [claude] [writing] [Unlabeled] │  ← pills, only shown when ≥1 labeled prompt exists
+│ 🔍 Search prompts...  ✕ [Label ▾] │  ← filter button shown only when ≥1 labeled prompt exists
 ├────────────────────────────────┤
 │ claude · summarize     🗑️     │  ← whole row clickable to edit, no pencil icon
 │ Summarize the following...     │
@@ -87,11 +85,11 @@ Behavior:
 
 Behavior:
 
-- Label filter pills: `All` is always first. Existing labels follow in alphabetical order. `Unlabeled` is last and appears only when unlabeled prompts exist alongside at least one labeled prompt. The pills row is hidden when no labeled prompts exist.
-- Clicking a label pill toggles it on or off. Active pills show an X on the right. Multiple pills can be active simultaneously. `All` clears all active pills and shows with accent background only when nothing is selected.
-- When label pills are active, only prompts whose label matches the active set are shown. Selecting `Unlabeled` shows prompts with no label.
+- Label filter button: shown only when at least one labeled prompt exists. "Label ▾" when no filters are active. "Label · N ▾" when N labels are selected.
+- Clicking the button opens a popover below it. The popover contains a "Clear" link at the top (always present, visible only when filters are active) followed by a scrollable checkbox list: existing labels in alphabetical order, then "Unlabeled" at the bottom if applicable. Multiple checkboxes can be active simultaneously. Unchecking all returns to showing everything.
+- When label filters are active, only prompts whose label matches the active set are shown. Selecting "Unlabeled" shows prompts with no label.
 - Label filter and text search apply together with AND logic. Empty state when the combination returns nothing: "No prompts found."
-- Label filter state is session-only. Resets to All when the sidepanel closes.
+- Label filter state is session-only. Resets to all on sidepanel close.
 - Click anywhere on row → opens edit form (full replace, no modal)
 - Hover → background shift + pointer cursor
 - 🗑️ click → inline confirmation expands in-row:
@@ -114,11 +112,10 @@ Behavior:
 │ │ summarize                │   │
 │ └──────────────────────────┘   │
 │                                │
-│ Label                          │  ← optional, free-text with clickable chips below
+│ Label (optional)               │  ← "(optional)" in the field label signals the field may be left blank
 │ ┌──────────────────────────┐   │
-│ │ claude                   │   │  ← accepts free-text, chips toggle existing labels
+│ │ claude                  ✕│   │  ← X clears the field, visible only when non-empty
 │ └──────────────────────────┘   │
-│ [claude ×] [writing]           │  ← chips, active chip shows × on right, click to toggle
 │                                │
 │ Prompt body                    │
 │ ┌──────────────────────────┐   │
@@ -159,7 +156,7 @@ Behavior:
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs.
-- Label field: optional, no format restriction. Free-text input with clickable chips below showing existing labels. Clicking a chip sets it as the label, and clicking again clears it. Accepts values not in the chip list. An empty value means no label. Label is included in the dirty-state check.
+- Label field: optional, no format restriction. Combobox: focus or typing opens a dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty and clears the label on click. Label is included in the dirty-state check.
 - Prompt body: required, must not be empty
 - Save persists the prompt immediately and returns to list
 - Textarea scrollbar: thin zinc thumb, transparent track

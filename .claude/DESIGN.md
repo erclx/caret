@@ -101,15 +101,24 @@ None. Speed over delight for a keyboard-driven tool.
 - Tab bar with plain text tabs, bottom border on the active tab
 - Edit view replaces the list inline, no modal
 
-### Sidepanel: label filter pills
+### Sidepanel: label filter
 
 - Shown only when at least one labeled prompt exists, hidden otherwise
-- Pills are small, low-contrast: `--card` background, `--border` border, `--muted-foreground` text, 4px radius
-- Active pill shifts to `--accent` background with `--foreground` text, no border change
-- Active pills show a small X icon on the right to make deselection discoverable
-- Multiple pills can be active simultaneously. `All` is active only when no label pills are selected. Clicking it clears all active pills.
-- `All` pill is always first. Label pills follow in alphabetical order. `Unlabeled` pill is last and appears only when unlabeled prompts exist alongside at least one labeled prompt
-- No scroll on the pills row. If labels are numerous they wrap.
+- A button at the right end of the search row, labeled "Label". When filters are active, the button shows "Label · N" in full-contrast foreground text
+- Button height matches the search input. Button text is `text-xs` to read as a secondary control relative to the primary search field
+- Clicking opens a popover with a scrollable checkbox list: existing labels in alphabetical order, "Unlabeled" at the bottom if applicable
+- A "Clear" link sits at the top of the popover, separated by a bottom border. It is always rendered (to prevent height shifts on activation) but visible only when filters are active
+- Each row is fully clickable. Clicking anywhere in the row toggles the filter, not only the checkbox or label text
+- Button uses `--border` border, `--muted-foreground` text when inactive, `--foreground` text when active
+
+### Sidepanel: edit form label field
+
+- Field label reads "Label (optional)" to communicate that the field may be left blank without a tooltip or helper text
+- Combobox: focus or typing opens a dropdown of existing labels. Empty input shows all existing labels. Typed characters narrow the list to matching entries
+- Arrow keys navigate the dropdown list. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Tab closes the dropdown and moves focus to the next field.
+- Selecting from the dropdown fills the input. The user may also type a value not in the list to create a new label
+- An X button appears inside the field when the value is non-empty, clearing the label on click and returning focus to the label input. Same pattern as the search input clear button.
+- No chips or pills below the input
 
 ### Sidepanel: prompt list rows
 

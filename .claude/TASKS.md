@@ -25,6 +25,35 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 
 > Test strategy: visual verification
 
+### Fix: two bugs found in UX audit
+
+- [ ] Dropdown shows "No prompts yet" when a query matches nothing. Show a distinct no-results message instead
+- [ ] Empty prompt body can be submitted. Validate body emptiness and block save consistently with how name validation works
+
+> Test strategy: unit tests for the dropdown empty-vs-no-match state and form save-disabled logic with empty body
+
+### Polish: edit form UX gaps
+
+- [ ] Duplicate-pair error appears under the name field when a label change causes the conflict. Surface it under the label field instead
+- [ ] No feedback after a successful save. Add a brief signal before returning to the list
+- [ ] Label field accepts leading/trailing whitespace without warning and is case-sensitive with no hint. Trim visibly and surface the case-sensitivity constraint
+
+> Test strategy: visual verification of error placement and save feedback. Unit test for label trimming behavior
+
+### Polish: GitHub options section gaps
+
+- [ ] Connection status dot stays green when the user edits repo or PAT fields without saving. Reset to neutral on any field change
+- [ ] Save is not blocked when owner/repo is empty and the field has never been touched. Block save until the field has a valid value
+- [ ] Empty snippets path shows no warning before save. Add inline validation
+
+> Test strategy: visual verification of each state transition in the installed extension
+
+### Feature: GitHub prompt indicator
+
+- [ ] GitHub-synced prompts are visually identical to local ones in the list. Add a subtle indicator so users know which prompts are managed by sync and may be overwritten
+
+> Test strategy: visual verification with a mix of local and synced prompts
+
 ## Done
 
 ### Feature: labels
@@ -77,3 +106,19 @@ Two sections only: Up next and Done. When completing a task, mark it `[x]` in pl
 - [x] Move the discard confirmation to always appear at the bottom of the form, keeping the Back button visible at all times
 
 > Test strategy: visual verification across light and dark modes, plus keyboard navigation smoke test in the installed extension
+
+### Feature: scalable label UI
+
+- [x] Replace sidepanel label filter pills row with a filter button + popover (checkbox list, multi-select, badge shows active count, scales to any number of labels)
+- [x] Replace edit form label input + chips with a combobox (dropdown of existing labels on focus or match, free-text still accepted, no pills below)
+
+> Test strategy: unit tests for filter popover toggle logic and combobox selection, visual verification with 10+ labels in both surfaces
+
+### Fix: label UI keyboard and focus gaps
+
+- [x] Label combobox option items are tab-reachable and show the browser default focus outline. They should be navigable by arrow keys only
+- [x] Pressing Tab on the label field does not close the combobox dropdown before focus moves to the next field
+- [x] Clicking the padding area of a filter row does not toggle the filter
+- [x] Clearing the label via the inline clear button leaves focus on the button rather than returning it to the label field
+
+> Test strategy: keyboard navigation smoke test in the installed extension, visual verification that all focus rings match the project style

@@ -50,7 +50,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 8. Options page: full settings including per-site trigger symbol config and GitHub sync config
 9. JSON export/import: backup and restore prompt library
 10. GitHub sync: pull snippets from a GitHub repo into the extension. Manual only. GitHub is source of truth. Extension is read-only
-11. Labels: optional single label per prompt for grouping and filtering. Label filter pills in the sidepanel list. Label field in the edit form with autocomplete. The same prompt name can appear under different labels
+11. Labels: optional single label per prompt for grouping and filtering. Label filter button with popover in the sidepanel list. Label field in the edit form as a combobox showing existing labels. The same prompt name can appear under different labels
 
 ## Tech stack
 

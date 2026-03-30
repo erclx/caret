@@ -166,89 +166,121 @@ describe('PromptLibrary', () => {
     })
   })
 
-  it('should not show label filter pills when no prompts have labels', () => {
+  it('should not show label filter button when no prompts have labels', () => {
     render(<PromptLibrary />)
 
     expect(
-      screen.queryByRole('button', { name: /^all$/i }),
+      screen.queryByRole('button', { name: /label/i }),
     ).not.toBeInTheDocument()
   })
 
-  it('should show label filter pills when labeled prompts exist', () => {
+  it('should show label filter button when labeled prompts exist', () => {
     mockUsePrompts.prompts = labeledPrompts
     render(<PromptLibrary />)
 
-    expect(screen.getByRole('button', { name: /^all$/i })).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: /^claude$/i }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: /^writing$/i }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /label/i })).toBeInTheDocument()
   })
 
-  it('should show Unlabeled pill when unlabeled prompts exist', () => {
-    mockUsePrompts.prompts = labeledPrompts
-    render(<PromptLibrary />)
-
-    expect(
-      screen.getByRole('button', { name: /^unlabeled$/i }),
-    ).toBeInTheDocument()
-  })
-
-  it('should not show Unlabeled pill when all prompts have labels', () => {
-    mockUsePrompts.prompts = labeledPrompts.filter((p) => p.label)
-    render(<PromptLibrary />)
-
-    expect(
-      screen.queryByRole('button', { name: /^unlabeled$/i }),
-    ).not.toBeInTheDocument()
-  })
-
-  it('should filter to only unlabeled prompts when Unlabeled pill is clicked', async () => {
+  it('should open popover with label checkboxes when filter button is clicked', async () => {
     mockUsePrompts.prompts = labeledPrompts
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getByRole('button', { name: /^unlabeled$/i }))
+    await user.click(screen.getByRole('button', { name: /label/i }))
+
+    expect(
+      screen.getByRole('checkbox', { name: /claude/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('checkbox', { name: /writing/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should show Unlabeled checkbox when unlabeled prompts exist', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /label/i }))
+
+    expect(
+      screen.getByRole('checkbox', { name: /unlabeled/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should not show Unlabeled checkbox when all prompts have labels', async () => {
+    mockUsePrompts.prompts = labeledPrompts.filter((p) => p.label)
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /label/i }))
+
+    expect(
+      screen.queryByRole('checkbox', { name: /unlabeled/i }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should filter to only unlabeled prompts when Unlabeled checkbox is checked', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /unlabeled/i }))
 
     expect(screen.getByText('fix-grammar')).toBeInTheDocument()
     expect(screen.queryByText('summarize')).not.toBeInTheDocument()
     expect(screen.queryByText('draft')).not.toBeInTheDocument()
   })
 
-  it('should filter to only labeled prompts when a label pill is clicked', async () => {
+  it('should filter to only labeled prompts when a label checkbox is checked', async () => {
     mockUsePrompts.prompts = labeledPrompts
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
 
     expect(screen.getByText('summarize')).toBeInTheDocument()
     expect(screen.queryByText('draft')).not.toBeInTheDocument()
     expect(screen.queryByText('fix-grammar')).not.toBeInTheDocument()
   })
 
-  it('should show All prompts again when All pill is clicked after a label filter', async () => {
+  it('should show badge count on filter button when filters are active', async () => {
     mockUsePrompts.prompts = labeledPrompts
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getByRole('button', { name: /^claude$/i }))
-    await user.click(screen.getByRole('button', { name: /^all$/i }))
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
+
+    expect(
+      screen.getByRole('button', { name: /label.*1/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should show all prompts when all checkboxes are unchecked', async () => {
+    mockUsePrompts.prompts = labeledPrompts
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
 
     expect(screen.getByText('summarize')).toBeInTheDocument()
     expect(screen.getByText('draft')).toBeInTheDocument()
     expect(screen.getByText('fix-grammar')).toBeInTheDocument()
   })
 
-  it('should allow multiple label pills to be active simultaneously', async () => {
+  it('should allow multiple label checkboxes to be active simultaneously', async () => {
     mockUsePrompts.prompts = labeledPrompts
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getByRole('button', { name: /^claude$/i }))
-    await user.click(screen.getByRole('button', { name: /^writing$/i }))
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
+    await user.click(screen.getByRole('checkbox', { name: /writing/i }))
 
     expect(screen.getByText('summarize')).toBeInTheDocument()
     expect(screen.getByText('draft')).toBeInTheDocument()
@@ -260,7 +292,9 @@ describe('PromptLibrary', () => {
     render(<PromptLibrary />)
     const user = userEvent.setup()
 
-    await user.click(screen.getByRole('button', { name: /^claude$/i }))
+    await user.click(screen.getByRole('button', { name: /label/i }))
+    await user.click(screen.getByRole('checkbox', { name: /claude/i }))
+    await user.keyboard('{Escape}')
     await user.type(screen.getByPlaceholderText(/search prompts/i), 'sum')
 
     expect(screen.getByText('summarize')).toBeInTheDocument()

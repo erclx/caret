@@ -24,7 +24,7 @@ See [manual/github-sync/verify.md](../manual/github-sync/verify.md) for the full
 
 ## Sidepanel
 
-`manual/sidepanel/` covers the prompt library UI: creating and editing prompts, label chips in the form and filter bar, search, delete, and the discard confirmation flow. The e2e tests mock these interactions; this checklist verifies them in a real browser with the actual extension.
+`manual/sidepanel/` covers the prompt library UI: creating and editing prompts, the label combobox in the form and label filter popover, search, delete, and the discard confirmation flow. The e2e tests mock these interactions; this checklist verifies them in a real browser with the actual extension.
 
 See [manual/sidepanel/verify.md](../manual/sidepanel/verify.md) for the full checklist.
 

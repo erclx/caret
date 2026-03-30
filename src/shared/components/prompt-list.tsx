@@ -6,7 +6,7 @@ import type { Prompt } from '@/shared/types'
 
 export interface PromptListProps {
   prompts: Prompt[]
-  hasQuery: boolean
+  hasActiveFilter: boolean
   hasEverHadPrompts: boolean
   onEdit: (prompt: Prompt) => void
   onDelete: (id: string) => void
@@ -14,7 +14,7 @@ export interface PromptListProps {
 
 export function PromptList({
   prompts,
-  hasQuery,
+  hasActiveFilter,
   hasEverHadPrompts,
   onEdit,
   onDelete,
@@ -22,7 +22,7 @@ export function PromptList({
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   if (prompts.length === 0) {
-    if (hasQuery) {
+    if (hasActiveFilter) {
       return (
         <div className='flex flex-1 flex-col items-center justify-center py-8 text-center'>
           <p className='text-muted-foreground text-sm'>No prompts found.</p>

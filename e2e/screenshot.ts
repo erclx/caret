@@ -146,11 +146,14 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.waitForLoadState('networkidle')
   await shot(listPage, 'sidepanel', `${scheme}-list.png`)
 
-  await listPage.getByRole('button', { name: /^claude$/i }).click()
+  await listPage.getByRole('button', { name: /label/i }).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-list-label-popover.png`)
+  await listPage.getByRole('checkbox', { name: /claude/i }).click()
+  await listPage.waitForTimeout(200)
+  await listPage.keyboard.press('Escape')
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-list-filtered.png`)
-  await listPage.getByRole('button', { name: /^all$/i }).click()
-  await listPage.waitForTimeout(200)
 
   await listPage
     .getByRole('button', { name: /delete prompt/i })

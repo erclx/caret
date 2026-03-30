@@ -45,7 +45,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
-    await user.type(screen.getByLabelText(/^label$/i), 'writing')
+    await user.type(screen.getByLabelText(/^label/i), 'writing')
     await user.type(screen.getByLabelText(/prompt body/i), 'New body')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
@@ -78,10 +78,10 @@ describe('PromptForm', () => {
       />,
     )
 
-    expect(screen.getByLabelText(/^label$/i)).toHaveValue('claude')
+    expect(screen.getByLabelText(/^label/i)).toHaveValue('claude')
   })
 
-  it('should render label chips from existingLabels', () => {
+  it('should show dropdown with existing labels when label input is focused', async () => {
     render(
       <PromptForm
         existingLabels={['claude', 'writing']}
@@ -89,12 +89,33 @@ describe('PromptForm', () => {
         onCancel={vi.fn()}
       />,
     )
+    const user = userEvent.setup()
+
+    await user.click(screen.getByLabelText(/^label/i))
 
     expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'writing' })).toBeInTheDocument()
   })
 
-  it('should set label when a chip is clicked', async () => {
+  it('should filter dropdown options as user types in the label field', async () => {
+    render(
+      <PromptForm
+        existingLabels={['claude', 'writing']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^label/i), 'cl')
+
+    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'writing' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should fill label input when a dropdown option is clicked', async () => {
     const handleSave = vi.fn().mockResolvedValue(undefined)
     render(
       <PromptForm
@@ -106,6 +127,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
+    await user.click(screen.getByLabelText(/^label/i))
     await user.click(screen.getByRole('button', { name: 'claude' }))
     await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
     await user.click(screen.getByRole('button', { name: /save/i }))
@@ -117,11 +139,11 @@ describe('PromptForm', () => {
     })
   })
 
-  it('should deselect label chip when clicked again', async () => {
+  it('should navigate options with arrow keys and select with Enter', async () => {
     const handleSave = vi.fn().mockResolvedValue(undefined)
     render(
       <PromptForm
-        existingLabels={['claude']}
+        existingLabels={['claude', 'writing']}
         onSave={handleSave}
         onCancel={vi.fn()}
       />,
@@ -129,13 +151,59 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
-    await user.click(screen.getByRole('button', { name: 'claude' }))
-    await user.click(screen.getByRole('button', { name: 'claude' }))
+    await user.click(screen.getByLabelText(/^label/i))
+    await user.keyboard('{ArrowDown}')
+    await user.keyboard('{Enter}')
     await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
-    const callArg = handleSave.mock.calls[0][0] as Record<string, unknown>
-    expect('label' in callArg).toBe(false)
+    expect(handleSave).toHaveBeenCalledWith({
+      name: 'new-prompt',
+      label: 'claude',
+      body: 'Body text',
+    })
+  })
+
+  it('should close combobox on Tab and move focus to the next field', async () => {
+    render(
+      <PromptForm
+        existingLabels={['claude']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(screen.getByLabelText(/^label/i))
+    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+
+    await user.keyboard('{Tab}')
+
+    expect(
+      screen.queryByRole('button', { name: 'claude' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByLabelText(/prompt body/i)).toHaveFocus()
+  })
+
+  it('should close combobox on Escape without triggering discard flow', async () => {
+    render(
+      <PromptForm
+        existingLabels={['claude']}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(screen.getByLabelText(/^label/i))
+    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+
+    expect(
+      screen.queryByRole('button', { name: 'claude' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
   })
 
   it('should call onCancel immediately when form is clean', async () => {
@@ -393,7 +461,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'summarize')
-    await user.type(screen.getByLabelText(/^label$/i), 'claude')
+    await user.type(screen.getByLabelText(/^label/i), 'claude')
 
     expect(
       screen.getByText(/a prompt with this name and label already exists/i),
@@ -415,7 +483,7 @@ describe('PromptForm', () => {
       screen.queryByText(/a prompt with this name and label already exists/i),
     ).not.toBeInTheDocument()
 
-    await user.type(screen.getByLabelText(/^label$/i), 'writing')
+    await user.type(screen.getByLabelText(/^label/i), 'writing')
     expect(
       screen.getByText(/a prompt with this name and label already exists/i),
     ).toBeInTheDocument()
@@ -478,7 +546,7 @@ describe('PromptForm', () => {
     )
     const user = userEvent.setup()
 
-    await user.type(screen.getByLabelText(/^label$/i), 'new-label')
+    await user.type(screen.getByLabelText(/^label/i), 'new-label')
     await user.click(screen.getByRole('button', { name: /cancel/i }))
 
     expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
