@@ -1,0 +1,25 @@
+[
+  {
+    "id": "6cd408c4-5a24-4d82-b79f-6682f6a48ed6",
+    "name": "summarize",
+    "label": "claude",
+    "body": "Summarize this in three bullet points.",
+    "createdAt": 1774808885963,
+    "updatedAt": 1774808885963
+  },
+  {
+    "id": "89a4c52e-fce2-4d9a-85dc-619cf3599596",
+    "name": "simplify",
+    "label": "writing",
+    "body": "Rewrite this in plain language. No jargon.",
+    "createdAt": 1774808885963,
+    "updatedAt": 1774808885963
+  },
+  {
+    "id": "376714f4-8b12-43ba-8162-2451a2792352",
+    "name": "proofread",
+    "body": "Proofread this. Fix grammar, spelling, and clarity.",
+    "createdAt": 1774808885963,
+    "updatedAt": 1774808885963
+  }
+]
