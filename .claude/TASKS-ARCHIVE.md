@@ -280,3 +280,48 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Trim trailing whitespace from the prompt body and append a single space on insertion so the user can continue typing immediately. Prompts ending with spaces or newlines get the excess stripped rather than a double space appended
 
 > Test strategy: insertion output
+
+### Chore: logo
+
+- [x] Design `>` glyph mark in a rounded-square container, zinc palette
+- [x] Export as PNG at 16, 32, 48, and 128px for the manifest and store listing
+
+> Test strategy: visual verification
+
+### Chore: CI/CD pipeline
+
+- [x] Add a GitHub Actions workflow: on version tag push, run checks, build, and zip the extension
+- [x] Attach the zip to a GitHub Release with an auto-generated changelog
+- [x] Automate Chrome Web Store publish after a successful release
+
+> Test strategy: pipeline verified by test tag push
+
+### Chore: Chrome Web Store listing
+
+- [x] Write `README.md` with install instructions, feature overview, and supported sites
+- [x] Write short description (132 char max) and full store description, drawing from the README
+- [x] Add a privacy policy page hosted via GitHub Pages (extension requests `storage` and `sidePanel` permissions. Confirm whether `contentSettings` is still used and remove it from the manifest if not)
+- [x] Produce at least one 1280×800 screenshot of the sidepanel in use. Compose manually as an OS-level screenshot with the sidepanel docked alongside a chat tab and the dropdown visual
+- [x] Export a 440×280 promo tile for the Chrome Web Store small promo slot
+- [x] Update the manifest display name to a human-readable value and add a `short_name`
+- [x] Register developer account ($5 one-time fee) if not done. This blocks submission
+- [x] Fill in Privacy practices tab: single purpose description, host permission justification, remote code justification, sidePanel and storage justifications, data usage certification
+- [x] Add and verify contact email on the Account tab
+- [x] Submit for review
+
+> Test strategy: Chrome Web Store human review
+
+### Chore: demo
+
+- [x] Record raw capture in OBS Studio at 1920×1080 using FancyZones: side panel docked alongside claude.ai, showing create prompt → type `>` → filter → insert
+- [x] Edit in DaVinci Resolve: zoom in on side panel during prompt creation, zoom in on chat input when dropdown appears, add minimal on-screen labels (`"Click Caret icon"`, `"Type > to invoke"`, `"Enter to insert"`), trim to 30–40 seconds
+- [x] Export as `store/demo.mp4`
+- [x] Add to `README.md` once the file exists
+
+> Test strategy: visual verification
+
+### Fix: GitHub sync CORS error with PAT configured
+
+- [x] Fix CORS failure when syncing snippets with a PAT configured. The auth header on the file fetch triggered a preflight that GitHub's raw content server rejects
+
+> Test strategy: manual verification in installed extension with PAT configured

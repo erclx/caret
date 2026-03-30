@@ -120,7 +120,7 @@ Rendered as a React root injected adjacent to the detected input element. Positi
 
 ### Keyboard navigation
 
-↑↓ arrows, Ctrl+J (down), and Ctrl+P (up) all move selection. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
+↑↓ arrows, Ctrl+J / Cmd+J (down), and Ctrl+P / Cmd+P (up) all move selection. Both `ctrlKey` and `metaKey` are accepted so Mac users can use the native modifier. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
 
 ### Content script input detection
 

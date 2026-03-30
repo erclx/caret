@@ -49,7 +49,7 @@ Behavior:
 - Symbol only fires at position 0 or immediately after whitespace. Mid-word does not trigger (e.g. `word>` must not open dropdown)
 - Filters in real time as user types after trigger symbol in the chat input. No separate search field inside the dropdown (intentional design decision)
 - Max 6 rows visible before scroll
-- Keyboard: ↑↓, Ctrl+J (down), Ctrl+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
+- Keyboard: ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut
 - Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
 - Dropdown width matches input element exactly
@@ -130,11 +130,11 @@ Behavior:
 └────────────────────────────────┘
 ```
 
-### Edit / new form: dirty state (Back triggered)
+### Edit / new form: dirty state
 
 ```plaintext
 ┌────────────────────────────────┐
-│ Discard changes?  [Keep editing] [Discard] │  ← replaces ← Back
+│ ← Back                         │  ← always visible, never replaced
 ├────────────────────────────────┤
 │ Name                           │
 │ ┌──────────────────────────┐   │
@@ -146,27 +146,7 @@ Behavior:
 │ │ ...                      │   │
 │ └──────────────────────────┘   │
 │                                │
-│ [Cancel]        [Save]         │  ← Cancel/Save remain visible
-└────────────────────────────────┘
-```
-
-### Edit / new form: dirty state (Cancel triggered)
-
-```plaintext
-┌────────────────────────────────┐
-│ ← Back                         │  ← Back remains visible
-├────────────────────────────────┤
-│ Name                           │
-│ ┌──────────────────────────┐   │
-│ │ summarize                │   │
-│ └──────────────────────────┘   │
-│                                │
-│ Prompt body                    │
-│ ┌──────────────────────────┐   │
-│ │ ...                      │   │
-│ └──────────────────────────┘   │
-│                                │
-│ Discard changes?  [Keep editing] [Discard] │  ← replaces Cancel/Save
+│ Discard changes?  [Keep editing] [Discard] │  ← always at bottom, replaces Cancel/Save
 └────────────────────────────────┘
 ```
 
@@ -174,8 +154,8 @@ Behavior:
 
 - `← Back` and Cancel both check dirty state before navigating
 - Dirty = values differ from initial. New form with empty fields is never dirty
-- If dirty: confirmation row appears at the anchor that was triggered. Back replaces the top `← Back` row. Cancel replaces the bottom Cancel/Save row
-- Keep editing dismisses the confirmation and restores whichever row was replaced
+- If dirty: confirmation row appears at the bottom, replacing Cancel/Save. Back stays visible at the top regardless of which action triggered the confirmation
+- Keep editing dismisses the confirmation and restores Cancel/Save
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs.

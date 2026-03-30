@@ -43,7 +43,7 @@ There's no native way to save, organize, and quickly invoke reusable prompt temp
 1. Prompt library CRUD: create, edit, delete prompts with a name (slug) and body text
 2. Trigger detection: user types configurable symbol (default: `>`) in chat input. Dropdown appears at position 0 or after whitespace only, never mid-word
 3. Fuzzy filter dropdown: command palette style, rendered above input, 6 visible rows, name + truncated body preview per row
-4. Keyboard nav: ↑↓, Ctrl+J (down), Ctrl+P (up) to move, Enter to insert, Escape to dismiss
+4. Keyboard nav: ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to move, Enter to insert, Escape to dismiss
 5. Prompt insertion: inserts prompt text at cursor position in the chat input
 6. Per-site trigger config: configurable trigger symbol per site to avoid native conflicts (e.g. Claude.ai uses `/`)
 7. Side panel UI: manage library from Chrome side panel. Extension icon opens the sidepanel. Popup entry is kept dormant for rollback
