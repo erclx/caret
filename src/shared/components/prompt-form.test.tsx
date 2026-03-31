@@ -443,6 +443,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'summarize')
+    await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
 
     expect(
       screen.queryByText(/a prompt with this name and label already exists/i),
@@ -551,5 +552,50 @@ describe('PromptForm', () => {
 
     expect(screen.getByText(/discard changes/i)).toBeInTheDocument()
     expect(handleCancel).not.toHaveBeenCalled()
+  })
+
+  it('should disable save when name is filled but body is empty', async () => {
+    render(<PromptForm onSave={vi.fn()} onCancel={vi.fn()} />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'my-prompt')
+
+    expect(screen.getByRole('button', { name: /save/i })).toBeDisabled()
+  })
+
+  it('should trim whitespace from label input on blur', async () => {
+    render(<PromptForm onSave={vi.fn()} onCancel={vi.fn()} />)
+    const user = userEvent.setup()
+
+    const labelInput = screen.getByLabelText(/^label/i)
+    await user.click(labelInput)
+    await user.type(labelInput, '  writing  ')
+    await user.keyboard('{Tab}')
+
+    expect(labelInput).toHaveValue('writing')
+  })
+
+  it('should show duplicate error under the label field when label change causes the conflict', async () => {
+    render(
+      <PromptForm
+        existingPrompts={[{ name: 'summarize', label: 'writing' }]}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText(/^name$/i), 'summarize')
+    expect(
+      screen.queryByText(/a prompt with this name and label already exists/i),
+    ).not.toBeInTheDocument()
+
+    await user.type(screen.getByLabelText(/^label/i), 'writing')
+    expect(
+      screen.getByText(/a prompt with this name and label already exists/i),
+    ).toBeInTheDocument()
+    expect(
+      screen.getAllByText(/a prompt with this name and label already exists/i),
+    ).toHaveLength(1)
   })
 })
