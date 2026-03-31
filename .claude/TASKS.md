@@ -35,13 +35,6 @@ Task block format:
 
 ## Up next
 
-### Fix: label UI affordance and popover focus
-
-- [ ] Label combobox has no visual or semantic signal that it opens a dropdown. Make it recognizable as a combobox
-- [ ] Filter popover opens with focus on the second checkbox instead of the first
-
-> Test strategy: keyboard navigation smoke test in the installed extension, visual verification of the combobox in light and dark modes
-
 ### Chore: add screenshot for filter zero-results state
 
 - [ ] Screenshot script has no capture of the zero-results filter state. Light and dark captures of the "No prompts found." empty state exist when done

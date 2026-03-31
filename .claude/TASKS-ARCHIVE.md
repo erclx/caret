@@ -409,3 +409,10 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Delete confirm row in the prompt list has the same pattern. Only the button reads as destructive when done
 
 > Test strategy: visual, light and dark verification in the installed extension
+
+### Fix: label UI affordance and popover focus
+
+- [x] Label combobox has no visual or semantic signal that it opens a dropdown. Make it recognizable as a combobox
+- [x] Filter popover opens with focus on the second checkbox instead of the first
+
+> Test strategy: keyboard navigation smoke test in the installed extension, visual verification of the combobox in light and dark modes

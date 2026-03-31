@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
@@ -275,19 +275,30 @@ export function PromptForm({
           <Input
             ref={labelInputRef}
             id='label'
+            role='combobox'
+            aria-expanded={isComboboxOpen && filteredLabels.length > 0}
+            aria-haspopup='listbox'
+            aria-autocomplete='list'
+            aria-controls='label-listbox'
+            aria-activedescendant={
+              isComboboxOpen && highlightedIndex >= 0
+                ? `label-option-${highlightedIndex}`
+                : undefined
+            }
             value={label}
             onChange={handleLabelChange}
             onFocus={() => setIsComboboxOpen(true)}
             onBlur={handleLabelBlur}
             onKeyDown={handleLabelKeyDown}
             placeholder='e.g. writing'
-            className={cn('text-sm', label && 'pr-8')}
+            className={cn('pr-7 text-sm', label && 'pr-14')}
             autoComplete='off'
           />
+          <ChevronDown className='text-muted-foreground pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2' />
           {label && (
             <button
               type='button'
-              className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
+              className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-7 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
               onClick={() => {
                 setLabel('')
                 setLabelError('')
@@ -306,14 +317,20 @@ export function PromptForm({
             </button>
           )}
           {isComboboxOpen && filteredLabels.length > 0 && (
-            <div className='border-border bg-card absolute top-full right-0 left-0 z-10 mt-1 max-h-40 overflow-y-auto rounded-md border shadow-md'>
+            <div
+              id='label-listbox'
+              role='listbox'
+              className='border-border bg-card absolute top-full right-0 left-0 z-10 mt-1 max-h-40 overflow-y-auto rounded-md border shadow-md'
+            >
               {filteredLabels.map((l, i) => (
-                <button
+                <div
                   key={l}
-                  type='button'
+                  id={`label-option-${i}`}
+                  role='option'
+                  aria-selected={i === highlightedIndex}
                   tabIndex={-1}
                   className={cn(
-                    'w-full px-3 py-1.5 text-left text-sm transition-colors outline-none',
+                    'w-full cursor-default px-3 py-1.5 text-left text-sm transition-colors',
                     i === highlightedIndex
                       ? 'bg-accent text-foreground'
                       : 'text-foreground hover:bg-accent/50',
@@ -321,7 +338,7 @@ export function PromptForm({
                   onClick={() => selectLabel(l)}
                 >
                   {l}
-                </button>
+                </div>
               ))}
             </div>
           )}

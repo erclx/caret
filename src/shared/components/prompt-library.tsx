@@ -40,6 +40,7 @@ export function PromptLibrary() {
   const [activeLabels, setActiveLabels] = useState<Set<string>>(new Set())
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
   const searchRef = useRef<HTMLInputElement | null>(null)
+  const checkboxListRef = useRef<HTMLDivElement>(null)
 
   const allLabels = useMemo(() => {
     const labels = new Set<string>()
@@ -222,7 +223,15 @@ export function PromptLibrary() {
                     <ChevronDown className='size-3' />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className='w-44 p-2'>
+                <PopoverContent
+                  className='w-44 p-2'
+                  onOpenAutoFocus={(e) => {
+                    e.preventDefault()
+                    checkboxListRef.current
+                      ?.querySelector<HTMLElement>('[data-slot="checkbox"]')
+                      ?.focus()
+                  }}
+                >
                   <div className='border-border mb-1 flex justify-end border-b pb-1'>
                     <button
                       className={cn(
@@ -236,7 +245,10 @@ export function PromptLibrary() {
                       Clear
                     </button>
                   </div>
-                  <div className='flex max-h-48 flex-col gap-0.5 overflow-y-auto'>
+                  <div
+                    ref={checkboxListRef}
+                    className='flex max-h-48 flex-col gap-0.5 overflow-y-auto'
+                  >
                     {allLabels.map((l) => (
                       <div
                         key={l}
