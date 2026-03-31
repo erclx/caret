@@ -16,7 +16,12 @@ Open the Options page and confirm all three sites are enabled with their default
 
 - [ ] Type `>` followed by part of a prompt name → list narrows to matching prompts.
 - [ ] Continue typing until one result remains → only that prompt is shown.
+- [ ] Type `>` followed by text that matches no prompts → "No results." message appears and the keyboard hint footer is hidden.
 - [ ] Delete back to `>` → full prompt list restored.
+
+## Empty state
+
+- [ ] Remove all prompts from the library, then type `>` in any chat input → "No prompts yet. Click the extension icon to add one." appears and the keyboard hint footer is hidden.
 
 ## Selection and insertion
 
