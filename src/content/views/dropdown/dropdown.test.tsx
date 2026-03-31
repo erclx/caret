@@ -144,4 +144,28 @@ describe('Dropdown', () => {
 
     expect(handleClose).toHaveBeenCalled()
   })
+
+  it('should show "No prompts yet" message when there are no prompts', () => {
+    render(
+      <Dropdown prompts={[]} query='' onSelect={vi.fn()} onClose={vi.fn()} />,
+    )
+
+    expect(screen.getByText(/no prompts yet\. click/i)).toBeInTheDocument()
+  })
+
+  it('should show "No results." when prompts exist but none match the query', () => {
+    render(
+      <Dropdown
+        prompts={prompts}
+        query='xyz'
+        onSelect={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText('No results.')).toBeInTheDocument()
+    expect(
+      screen.queryByText(/no prompts yet\. click/i),
+    ).not.toBeInTheDocument()
+  })
 })
