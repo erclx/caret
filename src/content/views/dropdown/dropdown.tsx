@@ -36,7 +36,9 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
     <div ref={containerRef} className='flex w-full flex-col'>
       {filteredPrompts.length === 0 ? (
         <p className='text-muted-foreground px-3 py-4 text-center text-[11px]'>
-          No prompts yet - click the extension icon to add one
+          {prompts.length === 0
+            ? 'No prompts yet. Click the extension icon to add one.'
+            : 'No results.'}
         </p>
       ) : (
         <div ref={listRef} className='max-h-70 overflow-y-auto'>
@@ -73,9 +75,11 @@ export function Dropdown({ prompts, query, onSelect, onClose }: DropdownProps) {
         </div>
       )}
 
-      <div className='border-border text-muted-foreground shrink-0 border-t px-3 py-1.5 text-[11px] select-none'>
-        ↑↓ navigate · Enter/Tab insert · Esc close
-      </div>
+      {filteredPrompts.length > 0 && (
+        <div className='border-border text-muted-foreground shrink-0 border-t px-3 py-1.5 text-[11px] select-none'>
+          ↑↓ navigate · Enter/Tab insert · Esc close
+        </div>
+      )}
     </div>
   )
 }

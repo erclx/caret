@@ -21,6 +21,7 @@ export interface PromptFormProps {
 }
 
 const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
+const DUPLICATE_MSG = 'A prompt with this name and label already exists'
 
 export function PromptForm({
   initialPrompt,
@@ -36,11 +37,22 @@ export function PromptForm({
   const [name, setName] = useState(initialName)
   const [label, setLabel] = useState(initialLabel)
   const [nameError, setNameError] = useState('')
+  const [labelError, setLabelError] = useState('')
   const [body, setBody] = useState(initialBody)
+  const [bodyError, setBodyError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   const [showDiscard, setShowDiscard] = useState(false)
   const [isComboboxOpen, setIsComboboxOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
+
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (savedTimerRef.current !== null) clearTimeout(savedTimerRef.current)
+    }
+  }, [])
 
   const filteredLabels = useMemo(() => {
     if (!existingLabels.length) return []
@@ -66,24 +78,21 @@ export function PromptForm({
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
     setName(val)
-    if (val && !KEBAB_RE.test(val)) {
+    setLabelError('')
+    if (!val) {
+      setNameError('')
+      return
+    }
+    if (!KEBAB_RE.test(val)) {
       setNameError(
         'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
       )
-    } else if (val && isDuplicatePair(val, label)) {
-      setNameError('A prompt with this name and label already exists')
+      return
+    }
+    if (isDuplicatePair(val, label)) {
+      setNameError(DUPLICATE_MSG)
     } else {
       setNameError('')
-    }
-  }
-
-  function applyDuplicateCheck(n: string, l: string) {
-    if (n && KEBAB_RE.test(n)) {
-      if (isDuplicatePair(n, l)) {
-        setNameError('A prompt with this name and label already exists')
-      } else {
-        setNameError('')
-      }
     }
   }
 
@@ -92,7 +101,25 @@ export function PromptForm({
     setLabel(val)
     setHighlightedIndex(-1)
     setIsComboboxOpen(true)
-    applyDuplicateCheck(name, val)
+    if (nameError === DUPLICATE_MSG) setNameError('')
+    if (name && KEBAB_RE.test(name) && isDuplicatePair(name, val)) {
+      setLabelError(DUPLICATE_MSG)
+    } else {
+      setLabelError('')
+    }
+  }
+
+  function handleLabelBlur() {
+    const trimmed = label.trim()
+    if (trimmed === label) return
+    setLabel(trimmed)
+    if (name && KEBAB_RE.test(name)) {
+      if (isDuplicatePair(name, trimmed)) {
+        setLabelError(DUPLICATE_MSG)
+      } else {
+        setLabelError('')
+      }
+    }
   }
 
   function handleLabelKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -127,7 +154,12 @@ export function PromptForm({
     setLabel(l)
     setIsComboboxOpen(false)
     setHighlightedIndex(-1)
-    applyDuplicateCheck(name, l)
+    if (nameError === DUPLICATE_MSG) setNameError('')
+    if (name && KEBAB_RE.test(name) && isDuplicatePair(name, l)) {
+      setLabelError(DUPLICATE_MSG)
+    } else {
+      setLabelError('')
+    }
   }
 
   const labelInputRef = useRef<HTMLInputElement>(null)
@@ -152,6 +184,10 @@ export function PromptForm({
   }, [])
 
   function handleRequestDiscard() {
+    if (isSaved) {
+      onCancel()
+      return
+    }
     if (isDirty) {
       setShowDiscard(true)
     } else {
@@ -169,6 +205,8 @@ export function PromptForm({
         body,
         ...(trimmedLabel ? { label: trimmedLabel } : {}),
       })
+      setIsSaved(true)
+      savedTimerRef.current = setTimeout(() => onCancel(), 2000)
     } finally {
       setIsSubmitting(false)
     }
@@ -224,6 +262,9 @@ export function PromptForm({
       </div>
       <div className='flex shrink-0 flex-col gap-2'>
         <Label htmlFor='label'>Label (optional)</Label>
+        <p className='text-muted-foreground text-xs'>
+          Labels are case-sensitive.
+        </p>
         <div
           className='relative'
           onBlur={(e) => {
@@ -239,6 +280,7 @@ export function PromptForm({
             value={label}
             onChange={handleLabelChange}
             onFocus={() => setIsComboboxOpen(true)}
+            onBlur={handleLabelBlur}
             onKeyDown={handleLabelKeyDown}
             placeholder='e.g. writing'
             className={cn('text-sm', label && 'pr-8')}
@@ -250,9 +292,14 @@ export function PromptForm({
               className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-2 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
               onClick={() => {
                 setLabel('')
+                setLabelError('')
                 setIsComboboxOpen(false)
                 setHighlightedIndex(-1)
-                applyDuplicateCheck(name, '')
+                if (name && KEBAB_RE.test(name) && isDuplicatePair(name, '')) {
+                  setNameError(DUPLICATE_MSG)
+                } else if (nameError === DUPLICATE_MSG) {
+                  setNameError('')
+                }
                 labelInputRef.current?.focus()
               }}
               aria-label='Clear label'
@@ -281,19 +328,31 @@ export function PromptForm({
             </div>
           )}
         </div>
+        {labelError && <p className='text-destructive text-xs'>{labelError}</p>}
       </div>
       <div className='flex min-h-0 flex-1 flex-col gap-2'>
         <Label htmlFor='body'>Prompt body</Label>
         <Textarea
           id='body'
           value={body}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(e) => {
+            setBody(e.target.value)
+            if (e.target.value.trim()) setBodyError('')
+          }}
+          onBlur={() => {
+            if (!body.trim()) setBodyError('Enter the prompt content')
+          }}
           required
           placeholder='Enter the prompt content...'
           className='flex-1 resize-none text-sm'
         />
+        {bodyError && <p className='text-destructive text-xs'>{bodyError}</p>}
       </div>
-      {showDiscard ? (
+      {isSaved ? (
+        <p className='text-muted-foreground shrink-0 text-right text-sm'>
+          Saved ✓
+        </p>
+      ) : showDiscard ? (
         discardRow
       ) : (
         <div className='flex shrink-0 justify-end gap-2'>
@@ -310,7 +369,13 @@ export function PromptForm({
             variant='outline'
             type='submit'
             className='dark:hover:bg-zinc-700 dark:hover:text-white'
-            disabled={isSubmitting || !!nameError || !name}
+            disabled={
+              isSubmitting ||
+              !!nameError ||
+              !!labelError ||
+              !name ||
+              !body.trim()
+            }
           >
             {isSubmitting ? 'Saving...' : 'Save'}
           </Button>

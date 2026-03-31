@@ -93,7 +93,6 @@ export function PromptLibrary() {
     } else {
       await addPrompt(data)
     }
-    setView('list')
   }
 
   function handleBack() {

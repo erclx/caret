@@ -392,3 +392,13 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Clearing the label via the inline clear button leaves focus on the button rather than returning it to the label field
 
 > Test strategy: keyboard navigation smoke test in the installed extension, visual verification that all focus rings match the project style
+
+### Fix: edit form bugs and polish
+
+- [x] Dropdown shows "No prompts yet" when a query matches nothing. Show a distinct no-results message instead
+- [x] Empty prompt body can be submitted. Validate body emptiness and block save consistently with how name validation works
+- [x] Duplicate-pair error appears under the name field when a label change causes the conflict. Surface it under the label field instead
+- [x] No feedback after a successful save. Add a brief signal before returning to the list
+- [x] Label field accepts leading/trailing whitespace without warning and is case-sensitive with no hint. Trim visibly and surface the case-sensitivity constraint
+
+> Test strategy: unit tests for dropdown empty-vs-no-match state, form save-disabled logic with empty body, and label trimming. Visual verification of error placement and save feedback
