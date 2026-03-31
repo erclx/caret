@@ -93,8 +93,8 @@ describe('PromptForm', () => {
 
     await user.click(screen.getByLabelText(/^label/i))
 
-    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'writing' })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'claude' })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'writing' })).toBeInTheDocument()
   })
 
   it('should filter dropdown options as user types in the label field', async () => {
@@ -109,9 +109,9 @@ describe('PromptForm', () => {
 
     await user.type(screen.getByLabelText(/^label/i), 'cl')
 
-    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'claude' })).toBeInTheDocument()
     expect(
-      screen.queryByRole('button', { name: 'writing' }),
+      screen.queryByRole('option', { name: 'writing' }),
     ).not.toBeInTheDocument()
   })
 
@@ -128,7 +128,7 @@ describe('PromptForm', () => {
 
     await user.type(screen.getByLabelText(/^name$/i), 'new-prompt')
     await user.click(screen.getByLabelText(/^label/i))
-    await user.click(screen.getByRole('button', { name: 'claude' }))
+    await user.click(screen.getByRole('option', { name: 'claude' }))
     await user.type(screen.getByLabelText(/prompt body/i), 'Body text')
     await user.click(screen.getByRole('button', { name: /save/i }))
 
@@ -175,12 +175,12 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByLabelText(/^label/i))
-    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'claude' })).toBeInTheDocument()
 
     await user.keyboard('{Tab}')
 
     expect(
-      screen.queryByRole('button', { name: 'claude' }),
+      screen.queryByRole('option', { name: 'claude' }),
     ).not.toBeInTheDocument()
     expect(screen.getByLabelText(/prompt body/i)).toHaveFocus()
   })
@@ -196,12 +196,12 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByLabelText(/^label/i))
-    expect(screen.getByRole('button', { name: 'claude' })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'claude' })).toBeInTheDocument()
 
     await user.keyboard('{Escape}')
 
     expect(
-      screen.queryByRole('button', { name: 'claude' }),
+      screen.queryByRole('option', { name: 'claude' }),
     ).not.toBeInTheDocument()
     expect(screen.queryByText(/discard changes/i)).not.toBeInTheDocument()
   })
