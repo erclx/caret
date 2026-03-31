@@ -258,13 +258,6 @@ Your primary directive is to maintain long-term system health over short-term co
 - Place error boundaries at route level.
 - Place Suspense at data-fetching boundaries.
 - Do not use a single root-level error boundary as the only safety net.
-
-## Accessibility
-
-- Use semantic HTML elements over `div`/`span` where a native element exists.
-- Add `aria-label` to interactive elements with no visible text label.
-- Always provide an `alt` prop on `<img>` elements.
-- Use `alt=""` for decorative images with no informational value.
   </rule>
 
 <rule name="210-ui">
@@ -296,11 +289,80 @@ Your primary directive is to maintain long-term system health over short-term co
 - Show format examples over instructions: `name@example.com` over `Enter your email here`.
 - Reserve instructions for labels or helper text below the input.
 
+## Feedback
+
+- After a successful mutation (save, sync, import), show brief inline feedback before navigating away or resetting the form.
+- Feedback must be transient: fade or dismiss automatically after 2–3 seconds. Do not require user dismissal.
+
 ## Alt text
 
 - Describe the content or function of the image, not its appearance.
 - Keep alt text concise. Do not prefix with "Image of" or "Photo of".
 - Alt text for functional images (icons, buttons) should describe the action, not the graphic.
+  </rule>
+
+<rule name="220-a11y">
+# ACCESSIBILITY AND KEYBOARD STANDARDS
+
+## Focus styles
+
+- All interactive elements must use the project focus ring. Do not define per-component focus styles.
+- Never apply `outline-none` without a custom focus ring in the same rule.
+- Focus ring must have 3:1 contrast against its background in both light and dark modes.
+
+## Keyboard interaction model
+
+- Tab / Shift+Tab: move focus sequentially through interactive elements in DOM order.
+- Enter: activates buttons and links, submits forms.
+- Space: activates buttons and checkboxes, toggles selection in listboxes.
+- Arrow keys: navigate within composite widgets. Do not let them exit the widget.
+- Escape: closes any overlay, popover, dialog, or dropdown. Cancels in-progress edits.
+- Do not introduce non-standard key bindings for common actions.
+
+## Composite widgets
+
+- Roving tabindex for interactive collections: one item in the tab sequence at a time.
+- Combobox: arrow keys navigate options, Enter selects, Escape closes, typing filters.
+
+## Focus management
+
+- Move focus into any overlay, popover, or dialog on open. Return focus to the trigger on close.
+- Never move focus on hover. Only on keyboard input or explicit pointer activation.
+
+## ARIA semantics
+
+- Use semantic HTML over custom elements: `<button>` over `<div onClick>`, `<a>` over `<span onClick>`.
+- A `<div>` with `onClick` requires `role`, `tabIndex="0"`, and keyboard handlers. Use `<button>` instead.
+- Set role on custom controls: `role="combobox"`, `role="listbox"`, `role="menu"`, `role="option"`.
+- Synchronize state attributes with visual state: `aria-expanded`, `aria-selected`, `aria-checked`, `aria-disabled`.
+- Add `aria-label` or `aria-labelledby` to interactive elements with no visible text label.
+- Always provide `alt` on `<img>`. Use `alt=""` for decorative images.
+  </rule>
+
+<rule name="230-forms">
+# FORM STANDARDS
+
+## Validation timing
+
+- Validate on blur, not on every keystroke. Exception: realtime feedback that is explicitly part of the feature (e.g. character count, live search).
+- Do not show an error on a field the user has never touched.
+
+## Save blocking
+
+- Block save when any required field is invalid or has never been touched.
+
+## Error placement
+
+- Show the error directly under the field that caused it, not under an unrelated field.
+
+## Input sanitization
+
+- Trim leading and trailing whitespace from text inputs on blur or submit, not on every keystroke.
+- If a field is case-sensitive, surface that constraint near the field. Do not silently treat `Foo` and `foo` as different values without warning.
+
+## Derived display state
+
+- Reset status indicators, counts, and derived display values when their source input changes.
   </rule>
 
 <rule name="250-tailwind">

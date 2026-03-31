@@ -1,6 +1,6 @@
 # Tasks archive
 
-Entries moved from TASKS.md when Done exceeded 10. Oldest first.
+Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at the bottom.
 
 ### Chore: planning & document setup
 
@@ -325,3 +325,70 @@ Entries moved from TASKS.md when Done exceeded 10. Oldest first.
 - [x] Fix CORS failure when syncing snippets with a PAT configured. The auth header on the file fetch triggered a preflight that GitHub's raw content server rejects
 
 > Test strategy: manual verification in installed extension with PAT configured
+
+### Feature: labels
+
+- [x] Add `label?: string` to `PromptSchema`. Update import merge key to `(label, name)` composite
+- [x] Update GitHub sync to recurse one level into subdirectories and derive label from folder name. Update diff identity key to `(label, name)` composite
+- [x] Add label field to the prompt edit form with clickable label chips. Validate uniqueness per `(label, name)` pair
+- [x] Add label filter pills to the sidepanel list view. Apply alongside text search with AND logic
+- [x] Show `label · name` in trigger dropdown rows for labeled prompts
+
+> Test strategy: unit tests for schema boundary, merge composite key, diff composite key and subdirectory fetch, form per-label uniqueness validation, filter pills rendering and interaction
+
+### Fix: GitHub sync skips prompt with matching key but different body silently
+
+- [x] When a local prompt and an incoming GitHub snippet share the same composite key but have different bodies, sync currently reports the prompt as up to date rather than flagging it as skipped or changed. Surface the distinction to the user
+
+> Test strategy: unit test for the diff case, manual verification in installed extension
+
+### Fix: import feedback is noisy with many entries
+
+- [x] The inline feedback string after a bulk import becomes hard to read when many prompts are updated or added. Redesign the feedback to be scannable regardless of entry count
+
+> Test strategy: visual verification with a large import fixture
+
+### Chore: manual test fixture system
+
+- [x] Create a manual testing folder at repo root with subfolders per feature area: import-export, github-sync, sidepanel, trigger, and dark-mode
+- [x] Populate import-export with five JSON fixtures (single, multi, overflow, empty, invalid) and a verification checklist covering export, import feedback, idempotency, truncation, and round-trip
+- [x] Add verification checklists for github-sync and sidepanel GitHub tab, sidepanel CRUD and filtering, trigger and dropdown on real sites, and dark mode
+- [x] Add a docs overview page describing each folder and linking to its checklist
+- [x] Add project instruction rules to keep fixtures and checklists current on feature changes and to review them before shipping
+- [x] Leave seeds independent of fixtures: they serve different purposes and coupling them creates drift
+
+> Test strategy: visual verification. Load each fixture in the extension and confirm the expected feedback message and prompt state.
+
+### Fix: dropdown screenshots missing the dropdown
+
+- [x] Both dropdown captures showed only the textarea because the trigger was typed before the extension was ready. Add synchronization so the dropdown appears correctly in both light and dark shots.
+
+> Test strategy: visual verification of regenerated screenshots
+
+### Fix: UI polish across sidepanel, options, and dropdown
+
+- [x] Give "Keep editing" and delete "Cancel" buttons a visible border so they are distinguishable inside the destructive confirmation banner
+- [x] Support Cmd+J/P on Mac in the dropdown keyboard handler alongside existing Ctrl+J/P
+- [x] Remove leftover debug log calls from the background service worker
+- [x] Add a focus ring to the "Create a token on GitHub" link in the GitHub section
+- [x] Add a focus ring to the per-site configuration checkbox
+- [x] Add bottom padding to the sidepanel list container so the GitHub tab button focus ring is not clipped
+- [x] Move the discard confirmation to always appear at the bottom of the form, keeping the Back button visible at all times
+
+> Test strategy: visual verification across light and dark modes, plus keyboard navigation smoke test in the installed extension
+
+### Feature: scalable label UI
+
+- [x] Replace sidepanel label filter pills row with a filter button + popover (checkbox list, multi-select, badge shows active count, scales to any number of labels)
+- [x] Replace edit form label input + chips with a combobox (dropdown of existing labels on focus or match, free-text still accepted, no pills below)
+
+> Test strategy: unit tests for filter popover toggle logic and combobox selection, visual verification with 10+ labels in both surfaces
+
+### Fix: label UI keyboard and focus gaps
+
+- [x] Label combobox option items are tab-reachable and show the browser default focus outline. They should be navigable by arrow keys only
+- [x] Pressing Tab on the label field does not close the combobox dropdown before focus moves to the next field
+- [x] Clicking the padding area of a filter row does not toggle the filter
+- [x] Clearing the label via the inline clear button leaves focus on the button rather than returning it to the label field
+
+> Test strategy: keyboard navigation smoke test in the installed extension, visual verification that all focus rings match the project style

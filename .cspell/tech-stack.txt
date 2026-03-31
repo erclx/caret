@@ -7,11 +7,14 @@ contenteditable
 crxjs
 elif
 esac
+labelledby
 lucide
 nextjs
+oneline
 pipefail
 shadcn
 shellcheck
+tabindex
 tailwindcss
 timonwong
 turbopack
