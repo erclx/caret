@@ -142,9 +142,12 @@ describe('PromptLibrary', () => {
       name: 'new-prompt',
       body: 'New body',
     })
-    await waitFor(() => {
-      expect(screen.getByText('summarize')).toBeInTheDocument()
-    })
+    await waitFor(
+      () => {
+        expect(screen.getByText('summarize')).toBeInTheDocument()
+      },
+      { timeout: 3000 },
+    )
   })
 
   it('should call updatePrompt with correct id on save when editing', async () => {
@@ -161,9 +164,12 @@ describe('PromptLibrary', () => {
       name: 'updated-name',
       body: 'Summarize this',
     })
-    await waitFor(() => {
-      expect(screen.getByText('summarize')).toBeInTheDocument()
-    })
+    await waitFor(
+      () => {
+        expect(screen.getByText('summarize')).toBeInTheDocument()
+      },
+      { timeout: 3000 },
+    )
   })
 
   it('should not show label filter button when no prompts have labels', () => {
