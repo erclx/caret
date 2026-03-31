@@ -213,10 +213,8 @@ export function PromptForm({
   }
 
   const discardRow = (
-    <div className='border-destructive bg-destructive/10 flex shrink-0 items-center justify-between gap-2 rounded-md border p-3 shadow-sm'>
-      <span className='text-destructive text-sm font-medium'>
-        Discard changes?
-      </span>
+    <div className='bg-muted dark:border-border flex shrink-0 items-center justify-between gap-2 rounded-md p-3 dark:border'>
+      <span className='text-muted-foreground text-sm'>Discard changes?</span>
       <div className='flex shrink-0 gap-2'>
         <Button
           type='button'
