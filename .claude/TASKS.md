@@ -30,17 +30,10 @@ Task block format:
 - [ ] Outcome: what done looks like
 - [ ] Outcome: what done looks like
 
-> Test strategy: type and brief justification
+> Test strategy: <unit | component | e2e | visual | manual>, what is being verified
 ```
 
 ## Up next
-
-### Fix: confirmation row visual weight
-
-- [ ] Discard-changes row in the edit form shows a red container and red label text alongside the destructive button. Only the button reads as destructive when done
-- [ ] Delete confirm row in the prompt list has the same pattern. Only the button reads as destructive when done
-
-> Test strategy: visual: light and dark verification in the installed extension
 
 ### Fix: label UI affordance and popover focus
 
@@ -53,7 +46,7 @@ Task block format:
 
 - [ ] Screenshot script has no capture of the zero-results filter state. Light and dark captures of the "No prompts found." empty state exist when done
 
-> Test strategy: visual: run the screenshot script and confirm the new captures appear
+> Test strategy: visual, run the screenshot script and confirm the new captures appear
 
 ### Fix: GitHub options state and validation
 

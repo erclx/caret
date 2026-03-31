@@ -402,3 +402,10 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Label field accepts leading/trailing whitespace without warning and is case-sensitive with no hint. Trim visibly and surface the case-sensitivity constraint
 
 > Test strategy: unit tests for dropdown empty-vs-no-match state, form save-disabled logic with empty body, and label trimming. Visual verification of error placement and save feedback
+
+### Fix: confirmation row visual weight
+
+- [x] Discard-changes row in the edit form shows a red container and red label text alongside the destructive button. Only the button reads as destructive when done
+- [x] Delete confirm row in the prompt list has the same pattern. Only the button reads as destructive when done
+
+> Test strategy: visual, light and dark verification in the installed extension
