@@ -116,7 +116,7 @@ Behavior:
 │                                │
 │ Label (optional)               │  ← "(optional)" in the field label signals the field may be left blank
 │ ┌──────────────────────────┐   │
-│ │ claude                  ✕│   │  ← X clears the field, visible only when non-empty
+│ │ claude               ✕  ↓│   │  ← chevron always visible, X appears to its left when non-empty
 │ └──────────────────────────┘   │
 │                                │
 │ Prompt body                    │
@@ -158,7 +158,7 @@ Behavior:
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
 - Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs. A duplicate-pair error appears below the name field when a name change causes the conflict.
-- Label field: optional, no format restriction. A "Labels are case-sensitive." hint appears between the field label and the input. Combobox: focus or typing opens a dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty and clears the label on click. Label is included in the dirty-state check. Whitespace is trimmed from the label on blur. A duplicate-pair error appears below the label field when a label change causes the conflict.
+- Label field: optional, no format restriction. A "Labels are case-sensitive." hint appears between the field label and the input. Combobox: a chevron icon at the right edge of the field signals that the field opens a dropdown. Focus or typing opens the dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty, to the left of the chevron, and clears the label on click. Label is included in the dirty-state check. Whitespace is trimmed from the label on blur. A duplicate-pair error appears below the label field when a label change causes the conflict.
 - Prompt body: required, must not be empty. An inline error "Enter the prompt content" appears below the field on blur when the field is empty. Save is disabled while the field is empty.
 - Save persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 2 seconds, then returns to the list automatically
 - Textarea scrollbar: thin zinc thumb, transparent track

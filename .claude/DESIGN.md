@@ -118,7 +118,8 @@ None. Speed over delight for a keyboard-driven tool.
 - Combobox: focus or typing opens a dropdown of existing labels. Empty input shows all existing labels. Typed characters narrow the list to matching entries
 - Arrow keys navigate the dropdown list. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Tab closes the dropdown and moves focus to the next field.
 - Selecting from the dropdown fills the input. The user may also type a value not in the list to create a new label
-- An X button appears inside the field when the value is non-empty, clearing the label on click and returning focus to the label input. Same pattern as the search input clear button.
+- A chevron icon at the right edge of the field is always visible and signals the field opens a dropdown. It is non-interactive.
+- An X button appears inside the field when the value is non-empty, to the left of the chevron, clearing the label on click and returning focus to the label input. When both icons are present, the input text must not overlap either.
 - No chips or pills below the input
 
 ### Sidepanel: prompt list rows
