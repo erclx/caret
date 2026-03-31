@@ -416,3 +416,13 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Filter popover opens with focus on the second checkbox instead of the first
 
 > Test strategy: keyboard navigation smoke test in the installed extension, visual verification of the combobox in light and dark modes
+
+### Chore: add screenshot for filter zero-results state
+
+- [x] Screenshot script has no capture of the zero-results filter state. Light and dark captures of the "No prompts found." empty state exist when done
+- [x] Screenshot script has no capture of the sidepanel GitHub workflow. Light and dark captures of not configured, never synced, and diff view exist
+- [x] Screenshot script has no capture of dropdown edge cases. Light and dark captures of zero-results and empty library states exist
+- [x] Screenshot script has no capture of the sidepanel deleted-all empty state. Light and dark captures exist
+- [x] Screenshot script has no capture of the options error states. Light and dark captures of the trigger conflict and GitHub connection errors exist
+
+> Test strategy: visual, run the screenshot script and confirm the new captures appear

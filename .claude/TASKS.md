@@ -35,12 +35,6 @@ Task block format:
 
 ## Up next
 
-### Chore: add screenshot for filter zero-results state
-
-- [ ] Screenshot script has no capture of the zero-results filter state. Light and dark captures of the "No prompts found." empty state exist when done
-
-> Test strategy: visual, run the screenshot script and confirm the new captures appear
-
 ### Fix: GitHub options state and validation
 
 - [ ] Connection status dot stays green when the user edits repo or PAT fields without saving. Reset to neutral on any field change
