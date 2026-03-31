@@ -125,6 +125,15 @@ None. Speed over delight for a keyboard-driven tool.
 
 - Labeled prompts render as `label · name` in the name line using the same color split as the dropdown: label and separator in `--muted-foreground`, name in `--foreground`.
 
+### Sidepanel: confirmation rows
+
+Applies to the delete confirm row in the list and the discard-changes row in the edit form.
+
+- Container uses `--muted` background with no border in light mode. In dark mode, add a `--border` border. The muted background blends into the panel background in dark, so the border defines the box.
+- Label text uses `--muted-foreground`. It is a prompt, not an alarm.
+- Only the destructive action button carries red. No other element in the row uses a destructive color.
+- Trash icon in list rows uses `--destructive` at 80% opacity at rest, full opacity on hover. The reduced opacity signals availability without competing with the prompt name and body that are the row's primary content.
+
 ### Sidepanel: GitHub view
 
 - Connection indicator: 8px filled circle, green when connected, red on error. Only shown when GitHub is configured.

@@ -39,7 +39,7 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 ## Discard confirmation
 
 - [ ] Open the form, make no changes, press Esc → returns to list with no confirmation.
-- [ ] Open the form, type in any field, press Esc → "Discard changes?" row appears.
+- [ ] Open the form, type in any field, press Esc → "Discard changes?" row appears with a neutral background and muted label text. Only the Discard button is red.
 - [ ] Click "Keep editing" → row dismisses, edits preserved.
 - [ ] Click "Discard" → returns to list, changes lost.
 - [ ] Same flow using the Cancel button instead of Esc.
@@ -47,7 +47,8 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 
 ## Delete
 
-- [ ] Delete a prompt → it is removed from the list.
+- [ ] Click the trash icon on a prompt → "Delete?" confirm row appears with a neutral background and muted label text. Only the Confirm button is red.
+- [ ] Click Confirm → prompt is removed from the list.
 - [ ] Delete the only prompt with a given label → that label no longer appears in the "Label" filter popover.
 
 ## Search and filter
