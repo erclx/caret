@@ -164,6 +164,12 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.getByRole('button', { name: /cancel/i }).click()
   await listPage.waitForTimeout(200)
 
+  await listPage.getByPlaceholder('Search prompts...').fill('xyz123')
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-list-empty-search.png`)
+  await listPage.getByPlaceholder('Search prompts...').fill('')
+  await listPage.waitForTimeout(200)
+
   await listPage.getByRole('button', { name: /new/i }).click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-new.png`)
@@ -179,7 +185,72 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-dirty.png`)
 
+  await listPage.getByRole('button', { name: /discard/i }).click()
+  await listPage.waitForTimeout(200)
+
+  await listPage.getByText(/^GitHub$/).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-github-not-configured.png`)
+
+  await listPage.evaluate(() => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      prompts: [],
+    })
+  })
+  await listPage.getByRole('button', { name: /Prompts/i }).click()
+  await listPage.waitForTimeout(500)
+  await shot(listPage, 'sidepanel', `${scheme}-list-empty-all-deleted.png`)
+
   await ctx.close()
+
+  const ghCtx = await launchWithExtension()
+  await ghCtx.addInitScript((seeds) => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      prompts: seeds,
+      settings: {
+        github: {
+          pat: 'ghp_fake123',
+          owner: 'owner',
+          repo: 'repo',
+          branch: 'main',
+          snippetsPath: 'snippets',
+        },
+      },
+    })
+  }, SEED_PROMPTS)
+  const ghId = await getExtensionId(ghCtx)
+  const ghPage = await ghCtx.newPage()
+  await ghPage.setViewportSize({ width: 400, height: 800 })
+  await ghPage.emulateMedia({ colorScheme: scheme })
+
+  await ghPage.route(
+    'https://api.github.com/repos/owner/repo/contents/snippets?ref=main',
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        json: [
+          {
+            name: 'new-prompt.md',
+            type: 'file',
+            download_url: 'https://fake/new-prompt.md',
+          },
+        ],
+      })
+    },
+  )
+  await ghPage.route('https://fake/new-prompt.md', async (route) => {
+    await route.fulfill({ status: 200, body: 'This is a new prompt' })
+  })
+
+  await ghPage.goto(`chrome-extension://${ghId}/src/sidepanel/index.html`)
+  await ghPage.getByRole('button', { name: /GitHub/i }).click()
+  await ghPage.waitForTimeout(200)
+  await shot(ghPage, 'sidepanel', `${scheme}-github-never-synced.png`)
+
+  await ghPage.getByRole('button', { name: /Sync now/i }).click()
+  await ghPage.waitForTimeout(1000)
+  await shot(ghPage, 'sidepanel', `${scheme}-github-diff.png`)
+  await ghCtx.close()
 }
 
 // options
@@ -195,10 +266,40 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await page.waitForLoadState('networkidle')
   await shot(page, 'options', `${scheme}.png`, true)
 
+  const errorCtx = await launchWithExtension()
+  const errorId = await getExtensionId(errorCtx)
+  const errorPage = await errorCtx.newPage()
+  await errorPage.setViewportSize({ width: 800, height: 900 })
+  await errorPage.emulateMedia({ colorScheme: scheme })
+
+  await errorPage.goto(`chrome-extension://${errorId}/src/options/index.html`)
+  await errorPage.evaluate(() => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      settings: {
+        sites: {
+          'claude.ai': { triggerSymbol: '/', enabled: true },
+          'chatgpt.com': { triggerSymbol: 'ab', enabled: true },
+        },
+        github: {
+          pat: 'bad_token',
+          owner: 'owner',
+          repo: 'repo',
+          branch: 'main',
+          snippetsPath: 'snippets',
+          connectionHealth: 'error',
+        },
+      },
+    })
+  })
+
+  await errorPage.reload({ waitUntil: 'networkidle' })
+  await shot(errorPage, 'options', `${scheme}-errors.png`, true)
+
+  await errorCtx.close()
   await ctx.close()
 }
 
-// dropdown (mocked ChatGPT page)
+// dropdown
 
 for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   const ctx = await launchWithExtension()
@@ -236,7 +337,55 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await page.waitForTimeout(500)
   await shot(page, 'dropdown', `${scheme}.png`)
 
+  await textarea.blur()
+  await page.keyboard.press('Escape')
+  await page.waitForTimeout(200)
+  await textarea.focus()
+  await page.keyboard.press('Backspace')
+  await page.keyboard.type('>nonsense')
+  await page.waitForTimeout(500)
+  await shot(page, 'dropdown', `${scheme}-no-results.png`)
+
   await ctx.close()
+
+  const emptyDlCtx = await launchWithExtension()
+  const emptyDlId = await getExtensionId(emptyDlCtx)
+  const emptyDlPage = await emptyDlCtx.newPage()
+  await emptyDlPage.setViewportSize({ width: 800, height: 600 })
+  await emptyDlPage.emulateMedia({ colorScheme: scheme })
+
+  await emptyDlPage.route('https://chatgpt.com/*', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: MOCK_CHATGPT_HTML,
+    })
+  })
+
+  const setupPage = await emptyDlCtx.newPage()
+  await setupPage.goto(
+    `chrome-extension://${emptyDlId}/src/sidepanel/index.html`,
+  )
+  await setupPage.evaluate(() => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      settings: {
+        sites: { 'chatgpt.com': { triggerSymbol: '>', enabled: true } },
+      },
+    })
+  })
+  await setupPage.close()
+
+  await emptyDlPage.goto('https://chatgpt.com/')
+  const emptyDlTextarea = emptyDlPage.locator('#prompt-textarea')
+  await emptyDlTextarea.waitFor()
+  await emptyDlPage.locator('#crxjs-app').waitFor({ state: 'attached' })
+  await emptyDlPage.waitForTimeout(500)
+
+  await emptyDlTextarea.focus()
+  await emptyDlPage.keyboard.type('>')
+  await emptyDlPage.waitForTimeout(500)
+  await shot(emptyDlPage, 'dropdown', `${scheme}-empty.png`)
+  await emptyDlCtx.close()
 }
 
 console.log(`\nAll screenshots saved to: screenshots/`)
