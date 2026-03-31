@@ -218,6 +218,10 @@ Running Playwright on every PR adds 3–5 minutes per run and requires Chrome in
 
 `package.json` version is the source of truth for the zip filename (`crx-caret-{version}.zip`). The release script bumps the version with `npm version --no-git-tag-version`, then commits and tags manually using a conventional commit message. This keeps the commit message format consistent with the rest of the project rather than using npm's default format.
 
+### Post-save navigation: form-owned with feedback delay
+
+After a successful save, the form shows a brief confirmation before navigating back to the list. The parent component is responsible only for persistence. Navigation timing belongs to the form so it controls the feedback window. If the parent navigated immediately on save, the form would unmount before feedback could render.
+
 ## Risks / open questions
 
 - **Claude.ai input insertion**: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.

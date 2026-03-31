@@ -51,7 +51,9 @@ Behavior:
 - Max 6 rows visible before scroll
 - Keyboard: ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut
-- Empty state: "No prompts yet - click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
+- Empty library state: "No prompts yet. Click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
+- No-results state: "No results." shown when the library has prompts but none match the current query
+- Keyboard hint footer is hidden in both empty states. There is nothing to navigate.
 - Dropdown width matches input element exactly
 - Anchored above input. Repositions when the input resizes
 - Insertion: removes trigger + query text, inserts prompt body at cursor position
@@ -155,10 +157,10 @@ Behavior:
 - Keep editing dismisses the confirmation and restores Cancel/Save
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
-- Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs.
-- Label field: optional, no format restriction. Combobox: focus or typing opens a dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty and clears the label on click. Label is included in the dirty-state check.
-- Prompt body: required, must not be empty
-- Save persists the prompt immediately and returns to list
+- Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs. A duplicate-pair error appears below the name field when a name change causes the conflict.
+- Label field: optional, no format restriction. A "Labels are case-sensitive." hint appears between the field label and the input. Combobox: focus or typing opens a dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty and clears the label on click. Label is included in the dirty-state check. Whitespace is trimmed from the label on blur. A duplicate-pair error appears below the label field when a label change causes the conflict.
+- Prompt body: required, must not be empty. An inline error "Enter the prompt content" appears below the field on blur when the field is empty. Save is disabled while the field is empty.
+- Save persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 2 seconds, then returns to the list automatically
 - Textarea scrollbar: thin zinc thumb, transparent track
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints

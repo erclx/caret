@@ -93,7 +93,7 @@ None. Speed over delight for a keyboard-driven tool.
 - Labeled prompts render as `label · name` in the name line: label in `--muted-foreground`, separator `·` in `--muted-foreground`, name in `--foreground`. Unlabeled prompts show name only.
 - Selected row uses accent background only, no border or left bar
 - No search input inside the dropdown. The user filters by typing in the chat input after the trigger symbol.
-- Keyboard hint footer in muted hint text
+- Keyboard hint footer in muted hint text. Hidden when the filtered list is empty. Showing it with nothing to select is misleading.
 
 ### Sidepanel
 
@@ -114,6 +114,7 @@ None. Speed over delight for a keyboard-driven tool.
 ### Sidepanel: edit form label field
 
 - Field label reads "Label (optional)" to communicate that the field may be left blank without a tooltip or helper text
+- A case-sensitivity hint sits between the field label and the input, not below it. The combobox dropdown opens downward from the input and would cover anything placed below.
 - Combobox: focus or typing opens a dropdown of existing labels. Empty input shows all existing labels. Typed characters narrow the list to matching entries
 - Arrow keys navigate the dropdown list. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Tab closes the dropdown and moves focus to the next field.
 - Selecting from the dropdown fills the input. The user may also type a value not in the list to create a new label
