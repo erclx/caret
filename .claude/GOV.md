@@ -26,7 +26,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Favor explicit behavior over implicit magic or conventions.
 - Ensure data and configuration reside in designated Single Source of Truth locations.
 - Treat data as immutable unless mutation is explicitly required.
-  </rule>
+</rule>
 
 <rule name="010-testing">
 # TESTING STANDARDS
@@ -60,7 +60,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Verification
 
 - Do not use snapshot testing for verification.
-  </rule>
+</rule>
 
 <rule name="020-concurrency">
 # CONCURRENCY STANDARDS
@@ -81,7 +81,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Failure handling
 
 - Handle partial failures in batched operations independently. Do not fail the entire batch for a single error.
-  </rule>
+</rule>
 
 <rule name="030-error-handling">
 # ERROR HANDLING STANDARDS
@@ -111,7 +111,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Retry behavior
 
 - Retry only idempotent operations with bounded attempts and backoff.
-  </rule>
+</rule>
 
 <rule name="040-performance">
 # PERFORMANCE STANDARDS
@@ -130,7 +130,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Paginate or stream unbounded data sets.
 - Do not optimize without measurement.
-  </rule>
+</rule>
 
 <rule name="050-logging">
 # LOGGING STANDARDS
@@ -149,7 +149,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Do not log credentials, tokens, or personally identifiable information.
 - Log observable behavior, not implementation details.
-  </rule>
+</rule>
 
 <rule name="060-naming">
 # NAMING STANDARDS
@@ -167,7 +167,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Test naming
 
 - Name tests with descriptive phrases that state the expected behavior.
-  </rule>
+</rule>
 
 <rule name="070-planning">
 # PLANNING STANDARDS
@@ -179,7 +179,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Propose the simplest solution that satisfies the requirement before implementing complex patterns.
 - Write or update tests as part of every implementation plan.
 - Do not modify code without a confirmed plan.
-  </rule>
+</rule>
 
 <rule name="100-typescript">
 # TYPESCRIPT STANDARDS
@@ -215,7 +215,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Import from the module's source file directly over barrel `index` re-exports.
 - Use `import type` for type-only imports.
 - Enable `strict: true` in tsconfig.json with no exceptions.
-  </rule>
+</rule>
 
 <rule name="200-react">
 # REACT ARCHITECTURE STANDARDS
@@ -258,7 +258,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Place error boundaries at route level.
 - Place Suspense at data-fetching boundaries.
 - Do not use a single root-level error boundary as the only safety net.
-  </rule>
+</rule>
 
 <rule name="210-ui">
 # UI COPY STANDARDS
@@ -299,7 +299,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Describe the content or function of the image, not its appearance.
 - Keep alt text concise. Do not prefix with "Image of" or "Photo of".
 - Alt text for functional images (icons, buttons) should describe the action, not the graphic.
-  </rule>
+</rule>
 
 <rule name="220-a11y">
 # ACCESSIBILITY AND KEYBOARD STANDARDS
@@ -337,7 +337,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Synchronize state attributes with visual state: `aria-expanded`, `aria-selected`, `aria-checked`, `aria-disabled`.
 - Add `aria-label` or `aria-labelledby` to interactive elements with no visible text label.
 - Always provide `alt` on `<img>`. Use `alt=""` for decorative images.
-  </rule>
+</rule>
 
 <rule name="230-forms">
 # FORM STANDARDS
@@ -363,7 +363,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Derived display state
 
 - Reset status indicators, counts, and derived display values when their source input changes.
-  </rule>
+</rule>
 
 <rule name="250-tailwind">
 # TAILWIND CSS V4 STANDARDS
@@ -389,7 +389,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Do not use the `!` important modifier.
 - Do not use inline `style` props for static styling. Use arbitrary values (`bg-[#316ff6]`) instead.
 - Use inline styles only for dynamic values from JS/API or to set CSS variables for utility consumption.
-  </rule>
+</rule>
 
 <rule name="260-shadcn">
 # SHADCN/UI STANDARDS
@@ -419,7 +419,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Use `asChild` prop with `<Slot>` for polymorphic rendering.
 - Do not wrap primitives in extra DOM elements.
 - Use `sonner` for toasts over the deprecated `toast` component.
-  </rule>
+</rule>
 
 <rule name="300-testing-ts">
 # TYPESCRIPT/JAVASCRIPT TESTING TOOLING
@@ -451,7 +451,7 @@ Your primary directive is to maintain long-term system health over short-term co
 - Do not make real network calls in unit tests.
 - `describe()` labels use the exact identifier of the subject under test in its natural casing.
 - `it()` descriptions use "should" + sentence case.
-  </rule>
+</rule>
 
 <rule name="310-zod">
 # ZOD VALIDATION STANDARDS
@@ -472,7 +472,7 @@ Your primary directive is to maintain long-term system health over short-term co
 
 - Use `z.unknown()` for truly ambiguous inputs instead of `z.any()`.
 - Prefer `.strict()` at boundaries or explicit `.pick()`/`.omit()` over `.passthrough()`.
-  </rule>
+</rule>
 
 <rule name="350-security-web">
 # WEB SECURITY STANDARDS
@@ -498,4 +498,4 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Third-party scripts
 
 - Audit and pin versions for all third-party scripts loaded in the browser.
-  </rule>
+</rule>
