@@ -41,6 +41,15 @@ const SEED_PROMPTS = [
     createdAt: Date.now(),
     updatedAt: Date.now(),
   },
+  {
+    id: 'seed-5',
+    name: 'review-pr',
+    label: 'claude',
+    source: 'github',
+    body: 'Review this pull request focusing on security and performance constraints.',
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
 ]
 
 const MOCK_CHATGPT_HTML = `<!DOCTYPE html>
@@ -179,6 +188,12 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.getByText(SEED_PROMPTS[0].name).first().click()
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-edit.png`)
+
+  await listPage.getByRole('button', { name: /cancel/i }).click()
+  await listPage.waitForTimeout(200)
+  await listPage.getByText('review-pr').first().click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-form-edit-github.png`)
 
   await listPage.getByLabel(/prompt body/i).type(' updated')
   await listPage.getByRole('button', { name: /cancel/i }).click()
