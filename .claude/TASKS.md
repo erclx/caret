@@ -35,15 +35,6 @@ Task block format:
 
 ## Up next
 
-### Fix: GitHub options state and validation
-
-- [ ] Connection status dot stays green when the user edits repo or PAT fields without saving. Reset to neutral on any field change
-- [ ] Save is not blocked when owner/repo is empty and the field has never been touched. Block save until the field has a valid value
-- [ ] Empty snippets path shows no warning before save. Add inline validation
-- [ ] GitHub-synced prompts are visually identical to local ones in the list. Add a subtle indicator so users know which prompts are managed by sync and may be overwritten
-
-> Test strategy: visual verification of each state transition and the sync indicator in the installed extension
-
 ### Chore: refresh the store demo
 
 - [ ] The existing demo is outdated and does not reflect current features. Record, edit, and export a replacement following the demo brief

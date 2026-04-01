@@ -45,19 +45,34 @@ Appears above the chat input when user types the trigger symbol (default `>`).
 Behavior:
 
 - Labeled prompts render as `label · name` in the name line. Unlabeled prompts show name only.
-- Trigger: user types `>` (configurable per site)
-- Symbol only fires at position 0 or immediately after whitespace. Mid-word does not trigger (e.g. `word>` must not open dropdown)
-- Filters in real time as user types after trigger symbol in the chat input. No separate search field inside the dropdown (intentional design decision)
-- Max 6 rows visible before scroll
-- Keyboard: ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
+
+**Trigger**
+
+- User types `>` (configurable per site)
+- Fires only at position 0 or immediately after whitespace. Mid-word does not trigger (e.g. `word>` must not open dropdown)
+- Filters in real time as user types after the trigger symbol in the chat input. No separate search field inside the dropdown (intentional design decision)
+
+**Keyboard**
+
+- ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
 - Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut
-- Empty library state: "No prompts yet. Click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
-- No-results state: "No results." shown when the library has prompts but none match the current query
+
+**States**
+
+- Empty library: "No prompts yet. Click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
+- No results: "No results." shown when the library has prompts but none match the current query
 - Keyboard hint footer is hidden in both empty states. There is nothing to navigate.
-- Dropdown width matches input element exactly
+
+**Layout**
+
+- Max 6 rows visible before scroll
+- Width matches input element exactly
 - Anchored above input. Repositions when the input resizes
-- Insertion: removes trigger + query text, inserts prompt body at cursor position
-- After insertion dropdown dismisses and focus returns to chat input
+
+**Insertion**
+
+- Removes trigger + query text, inserts prompt body at cursor position
+- Dropdown dismisses and focus returns to chat input
 
 ## 2. Sidepanel
 
@@ -87,18 +102,26 @@ Behavior:
 
 Behavior:
 
-- Label filter button: shown only when at least one labeled prompt exists. "Label ▾" when no filters are active. "Label · N ▾" when N labels are selected.
-- Clicking the button opens a popover below it. The popover contains a "Clear" link at the top (always present, visible only when filters are active) followed by a scrollable checkbox list: existing labels in alphabetical order, then "Unlabeled" at the bottom if applicable. Multiple checkboxes can be active simultaneously. Unchecking all returns to showing everything.
-- When label filters are active, only prompts whose label matches the active set are shown. Selecting "Unlabeled" shows prompts with no label.
-- Label filter and text search apply together with AND logic. Empty state when the combination returns nothing: "No prompts found."
-- Label filter state is session-only. Resets to all on sidepanel close.
-- Click anywhere on row → opens edit form (full replace, no modal)
+**Label filter**
+
+- Button: shown only when at least one labeled prompt exists. "Label ▾" when inactive, "Label · N ▾" when N selected.
+- Popover: "Clear" link at the top (visible when filters active), scrollable list of labels in alphabetical order, "Unlabeled" at the bottom if applicable. Multiple checkboxes can be active simultaneously. Unchecking all returns to showing everything.
+- When active: only prompts matching the active set are shown. "Unlabeled" shows prompts with no label.
+- Combines with text search using AND logic. "No prompts found." when nothing matches.
+- Session-only. Resets to all on sidepanel close.
+
+**Rows**
+
+- Click anywhere → opens edit form (full replace, no modal)
 - Hover → background shift + pointer cursor
 - 🗑️ click → inline confirmation expands in-row:
   ```
   │ Delete?      [Cancel]  [Confirm]  │
   ```
   Cancel dismisses, Confirm deletes with animation
+
+**Search and navigation**
+
 - Search filters on prompt name in real time. Empty query shows all
 - List is scrollable. Header, tab bar, and search input are fixed
 - `+ New` opens new prompt form (full replace), hidden when GitHub tab is active
@@ -129,6 +152,24 @@ Behavior:
 └────────────────────────────────┘
 ```
 
+### Edit / new form: GitHub source
+
+When editing a prompt synced from GitHub, a muted warning banner appears below the Back button.
+
+```plaintext
+┌────────────────────────────────┐
+│ ← Back                         │
+├────────────────────────────────┤
+│ ┌──────────────────────────┐   │
+│ │ [Github] Synced from     │   │
+│ │ GitHub. Local edits will │   │
+│ │ be lost on next sync.    │   │
+│ └──────────────────────────┘   │
+│                                │
+│ Name                           │
+│ ┌──────────────────────────┐   │
+```
+
 ### Edit / new form: dirty state
 
 ```plaintext
@@ -151,23 +192,49 @@ Behavior:
 
 Behavior:
 
+**Dirty state**
+
 - `← Back` and Cancel both check dirty state before navigating
 - Dirty = values differ from initial. New form with empty fields is never dirty
 - If dirty: confirmation row appears at the bottom, replacing Cancel/Save. Back stays visible at the top regardless of which action triggered the confirmation
 - Keep editing dismisses the confirmation and restores Cancel/Save
 - Discard navigates back without saving
 - If clean: navigate immediately with no confirmation
-- Name field: required, kebab-case only (`[a-z0-9-]+`). An inline error appears below the field in real time. Save is disabled while the error is active or name is empty. The same name is allowed if the label differs. A duplicate-pair error appears below the name field when a name change causes the conflict.
-- Label field: optional, no format restriction. A "Labels are case-sensitive." hint appears between the field label and the input. Combobox: a chevron icon at the right edge of the field signals that the field opens a dropdown. Focus or typing opens the dropdown showing existing labels, narrowed to matches when input is non-empty. Arrow keys navigate options. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Selecting from the dropdown or pressing Enter fills the input. Accepts values not in the list to create a new label. An empty value means no label. An X button appears inside the field when non-empty, to the left of the chevron, and clears the label on click. Label is included in the dirty-state check. Whitespace is trimmed from the label on blur. A duplicate-pair error appears below the label field when a label change causes the conflict.
-- Prompt body: required, must not be empty. An inline error "Enter the prompt content" appears below the field on blur when the field is empty. Save is disabled while the field is empty.
-- Save persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 2 seconds, then returns to the list automatically
+
+**Fields**
+
+- Name field: required, kebab-case only (`[a-z0-9-]+`)
+  - Inline error appears below the field in real time
+  - Save is disabled while the error is active or name is empty
+  - The same name is allowed if the label differs
+  - Duplicate-pair error appears below the name field when a name change causes the conflict
+- Label field: optional, no format restriction
+  - "Labels are case-sensitive." hint appears between the field label and the input
+  - Combobox: chevron icon at the right edge signals the field opens a dropdown
+  - Focus or typing opens the dropdown showing existing labels, narrowed to matches when input is non-empty
+  - Arrow keys navigate options. Enter selects the highlighted option. Escape closes without clearing the field or triggering the form's discard flow.
+  - Accepts values not in the list to create a new label. An empty value means no label.
+  - X button appears inside the field when non-empty, to the left of the chevron, and clears the label on click
+  - Included in dirty-state check. Whitespace is trimmed on blur.
+  - Duplicate-pair error appears below the label field when a label change causes the conflict
+- Prompt body: required, must not be empty
+  - Inline error "Enter the prompt content" appears below the field on blur when the field is empty
+  - Save is disabled while the field is empty
+
+**Save**
+
+- Persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 2 seconds, then returns to the list automatically
+
+**Display**
+
 - Textarea scrollbar: thin zinc thumb, transparent track
 - Edit form pre-fills fields with existing prompt data
 - New form shows empty fields with placeholder hints
+- GitHub source banner: shown exclusively when editing a GitHub-synced prompt. Uses a muted background and text, with the Github icon, to warn the user that their edits are ephemeral without breaking the mono zinc aesthetic constraint. It sits between the Back button and the Name field.
 
 ### Onboarding empty state
 
-Shown only on fresh install, before any prompt has ever been created (`hasEverHadPrompts = false`).
+Shown only on fresh install, before the user has created their first prompt.
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -185,7 +252,7 @@ Shown only on fresh install, before any prompt has ever been created (`hasEverHa
 
 ### Empty state
 
-Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.length === 0`).
+Shown when the library is empty, but the user has previously created or synced prompts.
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -271,15 +338,23 @@ Shown when all prompts have been deleted (`hasEverHadPrompts = true`, `prompts.l
 
 GitHub behavior:
 
+**Indicator**
+
 - `●` indicator: green = connected, red = error. When not configured, no dot is shown and the whole view shows "Set up in Options →" instead
+- Not configured: show "Set up in Options →" link instead of sync button
+- PAT optional for public repos, required for private
+
+**Sync**
+
 - Sync is always manual. No auto-sync
 - Cancel on diff discards fetch, does not modify storage
 - Apply is surgical: added snippets are inserted, updated prompts patch body and label, removed prompts are deleted, local prompts are untouched
-- Diff entries show `label · name` when a label is present, unlabeled entries show name only
+
+**Diff entries**
+
+- Show `label · name` when a label is present, unlabeled entries show name only
 - A file moved between GitHub subdirectories (label change) appears as two entries: a remove at the old composite key and an add at the new one
 - Skipped entries (`·`) are GitHub snippets whose `(label, name)` composite key matches a local prompt. They are not imported and the local prompt is preserved
-- Not configured: show "Set up in Options →" link instead of sync button
-- PAT optional for public repos, required for private
 
 ## 3. Options page
 
@@ -372,16 +447,24 @@ Notes on per-site rows:
 
 Behavior:
 
+**Data**
+
 - Export downloads `caret-backup.json`
 - Import validates JSON with Zod before writing to storage. Shows error on invalid file
 - Import merge conflict (duplicate name): last-write-wins
+
+**Per-site**
+
 - Trigger symbol editable per site. Toggle enable/disable per site without losing trigger config
-- PAT displayed masked after save, not encrypted (documented risk)
-- PAT field: full width, masked
-- Repository and Branch fields: side by side, equal width
+
+**GitHub sync**
+
+- PAT: full width, masked, displayed masked after save, not encrypted (documented risk). No inline validation on format; error shown only after a failed save attempt.
+- Repository and Branch: side by side, equal width
+- Snippets path: full width. "Enter a snippets path" inline error below the field on blur when empty.
 - `?` icon on each field label opens a tooltip with usage hint, no arrow on tooltip
-- `●` connection dot: green = connected, red = error, gray = not configured. Updates on save
-- No inline validation on PAT format. Error shown only after a failed save attempt.
+- `●` connection dot: green = connected, red = error, gray = not configured or dirty (any field edited since last save). Resets to gray on any field change. Updates on save.
+- Save is blocked when repository is empty or snippets path is empty, even before the user touches those fields
 - "Saved ✓" appears inline right of Save button, fades after 2.5s
 - Disconnect shown only when GitHub is configured. No confirmation dialog
 - Constrained max width, centered

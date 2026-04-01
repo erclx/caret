@@ -120,7 +120,10 @@ Rendered as a React root injected adjacent to the detected input element. Positi
 
 ### Keyboard navigation
 
-↑↓ arrows, Ctrl+J / Cmd+J (down), and Ctrl+P / Cmd+P (up) all move selection. Both `ctrlKey` and `metaKey` are accepted so Mac users can use the native modifier. Enter or Tab inserts. Escape dismisses. Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut. Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
+- ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) navigate. Both `ctrlKey` and `metaKey` are accepted so Mac users can use the native modifier.
+- Enter or Tab inserts. Escape dismisses.
+- Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut.
+- Handled via keydown listener on window (capture phase) to intercept before host page handlers fire.
 
 ### Content script input detection
 
@@ -136,9 +139,12 @@ Insertion uses `document.execCommand('insertText')` which triggers framework syn
 
 Two keys in `chrome.storage.local`: `prompts` and `settings`. Key absence (never written) means fresh install. The presence check drives the onboarding empty state.
 
-Each prompt stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, an optional `source` flag, and an optional `label` string. Source is `'github'` only on prompts pulled via GitHub sync. Locally created prompts omit it. The sync diff uses `source` to determine ownership. Label is a free-form string that groups prompts for filtering. It is not required and has no restricted character set.
+`prompts`: each entry stores a nanoid, a kebab-case slug name, body text, creation and update timestamps, an optional `source` flag, and an optional `label` string.
 
-Settings holds per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt. If absent, treat it as connected.
+- `source` is `'github'` only on prompts pulled via GitHub sync. Locally created prompts omit it. The sync diff uses `source` to determine ownership.
+- `label` is a free-form string that groups prompts for filtering. Not required, no restricted character set.
+
+`settings`: per-hostname config (trigger symbol and enabled toggle) and an optional GitHub block covering credentials, repo details, last sync metadata, and connection health. Connection health is persisted after each save attempt. If absent, treat it as connected.
 
 ### Onboarding empty state
 
@@ -152,7 +158,12 @@ Export serializes `Prompt[]` to `caret-backup.json` via Blob download. Import va
 
 The trigger dropdown filters on `name` only across all prompts, regardless of label. Results sort by `scoreMatch`: prefix = 2, substring = 1, fuzzy-only = 0.
 
-The sidepanel list has two independent filter dimensions: a text search on `name`, and a label filter popover (multi-select, opened from a button at the right of the search row). Both apply with AND logic when set. When label filters are active, unlabeled prompts are hidden. Label filter state is session-only and resets to all on close.
+The sidepanel list has two independent filter dimensions:
+
+- Text search on `name`
+- Label filter popover (multi-select, opened from a button at the right of the search row)
+
+Both apply with AND logic when set. When label filters are active, unlabeled prompts are hidden. Label filter state is session-only and resets to all on close.
 
 ### Dev seeding
 
@@ -162,21 +173,31 @@ On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `
 
 Extension pulls from GitHub. It never pushes back. Sync is manual, triggered by the user via a sync button in the sidepanel GitHub view.
 
-Flow: fetch directory listing from GitHub Contents API → for each subdirectory entry recurse one level to fetch its `.md` files (label = directory name) → fetch root-level `.md` files with no label → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
+**Flow**
 
-The diff identity key is `(label ?? '', name)`. A file moved between GitHub subdirectories (label change, same name) appears in the diff as a remove entry at the old composite key and an add entry at the new one. Subdirectory recursion adds one API request per subdirectory on top of the root listing and per-file fetches. This stays within rate limits for personal use.
+Fetch directory listing from GitHub Contents API → for each subdirectory entry recurse one level to fetch its `.md` files (label = directory name) → fetch root-level `.md` files with no label → strip `.md` from filename to derive slug → compute diff against existing `source === 'github'` prompts → if no changes, skip review and update `lastSyncedAt`/`lastSyncedCount` directly → otherwise show diff view → on confirm, apply changes surgically.
 
-Apply uses the diff, not a full replace. Added snippets get `source: 'github'`, a fresh `id`, and the folder-derived `label`. Updated prompts patch `body`, `label`, and `updatedAt`, preserving `id` and `createdAt`. Removed prompts are deleted. Locally created prompts (`source` absent) are invisible to the diff and untouched by apply.
+**Diff**
 
-When a GitHub snippet's `(label, name)` composite key matches a local prompt's composite key, the diff compares bodies. If the bodies match, the snippet routes to `unchanged` and no review is shown. If the bodies differ, the snippet routes to `skipped`: the local prompt is preserved, the GitHub version is not imported, and the entry appears in the diff review UI with a neutral indicator so the user understands why it was not applied.
+- Identity key is `(label ?? '', name)`. A file moved between GitHub subdirectories (label change, same name) appears in the diff as a remove at the old composite key and an add at the new one.
+- Subdirectory recursion adds one API request per subdirectory on top of the root listing and per-file fetches. This stays within rate limits for personal use.
+- When a snippet's composite key matches a local prompt's composite key, the diff compares bodies. Matching bodies route to `unchanged` (no review shown). Differing bodies route to `skipped`: the local prompt is preserved, the GitHub version is not imported, and the entry appears in the diff review UI with a neutral indicator.
 
-PAT is optional for public repos and required for private ones.
+**Apply**
 
-Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message.
+Uses the diff, not a full replace.
 
-If the GitHub config changes while a diff is under review, the review is automatically discarded. The diff is only valid against the config it was fetched with.
+- Added snippets get `source: 'github'`, a fresh `id`, and the folder-derived `label`
+- Updated prompts patch `body`, `label`, and `updatedAt`, preserving `id` and `createdAt`
+- Removed prompts are deleted
+- Locally created prompts (`source` absent) are invisible to the diff and untouched by apply
 
-Sync state is lifted into `PromptLibrary` so it survives tab switches.
+**Edge cases**
+
+- PAT is optional for public repos and required for private ones
+- Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message
+- If the GitHub config changes while a diff is under review, the review is automatically discarded. The diff is only valid against the config it was fetched with.
+- Sync state is lifted into `PromptLibrary` so it survives tab switches
 
 ### External data validation
 
@@ -224,9 +245,9 @@ After a successful save, the form shows a brief confirmation before navigating b
 
 ## Risks / open questions
 
-- **Claude.ai input insertion**: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
-- **ChatGPT input**: DOM structure changes frequently. Content script selector targeting is fragile.
-- **Dropdown positioning**: inputs that resize dynamically need ResizeObserver to stay anchored correctly.
-- **MV3 service worker lifecycle**: background script can be killed at any time. No persistent state lives there.
-- **GitHub PAT storage**: stored in `chrome.storage.local`, not encrypted. Acceptable for personal use. Document the risk clearly in the UI.
-- **GitHub API rate limits**: unauthenticated 60 req/hour, authenticated 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.
+- Claude.ai input insertion: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
+- ChatGPT input: DOM structure changes frequently. Content script selector targeting is fragile.
+- Dropdown positioning: inputs that resize dynamically need ResizeObserver to stay anchored correctly.
+- MV3 service worker lifecycle: background script can be killed at any time. No persistent state lives there.
+- GitHub PAT storage: stored in `chrome.storage.local`, not encrypted. Acceptable for personal use. Document the risk clearly in the UI.
+- GitHub API rate limits: unauthenticated 60 req/hour, authenticated 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.
