@@ -1,6 +1,7 @@
 import { ChevronDown, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+import { GithubIcon } from '@/shared/components/github-icon'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
@@ -246,6 +247,14 @@ export function PromptForm({
       >
         ← Back
       </button>
+      {initialPrompt?.source === 'github' && (
+        <div className='bg-muted text-muted-foreground flex shrink-0 items-center gap-2 rounded-md p-3 text-sm'>
+          <GithubIcon aria-hidden='true' className='size-4 shrink-0' />
+          <span>
+            Synced from GitHub. Local edits will be lost on next sync.
+          </span>
+        </div>
+      )}
       <div className='flex shrink-0 flex-col gap-2'>
         <Label htmlFor='name'>Name</Label>
         <Input

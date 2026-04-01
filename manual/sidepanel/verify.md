@@ -63,3 +63,11 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 - [ ] With prompts that have no label, check "Unlabeled" in the popover → only unlabeled prompts shown.
 - [ ] Combine search text with a label filter → both constraints apply simultaneously.
 - [ ] Close the sidepanel and reopen → label filters reset to none.
+
+## GitHub sync indicator
+
+- [ ] Sync prompts from GitHub → synced prompts show a small GitHub icon after the name in the list row.
+- [ ] Hover over the icon → tooltip reads "Managed by GitHub sync".
+- [ ] Locally created prompts → no icon shown.
+- [ ] Click a synced prompt to open the edit form → a muted banner "Synced from GitHub. Local edits will be lost on next sync." appears below the Back button.
+- [ ] Click a locally created prompt to open the edit form → no warning banner appears.

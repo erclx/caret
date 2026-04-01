@@ -1,7 +1,13 @@
 import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
+import { GithubIcon } from '@/shared/components/github-icon'
 import { Button } from '@/shared/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip'
 import type { Prompt } from '@/shared/types'
 
 export interface PromptListProps {
@@ -91,13 +97,36 @@ export function PromptList({
               onClick={() => onEdit(prompt)}
             >
               <div className='flex flex-col overflow-hidden'>
-                <span className='text-foreground truncate text-sm font-medium'>
-                  {prompt.label && (
-                    <span className='text-muted-foreground'>
-                      {prompt.label} ·{' '}
-                    </span>
+                <span className='text-foreground flex min-w-0 items-center gap-1 text-sm font-medium'>
+                  <span className='truncate'>
+                    {prompt.label && (
+                      <span className='text-muted-foreground'>
+                        {prompt.label} ·{' '}
+                      </span>
+                    )}
+                    {prompt.name}
+                  </span>
+                  {prompt.source === 'github' && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span
+                          tabIndex={0}
+                          className='focus-visible:ring-ring/50 inline-flex shrink-0 rounded outline-none focus-visible:ring-2'
+                        >
+                          <GithubIcon
+                            aria-hidden='true'
+                            className='text-muted-foreground size-3'
+                          />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side='top'
+                        className='bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700'
+                      >
+                        Managed by GitHub sync
+                      </TooltipContent>
+                    </Tooltip>
                   )}
-                  {prompt.name}
                 </span>
                 <span className='text-muted-foreground truncate text-xs'>
                   {prompt.body.length > 72

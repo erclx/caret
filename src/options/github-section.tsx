@@ -98,12 +98,21 @@ export function GithubSection({
         'connected') as ConnectionStatus
     },
   )
-  const [repoError, setRepoError] = useState<string | null>(null)
+  const [repoError, setRepoError] = useState<string | null>(() =>
+    settings.github ? null : validateOwnerRepo(''),
+  )
   const [isRepoBlurred, setRepoBlurred] = useState(false)
+  const [pathError, setPathError] = useState<string | null>(null)
+  const [isPathBlurred, setPathBlurred] = useState(false)
   const [connectionError, setConnectionError] = useState<string | null>(null)
   const [isSavingGithub, setIsSavingGithub] = useState(false)
   const [isGithubSaved, setIsGithubSaved] = useState(false)
   const githubSavedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function resetDirtyState() {
+    setConnectionStatus('unconfigured')
+    setConnectionError(null)
+  }
 
   useEffect(() => {
     return () => {
@@ -119,6 +128,8 @@ export function GithubSection({
     setConnectionError(null)
     setRepoError(null)
     setRepoBlurred(false)
+    setPathError(null)
+    setPathBlurred(false)
   }
 
   async function handleSaveGithub() {
@@ -173,9 +184,10 @@ export function GithubSection({
             id='github-pat'
             type='password'
             value={localGithub.pat}
-            onChange={(e) =>
+            onChange={(e) => {
               setLocalGithub((prev) => ({ ...prev, pat: e.target.value }))
-            }
+              resetDirtyState()
+            }}
             placeholder='ghp_••••••••••••••••••••'
             className='font-mono'
           />
@@ -209,6 +221,7 @@ export function GithubSection({
                   repo: slash !== -1 ? val.slice(slash + 1) : val,
                 }))
                 setRepoError(validateOwnerRepo(val))
+                resetDirtyState()
               }}
               onBlur={(e) => {
                 const val = e.target.value.trim()
@@ -234,9 +247,10 @@ export function GithubSection({
             <Input
               id='github-branch'
               value={localGithub.branch}
-              onChange={(e) =>
+              onChange={(e) => {
                 setLocalGithub((prev) => ({ ...prev, branch: e.target.value }))
-              }
+                resetDirtyState()
+              }}
               placeholder='main'
             />
           </div>
@@ -251,14 +265,29 @@ export function GithubSection({
           <Input
             id='github-path'
             value={localGithub.snippetsPath}
-            onChange={(e) =>
+            onChange={(e) => {
               setLocalGithub((prev) => ({
                 ...prev,
                 snippetsPath: e.target.value,
               }))
-            }
+              if (isPathBlurred) {
+                setPathError(
+                  e.target.value.trim() ? null : 'Enter a snippets path',
+                )
+              }
+              resetDirtyState()
+            }}
+            onBlur={(e) => {
+              setPathBlurred(true)
+              setPathError(
+                e.target.value.trim() ? null : 'Enter a snippets path',
+              )
+            }}
             placeholder='snippets'
           />
+          {isPathBlurred && pathError && (
+            <p className='text-destructive text-xs'>{pathError}</p>
+          )}
         </div>
       </div>
       <div className='border-border bg-muted/50 flex flex-col gap-3 rounded-b-lg border-t p-6'>
@@ -267,7 +296,13 @@ export function GithubSection({
             variant='outline'
             className='dark:hover:bg-zinc-700 dark:hover:text-white'
             onClick={handleSaveGithub}
-            disabled={isSavingGithub || !!repoError}
+            disabled={
+              isSavingGithub ||
+              !!repoError ||
+              !localGithub.owner ||
+              !localGithub.repo ||
+              !localGithub.snippetsPath.trim()
+            }
           >
             <Save className='mr-2 size-4' />
             {isSavingGithub ? 'Saving...' : 'Save'}

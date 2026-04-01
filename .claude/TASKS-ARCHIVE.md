@@ -426,3 +426,13 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Screenshot script has no capture of the options error states. Light and dark captures of the trigger conflict and GitHub connection errors exist
 
 > Test strategy: visual, run the screenshot script and confirm the new captures appear
+
+### Fix: GitHub options state and validation
+
+- [x] Connection status dot stays green when the user edits repo or PAT fields without saving. Reset to neutral on any field change
+- [x] Save is not blocked when owner/repo is empty and the field has never been touched. Block save until the field has a valid value
+- [x] Empty snippets path shows no warning before save. Add inline validation
+- [x] GitHub-synced prompts are visually identical to local ones in the list. Add a subtle indicator so users know which prompts are managed by sync and may be overwritten
+- [x] Add a warning banner to the edit form for GitHub-synced prompts so users know local edits will be overwritten
+
+> Test strategy: visual verification of each state transition and the sync indicator in the installed extension

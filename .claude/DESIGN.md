@@ -114,13 +114,21 @@ None. Speed over delight for a keyboard-driven tool.
 ### Sidepanel: edit form label field
 
 - Field label reads "Label (optional)" to communicate that the field may be left blank without a tooltip or helper text
-- A case-sensitivity hint sits between the field label and the input, not below it. The combobox dropdown opens downward from the input and would cover anything placed below.
-- Combobox: focus or typing opens a dropdown of existing labels. Empty input shows all existing labels. Typed characters narrow the list to matching entries
-- Arrow keys navigate the dropdown list. Enter selects the highlighted option. Escape closes the dropdown without clearing the field and without triggering the form's discard flow. Tab closes the dropdown and moves focus to the next field.
-- Selecting from the dropdown fills the input. The user may also type a value not in the list to create a new label
-- A chevron icon at the right edge of the field is always visible and signals the field opens a dropdown. It is non-interactive.
-- An X button appears inside the field when the value is non-empty, to the left of the chevron, clearing the label on click and returning focus to the label input. When both icons are present, the input text must not overlap either.
+- Case-sensitivity hint sits between the field label and the input, not below it. The combobox dropdown opens downward and would cover anything placed below.
+- Combobox behavior:
+  - Focus or typing opens a dropdown of existing labels. Empty input shows all. Typed characters narrow to matching entries.
+  - Arrow keys navigate the list. Enter selects the highlighted option. Escape closes without clearing the field or triggering the form's discard flow. Tab closes and moves focus to the next field.
+  - Selecting from the dropdown fills the input. The user may also type a value not in the list to create a new label.
+- Chevron icon: always visible at the right edge, signals the dropdown opens, non-interactive
+- X button: appears when the value is non-empty, to the left of the chevron, clears on click and returns focus to the label input. Input text must not overlap either icon.
 - No chips or pills below the input
+
+### Sidepanel: edit form GitHub banner
+
+- When editing a GitHub-synced prompt, a muted warning banner sits between the Back button and the Name field
+- The banner explains that local edits will be overwritten on the next sync
+- Uses `bg-muted` and `text-muted-foreground` to blend with the utilitarian dark/light schemes without competing with the form inputs
+- Contains the 16px `Github` lucide icon aligned with the text
 
 ### Sidepanel: prompt list rows
 
@@ -153,6 +161,8 @@ Applies to the delete confirm row in the list and the discard-changes row in the
 - Repository and Branch fields: side by side, equal width
 - Snippets path field: full width
 - No inline validation on PAT format. Error shown only after a failed save attempt.
+- Snippets path is required and non-empty. Inline error shows on blur when empty.
+- Connection dot resets to gray when any field changes without a save.
 - Disconnect shown only when GitHub is configured. No confirmation dialog.
 
 ## Logo

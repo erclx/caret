@@ -18,13 +18,13 @@ See [manual/import-export/verify.md](../manual/import-export/verify.md) for the 
 
 ## GitHub sync
 
-`manual/github-sync/` covers syncing prompts from a remote GitHub repository and the sidepanel GitHub tab. No extra fixture files are needed. This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
+`manual/github-sync/` covers syncing prompts from a remote GitHub repository, the sidepanel GitHub tab, and options page validation: connection dot reset on field edits, save blocking before valid input, and snippets path inline error. No extra fixture files are needed. This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
 
 See [manual/github-sync/verify.md](../manual/github-sync/verify.md) for the full checklist.
 
 ## Sidepanel
 
-`manual/sidepanel/` covers the prompt library UI: creating and editing prompts, the label combobox in the form and label filter popover, search, delete, and the discard confirmation flow. The e2e tests mock these interactions; this checklist verifies them in a real browser with the actual extension.
+`manual/sidepanel/` covers the prompt library UI: creating and editing prompts, the label combobox in the form and label filter popover, search, delete, the discard confirmation flow, and the GitHub sync indicator. The e2e tests mock these interactions; this checklist verifies them in a real browser with the actual extension.
 
 See [manual/sidepanel/verify.md](../manual/sidepanel/verify.md) for the full checklist.
 
