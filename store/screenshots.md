@@ -23,21 +23,8 @@ Produces the 1280×800 screenshots for the Chrome Web Store listing.
 2. Click in the chat input and type `>` to open the dropdown. All three prompts should be visible with `label · name` rows.
 3. Capture the window with OBS and save as `store/screenshot-1280x800.png`.
 
-## Future shots
+### Shot 2: GitHub tab
 
-Add these when the listing needs more coverage. Each is 1280×800 and uses the same setup above.
-
-### Prompt form
-
-1. Click "New" in the side panel to open the prompt form.
-2. Fill in all fields:
-   - Name: `summarize`
-   - Label: `claude`
-   - Body: `Summarize this in three bullet points.`
-3. Capture the window and save as `store/screenshot-form-1280x800.png`.
-
-### Options page
-
-1. Open `chrome://extensions/`, find Caret, and click "Details" → "Extension options".
-2. Configure at least two sites with different trigger symbols so the list is populated.
-3. Capture the window and save as `store/screenshot-options-1280x800.png`.
+1. Open the options page to the GitHub section. Scroll the page to the top so the Data and Per-site configuration sections are visible.
+2. Open the side panel and click the GitHub tab. The repo name, green connected dot, last synced timestamp, and snippet count should all be visible.
+3. Capture the window and save as `store/screenshot-github-1280x800.png`.
