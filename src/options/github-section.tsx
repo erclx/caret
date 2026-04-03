@@ -168,8 +168,8 @@ export function GithubSection({
       <div className='border-border border-b p-6'>
         <h2 className='text-foreground text-sm font-semibold'>GitHub sync</h2>
         <p className='text-muted-foreground text-sm'>
-          Pull prompts from a GitHub repository. Read-only; GitHub is the source
-          of truth.
+          Pull prompts from a GitHub repository. Sync is read-only. GitHub is
+          the source of truth.
         </p>
       </div>
       <div className='flex flex-col gap-4 p-6'>
