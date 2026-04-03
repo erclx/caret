@@ -16,6 +16,7 @@ export interface PromptListProps {
   hasEverHadPrompts: boolean
   onEdit: (prompt: Prompt) => void
   onDelete: (id: string) => void
+  onClearFilter?: () => void
 }
 
 export function PromptList({
@@ -24,6 +25,7 @@ export function PromptList({
   hasEverHadPrompts,
   onEdit,
   onDelete,
+  onClearFilter,
 }: PromptListProps) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
@@ -31,7 +33,17 @@ export function PromptList({
     if (hasActiveFilter) {
       return (
         <div className='flex flex-1 flex-col items-center justify-center py-8 text-center'>
-          <p className='text-muted-foreground text-sm'>No prompts found.</p>
+          <p className='text-muted-foreground text-sm'>
+            No prompts match your search.
+          </p>
+          {onClearFilter && (
+            <button
+              className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 mt-1 rounded text-[11px] transition-colors outline-none focus-visible:ring-2'
+              onClick={onClearFilter}
+            >
+              Clear filter to see all
+            </button>
+          )}
         </div>
       )
     }
