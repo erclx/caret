@@ -528,3 +528,21 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Clicking Export when there are no prompts shows a brief inline message instead of downloading an empty file
 
 > Test strategy: manual, verifying the message appears when the library is empty
+
+### Fix: delete confirm row gives no keyboard dismissal hint
+
+- [x] Pressing Escape while a confirm row is open cancels the deletion and restores the prompt row
+
+> Test strategy: component, verifying Escape dismisses the confirm row without calling onDelete
+
+### Fix: diff review gives no reason when apply is disabled
+
+- [x] When all fetched entries are kept local (skipped), the review view explains that nothing can be applied
+
+> Test strategy: visual, verify the message appears when a sync produces only skipped entries
+
+### Fix: edit form shows no feedback when save fails
+
+- [x] If saving a prompt fails, an inline error appears so the user knows the write did not succeed
+
+> Test strategy: component, verifying the error renders when onSave rejects

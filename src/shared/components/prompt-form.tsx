@@ -51,6 +51,7 @@ export function PromptForm({
   const [isBodyTouched, setIsBodyTouched] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [showDiscard, setShowDiscard] = useState(false)
   const [isComboboxOpen, setIsComboboxOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
@@ -96,6 +97,7 @@ export function PromptForm({
     const val = e.target.value
     setName(val)
     setLabelError('')
+    setSaveError(null)
     if (isNameTouched) {
       setNameError(validateName(val))
     }
@@ -111,6 +113,7 @@ export function PromptForm({
     setLabel(val)
     setHighlightedIndex(-1)
     setIsComboboxOpen(true)
+    setSaveError(null)
     if (isNameTouched && nameError === DUPLICATE_MSG)
       setNameError(validateName(name, val))
     if (name && KEBAB_RE.test(name) && isDuplicatePair(name, val)) {
@@ -165,6 +168,7 @@ export function PromptForm({
     setLabel(l)
     setIsComboboxOpen(false)
     setHighlightedIndex(-1)
+    setSaveError(null)
     if (isNameTouched && nameError === DUPLICATE_MSG)
       setNameError(validateName(name, l))
     if (name && KEBAB_RE.test(name) && isDuplicatePair(name, l)) {
@@ -210,6 +214,7 @@ export function PromptForm({
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmitting(true)
+    setSaveError(null)
     try {
       const trimmedLabel = label.trim()
       await onSave({
@@ -219,6 +224,8 @@ export function PromptForm({
       })
       setIsSaved(true)
       savedTimerRef.current = setTimeout(() => onCancel(), 1200)
+    } catch {
+      setSaveError('Could not save. Try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -391,6 +398,7 @@ export function PromptForm({
             value={body}
             onChange={(e) => {
               setBody(e.target.value)
+              setSaveError(null)
               if (isBodyTouched) {
                 setBodyError(
                   e.target.value.trim() ? '' : 'Enter the prompt content',
@@ -416,30 +424,35 @@ export function PromptForm({
         ) : showDiscard ? (
           discardRow
         ) : (
-          <div className='flex shrink-0 justify-end gap-2'>
-            <Button
-              type='button'
-              variant='ghost'
-              className='text-muted-foreground'
-              onClick={handleRequestDiscard}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant='outline'
-              type='submit'
-              className='dark:hover:bg-zinc-700 dark:hover:text-white'
-              disabled={
-                isSubmitting ||
-                !!nameError ||
-                !!labelError ||
-                !name ||
-                !body.trim()
-              }
-            >
-              {isSubmitting ? 'Saving...' : 'Save'}
-            </Button>
+          <div className='flex shrink-0 flex-col gap-2'>
+            {saveError && (
+              <p className='text-destructive text-right text-xs'>{saveError}</p>
+            )}
+            <div className='flex justify-end gap-2'>
+              <Button
+                type='button'
+                variant='ghost'
+                className='text-muted-foreground'
+                onClick={handleRequestDiscard}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant='outline'
+                type='submit'
+                className='dark:hover:bg-zinc-700 dark:hover:text-white'
+                disabled={
+                  isSubmitting ||
+                  !!nameError ||
+                  !!labelError ||
+                  !name ||
+                  !body.trim()
+                }
+              >
+                {isSubmitting ? 'Saving...' : 'Save'}
+              </Button>
+            </div>
           </div>
         )}
       </form>

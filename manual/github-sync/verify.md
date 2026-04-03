@@ -54,6 +54,7 @@ Open the side panel and click the GitHub tab.
 
 - [ ] After fetching completes with changes → diff list appears with added (`+`), updated (`~`), and removed (`-`) entries. Apply and Cancel buttons appear.
 - [ ] Locally-edited synced prompts appear as skipped (`·`) with a "kept local" label.
+- [ ] Sync when all remote entries match local prompts with edits (all skipped, no changes) → diff shows only "kept local" entries and "Nothing to apply. Local edits are preserved." appears below the list. Apply button is disabled.
 - [ ] Click Cancel → diff dismissed, no changes applied, status line unchanged.
 - [ ] Click "Apply N changes" → changes applied, "Applied ✓" confirmation appears briefly, status line shows "Synced just now · N snippets".
 
