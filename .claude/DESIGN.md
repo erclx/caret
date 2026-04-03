@@ -114,7 +114,7 @@ None. Speed over delight for a keyboard-driven tool.
 ### Sidepanel: edit form label field
 
 - Field label reads "Label (optional)" to communicate that the field may be left blank without a tooltip or helper text
-- Case-sensitivity hint sits between the field label and the input, not below it. The combobox dropdown opens downward and would cover anything placed below.
+- Case-sensitivity hint is shown in a tooltip triggered by a help icon (`HelpCircle`, 14px) placed inline next to the field label.
 - Combobox behavior:
   - Focus or typing opens a dropdown of existing labels. Empty input shows all. Typed characters narrow to matching entries.
   - Arrow keys navigate the list. Enter selects the highlighted option. Escape closes without clearing the field or triggering the form's discard flow. Tab closes and moves focus to the next field.
@@ -122,6 +122,7 @@ None. Speed over delight for a keyboard-driven tool.
 - Chevron icon: always visible at the right edge, signals the dropdown opens, non-interactive
 - X button: appears when the value is non-empty, to the left of the chevron, clears on click and returns focus to the label input. Input text must not overlap either icon.
 - No chips or pills below the input
+- Combobox dropdown adds a `--border` ring in dark mode. The `--card` and `--background` tokens are nearly identical in dark, so the ring defines the boundary
 
 ### Sidepanel: edit form GitHub banner
 

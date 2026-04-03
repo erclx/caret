@@ -137,7 +137,7 @@ Behavior:
 │ │ summarize                │   │
 │ └──────────────────────────┘   │
 │                                │
-│ Label (optional)               │  ← "(optional)" in the field label signals the field may be left blank
+│ Label (optional) ?             │  ← "(optional)" signals the field may be left blank, ? icon opens case-sensitivity tooltip
 │ ┌──────────────────────────┐   │
 │ │ claude               ✕  ↓│   │  ← chevron always visible, X appears to its left when non-empty
 │ └──────────────────────────┘   │
@@ -209,7 +209,7 @@ Behavior:
   - The same name is allowed if the label differs
   - Duplicate-pair error appears below the name field when a name change causes the conflict
 - Label field: optional, no format restriction
-  - "Labels are case-sensitive." hint appears between the field label and the input
+  - Case-sensitivity hint shown as a tooltip on a `?` icon next to the field label
   - Combobox: chevron icon at the right edge signals the field opens a dropdown
   - Focus or typing opens the dropdown showing existing labels, narrowed to matches when input is non-empty
   - Arrow keys navigate options. Enter selects the highlighted option. Escape closes without clearing the field or triggering the form's discard flow.

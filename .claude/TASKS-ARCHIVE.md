@@ -436,3 +436,16 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Add a warning banner to the edit form for GitHub-synced prompts so users know local edits will be overwritten
 
 > Test strategy: visual verification of each state transition and the sync indicator in the installed extension
+
+### Fix: label hint clutters the prompt form
+
+- [x] Replace the inline "Labels are case-sensitive." text with a tooltip icon next to the Label field label
+
+> Test strategy: component, verify tooltip renders and inline hint is gone
+
+### Fix: label combobox dropdown blends into the panel in dark mode
+
+- [x] Add a visible ring in dark mode so the dropdown is visually separated from the panel background
+- [x] Add an e2e screenshot capturing the edit form with the label dropdown open
+
+> Test strategy: visual, verify dropdown is distinct in dark mode. E2e screenshot confirms capture succeeds

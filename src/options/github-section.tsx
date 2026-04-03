@@ -43,13 +43,13 @@ function FieldLabel({ htmlFor, hint, children }: FieldLabelProps) {
     <div className='flex items-center gap-1.5'>
       <Label htmlFor={htmlFor}>{children}</Label>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <HelpCircle className='text-muted-foreground size-3.5 cursor-default' />
-        </TooltipTrigger>
-        <TooltipContent
-          side='top'
-          className='max-w-64 bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700'
+        <TooltipTrigger
+          aria-label={hint}
+          className='text-muted-foreground focus-visible:ring-ring/50 cursor-default p-0 outline-none focus-visible:rounded focus-visible:ring-2'
         >
+          <HelpCircle className='size-3.5' />
+        </TooltipTrigger>
+        <TooltipContent side='top' className='max-w-64'>
           {hint}
         </TooltipContent>
       </Tooltip>
@@ -168,8 +168,8 @@ export function GithubSection({
       <div className='border-border border-b p-6'>
         <h2 className='text-foreground text-sm font-semibold'>GitHub sync</h2>
         <p className='text-muted-foreground text-sm'>
-          Pull prompts from a GitHub repository. Read-only; GitHub is the source
-          of truth.
+          Pull prompts from a GitHub repository. Sync is read-only. GitHub is
+          the source of truth.
         </p>
       </div>
       <div className='flex flex-col gap-4 p-6'>
@@ -343,10 +343,7 @@ export function GithubSection({
                     Disconnect
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  side='top'
-                  className='max-w-64 bg-zinc-800 text-xs text-zinc-50 dark:bg-zinc-700'
-                >
+                <TooltipContent side='top' className='max-w-64'>
                   Your synced prompts will not be removed.
                 </TooltipContent>
               </Tooltip>

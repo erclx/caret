@@ -23,6 +23,17 @@ const LABELED_PROMPT: Prompt = {
 }
 
 describe('PromptForm', () => {
+  it('should render tooltip icon next to the label field and omit the inline hint', () => {
+    render(<PromptForm onSave={vi.fn()} onCancel={vi.fn()} />)
+
+    expect(
+      screen.getByRole('button', { name: /case sensitivity information/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText('Labels are case-sensitive.'),
+    ).not.toBeInTheDocument()
+  })
+
   it('should submit new prompt data successfully', async () => {
     const handleSave = vi.fn().mockResolvedValue(undefined)
     const handleCancel = vi.fn()

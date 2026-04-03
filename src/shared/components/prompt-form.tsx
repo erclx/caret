@@ -1,4 +1,4 @@
-import { ChevronDown, X } from 'lucide-react'
+import { ChevronDown, HelpCircle, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { GithubIcon } from '@/shared/components/github-icon'
@@ -6,6 +6,12 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Textarea } from '@/shared/components/ui/textarea'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip'
 import type { Prompt } from '@/shared/types'
 import { cn } from '@/shared/utils/cn'
 
@@ -239,172 +245,191 @@ export function PromptForm({
   )
 
   return (
-    <form onSubmit={handleSubmit} className='flex h-full flex-col gap-4 px-2'>
-      <button
-        type='button'
-        className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-fit shrink-0 items-center gap-1 rounded text-sm transition-colors outline-none focus-visible:ring-2'
-        onClick={handleRequestDiscard}
-      >
-        ← Back
-      </button>
-      {initialPrompt?.source === 'github' && (
-        <div className='bg-muted text-muted-foreground flex shrink-0 items-center gap-2 rounded-md p-3 text-sm'>
-          <GithubIcon aria-hidden='true' className='size-4 shrink-0' />
-          <span>
-            Synced from GitHub. Local edits will be lost on next sync.
-          </span>
-        </div>
-      )}
-      <div className='flex shrink-0 flex-col gap-2'>
-        <Label htmlFor='name'>Name</Label>
-        <Input
-          id='name'
-          value={name}
-          onChange={handleNameChange}
-          required
-          placeholder='e.g. summarize-text'
-          className='text-sm'
-        />
-        {nameError && <p className='text-destructive text-xs'>{nameError}</p>}
-      </div>
-      <div className='flex shrink-0 flex-col gap-2'>
-        <Label htmlFor='label'>Label (optional)</Label>
-        <p className='text-muted-foreground text-xs'>
-          Labels are case-sensitive.
-        </p>
-        <div
-          className='relative'
-          onBlur={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
-              setIsComboboxOpen(false)
-              setHighlightedIndex(-1)
-            }
-          }}
+    <TooltipProvider>
+      <form onSubmit={handleSubmit} className='flex h-full flex-col gap-4 px-2'>
+        <button
+          type='button'
+          className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-fit shrink-0 items-center gap-1 rounded text-sm transition-colors outline-none focus-visible:ring-2'
+          onClick={handleRequestDiscard}
         >
+          ← Back
+        </button>
+        {initialPrompt?.source === 'github' && (
+          <div className='bg-muted text-muted-foreground flex shrink-0 items-center gap-2 rounded-md p-3 text-sm'>
+            <GithubIcon aria-hidden='true' className='size-4 shrink-0' />
+            <span>
+              Synced from GitHub. Local edits will be lost on next sync.
+            </span>
+          </div>
+        )}
+        <div className='flex shrink-0 flex-col gap-2'>
+          <Label htmlFor='name'>Name</Label>
           <Input
-            ref={labelInputRef}
-            id='label'
-            role='combobox'
-            aria-expanded={isComboboxOpen && filteredLabels.length > 0}
-            aria-haspopup='listbox'
-            aria-autocomplete='list'
-            aria-controls='label-listbox'
-            aria-activedescendant={
-              isComboboxOpen && highlightedIndex >= 0
-                ? `label-option-${highlightedIndex}`
-                : undefined
-            }
-            value={label}
-            onChange={handleLabelChange}
-            onFocus={() => setIsComboboxOpen(true)}
-            onBlur={handleLabelBlur}
-            onKeyDown={handleLabelKeyDown}
-            placeholder='e.g. writing'
-            className={cn('pr-7 text-sm', label && 'pr-14')}
-            autoComplete='off'
+            id='name'
+            value={name}
+            onChange={handleNameChange}
+            required
+            placeholder='e.g. summarize-text'
+            className='text-sm'
           />
-          <ChevronDown className='text-muted-foreground pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2' />
-          {label && (
-            <button
-              type='button'
-              className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-7 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
-              onClick={() => {
-                setLabel('')
-                setLabelError('')
+          {nameError && <p className='text-destructive text-xs'>{nameError}</p>}
+        </div>
+        <div className='flex shrink-0 flex-col gap-2'>
+          <div className='flex items-center gap-1.5'>
+            <Label htmlFor='label'>Label (optional)</Label>
+            <Tooltip>
+              <TooltipTrigger
+                type='button'
+                aria-label='Case sensitivity information'
+                className='text-muted-foreground focus-visible:ring-ring/50 cursor-default p-0 outline-none focus-visible:rounded focus-visible:ring-2'
+              >
+                <HelpCircle className='size-3.5' />
+              </TooltipTrigger>
+              <TooltipContent side='top' className='max-w-64'>
+                Labels are case-sensitive
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <div
+            className='relative'
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
                 setIsComboboxOpen(false)
                 setHighlightedIndex(-1)
-                if (name && KEBAB_RE.test(name) && isDuplicatePair(name, '')) {
-                  setNameError(DUPLICATE_MSG)
-                } else if (nameError === DUPLICATE_MSG) {
-                  setNameError('')
-                }
-                labelInputRef.current?.focus()
-              }}
-              aria-label='Clear label'
-            >
-              <X className='size-3.5' />
-            </button>
-          )}
-          {isComboboxOpen && filteredLabels.length > 0 && (
-            <div
-              id='label-listbox'
-              role='listbox'
-              className='border-border bg-card absolute top-full right-0 left-0 z-10 mt-1 max-h-40 overflow-y-auto rounded-md border shadow-md'
-            >
-              {filteredLabels.map((l, i) => (
-                <div
-                  key={l}
-                  id={`label-option-${i}`}
-                  role='option'
-                  aria-selected={i === highlightedIndex}
-                  tabIndex={-1}
-                  className={cn(
-                    'w-full cursor-default px-3 py-1.5 text-left text-sm transition-colors',
-                    i === highlightedIndex
-                      ? 'bg-accent text-foreground'
-                      : 'text-foreground hover:bg-accent/50',
-                  )}
-                  onClick={() => selectLabel(l)}
-                >
-                  {l}
-                </div>
-              ))}
-            </div>
+              }
+            }}
+          >
+            <Input
+              ref={labelInputRef}
+              id='label'
+              role='combobox'
+              aria-expanded={isComboboxOpen && filteredLabels.length > 0}
+              aria-haspopup='listbox'
+              aria-autocomplete='list'
+              aria-controls='label-listbox'
+              aria-activedescendant={
+                isComboboxOpen && highlightedIndex >= 0
+                  ? `label-option-${highlightedIndex}`
+                  : undefined
+              }
+              value={label}
+              onChange={handleLabelChange}
+              onFocus={() => setIsComboboxOpen(true)}
+              onBlur={handleLabelBlur}
+              onKeyDown={handleLabelKeyDown}
+              placeholder='e.g. writing'
+              className={cn('pr-7 text-sm', label && 'pr-14')}
+              autoComplete='off'
+            />
+            <ChevronDown className='text-muted-foreground pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2' />
+            {label && (
+              <button
+                type='button'
+                className='text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 absolute top-1/2 right-7 -translate-y-1/2 rounded transition-colors outline-none focus-visible:ring-2'
+                onClick={() => {
+                  setLabel('')
+                  setLabelError('')
+                  setIsComboboxOpen(false)
+                  setHighlightedIndex(-1)
+                  if (
+                    name &&
+                    KEBAB_RE.test(name) &&
+                    isDuplicatePair(name, '')
+                  ) {
+                    setNameError(DUPLICATE_MSG)
+                  } else if (nameError === DUPLICATE_MSG) {
+                    setNameError('')
+                  }
+                  labelInputRef.current?.focus()
+                }}
+                aria-label='Clear label'
+              >
+                <X className='size-3.5' />
+              </button>
+            )}
+            {isComboboxOpen && filteredLabels.length > 0 && (
+              <div
+                id='label-listbox'
+                role='listbox'
+                className='border-border bg-card dark:ring-border absolute top-full right-0 left-0 z-10 mt-1 max-h-40 overflow-y-auto rounded-md border shadow-md dark:ring-1'
+              >
+                {filteredLabels.map((l, i) => (
+                  <div
+                    key={l}
+                    id={`label-option-${i}`}
+                    role='option'
+                    aria-selected={i === highlightedIndex}
+                    tabIndex={-1}
+                    className={cn(
+                      'w-full cursor-default px-3 py-1.5 text-left text-sm transition-colors',
+                      i === highlightedIndex
+                        ? 'bg-accent text-foreground'
+                        : 'text-foreground hover:bg-accent/50',
+                    )}
+                    onClick={() => selectLabel(l)}
+                  >
+                    {l}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {labelError && (
+            <p className='text-destructive text-xs'>{labelError}</p>
           )}
         </div>
-        {labelError && <p className='text-destructive text-xs'>{labelError}</p>}
-      </div>
-      <div className='flex min-h-0 flex-1 flex-col gap-2'>
-        <Label htmlFor='body'>Prompt body</Label>
-        <Textarea
-          id='body'
-          value={body}
-          onChange={(e) => {
-            setBody(e.target.value)
-            if (e.target.value.trim()) setBodyError('')
-          }}
-          onBlur={() => {
-            if (!body.trim()) setBodyError('Enter the prompt content')
-          }}
-          required
-          placeholder='Enter the prompt content...'
-          className='flex-1 resize-none text-sm'
-        />
-        {bodyError && <p className='text-destructive text-xs'>{bodyError}</p>}
-      </div>
-      {isSaved ? (
-        <p className='text-muted-foreground shrink-0 text-right text-sm'>
-          Saved ✓
-        </p>
-      ) : showDiscard ? (
-        discardRow
-      ) : (
-        <div className='flex shrink-0 justify-end gap-2'>
-          <Button
-            type='button'
-            variant='ghost'
-            className='text-muted-foreground'
-            onClick={handleRequestDiscard}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant='outline'
-            type='submit'
-            className='dark:hover:bg-zinc-700 dark:hover:text-white'
-            disabled={
-              isSubmitting ||
-              !!nameError ||
-              !!labelError ||
-              !name ||
-              !body.trim()
-            }
-          >
-            {isSubmitting ? 'Saving...' : 'Save'}
-          </Button>
+        <div className='flex min-h-0 flex-1 flex-col gap-2'>
+          <Label htmlFor='body'>Prompt body</Label>
+          <Textarea
+            id='body'
+            value={body}
+            onChange={(e) => {
+              setBody(e.target.value)
+              if (e.target.value.trim()) setBodyError('')
+            }}
+            onBlur={() => {
+              if (!body.trim()) setBodyError('Enter the prompt content')
+            }}
+            required
+            placeholder='Enter the prompt content...'
+            className='flex-1 resize-none text-sm'
+          />
+          {bodyError && <p className='text-destructive text-xs'>{bodyError}</p>}
         </div>
-      )}
-    </form>
+        {isSaved ? (
+          <p className='text-muted-foreground shrink-0 text-right text-sm'>
+            Saved ✓
+          </p>
+        ) : showDiscard ? (
+          discardRow
+        ) : (
+          <div className='flex shrink-0 justify-end gap-2'>
+            <Button
+              type='button'
+              variant='ghost'
+              className='text-muted-foreground'
+              onClick={handleRequestDiscard}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='outline'
+              type='submit'
+              className='dark:hover:bg-zinc-700 dark:hover:text-white'
+              disabled={
+                isSubmitting ||
+                !!nameError ||
+                !!labelError ||
+                !name ||
+                !body.trim()
+              }
+            >
+              {isSubmitting ? 'Saving...' : 'Save'}
+            </Button>
+          </div>
+        )}
+      </form>
+    </TooltipProvider>
   )
 }
