@@ -4,6 +4,7 @@
     "name": "summarize",
     "label": "claude",
     "body": "Summarize this in three bullet points.",
+    "source": "github",
     "createdAt": 1774808885963,
     "updatedAt": 1774808885963
   },
@@ -12,6 +13,7 @@
     "name": "simplify",
     "label": "writing",
     "body": "Rewrite this in plain language. No jargon.",
+    "source": "github",
     "createdAt": 1774808885963,
     "updatedAt": 1774808885963
   },

@@ -4,7 +4,7 @@ Reusable prompt library for Claude.ai, Gemini, and ChatGPT. Type a trigger symbo
 
 ## Demo
 
-[Watch the demo on YouTube](https://youtu.be/p6Gc-wPjgO4)
+[Watch the demo on YouTube](https://youtu.be/-h9lpno3NFU)
 
 ## Installation
 
