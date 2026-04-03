@@ -52,8 +52,9 @@ export function SiteConfigSection({
   )
   const [blurredTriggers, setBlurredTriggers] = useState<Set<string>>(new Set())
   const [isSaving, setIsSaving] = useState(false)
-  const [isSaved, setIsSaved] = useState(false)
+  const [savedFeedback, setSavedFeedback] = useState<string | null>(null)
   const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastFeedbackRef = useRef<string | null>(null)
 
   useEffect(() => {
     return () => {
@@ -82,27 +83,38 @@ export function SiteConfigSection({
     setBlurredTriggers((prev) => new Set(prev).add(site))
   }
 
+  function showFeedback(message: string) {
+    lastFeedbackRef.current = message
+    setSavedFeedback(message)
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
+    savedTimerRef.current = setTimeout(() => setSavedFeedback(null), 2500)
+  }
+
   async function handleSave() {
     if (hasInvalidTrigger) return
+
+    const changed = Object.entries(localSites).filter(([site, config]) => {
+      const original = settings.sites[site] || {
+        triggerSymbol: '>',
+        enabled: true,
+      }
+      return (
+        config.triggerSymbol !== original.triggerSymbol ||
+        config.enabled !== original.enabled
+      )
+    })
+
+    if (changed.length === 0) {
+      showFeedback('No changes')
+      return
+    }
+
     setIsSaving(true)
     try {
-      const promises = Object.entries(localSites)
-        .filter(([site, config]) => {
-          const original = settings.sites[site] || {
-            triggerSymbol: '>',
-            enabled: true,
-          }
-          return (
-            config.triggerSymbol !== original.triggerSymbol ||
-            config.enabled !== original.enabled
-          )
-        })
-        .map(([site, config]) => updateSiteSettings(site, config))
-      if (promises.length === 0) return
-      await Promise.all(promises)
-      setIsSaved(true)
-      if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
-      savedTimerRef.current = setTimeout(() => setIsSaved(false), 2500)
+      await Promise.all(
+        changed.map(([site, config]) => updateSiteSettings(site, config)),
+      )
+      showFeedback('Saved ✓')
     } finally {
       setIsSaving(false)
     }
@@ -203,10 +215,10 @@ export function SiteConfigSection({
         <span
           className={cn(
             'text-muted-foreground ml-auto text-sm transition-opacity duration-500',
-            isSaved ? 'opacity-100' : 'opacity-0',
+            savedFeedback !== null ? 'opacity-100' : 'opacity-0',
           )}
         >
-          Saved ✓
+          {lastFeedbackRef.current}
         </span>
       </div>
     </div>
