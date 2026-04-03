@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { GithubIcon } from '@/shared/components/github-icon'
 import { Button } from '@/shared/components/ui/button'
@@ -28,6 +28,29 @@ export function PromptList({
   onClearFilter,
 }: PromptListProps) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const trashButtonRefs = useRef(new Map<string, HTMLButtonElement>())
+  const pendingFocusId = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (confirmDeleteId === null) return
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        pendingFocusId.current = confirmDeleteId
+        setConfirmDeleteId(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [confirmDeleteId])
+
+  useEffect(() => {
+    if (confirmDeleteId !== null) return
+    if (pendingFocusId.current === null) return
+    trashButtonRefs.current.get(pendingFocusId.current)?.focus()
+    pendingFocusId.current = null
+  }, [confirmDeleteId])
 
   if (prompts.length === 0) {
     if (hasActiveFilter) {
@@ -82,7 +105,10 @@ export function PromptList({
                     variant='outline'
                     size='sm'
                     className='hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-white'
-                    onClick={() => setConfirmDeleteId(null)}
+                    onClick={() => {
+                      pendingFocusId.current = prompt.id
+                      setConfirmDeleteId(null)
+                    }}
                   >
                     Cancel
                   </Button>
@@ -147,6 +173,10 @@ export function PromptList({
                 </span>
               </div>
               <Button
+                ref={(el) => {
+                  if (el) trashButtonRefs.current.set(prompt.id, el)
+                  else trashButtonRefs.current.delete(prompt.id)
+                }}
                 variant='ghost'
                 size='icon-sm'
                 className='text-destructive/80 hover:bg-destructive/10 dark:hover:bg-destructive/20 hover:text-destructive shrink-0'

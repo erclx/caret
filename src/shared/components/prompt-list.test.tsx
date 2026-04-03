@@ -177,6 +177,73 @@ describe('PromptList', () => {
     expect(screen.queryByText('·')).not.toBeInTheDocument()
   })
 
+  it('should dismiss the confirm row on Escape without calling onDelete', async () => {
+    const handleDelete = vi.fn()
+    render(
+      <PromptList
+        prompts={mockPrompts}
+        hasActiveFilter={false}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={handleDelete}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
+    await user.keyboard('{Escape}')
+
+    expect(handleDelete).not.toHaveBeenCalled()
+    expect(screen.queryByText('Delete?')).not.toBeInTheDocument()
+  })
+
+  it('should return focus to the trash button on Escape', async () => {
+    render(
+      <PromptList
+        prompts={mockPrompts}
+        hasActiveFilter={false}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    const trashButton = screen.getAllByRole('button', {
+      name: /delete prompt/i,
+    })[0]
+    await user.click(trashButton)
+    await user.keyboard('{Escape}')
+
+    expect(document.activeElement).toBe(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
+  })
+
+  it('should return focus to the trash button on Cancel', async () => {
+    render(
+      <PromptList
+        prompts={mockPrompts}
+        hasActiveFilter={false}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+
+    expect(document.activeElement).toBe(
+      screen.getAllByRole('button', { name: /delete prompt/i })[0],
+    )
+  })
+
   it('should not trigger onEdit when the delete button is clicked', async () => {
     const handleEdit = vi.fn()
     render(
