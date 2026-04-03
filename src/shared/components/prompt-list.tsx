@@ -99,7 +99,7 @@ export function PromptList({
                 key={prompt.id}
                 className='bg-muted dark:border-border flex items-center justify-between gap-2 rounded-md p-3 dark:border'
               >
-                <span className='text-muted-foreground text-sm'>Delete?</span>
+                <span className='text-foreground text-sm'>Delete?</span>
                 <div className='flex shrink-0 gap-2'>
                   <Button
                     variant='outline'

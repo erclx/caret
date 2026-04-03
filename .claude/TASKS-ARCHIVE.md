@@ -546,3 +546,16 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] If saving a prompt fails, an inline error appears so the user knows the write did not succeed
 
 > Test strategy: component, verifying the error renders when onSave rejects
+
+### Chore: refresh the store demo
+
+- [x] The existing demo is outdated and does not reflect current features. Record, edit, and export a replacement following the demo brief
+- [x] Upload to YouTube and update the link in `README.md`
+
+> Test strategy: visual verification
+
+### Fix: confirmation row label is too faint to read
+
+- [x] "Delete?" and "Discard changes?" labels use full-contrast foreground text in both dark and light modes
+
+> Test strategy: visual, verify label reads clearly against the muted row background in both themes

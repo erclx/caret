@@ -6,9 +6,9 @@ Steps to complete the Caret listing. Developer account is registered and dashboa
 
 Get these right before the first submission. They cannot change after the listing goes live.
 
-- **Extension ID**: assigned when you upload the first zip. Fixed forever. Every credential and deep link will reference it.
-- **Owner account**: the Google account that creates the listing owns it permanently. Use the right account from the start.
-- **Permissions**: adding permissions after publish triggers re-review and can cause rejection. The manifest currently declares `sidePanel` and `storage`. Confirm this is correct before uploading.
+- Extension ID: assigned when you upload the first zip. Fixed forever. Every credential and deep link will reference it.
+- Owner account: the Google account that creates the listing owns it permanently. Use the right account from the start.
+- Permissions: adding permissions after publish triggers re-review and can cause rejection. The manifest currently declares `sidePanel` and `storage`. Confirm this is correct before uploading.
 
 Everything else is editable at any time without re-review: descriptions, privacy policy URL, category, screenshots, promo tile, and store icon. New extension zips (version updates) always go through review, but that is expected.
 
@@ -46,8 +46,7 @@ Follow `store/demo.md` to record, edit, and export `store/demo.mp4`.
 - Store icon: upload `store/icon.png`
 - Screenshots:
   - `store/screenshot-1280x800.png`
-  - `store/screenshot-labels-1280x800.png`
-  - `store/screenshot-form-1280x800.png`
+  - `store/screenshot-github-1280x800.png`
 - Small promo tile: upload `store/promo-440x280.png`
 - Category: Developer Tools
 - Support URL: `https://github.com/erclx/caret/issues`
