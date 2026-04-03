@@ -30,6 +30,8 @@ This repo's own `snippets/` folder is the fixture set. Configure the extension t
 - [ ] Fill in valid config and save → dot turns green. Edit PAT, repo, branch, or snippets path without saving → dot resets to neutral gray and error message clears.
 - [ ] Open Options with no prior GitHub config → Save button is disabled before touching any field.
 - [ ] Enter a valid PAT and branch but leave Repository empty → Save stays disabled.
+- [ ] Clear the Branch field and tab away → "Enter a branch name" error appears below the field, Save is disabled.
+- [ ] Re-enter a branch name → error clears, Save re-enables (if other fields are also valid).
 - [ ] Clear the Snippets path field and tab away → "Enter a snippets path" error appears below the field, Save is disabled.
 - [ ] Re-enter a snippets path → error clears, Save re-enables (if other fields are also valid).
 

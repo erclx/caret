@@ -11,14 +11,15 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 - [ ] Click New → form opens with Name, Label, and Prompt body fields.
 - [ ] Submit with Name and Prompt body empty → Save button stays disabled.
 - [ ] Fill in a name and body, then clear the body and tab away → error: `Enter the prompt content` appears below the body field.
-- [ ] Enter an invalid name (e.g. `My Prompt`) → error: `Use lowercase letters, numbers, and hyphens (e.g. my-prompt)`.
+- [ ] Enter an invalid name (e.g. `My Prompt`), then tab away → error: `Use lowercase letters, numbers, and hyphens (e.g. my-prompt)`.
+- [ ] With an invalid name error showing, type a valid name → error clears immediately on each keystroke.
 - [ ] Enter a valid name and body, leave Label blank → prompt saves and appears in the list without a label.
-- [ ] Create a second prompt with the same name and no label → error: `A prompt with this name and label already exists`.
+- [ ] Create a second prompt with the same name and no label, then tab away from the Name field → error: `A prompt with this name and label already exists`.
 - [ ] Create a prompt with a label (e.g. `writing`) → prompt saves and a "Label" filter button appears in the search row.
 
 ## Label combobox in the form
 
-- [ ] Open the form → "Labels are case-sensitive." hint is visible between the Label field label and the input.
+- [ ] Open the form → a help icon (?) sits next to the Label field label. Hover it → tooltip reads "Labels are case-sensitive". No inline hint text is shown.
 - [ ] Type a label with leading or trailing spaces (e.g. `  writing  `), then tab away → input trims to `writing`.
 - [ ] Open the form with at least one existing label → focus the Label field → a dropdown of existing labels appears.
 - [ ] Type partial text in the Label field → dropdown narrows to matching labels only.
@@ -33,7 +34,7 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 
 - [ ] Click a prompt in the list → form opens pre-filled with its name, label, and body.
 - [ ] Change the body and click Save → "Saved ✓" replaces the Cancel/Save row briefly, then the list view returns automatically.
-- [ ] Change the name to one that already exists under the same label → error appears below the Name field, Save stays disabled.
+- [ ] Change the name to one that already exists under the same label, then tab away → error appears below the Name field, Save stays disabled. Continue typing to fix the name → error clears immediately.
 - [ ] Change the label to one that creates a duplicate pair with the current name → error appears below the Label field, not the Name field.
 
 ## Discard confirmation

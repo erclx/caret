@@ -51,6 +51,11 @@ Open the Options page and confirm all three sites are enabled with their default
 - [ ] In Options, set the trigger for `claude.ai` to `/` → amber warning: `/ conflicts with this site's native slash menu`.
 - [ ] Save and confirm the dropdown still fires on `claude.ai` when `/` is typed (conflict is advisory only).
 
+## Save feedback
+
+- [ ] In Options, click Save without changing any site config field → "No changes" appears at the far right of the footer and fades after ~2.5s.
+- [ ] Change a trigger symbol and click Save → "Saved ✓" appears (not "No changes").
+
 ## Invalid trigger validation
 
 - [ ] In Options, clear the trigger symbol for any enabled site and tab away → red error: `Enter a single non-letter symbol`. Save button is disabled.

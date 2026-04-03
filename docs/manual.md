@@ -18,7 +18,7 @@ See [manual/import-export/verify.md](../manual/import-export/verify.md) for the 
 
 ## GitHub sync
 
-`manual/github-sync/` covers syncing prompts from a remote GitHub repository, the sidepanel GitHub tab, and options page validation: connection dot reset on field edits, save blocking before valid input, and snippets path inline error. No extra fixture files are needed. This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
+`manual/github-sync/` covers syncing prompts from a remote GitHub repository, the sidepanel GitHub tab, and options page validation: connection dot reset on field edits, save blocking before valid input, and branch and snippets path inline errors. No extra fixture files are needed. This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
 
 See [manual/github-sync/verify.md](../manual/github-sync/verify.md) for the full checklist.
 
@@ -30,7 +30,7 @@ See [manual/sidepanel/verify.md](../manual/sidepanel/verify.md) for the full che
 
 ## Trigger and dropdown
 
-`manual/trigger/` covers the content script injection on real sites. The e2e tests run against mocked pages with simplified DOM; this checklist verifies behavior on live Claude.ai, Gemini, and ChatGPT tabs. It also covers the per-site trigger configuration in Options: enabling and disabling sites, changing trigger symbols, and the slash conflict warning.
+`manual/trigger/` covers the content script injection on real sites. The e2e tests run against mocked pages with simplified DOM; this checklist verifies behavior on live Claude.ai, Gemini, and ChatGPT tabs. It also covers the per-site trigger configuration in Options: enabling and disabling sites, changing trigger symbols, save feedback ("No changes" vs "Saved ✓"), and the slash conflict warning.
 
 See [manual/trigger/verify.md](../manual/trigger/verify.md) for the full checklist.
 
