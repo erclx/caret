@@ -196,6 +196,11 @@ export function GitHubView({
                     </span>
                   </div>
                 ))}
+                {totalChanges === 0 && diff.skipped.length > 0 && (
+                  <p className='text-muted-foreground mt-1 text-xs'>
+                    Nothing to apply. Local edits are preserved.
+                  </p>
+                )}
                 {diff.unchanged.length > 0 && (
                   <p className='text-muted-foreground mt-1 text-xs'>
                     {diff.unchanged.length} unchanged
