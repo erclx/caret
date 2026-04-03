@@ -18,12 +18,15 @@ export function DataSection() {
   const [importFeedback, setImportFeedback] = useState<ImportFeedback | null>(
     null,
   )
+  const [exportFeedback, setExportFeedback] = useState<string | null>(null)
   const importTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const exportTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     return () => {
       if (importTimerRef.current) clearTimeout(importTimerRef.current)
+      if (exportTimerRef.current) clearTimeout(exportTimerRef.current)
     }
   }, [])
 
@@ -33,8 +36,19 @@ export function DataSection() {
     importTimerRef.current = setTimeout(() => setImportFeedback(null), duration)
   }
 
+  function showExportFeedback(message: string) {
+    setExportFeedback(message)
+    if (exportTimerRef.current) clearTimeout(exportTimerRef.current)
+    exportTimerRef.current = setTimeout(() => setExportFeedback(null), 2500)
+  }
+
   function handleExport() {
+    if (prompts.length === 0) {
+      showExportFeedback('Nothing to export.')
+      return
+    }
     exportPrompts(prompts)
+    showExportFeedback('Exported ✓')
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -98,6 +112,17 @@ export function DataSection() {
           className='hidden'
           onChange={handleFileChange}
         />
+        {exportFeedback && (
+          <p
+            className={
+              exportFeedback === 'Exported ✓'
+                ? 'text-muted-foreground text-sm'
+                : 'text-destructive text-sm'
+            }
+          >
+            {exportFeedback}
+          </p>
+        )}
         {importFeedback && (
           <div className='text-sm'>
             {importFeedback.type === 'error' ? (
