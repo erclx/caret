@@ -165,6 +165,8 @@ The sidepanel list has two independent filter dimensions:
 
 Both apply with AND logic when set. When label filters are active, unlabeled prompts are hidden. Label filter state is session-only and resets to all on close.
 
+The filter-aware empty state fires only when unfiltered prompts exist. If a query is active but all prompts have been deleted, the standard empty state shows instead of the filter-aware one. Without this guard, deleting the last prompt while a search is active produces a misleading "no results" message rather than the correct "no prompts" state.
+
 ### Dev seeding
 
 On storage init, if `NODE_ENV === development` and the `prompts` key is empty, `seeds.ts` writes a set of sample prompts mirroring the real `snippets/` folder content. No-op in production. Prevents implementers from testing against an empty library.

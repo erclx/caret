@@ -329,6 +329,20 @@ describe('PromptLibrary', () => {
     expect(screen.getByText('summarize')).toBeInTheDocument()
   })
 
+  it('should show no-prompts empty state when a search query is active but no prompts exist', async () => {
+    mockUsePrompts.prompts = []
+    mockUsePrompts.hasEverHadPrompts = true
+    render(<PromptLibrary />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByPlaceholderText(/search prompts/i), 'xyz')
+
+    expect(
+      screen.getByText(/no prompts yet, click \+ new to add one/i),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/no prompts found/i)).not.toBeInTheDocument()
+  })
+
   it('should filter prompts as search query changes', async () => {
     render(<PromptLibrary />)
     const user = userEvent.setup()

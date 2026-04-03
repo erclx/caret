@@ -107,7 +107,7 @@ Behavior:
 - Button: shown only when at least one labeled prompt exists. "Label ▾" when inactive, "Label · N ▾" when N selected.
 - Popover: "Clear" link at the top (visible when filters active), scrollable list of labels in alphabetical order, "Unlabeled" at the bottom if applicable. Multiple checkboxes can be active simultaneously. Unchecking all returns to showing everything.
 - When active: only prompts matching the active set are shown. "Unlabeled" shows prompts with no label.
-- Combines with text search using AND logic. "No prompts found." when nothing matches.
+- Combines with text search using AND logic. When nothing matches, the list area shows "No prompts match your search." with a hint-weight "Clear filter to see all" button below it. Clicking the button resets both the text query and the label filter.
 - Session-only. Resets to all on sidepanel close.
 
 **Rows**
@@ -372,8 +372,10 @@ Section order: Data → Per-site configuration → GitHub sync.
 │ [↓ Export prompts as JSON            ]      │
 │ [↑ Import prompts from JSON          ]      │
 │                                             │
-│ Updated 2: baz, qux. Added 1: foo.          │  ← single line, count + names, fades after Ns
-│ Added 5: a, b, c and 2 more.                │  ← truncates after 3 names when count > 3
+│ Exported ✓                                  │  ← export feedback, fades after 2.5s
+│ Nothing to export.                          │  ← shown instead when library is empty
+│ Updated 2: baz, qux. Added 1: foo.          │  ← import feedback, single line
+│ Added 5: a, b, c and 2 more.                │  ← truncates after 3 names
 │ All prompts are already up to date.         │  ← when import produces no changes
 └─────────────────────────────────────────────┘
 ```
@@ -450,7 +452,7 @@ Behavior:
 
 **Data**
 
-- Export downloads `caret-backup.json`
+- Export downloads `caret-backup.json`. Shows "Exported ✓" (muted color) inline right of the button, fades after 2.5s. Shows "Nothing to export." in destructive color instead when the library is empty
 - Import validates JSON with Zod before writing to storage. Shows error on invalid file
 - Import merge conflict (duplicate name): last-write-wins
 

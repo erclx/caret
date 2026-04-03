@@ -35,13 +35,12 @@ Task block format:
 
 ## Up next
 
-### Fix: GitHub sync view has multiple feedback gaps
+### Fix: delete confirm row gives no keyboard dismissal hint
 
-- [x] RefreshCw icon does not spin during `applying` state, only during `fetching`
-- [x] Status line reads "Up to date · N snippets" after an apply, which implies a fresh check rather than a completed write
-- [x] The "local" badge on skipped diff entries is cryptic. Users without context cannot tell it means the local version was preserved.
+- [ ] The inline delete confirmation row shows a hint that Escape dismisses it
+- [ ] Pressing Escape while a confirm row is open cancels the deletion and restores the prompt row
 
-> Test strategy: manual, verify spinner, status line, and diff labels across fetch → review → apply flow
+> Test strategy: component, verifying Escape dismisses the confirm row without calling onDelete
 
 ### Chore: refresh the store demo
 

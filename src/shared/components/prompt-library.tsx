@@ -113,7 +113,8 @@ export function PromptLibrary() {
   }
 
   const existingPrompts = prompts.map((p) => ({ label: p.label, name: p.name }))
-  const hasActiveFilter = query.trim().length > 0 || activeLabels.size > 0
+  const hasActiveFilter =
+    (query.trim().length > 0 || activeLabels.size > 0) && prompts.length > 0
   const hasLabels = allLabels.length > 0
 
   if (view === 'form') {
@@ -289,6 +290,10 @@ export function PromptLibrary() {
             hasEverHadPrompts={hasEverHadPrompts}
             onEdit={handleEdit}
             onDelete={deletePrompt}
+            onClearFilter={() => {
+              setQuery('')
+              setActiveLabels(new Set())
+            }}
           />
         </>
       )}

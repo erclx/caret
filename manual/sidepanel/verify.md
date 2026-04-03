@@ -63,6 +63,9 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 - [ ] Uncheck all labels → full list restored and badge disappears.
 - [ ] With prompts that have no label, check "Unlabeled" in the popover → only unlabeled prompts shown.
 - [ ] Combine search text with a label filter → both constraints apply simultaneously.
+- [ ] Type a query that matches no prompts → "No prompts match your search." appears centered in the list, with "Clear filter to see all" below it in smaller text.
+- [ ] Click "Clear filter to see all" → search clears, all prompts reappear.
+- [ ] Activate a label filter with no matching prompts → same empty state and clear button appear. Click the button → label filter resets.
 - [ ] Close the sidepanel and reopen → label filters reset to none.
 
 ## GitHub sync indicator

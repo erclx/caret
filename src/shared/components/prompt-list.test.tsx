@@ -64,7 +64,45 @@ describe('PromptList', () => {
       />,
     )
 
-    expect(screen.getByText(/no prompts found/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/no prompts match your search/i),
+    ).toBeInTheDocument()
+  })
+
+  it('should render clear filter button when hasActiveFilter is true and onClearFilter is provided', () => {
+    render(
+      <PromptList
+        prompts={[]}
+        hasActiveFilter={true}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+        onClearFilter={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByRole('button', { name: /clear filter/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('should call onClearFilter when the clear filter button is clicked', async () => {
+    const handleClearFilter = vi.fn()
+    render(
+      <PromptList
+        prompts={[]}
+        hasActiveFilter={true}
+        hasEverHadPrompts={true}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+        onClearFilter={handleClearFilter}
+      />,
+    )
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: /clear filter/i }))
+
+    expect(handleClearFilter).toHaveBeenCalledOnce()
   })
 
   it('should call onEdit when a prompt row is clicked', async () => {
