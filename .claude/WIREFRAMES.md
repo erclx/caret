@@ -223,7 +223,7 @@ Behavior:
 
 **Save**
 
-- Persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 2 seconds, then returns to the list automatically
+- Persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 1.2 seconds, then returns to the list automatically
 
 **Display**
 
@@ -313,7 +313,7 @@ Shown when the library is empty, but the user has previously created or synced p
 │ ~ writing · summarize  modified│
 │ - claude · summarize   removed │  ← a folder move shows as remove + add
 │ + writing · summarize  new     │
-│ · chat-mode            local   │  ← unlabeled local prompt, no label prefix
+│ · chat-mode       kept local   │  ← unlabeled local prompt, no label prefix
 │                                │
 │ 5 unchanged                    │
 ├────────────────────────────────┤
@@ -347,6 +347,7 @@ GitHub behavior:
 **Sync**
 
 - Sync is always manual. No auto-sync
+- The sync button shows a spinning icon during both fetch and apply
 - Cancel on diff discards fetch, does not modify storage
 - Apply is surgical: added snippets are inserted, updated prompts patch body and label, removed prompts are deleted, local prompts are untouched
 

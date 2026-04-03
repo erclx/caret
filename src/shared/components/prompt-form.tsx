@@ -218,7 +218,7 @@ export function PromptForm({
         ...(trimmedLabel ? { label: trimmedLabel } : {}),
       })
       setIsSaved(true)
-      savedTimerRef.current = setTimeout(() => onCancel(), 2000)
+      savedTimerRef.current = setTimeout(() => onCancel(), 1200)
     } finally {
       setIsSubmitting(false)
     }

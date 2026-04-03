@@ -37,9 +37,9 @@ Task block format:
 
 ### Fix: GitHub sync view has multiple feedback gaps
 
-- [ ] RefreshCw icon does not spin during `applying` state, only during `fetching`
-- [ ] Status line reads "Up to date · N snippets" after an apply, which implies a fresh check rather than a completed write
-- [ ] The "local" badge on skipped diff entries is cryptic. Users without context cannot tell it means the local version was preserved.
+- [x] RefreshCw icon does not spin during `applying` state, only during `fetching`
+- [x] Status line reads "Up to date · N snippets" after an apply, which implies a fresh check rather than a completed write
+- [x] The "local" badge on skipped diff entries is cryptic. Users without context cannot tell it means the local version was preserved.
 
 > Test strategy: manual, verify spinner, status line, and diff labels across fetch → review → apply flow
 

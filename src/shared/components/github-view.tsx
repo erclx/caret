@@ -191,7 +191,9 @@ export function GitHubView({
                     <span className='text-muted-foreground'>
                       {entryLabel(entry)}
                     </span>
-                    <span className='text-muted-foreground ml-auto'>local</span>
+                    <span className='text-muted-foreground ml-auto'>
+                      kept local
+                    </span>
                   </div>
                 ))}
                 {diff.unchanged.length > 0 && (
@@ -245,7 +247,8 @@ export function GitHubView({
               <RefreshCw
                 className={cn(
                   'mr-2 size-4',
-                  status === 'fetching' && 'animate-spin',
+                  (status === 'fetching' || status === 'applying') &&
+                    'animate-spin',
                 )}
               />
               {status === 'applying' ? 'Applying...' : 'Sync now'}

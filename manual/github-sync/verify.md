@@ -48,13 +48,14 @@ Open the side panel and click the GitHub tab.
 
 - [ ] After setup, open the GitHub tab → connection health dot is green, repo name shows as `erclx/caret`, status line shows last sync time and snippet count.
 - [ ] Click "Sync now" → button label stays "Sync now" with a spinning icon while fetching. Label does not change.
+- [ ] During apply (after clicking "Apply N changes") → button shows "Applying..." with a spinning icon.
 
 ### Diff review
 
 - [ ] After fetching completes with changes → diff list appears with added (`+`), updated (`~`), and removed (`-`) entries. Apply and Cancel buttons appear.
-- [ ] Locally-edited synced prompts appear as skipped (`·`) with a "local" label.
+- [ ] Locally-edited synced prompts appear as skipped (`·`) with a "kept local" label.
 - [ ] Click Cancel → diff dismissed, no changes applied, status line unchanged.
-- [ ] Click "Apply N changes" → changes applied, "Applied ✓" confirmation appears briefly, status line updates.
+- [ ] Click "Apply N changes" → changes applied, "Applied ✓" confirmation appears briefly, status line shows "Synced just now · N snippets".
 
 ### Up to date
 
