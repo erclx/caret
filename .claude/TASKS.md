@@ -35,9 +35,6 @@ Task block format:
 
 ## Up next
 
-### Chore: refresh the store demo
+### Nothing queued
 
-- [ ] The existing demo is outdated and does not reflect current features. Record, edit, and export a replacement following the demo brief
-- [ ] Upload to YouTube and update the link in `README.md`
-
-> Test strategy: visual verification
+- No tasks currently
