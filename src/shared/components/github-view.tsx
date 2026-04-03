@@ -12,7 +12,7 @@ interface GitHubViewProps {
   error: string | null
   config: GithubSettings | undefined
   upToDateCount: number | null
-  sync: () => Promise<void>
+  sync: () => Promise<'up-to-date' | undefined>
   applySync: () => Promise<void>
   cancelSync: () => void
 }
@@ -36,27 +36,29 @@ export function GitHubView({
   applySync,
   cancelSync,
 }: GitHubViewProps) {
-  const [hasJustApplied, setJustApplied] = useState(false)
-  const hasJustAppliedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  )
+  const [transient, setTransient] = useState<'applied' | 'checked' | null>(null)
+  const transientTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     return () => {
-      if (hasJustAppliedTimerRef.current)
-        clearTimeout(hasJustAppliedTimerRef.current)
+      if (transientTimerRef.current) clearTimeout(transientTimerRef.current)
     }
   }, [])
 
+  function showTransient(label: 'applied' | 'checked') {
+    setTransient(label)
+    if (transientTimerRef.current) clearTimeout(transientTimerRef.current)
+    transientTimerRef.current = setTimeout(() => setTransient(null), 2500)
+  }
+
+  async function handleSync() {
+    const outcome = await sync()
+    if (outcome === 'up-to-date') showTransient('checked')
+  }
+
   async function handleApply() {
     await applySync()
-    setJustApplied(true)
-    if (hasJustAppliedTimerRef.current)
-      clearTimeout(hasJustAppliedTimerRef.current)
-    hasJustAppliedTimerRef.current = setTimeout(
-      () => setJustApplied(false),
-      2500,
-    )
+    showTransient('applied')
   }
 
   if (!config) {
@@ -237,7 +239,7 @@ export function GitHubView({
                 (status === 'fetching' || status === 'applying') &&
                   'opacity-50',
               )}
-              onClick={sync}
+              onClick={handleSync}
               disabled={status === 'fetching' || status === 'applying'}
             >
               <RefreshCw
@@ -246,19 +248,16 @@ export function GitHubView({
                   status === 'fetching' && 'animate-spin',
                 )}
               />
-              {status === 'fetching'
-                ? 'Fetching...'
-                : status === 'applying'
-                  ? 'Applying...'
-                  : 'Sync now'}
+              {status === 'applying' ? 'Applying...' : 'Sync now'}
             </Button>
             <span
+              aria-hidden={!transient}
               className={cn(
                 'text-muted-foreground text-center text-xs transition-opacity duration-500',
-                hasJustApplied ? 'opacity-100' : 'opacity-0',
+                transient ? 'opacity-100' : 'opacity-0',
               )}
             >
-              Applied ✓
+              {transient === 'applied' ? 'Applied ✓' : 'Up to date ✓'}
             </span>
           </div>
         </>

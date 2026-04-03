@@ -449,3 +449,31 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Add an e2e screenshot capturing the edit form with the label dropdown open
 
 > Test strategy: visual, verify dropdown is distinct in dark mode. E2e screenshot confirms capture succeeds
+
+### Fix: GitHub sync status line flickers after apply
+
+- [x] Spam-clicking "Sync now" after applying no longer flickers between "Up to date" and "Synced just now" during fetch
+- [x] Status line shows "Up to date · N" immediately after applying, without briefly reverting to "Synced just now"
+- [x] Concurrent sync calls are blocked: clicks during an in-flight fetch are ignored
+
+> Test strategy: manual, spam sync button after apply and verify the status line stays stable
+
+### Fix: GitHub sync button label flickers during fetch
+
+- [x] "Fetching…" text removed from the sync button label. The spinner conveys in-progress state. The label stays "Sync now" throughout so it does not flash on fast fetches
+
+> Test strategy: manual, trigger a sync and confirm the button label stays stable
+
+### Fix: GitHub sync guard and state correctness
+
+- [x] Clicking "Sync now" while a stale review is showing silently no-oped. The guard now resets stale diff state and proceeds with a fresh fetch
+- [x] A fetch error while upToDateCount is set shows "Up to date · N" alongside the error message. Clear upToDateCount on fetch error
+- [x] Cancelling after a fetch that found differences leaves a stale "Up to date · N" count visible. Clear upToDateCount on cancel
+
+> Test strategy: manual, verify each edge case in the installed extension
+
+### Feat: "Up to date ✓" transient after no-changes sync
+
+- [x] After a sync that finds no changes, "Up to date ✓" appears below the sync button and fades after 2.5s, confirming the check ran
+
+> Test strategy: manual, trigger a no-changes sync and confirm the transient appears and fades

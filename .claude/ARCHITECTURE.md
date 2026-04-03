@@ -196,7 +196,7 @@ Uses the diff, not a full replace.
 
 - PAT is optional for public repos and required for private ones
 - Connection errors surface the specific cause (bad token, no access, not found) rather than a generic failure message
-- If the GitHub config changes while a diff is under review, the review is automatically discarded. The diff is only valid against the config it was fetched with.
+- If the GitHub config changes while a diff is under review, the review is treated as stale: the diff view is replaced by the idle sync button. Clicking "Sync now" at that point clears the stale diff and runs a fresh fetch immediately rather than silently no-oping.
 - Sync state is lifted into `PromptLibrary` so it survives tab switches
 
 ### External data validation

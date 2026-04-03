@@ -45,7 +45,7 @@ Open the side panel and click the GitHub tab.
 ### Configured state
 
 - [ ] After setup, open the GitHub tab → connection health dot is green, repo name shows as `erclx/caret`, status line shows last sync time and snippet count.
-- [ ] Click "Sync now" → button shows "Fetching..." with a spinning icon while fetching.
+- [ ] Click "Sync now" → button label stays "Sync now" with a spinning icon while fetching. Label does not change.
 
 ### Diff review
 
@@ -56,7 +56,7 @@ Open the side panel and click the GitHub tab.
 
 ### Up to date
 
-- [ ] Sync when nothing has changed → status line updates to "Up to date · N snippets". Apply button is disabled.
+- [ ] Sync when nothing has changed → status line shows "Up to date · N snippets" and "Up to date ✓" appears briefly below the button then fades.
 
 ### Error state
 
