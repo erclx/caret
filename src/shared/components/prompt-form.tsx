@@ -44,9 +44,11 @@ export function PromptForm({
   const [name, setName] = useState(initialName)
   const [label, setLabel] = useState(initialLabel)
   const [nameError, setNameError] = useState('')
+  const [isNameTouched, setIsNameTouched] = useState(false)
   const [labelError, setLabelError] = useState('')
   const [body, setBody] = useState(initialBody)
   const [bodyError, setBodyError] = useState('')
+  const [isBodyTouched, setIsBodyTouched] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const [showDiscard, setShowDiscard] = useState(false)
@@ -82,25 +84,26 @@ export function PromptForm({
     )
   }
 
+  function validateName(val: string, currentLabel = label): string {
+    if (!val) return ''
+    if (!KEBAB_RE.test(val))
+      return 'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)'
+    if (isDuplicatePair(val, currentLabel)) return DUPLICATE_MSG
+    return ''
+  }
+
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
     setName(val)
     setLabelError('')
-    if (!val) {
-      setNameError('')
-      return
+    if (isNameTouched) {
+      setNameError(validateName(val))
     }
-    if (!KEBAB_RE.test(val)) {
-      setNameError(
-        'Use lowercase letters, numbers, and hyphens (e.g. my-prompt)',
-      )
-      return
-    }
-    if (isDuplicatePair(val, label)) {
-      setNameError(DUPLICATE_MSG)
-    } else {
-      setNameError('')
-    }
+  }
+
+  function handleNameBlur(e: React.FocusEvent<HTMLInputElement>) {
+    setIsNameTouched(true)
+    setNameError(validateName(e.target.value))
   }
 
   function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -108,7 +111,8 @@ export function PromptForm({
     setLabel(val)
     setHighlightedIndex(-1)
     setIsComboboxOpen(true)
-    if (nameError === DUPLICATE_MSG) setNameError('')
+    if (isNameTouched && nameError === DUPLICATE_MSG)
+      setNameError(validateName(name, val))
     if (name && KEBAB_RE.test(name) && isDuplicatePair(name, val)) {
       setLabelError(DUPLICATE_MSG)
     } else {
@@ -161,7 +165,8 @@ export function PromptForm({
     setLabel(l)
     setIsComboboxOpen(false)
     setHighlightedIndex(-1)
-    if (nameError === DUPLICATE_MSG) setNameError('')
+    if (isNameTouched && nameError === DUPLICATE_MSG)
+      setNameError(validateName(name, l))
     if (name && KEBAB_RE.test(name) && isDuplicatePair(name, l)) {
       setLabelError(DUPLICATE_MSG)
     } else {
@@ -268,6 +273,7 @@ export function PromptForm({
             id='name'
             value={name}
             onChange={handleNameChange}
+            onBlur={handleNameBlur}
             required
             placeholder='e.g. summarize-text'
             className='text-sm'
@@ -385,10 +391,17 @@ export function PromptForm({
             value={body}
             onChange={(e) => {
               setBody(e.target.value)
-              if (e.target.value.trim()) setBodyError('')
+              if (isBodyTouched) {
+                setBodyError(
+                  e.target.value.trim() ? '' : 'Enter the prompt content',
+                )
+              }
             }}
-            onBlur={() => {
-              if (!body.trim()) setBodyError('Enter the prompt content')
+            onBlur={(e) => {
+              setIsBodyTouched(true)
+              setBodyError(
+                e.target.value.trim() ? '' : 'Enter the prompt content',
+              )
             }}
             required
             placeholder='Enter the prompt content...'

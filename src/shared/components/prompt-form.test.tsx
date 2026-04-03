@@ -379,6 +379,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'My Prompt!')
+    await user.tab()
 
     expect(
       screen.getByText(/use lowercase letters, numbers, and hyphens/i),
@@ -391,6 +392,7 @@ describe('PromptForm', () => {
     const input = screen.getByLabelText(/^name$/i)
 
     await user.type(input, 'Bad Name')
+    await user.tab()
     expect(
       screen.getByText(/use lowercase letters, numbers, and hyphens/i),
     ).toBeInTheDocument()
@@ -422,6 +424,7 @@ describe('PromptForm', () => {
     const user = userEvent.setup()
 
     await user.type(screen.getByLabelText(/^name$/i), 'existing-prompt')
+    await user.tab()
 
     expect(
       screen.getByText(/a prompt with this name and label already exists/i),
@@ -536,6 +539,7 @@ describe('PromptForm', () => {
     const input = screen.getByLabelText(/^name$/i)
 
     await user.type(input, 'existing-prompt')
+    await user.tab()
     expect(
       screen.getByText(/a prompt with this name and label already exists/i),
     ).toBeInTheDocument()
