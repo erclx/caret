@@ -148,6 +148,7 @@ Applies to the delete confirm row in the list and the discard-changes row in the
 
 - Connection indicator: 8px filled circle, green when connected, red on error. Only shown when GitHub is configured.
 - When not configured, the entire view is replaced by a plain link to Options.
+- Post-sync transient: a label fades in below the sync button and out after 2.5s. "Applied ✓" after a successful apply. "Up to date ✓" after a fetch that finds no changes. Both use `--muted-foreground` centered `text-xs`, opacity transition only.
 
 ### Options page
 
