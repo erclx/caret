@@ -31,17 +31,23 @@ export function useGithubSync() {
   const isStaleReview = status === 'reviewing' && syncConfigKey !== configKey
   const effectiveStatus: SyncStatus = isStaleReview ? 'idle' : status
 
-  const sync = useCallback(async () => {
+  const sync = useCallback(async (): Promise<'up-to-date' | undefined> => {
     if (!config) return
+    const isStale = status === 'reviewing' && syncConfigKey !== configKey
+    if (status !== 'idle' && !isStale) return
+    if (isStale) {
+      setDiff(null)
+      setSnippets([])
+    }
     setSyncConfigKey(configKey)
     setStatus('fetching')
     setError(null)
-    setUpToDateCount(null)
 
     const result = await fetchSnippets(config)
 
     if (!result.ok) {
       setError(result.error)
+      setUpToDateCount(null)
       setStatus('idle')
       return
     }
@@ -66,7 +72,10 @@ export function useGithubSync() {
     if (!hasChanges) {
       const now = Date.now()
       const current = await storage.getSettings()
-      if (!current.github) return
+      if (!current.github) {
+        setStatus('idle')
+        return
+      }
       await updateSettings({
         ...current,
         github: {
@@ -78,13 +87,13 @@ export function useGithubSync() {
       setUpToDateCount(result.snippets.length)
       setSyncConfigKey(null)
       setStatus('idle')
-      return
+      return 'up-to-date'
     }
 
     setSnippets(result.snippets)
     setDiff(diffResult)
     setStatus('reviewing')
-  }, [config, configKey, prompts, updateSettings])
+  }, [config, configKey, syncConfigKey, prompts, updateSettings, status])
 
   const applySync = useCallback(async () => {
     if (!config || !diff || isStaleReview) return
@@ -157,6 +166,7 @@ export function useGithubSync() {
       },
     })
 
+    setUpToDateCount(snippets.length)
     setDiff(null)
     setSnippets([])
     setSyncConfigKey(null)
@@ -164,6 +174,7 @@ export function useGithubSync() {
   }, [config, diff, isStaleReview, prompts, snippets, updateSettings])
 
   const cancelSync = useCallback(() => {
+    setUpToDateCount(null)
     setDiff(null)
     setSnippets([])
     setSyncConfigKey(null)
