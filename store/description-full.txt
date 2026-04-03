@@ -11,7 +11,7 @@ FEATURES
 • Type-to-search dropdown: command-palette style, appears above the chat input
 • Keyboard navigation: arrow keys, Ctrl+J/Ctrl+P, Enter or Tab to insert, Escape to dismiss
 • Per-site trigger config: set a different symbol per site to avoid conflicts with native shortcuts
-• GitHub sync: pull prompts from a GitHub repository. Sync is read-only and triggered manually. Subdirectories map to labels.
+• GitHub sync: pull prompts from a GitHub repository. Sync is read-only and triggered manually. Subdirectories map to labels. Locally-edited synced prompts are preserved when they share the same name and label as a remote prompt.
 • JSON export and import: back up and restore your library
 • Local storage: all data stays in your browser with nothing sent to any server
 
