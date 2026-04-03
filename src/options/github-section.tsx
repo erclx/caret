@@ -104,6 +104,8 @@ export function GithubSection({
   const [isRepoBlurred, setRepoBlurred] = useState(false)
   const [pathError, setPathError] = useState<string | null>(null)
   const [isPathBlurred, setPathBlurred] = useState(false)
+  const [branchError, setBranchError] = useState<string | null>(null)
+  const [isBranchBlurred, setBranchBlurred] = useState(false)
   const [connectionError, setConnectionError] = useState<string | null>(null)
   const [isSavingGithub, setIsSavingGithub] = useState(false)
   const [isGithubSaved, setIsGithubSaved] = useState(false)
@@ -130,6 +132,8 @@ export function GithubSection({
     setRepoBlurred(false)
     setPathError(null)
     setPathBlurred(false)
+    setBranchError(null)
+    setBranchBlurred(false)
   }
 
   async function handleSaveGithub() {
@@ -249,10 +253,24 @@ export function GithubSection({
               value={localGithub.branch}
               onChange={(e) => {
                 setLocalGithub((prev) => ({ ...prev, branch: e.target.value }))
+                if (isBranchBlurred) {
+                  setBranchError(
+                    e.target.value.trim() ? null : 'Enter a branch name',
+                  )
+                }
                 resetDirtyState()
+              }}
+              onBlur={(e) => {
+                setBranchBlurred(true)
+                setBranchError(
+                  e.target.value.trim() ? null : 'Enter a branch name',
+                )
               }}
               placeholder='main'
             />
+            {isBranchBlurred && branchError && (
+              <p className='text-destructive text-xs'>{branchError}</p>
+            )}
           </div>
         </div>
         <div className='flex flex-col gap-2'>
@@ -301,6 +319,7 @@ export function GithubSection({
               !!repoError ||
               !localGithub.owner ||
               !localGithub.repo ||
+              !localGithub.branch.trim() ||
               !localGithub.snippetsPath.trim()
             }
           >

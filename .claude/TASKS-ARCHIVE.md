@@ -477,3 +477,21 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] After a sync that finds no changes, "Up to date ✓" appears below the sync button and fades after 2.5s, confirming the check ran
 
 > Test strategy: manual, trigger a no-changes sync and confirm the transient appears and fades
+
+### Fix: site config Save silently no-ops when nothing changed
+
+- [x] Clicking Save when no fields differ from stored values gives no feedback, leaving the user unable to tell whether save succeeded or was skipped
+
+> Test strategy: manual, click Save with no changes and verify feedback
+
+### Fix: branch field has no empty guard in GitHub section
+
+- [x] Clearing the branch field and saving succeeds with no inline error. Failure surfaces as a network error at sync time.
+
+> Test strategy: manual, clear branch, save, observe no inline error
+
+### Fix: body validation timing is inconsistent with name validation
+
+- [x] Body error only fires on blur. Name error fires on every keystroke. Clearing body while focused shows no feedback until tab-away.
+
+> Test strategy: manual, clear body while focused and verify no error appears until blur
