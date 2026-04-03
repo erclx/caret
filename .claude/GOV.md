@@ -292,7 +292,7 @@ Your primary directive is to maintain long-term system health over short-term co
 ## Feedback
 
 - After a successful mutation (save, sync, import), show brief inline feedback before navigating away or resetting the form.
-- Feedback must be transient: fade or dismiss automatically after 2–3 seconds. Do not require user dismissal.
+- Feedback must be transient: fade or dismiss automatically. Do not require user dismissal.
 
 ## Alt text
 
