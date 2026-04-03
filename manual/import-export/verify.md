@@ -4,7 +4,8 @@ Run `bun run dev`, load the extension, open the Options page, and go to the Data
 
 ## Export
 
-- [ ] Click "Export prompts as JSON" → browser downloads `caret-backup.json`.
+- [ ] Delete all prompts, then click "Export prompts as JSON" → no file downloads. "Nothing to export." appears in red inline to the right of the Export button and fades after ~2.5s.
+- [ ] Add at least one prompt, then click "Export prompts as JSON" → browser downloads `caret-backup.json`. "Exported ✓" appears inline to the right of the Export button and fades after ~2.5s.
 - [ ] Open the file. Confirm it is a valid JSON array where each object has `id`, `name`, `body`, `createdAt`, and `updatedAt` fields.
 - [ ] Add a prompt with a `label`, export again → confirm `label` appears in the file.
 

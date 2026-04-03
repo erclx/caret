@@ -495,3 +495,36 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] Body error only fires on blur. Name error fires on every keystroke. Clearing body while focused shows no feedback until tab-away.
 
 > Test strategy: manual, clear body while focused and verify no error appears until blur
+
+### Fix: GitHub sync view has multiple feedback gaps
+
+- [x] RefreshCw icon does not spin during `applying` state, only during `fetching`
+- [x] Status line reads "Up to date · N snippets" after an apply, which implies a fresh check rather than a completed write
+- [x] The "local" badge on skipped diff entries is cryptic. Users without context cannot tell it means the local version was preserved.
+
+> Test strategy: manual, verify spinner, status line, and diff labels across fetch → review → apply flow
+
+### Fix: wrong empty state shown after filtering and deleting the last matching prompt
+
+- [x] Prompt list shows a context-aware empty state when filtered results are empty but unfiltered prompts exist
+
+> Test strategy: component, verifying empty state message matches filtered vs. unfiltered context
+
+### Fix: export gives no feedback
+
+- [x] Clicking Export shows a brief confirmation that the file was downloaded
+
+> Test strategy: manual, verifying feedback appears after clicking Export
+
+### Fix: filter empty state gives no recovery path
+
+- [x] "No prompts found." becomes "No prompts match your search." with a hint-weight secondary line: "Clear your search to see all."
+- [x] When a label filter causes zero results, the empty state includes a "Clear filter" link that removes the active label filters
+
+> Test strategy: component, verifying updated copy and the clear link appear when a filter is active with no results
+
+### Fix: export runs silently with an empty library
+
+- [x] Clicking Export when there are no prompts shows a brief inline message instead of downloading an empty file
+
+> Test strategy: manual, verifying the message appears when the library is empty
