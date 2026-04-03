@@ -243,6 +243,14 @@ Running Playwright on every PR adds 3–5 minutes per run and requires Chrome in
 
 After a successful save, the form shows a brief confirmation before navigating back to the list. The parent component is responsible only for persistence. Navigation timing belongs to the form so it controls the feedback window. If the parent navigated immediately on save, the form would unmount before feedback could render.
 
+### Form validation timing: blur-first, then live
+
+All form fields validate on blur first, then re-validate on every subsequent change once touched. Errors never appear before a field has been blurred. After first blur, errors update immediately as the user types, so fixes register without a second tab-away.
+
+Each field carries an explicit `isTouched` boolean rather than inferring touched state from error presence or empty-value guards. The implicit pattern (suppressing errors when the value is empty) was a pre-existing violation that relied on coincidental behavior. Explicit flags make the intent clear and prevent regression.
+
+This applies to the prompt form (name and body) and to the GitHub section (repo, branch, snippets path), which already used the same pattern before this decision was recorded.
+
 ## Risks / open questions
 
 - Claude.ai input insertion: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.

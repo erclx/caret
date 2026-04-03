@@ -155,6 +155,7 @@ Applies to the delete confirm row in the list and the discard-changes row in the
 - Max width 640px, centered
 - Section headers use full-contrast foreground text to create hierarchy against the muted description text below
 - Save button left-aligned in all section footers, feedback text pushed to the far right
+- After a successful save, feedback reads "Saved ✓". When Save is clicked with no changed fields, feedback reads "No changes". The two are visually identical in placement and style but distinct in copy to signal whether a write occurred.
 - Destructive actions sit in the same footer row as Save. Supplementary hints shown as tooltip on hover, not inline
 
 ### Options page: GitHub section
@@ -163,6 +164,7 @@ Applies to the delete confirm row in the list and the discard-changes row in the
 - Repository and Branch fields: side by side, equal width
 - Snippets path field: full width
 - No inline validation on PAT format. Error shown only after a failed save attempt.
+- Branch is required and non-empty. Inline error shows on blur when empty, same as Snippets path.
 - Snippets path is required and non-empty. Inline error shows on blur when empty.
 - Connection dot resets to gray when any field changes without a save.
 - Disconnect shown only when GitHub is configured. No confirmation dialog.
