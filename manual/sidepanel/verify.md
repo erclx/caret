@@ -36,6 +36,7 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 - [ ] Change the body and click Save → "Saved ✓" replaces the Cancel/Save row briefly, then the list view returns automatically.
 - [ ] Change the name to one that already exists under the same label, then tab away → error appears below the Name field, Save stays disabled. Continue typing to fix the name → error clears immediately.
 - [ ] Change the label to one that creates a duplicate pair with the current name → error appears below the Label field, not the Name field.
+- [ ] Trigger a save failure (e.g. disconnect storage) and click Save → "Could not save. Try again." appears above the Cancel/Save row in destructive red. Edit any field → error clears immediately.
 
 ## Discard confirmation
 
@@ -49,6 +50,7 @@ Run `bun run dev`, load the extension, and open the side panel by clicking the e
 ## Delete
 
 - [ ] Click the trash icon on a prompt → "Delete?" confirm row appears with a neutral background and muted label text. Only the Confirm button is red.
+- [ ] Click the trash icon on any prompt, then press Escape → confirm row dismisses, prompt row restores, no deletion occurs.
 - [ ] Click Confirm → prompt is removed from the list.
 - [ ] Delete the only prompt with a given label → that label no longer appears in the "Label" filter popover.
 

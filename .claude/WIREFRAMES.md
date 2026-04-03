@@ -118,7 +118,7 @@ Behavior:
   ```
   │ Delete?      [Cancel]  [Confirm]  │
   ```
-  Cancel dismisses, Confirm deletes with animation
+  Cancel or Escape dismisses. Confirm deletes with animation.
 
 **Search and navigation**
 
@@ -224,6 +224,7 @@ Behavior:
 **Save**
 
 - Persists the prompt, shows "Saved ✓" in place of the Cancel/Save row for 1.2 seconds, then returns to the list automatically
+- If the save fails, an error appears above the buttons. The error clears when the user edits any field.
 
 **Display**
 
@@ -356,6 +357,7 @@ GitHub behavior:
 - Show `label · name` when a label is present, unlabeled entries show name only
 - A file moved between GitHub subdirectories (label change) appears as two entries: a remove at the old composite key and an add at the new one
 - Skipped entries (`·`) are GitHub snippets whose `(label, name)` composite key matches a local prompt. They are not imported and the local prompt is preserved
+- When the diff contains only skipped entries with no added, updated, or removed entries, a note below the list reads "Nothing to apply. Local edits are preserved." Apply is disabled.
 
 ## 3. Options page
 
