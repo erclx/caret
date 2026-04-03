@@ -183,6 +183,10 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await listPage.waitForTimeout(200)
   await shot(listPage, 'sidepanel', `${scheme}-form-new.png`)
 
+  await listPage.getByLabel(/^label/i).click()
+  await listPage.waitForTimeout(200)
+  await shot(listPage, 'sidepanel', `${scheme}-form-label-dropdown.png`)
+
   await listPage.getByRole('button', { name: /cancel/i }).click()
   await listPage.waitForTimeout(200)
   await listPage.getByText(SEED_PROMPTS[0].name).first().click()
