@@ -35,13 +35,6 @@ Task block format:
 
 ## Up next
 
-### Fix: delete confirm row gives no keyboard dismissal hint
-
-- [ ] The inline delete confirmation row shows a hint that Escape dismisses it
-- [ ] Pressing Escape while a confirm row is open cancels the deletion and restores the prompt row
-
-> Test strategy: component, verifying Escape dismisses the confirm row without calling onDelete
-
 ### Chore: refresh the store demo
 
 - [ ] The existing demo is outdated and does not reflect current features. Record, edit, and export a replacement following the demo brief
