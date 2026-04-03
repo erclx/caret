@@ -149,28 +149,34 @@ export function useGithubSync() {
       ]
     })
 
-    await storage.setPrompts([
-      ...localPrompts,
-      ...keptGithubPrompts,
-      ...addedPrompts,
-    ])
+    try {
+      await storage.setPrompts([
+        ...localPrompts,
+        ...keptGithubPrompts,
+        ...addedPrompts,
+      ])
 
-    const current = await storage.getSettings()
-    if (!current.github) return
-    await updateSettings({
-      ...current,
-      github: {
-        ...current.github,
-        lastSyncedAt: now,
-        lastSyncedCount: snippets.length,
-      },
-    })
+      const current = await storage.getSettings()
+      if (current.github) {
+        await updateSettings({
+          ...current,
+          github: {
+            ...current.github,
+            lastSyncedAt: now,
+            lastSyncedCount: snippets.length,
+          },
+        })
+      }
 
-    setUpToDateCount(snippets.length)
-    setDiff(null)
-    setSnippets([])
-    setSyncConfigKey(null)
-    setStatus('idle')
+      setUpToDateCount(null)
+      setDiff(null)
+      setSnippets([])
+      setSyncConfigKey(null)
+    } catch {
+      setError('Failed to apply changes')
+    } finally {
+      setStatus('idle')
+    }
   }, [config, diff, isStaleReview, prompts, snippets, updateSettings])
 
   const cancelSync = useCallback(() => {
