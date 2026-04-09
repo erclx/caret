@@ -559,3 +559,21 @@ Completed tasks moved here from `TASKS.md`. Oldest entries at the top, newest at
 - [x] "Delete?" and "Discard changes?" labels use full-contrast foreground text in both dark and light modes
 
 > Test strategy: visual, verify label reads clearly against the muted row background in both themes
+
+### Fix: dropdown mispositioned when input is expanded
+
+- [x] Dropdown appears just above the input bottom edge regardless of input height
+
+> Test strategy: visual, verify dropdown stays near the input bottom edge when the textarea is expanded
+
+### Fix: trigger does not fire after pasting long text
+
+- [x] Typing `>` after pasting multi-paragraph text into the input correctly opens the dropdown
+- [x] Typing `>` on a new line after pasted content with block elements correctly opens the dropdown
+- [x] Text before cursor is computed from its own range, not sliced from the full input value
+- [x] Block boundary newlines are preserved in trigger validation so whitespace checks pass across paragraphs
+- [x] Cursor position stays consistent with the text insertion path
+- [x] Dropdown position falls back to the cursor's container element when the caret rect has zero height, keeping the dropdown near the cursor on empty lines in expanded inputs
+- [x] Added expanded-input dropdown screenshot (light and dark) to the screenshot script
+
+> Test strategy: unit tests for cursor position, text-before-cursor at block boundaries, and position fallback. Manual verification on Claude.ai with pasted multi-paragraph content

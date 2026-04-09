@@ -116,7 +116,9 @@ shadcn is headless and Tailwind-native. Ships only what's used, no bloat. lucide
 
 ### Dropdown: command palette style, above input
 
-Rendered as a React root injected adjacent to the detected input element. Positioned absolutely via `getBoundingClientRect`, anchored above the input. ResizeObserver watches for input resize to reposition. 6 rows visible, scrollable. Each row: prompt name + truncated body preview.
+Rendered as a React root injected adjacent to the detected input element. Positioned `fixed` using coordinates from `range.getBoundingClientRect()` on the active cursor range, with left and width from the input element's bounding rect. Anchoring to the cursor line (not the element top or bottom) keeps the dropdown just above where the user is typing regardless of input height. `translateY(-100%)` lifts the dropdown above that line. ResizeObserver watches for resize to reposition. 6 rows visible, scrollable. Each row: prompt name + truncated body preview.
+
+When the caret rect has zero height (collapsed range on an empty line), the adapter falls back to the cursor's containing element rect before falling back to the full input element rect. This keeps the dropdown near the cursor line in expanded inputs rather than snapping to the input's top edge.
 
 ### Keyboard navigation
 
@@ -134,6 +136,8 @@ Each target site renders its chat input differently:
 - ChatGPT: contenteditable div (also ProseMirror-based)
 
 Insertion uses `document.execCommand('insertText')` which triggers framework synthetic events on all three. Abstracted behind an input adapter per site.
+
+The contenteditable adapter maintains two text representations. Cursor position uses raw text content offsets so the insertion path can map positions back to DOM nodes. Text-before-cursor uses rendered range text so trigger validation sees newlines at block boundaries. Browsers omit the trailing newline when a range ends at the start of a block element, so the adapter detects block boundaries and injects the missing newline.
 
 ### Storage shape
 
@@ -257,7 +261,6 @@ This applies to the prompt form (name and body) and to the GitHub section (repo,
 
 - Claude.ai input insertion: ProseMirror may require dispatching a custom transaction rather than relying on `execCommand`. Needs verification in Feature 6.
 - ChatGPT input: DOM structure changes frequently. Content script selector targeting is fragile.
-- Dropdown positioning: inputs that resize dynamically need ResizeObserver to stay anchored correctly.
 - MV3 service worker lifecycle: background script can be killed at any time. No persistent state lives there.
 - GitHub PAT storage: stored in `chrome.storage.local`, not encrypted. Acceptable for personal use. Document the risk clearly in the UI.
 - GitHub API rate limits: unauthenticated 60 req/hour, authenticated 5000 req/hour. Each sync fetches N+1 requests (1 directory listing + 1 per snippet). Fine for personal use either way.
