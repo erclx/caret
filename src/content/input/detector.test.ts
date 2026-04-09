@@ -144,24 +144,71 @@ describe('InputDetector', () => {
     detector.attach(div)
     detector.setTriggerSymbol('>')
 
-    const mockSelection = {
+    vi.spyOn(window, 'getSelection').mockReturnValue({
       rangeCount: 1,
       getRangeAt: () => ({
         startContainer: div,
-        startOffset: 1,
-        cloneRange: () => ({
-          selectNodeContents: vi.fn(),
-          setEnd: vi.fn(),
-          cloneContents: () => ({ textContent: '>' }),
-        }),
+        startOffset: 0,
+        getBoundingClientRect: () => new DOMRect(0, 0, 0, 0),
       }),
-    }
-    vi.spyOn(window, 'getSelection').mockReturnValue(
-      mockSelection as unknown as Selection,
-    )
+    } as unknown as Selection)
 
     div.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
     div.appendChild(document.createTextNode('>'))
+
+    const textNode = div.firstChild as Text
+    vi.spyOn(window, 'getSelection').mockReturnValue({
+      rangeCount: 1,
+      getRangeAt: () => ({
+        startContainer: textNode,
+        startOffset: 1,
+        getBoundingClientRect: () => new DOMRect(0, 0, 0, 0),
+      }),
+    } as unknown as Selection)
+
+    div.dispatchEvent(new Event('input', { bubbles: true }))
+
+    expect(stateCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ isActive: true, triggerSymbol: '>' }),
+    )
+  })
+
+  it('should detect trigger symbol at the start of a new block after pasted content', () => {
+    const div = document.createElement('div')
+    div.setAttribute('contenteditable', 'true')
+    div.contentEditable = 'true'
+    document.body.appendChild(div)
+    detector.attach(div)
+    detector.setTriggerSymbol('>')
+
+    const p1 = document.createElement('p')
+    p1.textContent = 'pasted paragraph'
+    const p2 = document.createElement('p')
+    div.appendChild(p1)
+    div.appendChild(p2)
+
+    vi.spyOn(window, 'getSelection').mockReturnValue({
+      rangeCount: 1,
+      getRangeAt: () => ({
+        startContainer: p2,
+        startOffset: 0,
+        getBoundingClientRect: () => new DOMRect(0, 0, 0, 0),
+      }),
+    } as unknown as Selection)
+
+    div.dispatchEvent(new KeyboardEvent('keydown', { key: '>' }))
+
+    p2.appendChild(document.createTextNode('>'))
+
+    vi.spyOn(window, 'getSelection').mockReturnValue({
+      rangeCount: 1,
+      getRangeAt: () => ({
+        startContainer: p2.firstChild!,
+        startOffset: 1,
+        getBoundingClientRect: () => new DOMRect(0, 0, 0, 0),
+      }),
+    } as unknown as Selection)
+
     div.dispatchEvent(new Event('input', { bubbles: true }))
 
     expect(stateCallback).toHaveBeenCalledWith(
