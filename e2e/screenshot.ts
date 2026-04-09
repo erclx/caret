@@ -87,6 +87,49 @@ const MOCK_CHATGPT_HTML = `<!DOCTYPE html>
   </body>
 </html>`
 
+const MOCK_CONTENTEDITABLE_HTML = `<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        align-items: flex-end;
+        height: 100vh;
+        box-sizing: border-box;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { background: #212121; }
+      }
+      #prompt-textarea {
+        width: 100%;
+        min-height: 40px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #e4e4e7;
+        background: #fff;
+        color: #000;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      #prompt-textarea p {
+        margin: 0 0 4px 0;
+      }
+      @media (prefers-color-scheme: dark) {
+        #prompt-textarea { background: #2f2f2f; border-color: #4a4a4a; color: #ececec; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="prompt-textarea" contenteditable="true"></div>
+  </body>
+</html>`
+
 type ColorScheme = 'light' | 'dark'
 
 type BrowserGlobal = {
@@ -405,6 +448,67 @@ for (const scheme of ['light', 'dark'] as ColorScheme[]) {
   await emptyDlPage.waitForTimeout(500)
   await shot(emptyDlPage, 'dropdown', `${scheme}-empty.png`)
   await emptyDlCtx.close()
+
+  const expandedCtx = await launchWithExtension()
+  const expandedId = await getExtensionId(expandedCtx)
+
+  const expandedSeedPage = await expandedCtx.newPage()
+  await expandedSeedPage.goto(
+    `chrome-extension://${expandedId}/src/sidepanel/index.html`,
+  )
+  await expandedSeedPage.evaluate((prompts) => {
+    ;(globalThis as unknown as BrowserGlobal).chrome.storage.local.set({
+      prompts,
+      settings: {
+        sites: { 'chatgpt.com': { triggerSymbol: '>', enabled: true } },
+      },
+    })
+  }, SEED_PROMPTS)
+  await expandedSeedPage.close()
+
+  const expandedPage = await expandedCtx.newPage()
+  await expandedPage.setViewportSize({ width: 800, height: 600 })
+  await expandedPage.emulateMedia({ colorScheme: scheme })
+  await expandedPage.route('https://chatgpt.com/*', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: MOCK_CONTENTEDITABLE_HTML,
+    })
+  })
+  await expandedPage.goto('https://chatgpt.com/')
+  const ceInput = expandedPage.locator('#prompt-textarea')
+  await ceInput.waitFor()
+  await expandedPage.locator('#crxjs-app').waitFor({ state: 'attached' })
+  await expandedPage.waitForTimeout(500)
+
+  await ceInput.focus()
+  const lines = [
+    'Here is the draft for the product launch announcement:',
+    '',
+    'We are excited to introduce our latest feature update.',
+    'This release includes performance improvements, a redesigned',
+    'dashboard, and new integrations with third-party services.',
+    '',
+    'Key highlights:',
+    '- 40% faster page loads across all views',
+    '- Dark mode support for the entire application',
+    '- Webhook support for real-time notifications',
+    '- Improved search with fuzzy matching',
+  ]
+  for (const line of lines) {
+    if (line === '') {
+      await expandedPage.keyboard.press('Enter')
+    } else {
+      await expandedPage.keyboard.type(line, { delay: 5 })
+      await expandedPage.keyboard.press('Enter')
+    }
+  }
+  await expandedPage.waitForTimeout(200)
+  await expandedPage.keyboard.type('>')
+  await expandedPage.waitForTimeout(500)
+  await shot(expandedPage, 'dropdown', `${scheme}-expanded.png`)
+  await expandedCtx.close()
 }
 
 console.log(`\nAll screenshots saved to: screenshots/`)
