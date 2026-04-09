@@ -157,6 +157,7 @@ jobs:
           path: release/
 
       - name: Publish to Chrome Web Store
+        continue-on-error: true
         env:
           EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
           CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
