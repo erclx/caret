@@ -12,7 +12,7 @@ Push a `v*` tag to trigger a release. Use the release script rather than tagging
 bun run release
 ```
 
-The script prompts for a bump type (patch, minor, or major), updates `package.json`, commits with `chore(release): vX.X.X`, tags, and pushes. The workflow fires automatically on the tag push. Release notes are generated automatically by `changelogithub` from conventional commits and written to the GitHub Release.
+The script prompts for a bump type (patch, minor, or major), updates `package.json`, commits with `chore(release): vX.X.X`, tags, and pushes. If a push fails (e.g. a flaky pre-push hook), re-run the same command. The script detects the in-progress release branch and resumes from the last successful step. Branch push, tag push, and PR creation are each idempotent. The workflow fires automatically on the tag push. Release notes are generated automatically by `changelogithub` from conventional commits and written to the GitHub Release.
 
 ### Job order
 
@@ -22,7 +22,7 @@ unit-tests     ─────────────┼─ release ─ publish
 build          ─ e2e-tests ─┘
 ```
 
-`static-checks`, `unit-tests`, and `build` run in parallel. `e2e-tests` gates on `build`. `release` gates on all three parallel jobs plus `e2e-tests`, creates the GitHub Release via `changelogithub`, and attaches the zip. `publish` gates on `release` and uploads to the Chrome Web Store.
+`static-checks`, `unit-tests`, and `build` run in parallel. `e2e-tests` gates on `build`. `release` gates on all three parallel jobs plus `e2e-tests`, creates the GitHub Release via `changelogithub`, and attaches the zip. `publish` gates on `release` and uploads to the Chrome Web Store. The publish step uses `continue-on-error` so a CWS rejection (e.g. pending review) does not fail the workflow.
 
 The build produces `release/crx-caret-{version}.zip`, uploaded as a workflow artifact (7-day retention) and attached to the GitHub Release.
 
