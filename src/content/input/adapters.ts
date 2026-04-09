@@ -75,7 +75,7 @@ export class ContentEditableAdapter implements InputAdapter {
   }
 
   public getValue(): string {
-    return this.element.innerText || this.element.textContent || ''
+    return this.element.textContent || ''
   }
 
   public getCursorPosition(): number {
@@ -85,15 +85,75 @@ export class ContentEditableAdapter implements InputAdapter {
     const range = selection.getRangeAt(0)
     if (!this.element.contains(range.startContainer)) return 0
 
-    return this.getTextOffsetToNode(range.startContainer, range.startOffset)
+    const preCaretRange = document.createRange()
+    preCaretRange.selectNodeContents(this.element)
+    preCaretRange.setEnd(range.startContainer, range.startOffset)
+    return preCaretRange.cloneContents().textContent?.length ?? 0
   }
 
   public getTextBeforeCursor(): string {
-    return this.getValue().slice(0, this.getCursorPosition())
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return ''
+
+    const range = selection.getRangeAt(0)
+    if (!this.element.contains(range.startContainer)) return ''
+
+    const preCaretRange = document.createRange()
+    preCaretRange.selectNodeContents(this.element)
+    preCaretRange.setEnd(range.startContainer, range.startOffset)
+    const text = preCaretRange.toString()
+    const block = this.getContainingBlock(range.startContainer)
+
+    if (block && block.previousElementSibling) {
+      const blockRange = document.createRange()
+      blockRange.selectNodeContents(block)
+      blockRange.setEnd(range.startContainer, range.startOffset)
+      const textInBlock = blockRange.toString()
+      const textBeforeBlock = text.slice(0, text.length - textInBlock.length)
+
+      if (textBeforeBlock.length > 0 && !textBeforeBlock.endsWith('\n')) {
+        return textBeforeBlock + '\n' + textInBlock
+      }
+    }
+
+    return text
   }
 
   public getRect(): DOMRect {
-    return this.element.getBoundingClientRect()
+    const elementRect = this.element.getBoundingClientRect()
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return elementRect
+
+    const range = selection.getRangeAt(0)
+    const caretRect = range.getBoundingClientRect()
+
+    if (caretRect.height > 0) {
+      return new DOMRect(
+        elementRect.left,
+        caretRect.top,
+        elementRect.width,
+        caretRect.height,
+      )
+    }
+
+    const container =
+      range.startContainer.nodeType === Node.TEXT_NODE
+        ? range.startContainer.parentElement
+        : (range.startContainer as HTMLElement)
+
+    if (container && this.element.contains(container)) {
+      const containerRect = container.getBoundingClientRect()
+      if (containerRect.height > 0) {
+        return new DOMRect(
+          elementRect.left,
+          containerRect.top,
+          elementRect.width,
+          containerRect.height,
+        )
+      }
+    }
+
+    return elementRect
   }
 
   public insertText(text: string, deleteLength: number): void {
@@ -130,22 +190,16 @@ export class ContentEditableAdapter implements InputAdapter {
     }
   }
 
-  private getTextOffsetToNode(targetNode: Node, targetOffset: number): number {
-    const walker = document.createTreeWalker(
-      this.element,
-      NodeFilter.SHOW_TEXT,
-      null,
-    )
-    let total = 0
-    let node = walker.nextNode()
-    while (node) {
-      if (node === targetNode) {
-        return total + targetOffset
+  private getContainingBlock(node: Node): HTMLElement | null {
+    const BLOCK_TAGS = /^(P|DIV|LI|H[1-6]|BLOCKQUOTE|PRE)$/
+    let current: Node | null = node
+    while (current && current !== this.element) {
+      if (current instanceof HTMLElement && BLOCK_TAGS.test(current.tagName)) {
+        return current
       }
-      total += node.textContent?.length ?? 0
-      node = walker.nextNode()
+      current = current.parentNode
     }
-    return total
+    return null
   }
 
   private findTextPosition(

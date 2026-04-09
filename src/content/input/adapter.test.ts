@@ -134,11 +134,59 @@ describe('ContentEditableAdapter', () => {
   })
 
   describe('getRect', () => {
-    it('should delegate to getBoundingClientRect', () => {
+    it('should return cursor-based rect when selection is available', () => {
+      const el = makeContentEditable('hello')
+      const elementRect = new DOMRect(10, 100, 300, 40)
+      const caretRect = new DOMRect(10, 50, 0, 20)
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(elementRect)
+      vi.spyOn(window, 'getSelection').mockReturnValue({
+        rangeCount: 1,
+        getRangeAt: () => ({ getBoundingClientRect: () => caretRect }),
+      } as unknown as Selection)
+
+      const result = new ContentEditableAdapter(el).getRect()
+
+      expect(result.left).toBe(elementRect.left)
+      expect(result.width).toBe(elementRect.width)
+      expect(result.top).toBe(caretRect.top)
+      expect(result.height).toBe(caretRect.height)
+    })
+
+    it('should fall back to container rect when caret rect has zero height', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p = document.createElement('p')
+      el.appendChild(p)
+      document.body.appendChild(el)
+
+      const elementRect = new DOMRect(10, 100, 300, 400)
+      const containerRect = new DOMRect(10, 450, 300, 20)
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(elementRect)
+      vi.spyOn(p, 'getBoundingClientRect').mockReturnValue(containerRect)
+      vi.spyOn(window, 'getSelection').mockReturnValue({
+        rangeCount: 1,
+        getRangeAt: () => ({
+          startContainer: p,
+          startOffset: 0,
+          getBoundingClientRect: () => new DOMRect(0, 0, 0, 0),
+        }),
+      } as unknown as Selection)
+
+      const result = new ContentEditableAdapter(el).getRect()
+
+      expect(result.left).toBe(elementRect.left)
+      expect(result.width).toBe(elementRect.width)
+      expect(result.top).toBe(containerRect.top)
+      expect(result.height).toBe(containerRect.height)
+    })
+
+    it('should fall back to getBoundingClientRect when selection is unavailable', () => {
       const el = makeContentEditable()
-      const rect = { top: 5, left: 15 } as DOMRect
-      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(rect)
-      expect(new ContentEditableAdapter(el).getRect()).toBe(rect)
+      const elementRect = new DOMRect(10, 100, 300, 40)
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue(elementRect)
+      vi.spyOn(window, 'getSelection').mockReturnValue(null)
+
+      expect(new ContentEditableAdapter(el).getRect()).toBe(elementRect)
     })
   })
 
@@ -157,6 +205,150 @@ describe('ContentEditableAdapter', () => {
       selection.addRange(range)
 
       expect(new ContentEditableAdapter(el).getCursorPosition()).toBe(0)
+    })
+
+    it('should return textContent-based offset excluding block newlines', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p1 = document.createElement('p')
+      p1.textContent = 'hello'
+      const p2 = document.createElement('p')
+      p2.textContent = 'world'
+      el.appendChild(p1)
+      el.appendChild(p2)
+      document.body.appendChild(el)
+
+      const range = document.createRange()
+      range.setStart(p2.firstChild!, 3)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      expect(new ContentEditableAdapter(el).getCursorPosition()).toBe(8)
+    })
+
+    it('should return correct offset when cursor is in an element node (empty paragraph)', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p1 = document.createElement('p')
+      p1.textContent = 'hello'
+      const p2 = document.createElement('p')
+      el.appendChild(p1)
+      el.appendChild(p2)
+      document.body.appendChild(el)
+
+      const range = document.createRange()
+      range.setStart(p2, 0)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      expect(new ContentEditableAdapter(el).getCursorPosition()).toBe(5)
+    })
+  })
+
+  describe('getTextBeforeCursor', () => {
+    it('should use range instead of slicing getValue', () => {
+      const el = makeContentEditable('hello world')
+      const textNode = el.firstChild!
+      const range = document.createRange()
+      range.setStart(textNode, 5)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      expect(new ContentEditableAdapter(el).getTextBeforeCursor()).toBe('hello')
+    })
+
+    it('should return empty string when selection is unavailable', () => {
+      const el = makeContentEditable('hello')
+      vi.spyOn(window, 'getSelection').mockReturnValue(null)
+
+      expect(new ContentEditableAdapter(el).getTextBeforeCursor()).toBe('')
+    })
+
+    it('should return empty string when cursor is outside the element', () => {
+      const el = makeContentEditable('hello')
+      const outside = document.createElement('div')
+      outside.textContent = 'other'
+      document.body.appendChild(outside)
+
+      const range = document.createRange()
+      range.setStart(outside.firstChild!, 2)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      expect(new ContentEditableAdapter(el).getTextBeforeCursor()).toBe('')
+    })
+
+    it('should append newline when cursor is at the start of a non-first block element', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p1 = document.createElement('p')
+      p1.textContent = 'hello'
+      const p2 = document.createElement('p')
+      el.appendChild(p1)
+      el.appendChild(p2)
+      document.body.appendChild(el)
+
+      const range = document.createRange()
+      range.setStart(p2, 0)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      const result = new ContentEditableAdapter(el).getTextBeforeCursor()
+
+      expect(result).toBe('hello\n')
+    })
+
+    it('should append newline when cursor is mid-text inside a non-first block', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p1 = document.createElement('p')
+      p1.textContent = 'hello'
+      const p2 = document.createElement('p')
+      p2.textContent = 'world'
+      el.appendChild(p1)
+      el.appendChild(p2)
+      document.body.appendChild(el)
+
+      const range = document.createRange()
+      range.setStart(p2.firstChild!, 5)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      const result = new ContentEditableAdapter(el).getTextBeforeCursor()
+
+      expect(result).toBe('hello\nworld')
+    })
+
+    it('should not append newline when cursor is in the first block element', () => {
+      const el = document.createElement('div')
+      el.setAttribute('contenteditable', 'true')
+      const p1 = document.createElement('p')
+      p1.textContent = 'hello'
+      el.appendChild(p1)
+      document.body.appendChild(el)
+
+      const range = document.createRange()
+      range.setStart(p1, 0)
+      range.collapse(true)
+      const selection = window.getSelection()!
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      const result = new ContentEditableAdapter(el).getTextBeforeCursor()
+
+      expect(result).toBe('')
     })
   })
 
