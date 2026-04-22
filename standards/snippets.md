@@ -1,3 +1,8 @@
+---
+title: Snippet reference
+description: Snippet reference and authoring conventions
+---
+
 # Snippet reference
 
 ## What a snippet is
@@ -7,8 +12,8 @@ A snippet is a short, focused prompt stored as a plain markdown file. Invoke one
 ## Invocation channels
 
 - Chrome extension: type `>slug` in a supported chat UI (claude.ai, gemini.google.com) to insert the snippet text inline
-- Claude Code terminal: prefix the file path with `@` (e.g. `@snippets/claude-feature.md`)
-- Snippets always install flat as `snippets/{slug}.md` regardless of source folder structure
+- Claude Code terminal: prefix the install path with `@` (e.g. `@snippets/claude/feature`)
+- Snippets install preserving the source folder structure. A snippet at `claude/edit.md` installs as `snippets/claude/edit.md` and is invoked as `@snippets/claude/edit`
 
 ## Use patterns
 
@@ -44,8 +49,8 @@ Scan relevant files and list conflicts. Do not implement. # run-as-is, no contex
 ### Incorrect
 
 ```markdown
-I want to implement: <feature or task name> # user fill-in placeholder — redundant, add context after invocation
+I want to implement: <feature or task name> # redundant fill-in, add context after invocation instead
 See ARCHITECTURE.md before starting. # external dependency, not self-contained
 
-## Overview\n## Steps # headers present — belongs in a system prompt
+## Overview\n## Steps # headers belong in a system prompt, not a snippet
 ```
