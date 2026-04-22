@@ -1,3 +1,4 @@
+aitk
 axios
 beforeinput
 borderless
@@ -16,6 +17,7 @@ networkidle
 noopener
 noreferrer
 Noto
+nums
 octocat
 parallelizable
 scannability
@@ -37,3 +39,5 @@ unstub
 Wireframes
 wireframes
 wordmark
+worktree
+worktrees
