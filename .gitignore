@@ -26,13 +26,11 @@ screenshots
 *.crx
 *.pem
 
-# Gemini
-.gemini/.tmp/
-.gemini/settings.json
-
 # Claude
 .claude/.tmp/
 .claude/memory/
+.claude/plans/
+.claude/review/
 
 # VS Code
 .vscode/*

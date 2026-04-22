@@ -1,3 +1,8 @@
+---
+title: Claude skill reference
+description: Claude skill structure and authoring rules
+---
+
 # Claude skill reference
 
 ## Overview
@@ -33,9 +38,16 @@ Skills give Claude Code domain-specific constraints and rules inline, so it can 
 - Keep `SKILL.md` under 5,000 words. Move detailed docs to `references/`.
 - Link to `references/` files explicitly so Claude knows to load them
 - Use progressive disclosure: `SKILL.md` for core instructions, `references/` for detail, `scripts/` for deterministic operations
-- Headers: sentence case for all levels (H1, H2, H3)
+- Use sentence case for all headings (H1, H2, H3)
 - When executing multiple independent operations (file reads, shell commands), run them in parallel to reduce latency
 - When referencing project files, include "from the project root" in the read instruction
+- Contain only behavioral rules (what to do, what not to do) and pointers to reference docs. Narrative descriptions of what files are or how the system works belong in `docs/`, not in the skill body.
+- State rules, not inventories. Reference docs for lists that change. Enumerating items in a skill body creates drift when items are added or removed.
+- When a rule could enumerate allowed options, phrase it as a ban on the forbidden shape so the rule stays stable as categories are added.
+- Cut any rule that resists crisp one-line phrasing. Vague guidance is worse than none.
+- Avoid flags that dispatch between alternate flows. The model misreads them and runs the vanilla path. Dry-run-style toggles are fine. For alternate flows, prefer a separate skill or manual invocation of two skills in sequence.
+- Before collapsing a manual multi-step flow into a skill, ask what the manual pauses do. Pauses that carry external timing, error-surfacing, or judgment weight are the feature. Prefer a snippet over a skill, or require explicit per-step confirmation.
+- Skill success lines emit the full relative path from the project root (`<dir>/<file>`) for any file written, updated, or deleted. Bare filenames are not clickable in the terminal.
 
 ## Scripts
 
