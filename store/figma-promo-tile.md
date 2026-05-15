@@ -1,3 +1,8 @@
+---
+title: 'Figma steps: Caret promo tile'
+description: Produces the 440×280 small promo tile for the Chrome Web Store listing
+---
+
 # Figma steps: Caret promo tile
 
 Produces the 440×280 small promo tile for the Chrome Web Store listing.

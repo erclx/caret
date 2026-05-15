@@ -1,3 +1,8 @@
+---
+title: 'Figma steps: Caret icon'
+description: Produces full-bleed icons for the extension manifest, exported from a single 128x128 frame
+---
+
 # Figma steps: Caret icon
 
 Produces full-bleed icons for the extension manifest. Export all four sizes from a single 128x128 frame.
