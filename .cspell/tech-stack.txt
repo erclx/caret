@@ -1,3 +1,4 @@
+aitk
 bun
 bunx
 changelogithub
@@ -12,6 +13,7 @@ lucide
 nextjs
 oneline
 pipefail
+regen
 shadcn
 shellcheck
 tabindex

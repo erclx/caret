@@ -2,6 +2,7 @@ axios
 beforeinput
 borderless
 bradlc
+browsable
 caret
 dbaeumer
 devconsole
