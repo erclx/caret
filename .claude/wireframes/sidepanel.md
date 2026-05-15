@@ -1,85 +1,20 @@
-# Wireframes
+---
+title: Sidepanel
+description: Prompt library UI opened by the extension icon. Houses all prompt management and GitHub sync state.
+---
 
-ASCII wireframes for planning purposes. Structure and layout only, not final design. Update this doc when a new surface is designed or a layout decision changes.
-
-What belongs:
-
-- ASCII diagrams showing layout, hierarchy, and component placement
-- A context sentence per section describing when and where it appears
-- All meaningful states: empty, loading, error, and any variant where the layout changes significantly
-- Exact UI copy strings: labels, empty states, confirmation text, hints
-- Interaction rules: what triggers what, navigation flow, confirmation behavior
-- Intentional omissions with a brief reason, so they are not re-added later
-
-What does not belong:
-
-- Implementation details (event listeners, API call counts, storage keys). Those live in ARCHITECTURE.md.
-- Visual decisions (colors, spacing, typography). Those live in DESIGN.md.
-- Pixel values or final measurements. Verify those in the browser.
-
-Use `←` for inline annotations inside diagrams. Use sentence case for all text labels. Document state variants as separate subsections when the layout changes. Keep behavior bullets to UX only: what the user sees and does, not how the code handles it.
-
-## 1. In-Chat Dropdown (Command Palette)
-
-Appears above the chat input when user types the trigger symbol (default `>`).
-
-```plaintext
-┌─────────────────────────────────────────┐
-│   summarize...                          │  ← no search input, filter is typed
-├─────────────────────────────────────────┤  directly in chat input after trigger
-│ ▶ claude · summarize  Summarize the f.. │  ← selected, label shown for labeled prompts
-│   claude · fix-code   Fix and explain.. │
-│   fix-grammar         Fix grammar an... │  ← unlabeled prompt, no label prefix
-│   bullet-points       Convert this i... │
-│   eli5                Explain this l... │
-│   writing · draft     Draft an email... │
-├─────────────────────────────────────────┤
-│ ↑↓ navigate · Enter/Tab insert · Esc close  │
-└─────────────────────────────────────────┘
-        ▲ anchored above input
-┌─────────────────────────────────────────┐
-│ > summarize█                            │  ← chat input, typing here filters above
-└─────────────────────────────────────────┘
-```
-
-Behavior:
-
-- Labeled prompts render as `label · name` in the name line. Unlabeled prompts show name only.
-
-**Trigger**
-
-- User types `>` (configurable per site)
-- Fires only at position 0 or immediately after whitespace. Mid-word does not trigger (e.g. `word>` must not open dropdown)
-- Filters in real time as user types after the trigger symbol in the chat input. No separate search field inside the dropdown (intentional design decision)
-
-**Keyboard**
-
-- ↑↓, Ctrl+J / Cmd+J (down), Ctrl+P / Cmd+P (up) to navigate · Enter or Tab to insert · Esc to dismiss
-- Ctrl+K and Ctrl+N are intentionally excluded. Ctrl+K conflicts with Claude.ai's native formatting shortcut
-
-**States**
-
-- Empty library: "No prompts yet. Click the extension icon to add one." (directs to sidepanel, not the sidepanel's own "+ New" button)
-- No results: "No results." shown when the library has prompts but none match the current query
-- Keyboard hint footer is hidden in both empty states. There is nothing to navigate.
-
-**Layout**
-
-- Max 6 rows visible before scroll
-- Width matches input element exactly
-- Anchored above input. Repositions when the input resizes
-
-**Insertion**
-
-- Removes trigger + query text, inserts prompt body at cursor position
-- Dropdown dismisses and focus returns to chat input
-
-## 2. Sidepanel
+# Sidepanel
 
 > Popup code is kept but not surfaced. The extension icon opens the sidepanel.
 > All prompt management lives here.
 
-### List view
+Surface shape:
+
+- Width ~380px, user-resizable
+- Tab bar with plain text tabs and a bottom border on the active tab
+- Edit view replaces the list inline. No modal
+
+## List view
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -126,7 +61,7 @@ Behavior:
 - List is scrollable. Header, tab bar, and search input are fixed
 - `+ New` opens new prompt form (full replace), hidden when GitHub tab is active
 
-### Edit / new form
+## Edit / new form
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -152,7 +87,7 @@ Behavior:
 └────────────────────────────────┘
 ```
 
-### Edit / new form: GitHub source
+## Edit / new form: GitHub source
 
 When editing a prompt synced from GitHub, a muted warning banner appears below the Back button.
 
@@ -170,7 +105,7 @@ When editing a prompt synced from GitHub, a muted warning banner appears below t
 │ ┌──────────────────────────┐   │
 ```
 
-### Edit / new form: dirty state
+## Edit / new form: dirty state
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -233,7 +168,7 @@ Behavior:
 - New form shows empty fields with placeholder hints
 - GitHub source banner: shown exclusively when editing a GitHub-synced prompt. Uses a muted background and text, with the Github icon, to warn the user that their edits are ephemeral without breaking the mono zinc aesthetic constraint. It sits between the Back button and the Name field.
 
-### Onboarding empty state
+## Onboarding empty state
 
 Shown only on fresh install, before the user has created their first prompt.
 
@@ -251,7 +186,7 @@ Shown only on fresh install, before the user has created their first prompt.
 └────────────────────────────────┘
 ```
 
-### Empty state
+## Empty state
 
 Shown when the library is empty, but the user has previously created or synced prompts.
 
@@ -268,7 +203,7 @@ Shown when the library is empty, but the user has previously created or synced p
 └────────────────────────────────┘
 ```
 
-### GitHub tab: not configured
+## GitHub tab: not configured
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -282,7 +217,7 @@ Shown when the library is empty, but the user has previously created or synced p
 └────────────────────────────────┘
 ```
 
-### GitHub tab: configured, never synced
+## GitHub tab: configured, never synced
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -297,7 +232,7 @@ Shown when the library is empty, but the user has previously created or synced p
 └────────────────────────────────┘
 ```
 
-### GitHub tab: diff view
+## GitHub tab: diff view
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -322,7 +257,7 @@ Shown when the library is empty, but the user has previously created or synced p
 └────────────────────────────────┘
 ```
 
-### GitHub tab: post-sync
+## GitHub tab: post-sync
 
 ```plaintext
 ┌────────────────────────────────┐
@@ -359,117 +294,52 @@ GitHub behavior:
 - Skipped entries (`·`) are GitHub snippets whose `(label, name)` composite key matches a local prompt. They are not imported and the local prompt is preserved
 - When the diff contains only skipped entries with no added, updated, or removed entries, a note below the list reads "Nothing to apply. Local edits are preserved." Apply is disabled.
 
-## 3. Options page
+## Appearance
 
-Section order: Data → Per-site configuration → GitHub sync.
+### Label filter button
 
-### Data section
+- Hidden when no labeled prompts exist
+- Button uses `--border` border, `--muted-foreground` text when inactive, `--foreground` text when active
+- Button height matches the search input. Button text is `text-xs` to read as a secondary control relative to the primary search field
+- When active, the button label reads "Label · N" in full-contrast foreground text. `N` is the count of selected labels
 
-```plaintext
-┌─────────────────────────────────────────────┐
-│ Data                                        │
-│ Export your prompts as a backup or restore  │
-│ from a previous export.                     │
-├─────────────────────────────────────────────┤
-│ [↓ Export prompts as JSON            ]      │
-│ [↑ Import prompts from JSON          ]      │
-│                                             │
-│ Exported ✓                                  │  ← export feedback, fades after 2.5s
-│ Nothing to export.                          │  ← shown instead when library is empty
-│ Updated 2: baz, qux. Added 1: foo.          │  ← import feedback, single line
-│ Added 5: a, b, c and 2 more.                │  ← truncates after 3 names
-│ All prompts are already up to date.         │  ← when import produces no changes
-└─────────────────────────────────────────────┘
-```
+### Label filter popover
 
-### Per-site configuration section
+- Scrollable checkbox list: existing labels in alphabetical order with "Unlabeled" at the bottom when applicable
+- A "Clear" link sits at the top of the popover, separated by a bottom border. It is always rendered to prevent height shifts on activation, but it is visible only when filters are active
+- Each row is fully clickable. Clicking anywhere in the row toggles the filter, not only the checkbox or label text
 
-```plaintext
-┌─────────────────────────────────────────────┐
-│ Per-site configuration                      │
-│ Configure the trigger symbol and toggle     │
-│ Caret integration for supported platforms.  │
-├─────────────────────────────────────────────┤
-│ ┌─────────────────────────────────────────┐ │
-│ │ claude.ai                               │ │
-│ │ [✓] Enable Caret on this site           │ │
-│ │                              Trigger    │ │
-│ │                              [ > ]      │ │
-│ └─────────────────────────────────────────┘ │
-│ ┌─────────────────────────────────────────┐ │
-│ │ gemini.google.com                       │ │
-│ │ [✓] Enable Caret on this site           │ │
-│ │                              Trigger    │ │
-│ │                              [ > ]      │ │
-│ └─────────────────────────────────────────┘ │
-│ ┌─────────────────────────────────────────┐ │
-│ │ chatgpt.com                             │ │
-│ │ [✓] Enable Caret on this site           │ │
-│ │                              Trigger    │ │
-│ │                              [ > ]      │ │
-│ └─────────────────────────────────────────┘ │
-├─────────────────────────────────────────────┤
-│ [💾 Save]                       Saved ✓      │  ← Save left-aligned, "Saved ✓" ml-auto, fades after 2.5s
-└─────────────────────────────────────────────┘
-```
+### Prompt list rows
 
-Notes on per-site rows:
+- Labeled prompts render the `label · name` line with label and separator in `--muted-foreground` and name in `--foreground`. Matches the dropdown styling
+- Trash icon uses `--destructive` at 80% opacity at rest and full opacity on hover. The reduced opacity signals availability without competing with the prompt name and body that are the row's primary content
 
-- On `sm+` screens the trigger input floats right. On mobile it goes full-width below
-- Invalid trigger (non-symbol or empty): red `"Enter a single non-letter symbol"` below input, shown only after blur
-- `/` on claude.ai or chatgpt.com: amber `"/ conflicts with this site's native slash menu"` below input
-- Save button disabled while any enabled site has an invalid trigger
+### Confirmation rows
 
-### GitHub sync section
+Applies to the inline delete confirm row in the list and the discard-changes row in the edit form.
 
-```plaintext
-┌─────────────────────────────────────────────┐
-│ GitHub sync                                 │
-│ Pull prompts from a GitHub repository.      │
-│ Read-only. GitHub is the source of truth.   │
-├─────────────────────────────────────────────┤
-│ Personal access token ?                     │
-│ ┌─────────────────────────────────────┐     │
-│ │ ghp_••••••••••••••••••••••••••••••  │     │
-│ └─────────────────────────────────────┘     │
-│ Create a token on GitHub →                  │
-│                                             │
-│ Repository ?        Branch ?                │
-│ ┌──────────────┐    ┌──────────────┐        │
-│ │ owner/repo   │    │ main         │        │
-│ └──────────────┘    └──────────────┘        │
-│                                             │
-│ Snippets path ?                             │
-│ ┌─────────────────────────────────────┐     │
-│ │ snippets                            │     │
-│ └─────────────────────────────────────┘     │
-├─────────────────────────────────────────────┤
-│ [💾 Save]  ● Connected   Saved ✓  [Disconnect] │  ← Save left, Saved ✓ + Disconnect ml-auto right
-│                                               │    Disconnect shown only when GitHub configured
-│ connection error message (if any)             │    Hint on Disconnect shown as tooltip on hover
-└───────────────────────────────────────────────┘
-```
+- Container uses `--muted` background with no border in light mode. In dark mode, add a `--border` border, since the muted background blends into the panel background and a border is needed to define the box
+- Label text uses `--foreground`. It is the context for the action buttons and must be fully legible
+- Only the destructive action button carries red. No other element in the row uses a destructive color
 
-Behavior:
+### Edit form label field
 
-**Data**
+- Field label reads "Label (optional)" to communicate that the field may be left blank without a tooltip or helper text
+- Case-sensitivity hint shows in a tooltip triggered by a help icon (`HelpCircle`, 14px) placed inline next to the field label
+- Chevron icon is always visible at the right edge to signal that the dropdown opens. It is non-interactive
+- X button appears when the value is non-empty, sits to the left of the chevron, clears on click, and returns focus to the label input. Input text must not overlap either icon
+- No chips or pills below the input
+- Combobox dropdown adds a `--border` ring in dark mode, since `--card` and `--background` are nearly identical in dark and a ring is needed to define the boundary
 
-- Export downloads `caret-backup.json`. Shows "Exported ✓" (muted color) inline right of the button, fades after 2.5s. Shows "Nothing to export." in destructive color instead when the library is empty
-- Import validates JSON with Zod before writing to storage. Shows error on invalid file
-- Import merge conflict (duplicate name): last-write-wins
+### Edit form GitHub banner
 
-**Per-site**
+- When editing a GitHub-synced prompt, a muted warning banner sits between the Back button and the Name field
+- The banner explains that local edits will be overwritten on the next sync
+- Uses `bg-muted` and `text-muted-foreground` to blend with the utilitarian dark and light schemes without competing with the form inputs
+- Contains the 16px `Github` lucide icon aligned with the text
 
-- Trigger symbol editable per site. Toggle enable/disable per site without losing trigger config
+### GitHub view
 
-**GitHub sync**
-
-- PAT: full width, masked, displayed masked after save, not encrypted (documented risk). No inline validation on format; error shown only after a failed save attempt.
-- Repository and Branch: side by side, equal width
-- Snippets path: full width. "Enter a snippets path" inline error below the field on blur when empty.
-- `?` icon on each field label opens a tooltip with usage hint, no arrow on tooltip
-- `●` connection dot: green = connected, red = error, gray = not configured or dirty (any field edited since last save). Resets to gray on any field change. Updates on save.
-- Save is blocked when repository is empty or snippets path is empty, even before the user touches those fields
-- "Saved ✓" appears inline right of Save button, fades after 2.5s
-- Disconnect shown only when GitHub is configured. No confirmation dialog
-- Constrained max width, centered
+- Connection indicator: 8px filled circle. Green when connected, red on error. Shown only when GitHub is configured
+- When not configured, the entire view is replaced by a plain link to Options
+- Post-sync transient: a label fades in below the sync button and out after 2.5s. "Applied ✓" after a successful apply. "Up to date ✓" after a fetch that finds no changes. Both use `--muted-foreground` centered `text-xs` with opacity-only transition
