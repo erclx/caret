@@ -1,3 +1,8 @@
+---
+title: Demo
+description: Records the demo video for the Chrome Web Store listing and README
+---
+
 # Demo
 
 Records the demo video for the Chrome Web Store listing and README.

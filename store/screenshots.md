@@ -1,3 +1,8 @@
+---
+title: Screenshots
+description: Produces the 1280×800 screenshots for the Chrome Web Store listing
+---
+
 # Screenshots
 
 Produces the 1280×800 screenshots for the Chrome Web Store listing.

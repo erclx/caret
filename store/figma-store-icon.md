@@ -1,3 +1,8 @@
+---
+title: 'Figma steps: Caret store icon'
+description: Produces the Chrome Web Store icon at 128px with 16px padding on a transparent canvas
+---
+
 # Figma steps: Caret store icon
 
 Produces the Chrome Web Store icon. Artwork is 96x96 centered in a 128x128 transparent canvas with 16px padding on each side. Export the 128px size only and upload via the store dashboard.

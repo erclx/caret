@@ -1,3 +1,8 @@
+---
+title: Chrome Web Store listing
+description: Steps to complete the Caret listing including dashboard setup and API secrets for auto-publish
+---
+
 # Chrome Web Store listing
 
 Steps to complete the Caret listing. Developer account is registered and dashboard is accessible. Work through these in order; the API secrets must be in place before auto-publish works.
