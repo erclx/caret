@@ -94,7 +94,6 @@ The project uses a three-tier context model. Know which tier holds what before r
 - `src/shared/`: hooks, types, utils and components shared across entry points
 - `manifest.config.ts`: extension manifest (entry points, permissions, icons)
 - `.claude/snippets/`: short, single-purpose prompts invoked via `@` in Claude Code or `>slug` in the extension
-- `prompts/`: system prompts for authoring specific artifact types (scripts, skills)
 - `manual/`: manual testing fixtures and verification checklists (import-export, github-sync, sidepanel, trigger, dark-mode)
 - `store/`: Chrome Web Store assets (descriptions, store icon, screenshots, promo tiles)
 - `.claude/`: planning docs (requirements, architecture, wireframes, design, tasks)
