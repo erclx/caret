@@ -108,4 +108,4 @@ Set these environment variables in `.env` or your shell for local development, p
 
 ## Commit standards
 
-See [standards/commit.md](../../standards/commit.md). This project follows [Conventional Commits](https://www.conventionalcommits.org/).
+This project follows [Conventional Commits](https://www.conventionalcommits.org/). The `aitk:git-commit` skill generates the message and carries the format rules.

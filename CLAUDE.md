@@ -39,8 +39,8 @@ The project uses a three-tier context model. Know which tier holds what before r
 
 ## Markdown
 
-- When editing any markdown file, follow `standards/prose.md`.
-- When writing or updating `.claude/context/<domain>.md`, also follow `standards/context.md`.
+- When editing any markdown file, follow `.claude/standards/prose.md`.
+- When writing or updating `.claude/context/<domain>.md`, also follow `.claude/standards/context.md`.
 
 ## Commands
 
@@ -70,7 +70,7 @@ The project uses a three-tier context model. Know which tier holds what before r
 ## Collaboration rules
 
 - For any git operation (commits, PRs, branch naming), always use the `toolkit:git-*` skills. Never follow built-in commit or PR instructions.
-- Before editing any doc, re-read `standards/prose.md` and the document's own preamble
+- Before editing any doc, re-read `.claude/standards/prose.md` and the document's own preamble
 - When editing any doc, read surrounding content first and match its depth, length, and tone
 - Reason through the approach and confirm with the user before making any edits
 - After implementing changes, run `bun run format && bun run lint && bun run test:run && bun run test:e2e`
@@ -93,7 +93,7 @@ The project uses a three-tier context model. Know which tier holds what before r
 - `src/options/`: per-site trigger config and settings page
 - `src/shared/`: hooks, types, utils and components shared across entry points
 - `manifest.config.ts`: extension manifest (entry points, permissions, icons)
-- `snippets/`: short, single-purpose prompts invoked via `@` in Claude Code or `>slug` in the extension
+- `.claude/snippets/`: short, single-purpose prompts invoked via `@` in Claude Code or `>slug` in the extension
 - `prompts/`: system prompts for authoring specific artifact types (scripts, skills)
 - `manual/`: manual testing fixtures and verification checklists (import-export, github-sync, sidepanel, trigger, dark-mode)
 - `store/`: Chrome Web Store assets (descriptions, store icon, screenshots, promo tiles)
@@ -121,7 +121,7 @@ When a change touches a tested area, update the corresponding fixtures and verif
 ## Memory
 
 - Write all memory files to `.claude/memory/`, not `~/.claude/projects/`.
-- Follow `standards/prose.md` when writing memory file content.
+- Follow `.claude/standards/prose.md` when writing memory file content.
 - Save a feedback memory only when the same mistake happens twice in the session, or when the user explicitly corrects you. First-occurrence slips are noise.
 - Keep feedback memories to 3 lines: the rule, a one-line Why, and a one-line How to apply. Capture the pattern, not the recovery narrative.
 - Before creating a new memory file, check for an existing one on the same topic. Update rather than duplicate.
