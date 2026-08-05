@@ -28,9 +28,14 @@ screenshots
 
 # Claude
 .claude/.tmp/
+.claude/groundwork/
+.claude/intake/
 .claude/memory/
 .claude/plans/
+.claude/plans-archive/
 .claude/review/
+.claude/task-archive/
+.claude/tasks/
 .claude/briefs/
 .claude/worktrees/
 .claude/TASKS.md
