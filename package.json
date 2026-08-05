@@ -14,7 +14,7 @@
     "check:format": "prettier --check --log-level warn --ignore-path .gitignore --ignore-path .prettierignore . && shfmt --diff --indent 2 scripts/",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix --max-warnings 0",
-    "check:spell": "cspell '**' --no-progress --color --show-context",
+    "check:spell": "cspell '**' --no-progress --color --show-context --no-must-find-files",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run --reporter=verbose",
