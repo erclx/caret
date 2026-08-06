@@ -36,9 +36,7 @@ screenshots
 .claude/review/
 .claude/task-archive/
 .claude/tasks/
-.claude/briefs/
 .claude/worktrees/
-.claude/TASKS.md
 
 # VS Code
 .vscode/*

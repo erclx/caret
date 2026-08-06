@@ -20,7 +20,7 @@ What does not belong:
 ## Problem
 
 Power users of AI chat tools (Claude.ai, Gemini, ChatGPT) repeatedly type the same prompts.
-There's no native way to save, organize, and quickly invoke reusable prompt templates across these platforms.
+There's no native way to save, organize, and invoke reusable prompt templates across these platforms.
 
 ## Goals
 

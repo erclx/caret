@@ -9,7 +9,7 @@ The in-chat command palette. Implementation in `src/content/views/dropdown/`. Fi
 
 ## Command palette style, above input
 
-Rendered as a React root injected adjacent to the detected input element. Positioned `fixed` using coordinates from `range.getBoundingClientRect()` on the active cursor range, with left and width from the input element's bounding rect. Anchoring to the cursor line (not the element top or bottom) keeps the dropdown just above where the user is typing regardless of input height. `translateY(-100%)` lifts the dropdown above that line. ResizeObserver watches for resize to reposition. 6 rows visible, scrollable. Each row: prompt name + truncated body preview.
+Rendered as a React root injected adjacent to the detected input element. Positioned `fixed` using coordinates from `range.getBoundingClientRect()` on the active cursor range, with left and width from the input element's bounding rect. Anchoring to the cursor line (not the element top or bottom) keeps the dropdown adjacent to where the user is typing regardless of input height. `translateY(-100%)` lifts the dropdown above that line. ResizeObserver watches for resize to reposition. 6 rows visible, scrollable. Each row: prompt name + truncated body preview.
 
 When the caret rect has zero height (collapsed range on an empty line), the adapter falls back to the cursor's containing element rect before falling back to the full input element rect. This keeps the dropdown near the cursor line in expanded inputs rather than snapping to the input's top edge.
 
