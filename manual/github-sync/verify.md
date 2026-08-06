@@ -2,7 +2,7 @@
 
 Run `bun run dev`, load the extension, open the Options page, and go to the GitHub Sync section.
 
-This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and verify the sync outcomes below.
+This repo's own `.claude/snippets/` folder is the fixture set. Configure the extension to point at it and verify the sync outcomes below.
 
 ## Setup
 
@@ -11,12 +11,12 @@ This repo's own `snippets/` folder is the fixture set. Configure the extension t
    - Owner: `erclx`
    - Repo: `caret`
    - Branch: `main`
-   - Snippets path: `snippets`
+   - Snippets path: `.claude/snippets`
 3. Paste the token and click Save.
 
 ## Initial sync
 
-- [ ] Click Sync → all prompts from `snippets/` appear in the prompt list with `source: "github"`.
+- [ ] Click Sync → all prompts from `.claude/snippets/` appear in the prompt list with `source: "github"`.
 - [ ] Confirm each prompt name matches its filename (without extension).
 - [ ] Confirm no duplicates exist if you sync a second time immediately.
 
@@ -56,7 +56,7 @@ Open the side panel and click the GitHub tab.
 - [ ] Locally-edited synced prompts appear as skipped (`·`) with a "kept local" label.
 - [ ] Sync when all remote entries match local prompts with edits (all skipped, no changes) → diff shows only "kept local" entries and "Nothing to apply. Local edits are preserved." appears below the list. Apply button is disabled.
 - [ ] Click Cancel → diff dismissed, no changes applied, status line unchanged.
-- [ ] Click "Apply N changes" → changes applied, "Applied ✓" confirmation appears briefly, status line shows "Synced just now · N snippets".
+- [ ] Click `Apply N changes` → changes applied, `Applied ✓` confirmation appears briefly, status line shows `Synced just now · N snippets`.
 
 ### Up to date
 

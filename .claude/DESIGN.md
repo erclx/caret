@@ -39,7 +39,7 @@ No accent. Mono zinc scale only. Defined as shadcn HSL variable overrides in `in
 | `--border`           | Light gray / dark gray       | All borders                  |
 | `--foreground`       | Near-black / near-white      | Body text, prompt names      |
 | `--muted-foreground` | Mid gray                     | Preview text, hints, labels  |
-| `--accent`           | Very light gray / dim dark   | Selected row, hover state    |
+| `--accent`           | Palest gray / dim dark       | Selected row, hover state    |
 | `--destructive`      | Red                          | Delete actions, error states |
 
 Buttons use `--foreground` on `--card` with a `--border` outline. Selection is a background shift only, no color pop.

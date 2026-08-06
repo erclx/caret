@@ -23,7 +23,7 @@ See [manual/import-export/verify.md](../../manual/import-export/verify.md) for t
 
 ## GitHub sync
 
-`manual/github-sync/` covers syncing prompts from a remote GitHub repository, the sidepanel GitHub tab, and options page validation: connection dot reset on field edits, save blocking before valid input, and branch and snippets path inline errors. No extra fixture files are needed. This repo's own `snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
+`manual/github-sync/` covers syncing prompts from a remote GitHub repository, the sidepanel GitHub tab, and options page validation: connection dot reset on field edits, save blocking before valid input, and branch and snippets path inline errors. No extra fixture files are needed. This repo's own `.claude/snippets/` folder is the fixture set. Configure the extension to point at it and follow the checklist.
 
 See [manual/github-sync/verify.md](../../manual/github-sync/verify.md) for the full checklist.
 
